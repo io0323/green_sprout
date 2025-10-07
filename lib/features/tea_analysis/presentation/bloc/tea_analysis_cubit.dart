@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/errors/failures.dart';
+import '../../../../core/errors/failures.dart';
 import '../../domain/entities/tea_analysis_result.dart';
 import '../../domain/usecases/tea_analysis_usecases.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/errors/failures.dart';
+import '../../../../core/errors/failures.dart';
 import '../../domain/entities/camera_state.dart';
 import '../../domain/usecases/camera_usecases.dart';
 

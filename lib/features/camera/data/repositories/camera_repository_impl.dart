@@ -1,5 +1,6 @@
-import '../../core/errors/failures.dart';
-import '../../core/usecases/usecase.dart';
+import 'package:dartz/dartz.dart';
+import '../../../../core/errors/failures.dart';
+import '../../domain/entities/camera_state.dart';
 import '../../domain/repositories/camera_repository.dart';
 import '../datasources/camera_local_datasource.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/utils/app_utils.dart';
+import '../../../../core/utils/app_utils.dart';
 import '../../domain/entities/tea_analysis_result.dart';
 
 /**
@@ -18,9 +18,9 @@ class TodaySummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final today = DateTime.now();
     final todayResults = results.where((result) {
-      return result.createdAt.year == today.year &&
-             result.createdAt.month == today.month &&
-             result.createdAt.day == today.day;
+      return result.timestamp.year == today.year &&
+             result.timestamp.month == today.month &&
+             result.timestamp.day == today.day;
     }).toList();
 
     return Container(

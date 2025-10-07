@@ -1,6 +1,5 @@
-import '../../core/constants/app_constants.dart';
-import '../../core/errors/failures.dart';
-import '../../core/usecases/usecase.dart';
+import 'package:dartz/dartz.dart';
+import '../../../../core/errors/failures.dart';
 import '../../domain/entities/analysis_result.dart';
 import '../../domain/repositories/analysis_repository.dart';
 import '../datasources/analysis_local_datasource.dart';

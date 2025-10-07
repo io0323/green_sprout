@@ -1,4 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'core/di/injection_container.dart' as di;
+import 'features/tea_analysis/presentation/bloc/tea_analysis_cubit.dart';
+import 'features/tea_analysis/presentation/bloc/analysis_cubit.dart';
+import 'features/camera/presentation/bloc/camera_cubit.dart';
+import 'features/tea_analysis/presentation/pages/home_page.dart';
+import 'features/camera/presentation/pages/camera_page.dart';
+import 'features/tea_analysis/presentation/pages/analysis_result_page.dart';
+import 'features/logs/presentation/pages/log_list_page.dart';
 
 /**
  * 茶園管理AIアプリのメインエントリーポイント
@@ -6,6 +16,9 @@ import 'package:flutter/material.dart';
  */
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // 依存性注入の初期化
+  await di.init();
   
   runApp(const TeaGardenApp());
 }
@@ -19,100 +32,35 @@ class TeaGardenApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '茶園管理AI',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        useMaterial3: true,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.green,
-          foregroundColor: Colors.white,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<TeaAnalysisCubit>(
+          create: (context) => GetIt.I<TeaAnalysisCubit>(),
         ),
-      ),
-      home: const HomePage(),
-    );
-  }
-}
-
-/**
- * ホームページ
- * 基本的なUIを表示
- */
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('茶園管理AI'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.history),
-            onPressed: () {
-              // TODO: 日誌一覧画面への遷移
-            },
-            tooltip: '日誌一覧',
+        BlocProvider<AnalysisCubit>(
+          create: (context) => GetIt.I<AnalysisCubit>(),
+        ),
+        BlocProvider<CameraCubit>(
+          create: (context) => GetIt.I<CameraCubit>(),
+        ),
+      ],
+      child: MaterialApp(
+        title: '茶園管理AI',
+        theme: ThemeData(
+          primarySwatch: Colors.green,
+          useMaterial3: true,
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
           ),
-        ],
-      ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.eco,
-              size: 100,
-              color: Colors.green,
-            ),
-            SizedBox(height: 24),
-            Text(
-              '茶園管理AI',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Colors.green,
-              ),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'クリーンアーキテクチャ版',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
-            ),
-            SizedBox(height: 32),
-            Text(
-              'アプリの基本構造は完成しています',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              '詳細な機能実装は順次追加予定です',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
-            ),
-          ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // TODO: カメラ画面への遷移
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('カメラ機能は実装中です'),
-              backgroundColor: Colors.green,
-            ),
-          );
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const HomePage(),
+          '/camera': (context) => const CameraPage(),
+          '/analysis_result': (context) => const AnalysisResultPage(),
+          '/logs': (context) => const LogListPage(),
         },
-        backgroundColor: Colors.green,
-        child: const Icon(Icons.camera_alt, color: Colors.white),
       ),
     );
   }
