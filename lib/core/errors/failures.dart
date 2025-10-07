@@ -1,3 +1,5 @@
+import 'package:dartz/dartz.dart';
+
 /**
  * クリーンアーキテクチャのコア層
  * エラーハンドリングとユースケースの基底クラス
@@ -53,53 +55,4 @@ class TFLiteFailure extends Failure {
  */
 class GenericFailure extends Failure {
   const GenericFailure(super.message, [super.code]);
-}
-
-/**
- * Either型の実装
- * 成功時はRight、失敗時はLeftを返す
- */
-abstract class Either<L, R> {
-  const Either();
-}
-
-class Left<L, R> extends Either<L, R> {
-  final L value;
-  const Left(this.value);
-}
-
-class Right<L, R> extends Either<L, R> {
-  final R value;
-  const Right(this.value);
-}
-
-/**
- * ユースケースの基底クラス
- * 全てのユースケースはこのクラスを継承
- */
-abstract class UseCase<Type, Params> {
-  /**
-   * ユースケースを実行
-   * @param params パラメータ
-   * @return Either<Failure, Type> 成功時はRight、失敗時はLeft
-   */
-  Future<Either<Failure, Type>> call(Params params);
-}
-
-/**
- * パラメータなしのユースケースの基底クラス
- */
-abstract class UseCaseNoParams<Type> {
-  /**
-   * ユースケースを実行
-   * @return Either<Failure, Type> 成功時はRight、失敗時はLeft
-   */
-  Future<Either<Failure, Type>> call();
-}
-
-/**
- * パラメータなしのユースケース用の空クラス
- */
-class NoParams {
-  const NoParams();
 }

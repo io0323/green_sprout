@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/di/injection_container.dart' as di;
 import '../bloc/tea_analysis_cubit.dart';
 import '../bloc/analysis_cubit.dart';
-import '../bloc/camera_cubit.dart';
+import '../../camera/presentation/bloc/camera_cubit.dart';
 import '../widgets/tea_analysis_card.dart';
 import '../widgets/camera_button.dart';
 import '../widgets/today_summary_card.dart';
-import 'camera_page.dart';
-import 'log_list_page.dart';
+import '../../camera/presentation/pages/camera_page.dart';
+import '../../logs/presentation/pages/log_list_page.dart';
 
 /**
  * ホームページ

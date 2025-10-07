@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/utils/app_utils.dart';
-import '../../domain/entities/tea_analysis_result.dart';
-import '../bloc/camera_cubit.dart';
-import 'camera_page.dart';
 
 /**
  * 写真撮影ボタンウィジェット

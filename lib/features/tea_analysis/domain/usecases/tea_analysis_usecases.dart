@@ -1,5 +1,6 @@
-import '../../core/errors/failures.dart';
-import '../../core/usecases/usecase.dart';
+import 'package:dartz/dartz.dart';
+import '../../../../core/errors/failures.dart';
+import '../../../../core/usecases/usecase.dart';
 import '../entities/tea_analysis_result.dart';
 import '../repositories/tea_analysis_repository.dart';
 

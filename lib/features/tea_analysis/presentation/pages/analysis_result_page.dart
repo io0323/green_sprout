@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/utils/app_utils.dart';
+import '../../../../core/utils/app_utils.dart';
+import '../../domain/entities/tea_analysis_result.dart';
 import '../bloc/analysis_cubit.dart';
 import '../bloc/tea_analysis_cubit.dart';
-import '../widgets/analysis_result_card.dart';
-import '../widgets/confidence_indicator.dart';
-import '../widgets/comment_input_widget.dart';
 
 /**
  * 解析結果ページ
@@ -46,204 +44,60 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('解析結果'),
-        actions: [
-          BlocBuilder<AnalysisCubit, AnalysisState>(
-            builder: (context, state) {
-              if (state is AnalysisCompleted) {
-                return TextButton(
-                  onPressed: _saveResult,
-                  child: const Text(
-                    '保存',
-                    style: TextStyle(color: Colors.white),
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
+      ),
+      body: BlocBuilder<AnalysisCubit, AnalysisState>(
+        builder: (context, state) {
+          if (state is AnalysisAnalyzing) {
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 16),
+                  Text('茶葉を解析中...'),
+                ],
+              ),
+            );
+          } else if (state is AnalysisCompleted) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.check_circle, size: 64, color: Colors.green),
+                  const SizedBox(height: 16),
+                  Text('解析完了: ${state.result.growthStage}'),
+                  const SizedBox(height: 8),
+                  Text('健康状態: ${state.result.healthStatus}'),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: _saveResult,
+                    child: const Text('保存'),
                   ),
-                );
-              }
-              return const SizedBox.shrink();
-            },
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 撮影画像
-            _buildImagePreview(),
-            
-            const SizedBox(height: 24),
-            
-            // 解析結果
-            BlocBuilder<AnalysisCubit, AnalysisState>(
-              builder: (context, state) {
-                if (state is AnalysisAnalyzing) {
-                  return _buildAnalyzingIndicator();
-                } else if (state is AnalysisCompleted) {
-                  return _buildAnalysisResult(state.result);
-                } else if (state is AnalysisError) {
-                  return _buildErrorState(state.message);
-                } else {
-                  return const SizedBox.shrink();
-                }
-              },
-            ),
-            
-            const SizedBox(height: 24),
-            
-            // コメント入力
-            BlocBuilder<AnalysisCubit, AnalysisState>(
-              builder: (context, state) {
-                if (state is AnalysisCompleted) {
-                  return CommentInputWidget(
-                    controller: _commentController,
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /**
-   * 画像プレビューを構築
-   */
-  Widget _buildImagePreview() {
-    return Center(
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Image.asset(
-            'assets/images/placeholder.png', // プレースホルダー画像
-            width: double.infinity,
-            height: 300,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                width: double.infinity,
-                height: 300,
-                color: Colors.grey[300],
-                child: const Center(
-                  child: Icon(
-                    Icons.image,
-                    size: 64,
-                    color: Colors.grey,
+                ],
+              ),
+            );
+          } else if (state is AnalysisError) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error, size: 64, color: Colors.red),
+                  const SizedBox(height: 16),
+                  Text('エラー: ${state.message}'),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('戻る'),
                   ),
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-
-  /**
-   * 解析中インジケーターを構築
-   */
-  Widget _buildAnalyzingIndicator() {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            const CircularProgressIndicator(),
-            const SizedBox(height: 16),
-            Text(
-              '茶葉を解析中...',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'AIが成長状態と健康状態を判定しています',
-              style: TextStyle(color: Colors.grey),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /**
-   * 解析結果を構築
-   */
-  Widget _buildAnalysisResult(dynamic result) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // 成長状態
-        AnalysisResultCard(
-          title: '成長状態',
-          value: result.growthStage,
-          confidence: result.growthConfidence,
-          icon: AppUtils.getGrowthStageIcon(result.growthStage),
-          color: Colors.green,
-        ),
-        
-        const SizedBox(height: 16),
-        
-        // 健康状態
-        AnalysisResultCard(
-          title: '健康状態',
-          value: result.healthStatus,
-          confidence: result.healthConfidence,
-          icon: AppUtils.getHealthStatusIcon(result.healthStatus),
-          color: AppUtils.getHealthStatusColor(result.healthStatus),
-        ),
-        
-        const SizedBox(height: 16),
-        
-        // 全体信頼度
-        ConfidenceIndicator(confidence: result.overallConfidence),
-      ],
-    );
-  }
-
-  /**
-   * エラー状態を構築
-   */
-  Widget _buildErrorState(String message) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            const Icon(
-              Icons.error_outline,
-              size: 64,
-              color: Colors.red,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              '解析に失敗しました',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              message,
-              style: const TextStyle(color: Colors.grey),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('撮影画面に戻る'),
-            ),
-          ],
-        ),
+                ],
+              ),
+            );
+          }
+          
+          return const Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }
@@ -259,15 +113,15 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
       
       // 茶葉解析結果エンティティを作成
       final teaAnalysis = TeaAnalysisResult(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
         imagePath: widget.imagePath,
         growthStage: result.growthStage,
         healthStatus: result.healthStatus,
-        confidence: result.overallConfidence,
+        confidence: result.confidence,
         comment: _commentController.text.trim().isEmpty
             ? null
             : _commentController.text.trim(),
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
+        timestamp: DateTime.now(),
       );
 
       // 保存実行

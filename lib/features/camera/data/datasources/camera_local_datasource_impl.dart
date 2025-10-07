@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:camera/camera.dart';
-import '../../core/constants/app_constants.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../domain/entities/camera_state.dart';
 import 'camera_local_datasource.dart';
 

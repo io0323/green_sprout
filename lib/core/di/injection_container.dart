@@ -14,6 +14,9 @@ import '../features/camera/data/datasources/camera_local_datasource_impl.dart';
 import '../features/camera/data/repositories/camera_repository_impl.dart';
 import '../features/camera/domain/repositories/camera_repository.dart';
 import '../features/camera/domain/usecases/camera_usecases.dart';
+import '../features/tea_analysis/presentation/bloc/tea_analysis_cubit.dart';
+import '../features/tea_analysis/presentation/bloc/analysis_cubit.dart';
+import '../features/camera/presentation/bloc/camera_cubit.dart';
 
 /**
  * 依存性注入コンテナ
@@ -79,4 +82,27 @@ Future<void> init() async {
   sl.registerLazySingleton(() => CaptureImage(sl()));
   sl.registerLazySingleton(() => DisposeCamera(sl()));
   sl.registerLazySingleton(() => CheckCameraInitialized(sl()));
+
+  // BLoC
+  sl.registerFactory(() => TeaAnalysisCubit(
+    getAllTeaAnalyses: sl(),
+    getTodayTeaAnalyses: sl(),
+    getRecentTeaAnalyses: sl(),
+    saveTeaAnalysis: sl(),
+    updateTeaAnalysis: sl(),
+    deleteTeaAnalysis: sl(),
+  ));
+  
+  sl.registerFactory(() => AnalysisCubit(
+    loadModel: sl(),
+    analyzeImage: sl(),
+    checkModelLoaded: sl(),
+  ));
+  
+  sl.registerFactory(() => CameraCubit(
+    initializeCamera: sl(),
+    captureImage: sl(),
+    disposeCamera: sl(),
+    checkCameraInitialized: sl(),
+  ));
 }

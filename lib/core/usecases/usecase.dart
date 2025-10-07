@@ -13,3 +13,8 @@ abstract class UseCaseNoParams<Type> {
   /// ユースケースを実行する
   Future<Either<Failure, Type>> call();
 }
+
+/// パラメータなしのユースケース用の空クラス
+class NoParams {
+  const NoParams();
+}

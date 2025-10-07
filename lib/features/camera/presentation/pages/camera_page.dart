@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/camera_cubit.dart';
-import '../widgets/camera_preview_widget.dart';
-import '../widgets/capture_button_widget.dart';
-import '../widgets/camera_guide_widget.dart';
-import 'analysis_result_page.dart';
+import '../../tea_analysis/presentation/pages/analysis_result_page.dart';
 
 /**
  * カメラページ
@@ -77,17 +74,41 @@ class _CameraPageState extends State<CameraPage> {
             }
 
             if (state is CameraInitialized) {
-              return Stack(
-                children: [
-                  // カメラプレビュー
-                  const CameraPreviewWidget(),
-                  
-                  // 撮影ガイド
-                  const CameraGuideWidget(),
-                  
-                  // 撮影ボタン
-                  const CaptureButtonWidget(),
-                ],
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.camera_alt,
+                      size: 100,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'カメラ準備完了',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        context.read<CameraCubit>().capture();
+                      },
+                      icon: const Icon(Icons.camera_alt),
+                      label: const Text('撮影'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 32,
+                          vertical: 16,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               );
             }
 

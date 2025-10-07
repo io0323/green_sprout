@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/utils/app_utils.dart';
+import '../../../../core/utils/app_utils.dart';
 import '../../domain/entities/tea_analysis_result.dart';
-import '../bloc/tea_analysis_cubit.dart';
-import '../widgets/tea_analysis_card.dart';
 
 /**
  * 茶葉解析結果カードウィジェット
@@ -41,7 +38,7 @@ class TeaAnalysisCard extends StatelessWidget {
           ],
         ),
         trailing: Text(
-          AppUtils.formatRelativeTime(result.createdAt),
+          AppUtils.formatRelativeTime(result.timestamp),
           style: const TextStyle(fontSize: 12),
         ),
         onTap: () {
