@@ -1,0 +1,56 @@
+name: tea_garden_ai
+description: 茶園管理AIアプリ - 茶葉の成長状態と健康状態を解析
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # UI関連
+  cupertino_icons: ^1.0.2
+  
+  # カメラ・画像処理
+  camera: ^0.10.5+5
+  image_picker: ^1.0.4
+  
+  # TensorFlow Lite
+  tflite_flutter: ^0.10.4
+  
+  # データベース
+  sqflite: ^2.3.0
+  path: ^1.8.3
+  
+  # 状態管理
+  provider: ^6.1.1
+  flutter_bloc: ^8.1.3
+  
+  # 依存性注入
+  get_it: ^7.6.4
+  
+  # 関数型プログラミング
+  dartz: ^0.10.1
+  
+  # 日付処理
+  intl: ^0.18.1
+  
+  # ファイル操作
+  path_provider: ^2.1.1
+  
+  # 画像処理
+  image: ^4.0.17
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  
+  # アセットフォルダ
+  assets:
+    - assets/models/
+    - assets/images/
