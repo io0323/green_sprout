@@ -72,12 +72,12 @@ class CameraCubit extends Cubit<CameraBlocState> {
    */
   Future<void> initialize() async {
     emit(CameraInitializing());
-    
+
     final result = await initializeCamera();
-    
+
     result.fold(
       (failure) => emit(CameraError(_mapFailureToMessage(failure))),
-      (_) {
+      (unit) {
         // 初期化成功後、現在の状態を取得
         checkCameraInitialized().then((result) {
           result.fold(
@@ -100,12 +100,12 @@ class CameraCubit extends Cubit<CameraBlocState> {
    */
   Future<void> capture() async {
     emit(CameraCapturing());
-    
+
     final result = await captureImage();
-    
+
     result.fold(
       (failure) => emit(CameraError(_mapFailureToMessage(failure))),
-      (imagePath) => emit(CameraCaptured(imagePath)),
+      (imageFile) => emit(CameraCaptured(imageFile.path)),
     );
   }
 
@@ -114,10 +114,10 @@ class CameraCubit extends Cubit<CameraBlocState> {
    */
   Future<void> dispose() async {
     final result = await disposeCamera();
-    
+
     result.fold(
       (failure) => emit(CameraError(_mapFailureToMessage(failure))),
-      (_) => emit(CameraInitial()),
+      (unit) => emit(CameraInitial()),
     );
   }
 

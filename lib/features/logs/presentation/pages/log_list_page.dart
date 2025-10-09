@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/di/injection_container.dart' as di;
-import '../../tea_analysis/presentation/bloc/tea_analysis_cubit.dart';
-import '../../tea_analysis/presentation/widgets/tea_analysis_card.dart';
+import '../../../tea_analysis/presentation/bloc/tea_analysis_cubit.dart';
+import '../../../tea_analysis/presentation/widgets/tea_analysis_card.dart';
 
 /**
- * ログ一覧ページ
- * 過去の解析結果を表示
+ * 日誌一覧ページ
+ * 過去の茶葉解析結果を表示
  */
 class LogListPage extends StatefulWidget {
   const LogListPage({super.key});
@@ -21,7 +20,7 @@ class _LogListPageState extends State<LogListPage> {
     super.initState();
     // 初期化処理
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<TeaAnalysisCubit>().getAllTeaAnalyses();
+      context.read<TeaAnalysisCubit>().loadAllResults();
     });
   }
 
@@ -29,7 +28,7 @@ class _LogListPageState extends State<LogListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('解析ログ'),
+        title: const Text('日誌一覧'),
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
       ),
@@ -60,7 +59,7 @@ class _LogListPageState extends State<LogListPage> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
-                      context.read<TeaAnalysisCubit>().getAllTeaAnalyses();
+                      context.read<TeaAnalysisCubit>().loadAllResults();
                     },
                     child: const Text('再試行'),
                   ),
@@ -76,13 +75,13 @@ class _LogListPageState extends State<LogListPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.eco,
+                      Icons.book,
                       size: 64,
                       color: Colors.grey,
                     ),
                     SizedBox(height: 16),
                     Text(
-                      'まだ解析結果がありません',
+                      'まだ記録がありません',
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey,
@@ -100,7 +99,6 @@ class _LogListPageState extends State<LogListPage> {
                 ),
               );
             }
-
             return ListView.builder(
               itemCount: state.results.length,
               itemBuilder: (context, index) {
@@ -110,9 +108,7 @@ class _LogListPageState extends State<LogListPage> {
             );
           }
 
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Center(child: Text('Unknown state'));
         },
       ),
     );

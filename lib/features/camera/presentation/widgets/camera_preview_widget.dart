@@ -15,12 +15,12 @@ class CameraPreviewWidget extends StatelessWidget {
       builder: (context, state) {
         if (state is CameraInitialized) {
           // カメラプレビューを表示（実装は簡略化）
-          return const Center(
+          return Center(
             child: AspectRatio(
               aspectRatio: 16 / 9,
               child: Container(
                 color: Colors.grey,
-                child: Center(
+                child: const Center(
                   child: Text(
                     'カメラプレビュー',
                     style: TextStyle(

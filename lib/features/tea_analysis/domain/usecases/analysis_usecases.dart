@@ -1,39 +1,35 @@
-import '../../core/errors/failures.dart';
-import '../../core/usecases/usecase.dart';
+import 'dart:io';
+import 'package:dartz/dartz.dart';
+import '../../../../core/errors/failures.dart';
+import '../../../../core/usecases/usecase.dart';
 import '../entities/analysis_result.dart';
 import '../repositories/analysis_repository.dart';
 
-/**
- * AIモデルを読み込むユースケース
- */
-class LoadAnalysisModel implements UseCaseNoParams<void> {
+/// AIモデルをロードするユースケース
+class LoadAnalysisModel implements UseCaseNoParams<Unit> {
   final AnalysisRepository repository;
 
   LoadAnalysisModel(this.repository);
 
   @override
-  Future<Either<Failure, void>> call() async {
+  Future<Either<Failure, Unit>> call() async {
     return await repository.loadModel();
   }
 }
 
-/**
- * 画像を解析するユースケース
- */
-class AnalyzeImage implements UseCase<AnalysisResult, String> {
+/// 画像を解析するユースケース
+class AnalyzeImage implements UseCase<AnalysisResult, File> {
   final AnalysisRepository repository;
 
   AnalyzeImage(this.repository);
 
   @override
-  Future<Either<Failure, AnalysisResult>> call(String params) async {
-    return await repository.analyzeImage(params);
+  Future<Either<Failure, AnalysisResult>> call(File imageFile) async {
+    return await repository.analyzeImage(imageFile);
   }
 }
 
-/**
- * モデルが読み込まれているかチェックするユースケース
- */
+/// モデルが読み込まれているかチェックするユースケース
 class CheckModelLoaded implements UseCaseNoParams<bool> {
   final AnalysisRepository repository;
 

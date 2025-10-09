@@ -3,7 +3,6 @@ import '../../../../core/errors/failures.dart';
 import '../../domain/entities/tea_analysis_result.dart';
 import '../../domain/repositories/tea_analysis_repository.dart';
 import '../datasources/tea_analysis_local_datasource.dart';
-import '../models/tea_analysis_result_model.dart';
 
 /**
  * 茶葉解析結果リポジトリの実装
@@ -17,108 +16,52 @@ class TeaAnalysisRepositoryImpl implements TeaAnalysisRepository {
   });
 
   @override
-  Future<Either<Failure, List<TeaAnalysisResult>>> getAllTeaAnalyses() async {
+  Future<Either<Failure, List<TeaAnalysisResult>>> getAllTeaAnalysisResults() async {
     try {
-      final models = await localDataSource.getAllTeaAnalyses();
-      final entities = models.map((model) => model.toEntity()).toList();
-      return Right(entities);
+      final result = await localDataSource.getAllTeaAnalysisResults();
+      return result;
     } catch (e) {
       return Left(CacheFailure('データの取得に失敗しました: $e'));
     }
   }
 
   @override
-  Future<Either<Failure, TeaAnalysisResult?>> getTeaAnalysis(int id) async {
+  Future<Either<Failure, List<TeaAnalysisResult>>> getTeaAnalysisResultsForDate(DateTime date) async {
     try {
-      final model = await localDataSource.getTeaAnalysis(id);
-      return Right(model?.toEntity());
+      final result = await localDataSource.getTeaAnalysisResultsForDate(date);
+      return result;
     } catch (e) {
       return Left(CacheFailure('データの取得に失敗しました: $e'));
     }
   }
 
   @override
-  Future<Either<Failure, int>> saveTeaAnalysis(TeaAnalysisResult teaAnalysis) async {
+  Future<Either<Failure, TeaAnalysisResult>> saveTeaAnalysisResult(TeaAnalysisResult result) async {
     try {
-      final model = TeaAnalysisResultModel.fromEntity(teaAnalysis);
-      final id = await localDataSource.insertTeaAnalysis(model);
-      return Right(id);
+      final savedResult = await localDataSource.saveTeaAnalysisResult(result);
+      return savedResult;
     } catch (e) {
       return Left(CacheFailure('データの保存に失敗しました: $e'));
     }
   }
 
   @override
-  Future<Either<Failure, void>> updateTeaAnalysis(TeaAnalysisResult teaAnalysis) async {
+  Future<Either<Failure, TeaAnalysisResult>> updateTeaAnalysisResult(TeaAnalysisResult result) async {
     try {
-      final model = TeaAnalysisResultModel.fromEntity(teaAnalysis);
-      await localDataSource.updateTeaAnalysis(model);
-      return const Right(null);
+      final updatedResult = await localDataSource.updateTeaAnalysisResult(result);
+      return updatedResult;
     } catch (e) {
       return Left(CacheFailure('データの更新に失敗しました: $e'));
     }
   }
 
   @override
-  Future<Either<Failure, void>> deleteTeaAnalysis(int id) async {
+  Future<Either<Failure, Unit>> deleteTeaAnalysisResult(String id) async {
     try {
-      await localDataSource.deleteTeaAnalysis(id);
-      return const Right(null);
+      final result = await localDataSource.deleteTeaAnalysisResult(id);
+      return result;
     } catch (e) {
       return Left(CacheFailure('データの削除に失敗しました: $e'));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<TeaAnalysisResult>>> getTeaAnalysesByDateRange(
-    DateTime startDate,
-    DateTime endDate,
-  ) async {
-    try {
-      final models = await localDataSource.getTeaAnalysesByDateRange(startDate, endDate);
-      final entities = models.map((model) => model.toEntity()).toList();
-      return Right(entities);
-    } catch (e) {
-      return Left(CacheFailure('データの検索に失敗しました: $e'));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<TeaAnalysisResult>>> getTeaAnalysesByGrowthStage(
-    String growthStage,
-  ) async {
-    try {
-      final models = await localDataSource.getTeaAnalysesByGrowthStage(growthStage);
-      final entities = models.map((model) => model.toEntity()).toList();
-      return Right(entities);
-    } catch (e) {
-      return Left(CacheFailure('データの検索に失敗しました: $e'));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<TeaAnalysisResult>>> getTodayTeaAnalyses() async {
-    try {
-      final now = DateTime.now();
-      final startOfDay = DateTime(now.year, now.month, now.day);
-      final endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59);
-      
-      final models = await localDataSource.getTeaAnalysesByDateRange(startOfDay, endOfDay);
-      final entities = models.map((model) => model.toEntity()).toList();
-      return Right(entities);
-    } catch (e) {
-      return Left(CacheFailure('今日のデータの取得に失敗しました: $e'));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<TeaAnalysisResult>>> getRecentTeaAnalyses(int limit) async {
-    try {
-      final models = await localDataSource.getRecentTeaAnalyses(limit);
-      final entities = models.map((model) => model.toEntity()).toList();
-      return Right(entities);
-    } catch (e) {
-      return Left(CacheFailure('最近のデータの取得に失敗しました: $e'));
     }
   }
 }

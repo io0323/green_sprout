@@ -4,17 +4,13 @@
  */
 class AnalysisResult {
   final String growthStage;
-  final double growthConfidence;
   final String healthStatus;
-  final double healthConfidence;
-  final double overallConfidence;
+  final double confidence;
 
   const AnalysisResult({
     required this.growthStage,
-    required this.growthConfidence,
     required this.healthStatus,
-    required this.healthConfidence,
-    required this.overallConfidence,
+    required this.confidence,
   });
 
   /**
@@ -25,10 +21,8 @@ class AnalysisResult {
     if (identical(this, other)) return true;
     return other is AnalysisResult &&
         other.growthStage == growthStage &&
-        other.growthConfidence == growthConfidence &&
         other.healthStatus == healthStatus &&
-        other.healthConfidence == healthConfidence &&
-        other.overallConfidence == overallConfidence;
+        other.confidence == confidence;
   }
 
   /**
@@ -38,10 +32,8 @@ class AnalysisResult {
   int get hashCode {
     return Object.hash(
       growthStage,
-      growthConfidence,
       healthStatus,
-      healthConfidence,
-      overallConfidence,
+      confidence,
     );
   }
 
@@ -50,14 +42,14 @@ class AnalysisResult {
    */
   @override
   String toString() {
-    return 'AnalysisResult(growthStage: $growthStage, growthConfidence: $growthConfidence, healthStatus: $healthStatus, healthConfidence: $healthConfidence, overallConfidence: $overallConfidence)';
+    return 'AnalysisResult(growthStage: $growthStage, healthStatus: $healthStatus, confidence: $confidence)';
   }
 
   /**
    * 信頼度が高いかどうかを判定
    */
   bool get isHighConfidence {
-    return overallConfidence >= 0.8;
+    return confidence >= 0.8;
   }
 
   /**

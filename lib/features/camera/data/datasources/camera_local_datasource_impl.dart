@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:camera/camera.dart';
+import 'package:dartz/dartz.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/errors/failures.dart';
 import '../../domain/entities/camera_state.dart';
 import 'camera_local_datasource.dart';
 
@@ -14,12 +16,12 @@ class CameraLocalDataSourceImpl implements CameraLocalDataSource {
   CameraState _currentState = const CameraState();
 
   @override
-  Future<void> initializeCamera() async {
+  Future<Either<Failure, Unit>> initializeCamera() async {
     try {
       _cameras = await availableCameras();
-      
+
       if (_cameras!.isEmpty) {
-        throw Exception('カメラが見つかりません');
+        return Left(CameraFailure('カメラが見つかりません'));
       }
 
       // バックカメラを優先的に選択
@@ -35,7 +37,7 @@ class CameraLocalDataSourceImpl implements CameraLocalDataSource {
       );
 
       await _cameraController!.initialize();
-      
+
       _currentState = _currentState.copyWith(
         isInitialized: true,
         errorMessage: null,
@@ -45,42 +47,44 @@ class CameraLocalDataSourceImpl implements CameraLocalDataSource {
         errorMessage: e.toString(),
         isInitialized: false,
       );
-      rethrow;
+      return Left(CameraFailure('カメラの初期化に失敗しました: $e'));
     }
+    return const Right(unit);
   }
 
   @override
-  Future<String> captureImage() async {
+  Future<Either<Failure, File>> captureImage() async {
     if (_cameraController == null || !_cameraController!.value.isInitialized) {
-      throw Exception('カメラが初期化されていません');
+      return Left(CameraFailure('カメラが初期化されていません'));
     }
 
     try {
       _currentState = _currentState.copyWith(isCapturing: true);
-      
+
       final XFile image = await _cameraController!.takePicture();
-      final imagePath = image.path;
-      
+      final imageFile = File(image.path);
+
       _currentState = _currentState.copyWith(
         isCapturing: false,
-        capturedImagePath: imagePath,
+        capturedImagePath: image.path,
       );
-      
-      return imagePath;
+
+      return Right(imageFile);
     } catch (e) {
       _currentState = _currentState.copyWith(
         isCapturing: false,
         errorMessage: e.toString(),
       );
-      rethrow;
+      return Left(CameraFailure('画像の撮影に失敗しました: $e'));
     }
   }
 
   @override
-  Future<void> disposeCamera() async {
+  Future<Either<Failure, Unit>> disposeCamera() async {
     await _cameraController?.dispose();
     _cameraController = null;
     _currentState = const CameraState();
+    return const Right(unit);
   }
 
   @override

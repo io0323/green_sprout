@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/di/injection_container.dart' as di;
 import '../bloc/tea_analysis_cubit.dart';
 import '../bloc/analysis_cubit.dart';
-import '../../camera/presentation/bloc/camera_cubit.dart';
 import '../widgets/tea_analysis_card.dart';
 import '../widgets/camera_button.dart';
 import '../widgets/today_summary_card.dart';
-import '../../camera/presentation/pages/camera_page.dart';
-import '../../logs/presentation/pages/log_list_page.dart';
 
 /**
  * ホームページ
@@ -27,7 +23,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     // 初期化処理
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<TeaAnalysisCubit>().getAllTeaAnalyses();
+      context.read<TeaAnalysisCubit>().loadAllResults();
       context.read<AnalysisCubit>().loadModel();
     });
   }
@@ -74,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
-                      context.read<TeaAnalysisCubit>().getAllTeaAnalyses();
+                      context.read<TeaAnalysisCubit>().loadAllResults();
                     },
                     child: const Text('再試行'),
                   ),
@@ -88,10 +84,10 @@ class _HomePageState extends State<HomePage> {
               children: [
                 // 今日のサマリー
                 TodaySummaryCard(results: state.results),
-                
+
                 // 写真撮影ボタン
                 const CameraButton(),
-                
+
                 // 最近の解析結果一覧
                 Expanded(
                   child: _buildRecentResults(state.results),

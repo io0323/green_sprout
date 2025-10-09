@@ -1,19 +1,21 @@
-import 'package:dartz/dartz.dart';
-import 'package:tflite_flutter/tflite_flutter.dart';
-import 'package:image/image.dart' as img;
 import 'dart:io';
-import '../../../../core/errors/failures.dart';
-import '../../../../core/constants/app_constants.dart';
-import '../../domain/entities/analysis_result.dart';
-import '../datasources/analysis_local_datasource.dart';
+import 'package:dartz/dartz.dart';
+import 'package:image/image.dart' as img;
+import 'package:tflite_flutter/tflite_flutter.dart';
 
-/// AI解析のローカルデータソースの実装
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/errors/failures.dart';
+import '../../domain/entities/analysis_result.dart';
+import 'analysis_local_datasource.dart';
+
+/// AI解析のローカルデータソースの実装クラス
+/// TFLiteモデルの呼び出しや画像の前処理などを実装
 class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
   Interpreter? _interpreter;
   bool _isModelLoaded = false;
 
   @override
-  Future<Either<Failure, AnalysisResult>> analyzeImage(String imagePath) async {
+  Future<Either<Failure, AnalysisResult>> analyzeImage(File imageFile) async {
     try {
       // モデルが読み込まれていない場合は読み込む
       if (!_isModelLoaded) {
@@ -24,7 +26,7 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
       }
 
       // 画像を読み込んで前処理
-      final imageBytes = await File(imagePath).readAsBytes();
+      final imageBytes = await imageFile.readAsBytes();
       final image = img.decodeImage(imageBytes);
       if (image == null) {
         return Left(TFLiteFailure('画像の読み込みに失敗しました'));
@@ -54,16 +56,14 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
   }
 
   @override
-  Future<bool> isModelLoaded() async {
-    return _isModelLoaded;
-  }
+  bool get isModelLoaded => _isModelLoaded;
 
   @override
-  Future<Either<Failure, void>> loadModel() async {
+  Future<Either<Failure, Unit>> loadModel() async {
     try {
       _interpreter = await Interpreter.fromAsset(AppConstants.modelPath);
       _isModelLoaded = true;
-      return Right(null);
+      return const Right(unit);
     } catch (e) {
       return Left(TFLiteFailure('モデルの読み込みに失敗しました: $e'));
     }
@@ -79,14 +79,14 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
       ),
     );
 
-    for (int i = 0; i < AppConstants.inputImageSize; i++) {
-      for (int j = 0; j < AppConstants.inputImageSize; j++) {
-        final pixel = image.getPixel(j, i);
-        input[i][j][0] = img.getRed(pixel) / 255.0;   // R
-        input[i][j][1] = img.getGreen(pixel) / 255.0; // G
-        input[i][j][2] = img.getBlue(pixel) / 255.0;  // B
+      for (int i = 0; i < AppConstants.inputImageSize; i++) {
+        for (int j = 0; j < AppConstants.inputImageSize; j++) {
+          final pixel = image.getPixel(j, i);
+          input[i][j][0] = (pixel.r / 255.0);   // R
+          input[i][j][1] = (pixel.g / 255.0);   // G
+          input[i][j][2] = (pixel.b / 255.0);   // B
+        }
       }
-    }
 
     return input;
   }
@@ -96,15 +96,14 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
     // 出力の解釈（例：成長状態と健康状態の分類）
     final growthStageIndex = output.indexOf(output.reduce((a, b) => a > b ? a : b));
     final healthStatusIndex = output.indexOf(output.reduce((a, b) => a > b ? a : b));
-    
+
     final growthStages = ['芽', '若葉', '成葉', '老葉'];
     final healthStatuses = ['健康', '軽微な損傷', '損傷', '病気'];
-    
+
     return AnalysisResult(
       growthStage: growthStages[growthStageIndex],
       healthStatus: healthStatuses[healthStatusIndex],
       confidence: output[growthStageIndex],
-      timestamp: DateTime.now(),
     );
   }
 }
