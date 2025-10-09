@@ -1,33 +1,23 @@
-import '../../core/errors/failures.dart';
+import 'dart:io';
+import 'package:dartz/dartz.dart';
+import '../../../../core/errors/failures.dart';
 import '../entities/camera_state.dart';
 
-/**
- * カメラサービスのリポジトリインターフェース
- * カメラの操作と状態管理
- */
+/// カメラリポジトリの抽象クラス
+/// カメラの操作と状態管理の契約を定義
 abstract class CameraRepository {
-  /**
-   * カメラを初期化
-   */
-  Future<Either<Failure, void>> initializeCamera();
+  /// カメラを初期化する
+  Future<Either<Failure, Unit>> initializeCamera();
 
-  /**
-   * 画像を撮影
-   */
-  Future<Either<Failure, String>> captureImage();
+  /// 画像を撮影する
+  Future<Either<Failure, File>> captureImage();
 
-  /**
-   * カメラを破棄
-   */
-  Future<Either<Failure, void>> disposeCamera();
+  /// カメラを破棄する
+  Future<Either<Failure, Unit>> disposeCamera();
 
-  /**
-   * 現在のカメラ状態を取得
-   */
+  /// 現在のカメラの状態を取得する
   CameraState get currentState;
 
-  /**
-   * カメラが初期化されているかチェック
-   */
+  /// カメラが初期化されているか
   bool get isInitialized;
 }

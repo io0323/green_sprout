@@ -1,32 +1,23 @@
+import 'dart:io';
+import 'package:dartz/dartz.dart';
+import '../../../../core/errors/failures.dart';
 import '../../domain/entities/camera_state.dart';
 
-/**
- * カメラのローカルデータソースインターフェース
- * カメラとの直接的なやり取りを定義
- */
+/// カメラのローカルデータソースの抽象クラス
+/// カメラとの直接的なやり取りを定義
 abstract class CameraLocalDataSource {
-  /**
-   * カメラを初期化
-   */
-  Future<void> initializeCamera();
+  /// カメラを初期化する
+  Future<Either<Failure, Unit>> initializeCamera();
 
-  /**
-   * 画像を撮影
-   */
-  Future<String> captureImage();
+  /// 画像を撮影する
+  Future<Either<Failure, File>> captureImage();
 
-  /**
-   * カメラを破棄
-   */
-  Future<void> disposeCamera();
+  /// カメラを破棄する
+  Future<Either<Failure, Unit>> disposeCamera();
 
-  /**
-   * 現在のカメラ状態を取得
-   */
+  /// 現在のカメラの状態を取得する
   CameraState get currentState;
 
-  /**
-   * カメラが初期化されているかチェック
-   */
+  /// カメラが初期化されているか
   bool get isInitialized;
 }

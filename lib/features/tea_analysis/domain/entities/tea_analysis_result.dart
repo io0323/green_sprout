@@ -3,38 +3,35 @@
  * ビジネスロジックの中核となるオブジェクト
  */
 class TeaAnalysisResult {
-  final int? id;
+  final String id;
   final String imagePath;
   final String growthStage;
   final String healthStatus;
   final double confidence;
   final String? comment;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final DateTime timestamp;
 
   const TeaAnalysisResult({
-    this.id,
+    required this.id,
     required this.imagePath,
     required this.growthStage,
     required this.healthStatus,
     required this.confidence,
     this.comment,
-    required this.createdAt,
-    required this.updatedAt,
+    required this.timestamp,
   });
 
   /**
    * コメントを更新した新しいインスタンスを作成
    */
   TeaAnalysisResult copyWith({
-    int? id,
+    String? id,
     String? imagePath,
     String? growthStage,
     String? healthStatus,
     double? confidence,
     String? comment,
-    DateTime? createdAt,
-    DateTime? updatedAt,
+    DateTime? timestamp,
   }) {
     return TeaAnalysisResult(
       id: id ?? this.id,
@@ -43,8 +40,7 @@ class TeaAnalysisResult {
       healthStatus: healthStatus ?? this.healthStatus,
       confidence: confidence ?? this.confidence,
       comment: comment ?? this.comment,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
+      timestamp: timestamp ?? this.timestamp,
     );
   }
 
@@ -61,8 +57,7 @@ class TeaAnalysisResult {
         other.healthStatus == healthStatus &&
         other.confidence == confidence &&
         other.comment == comment &&
-        other.createdAt == createdAt &&
-        other.updatedAt == updatedAt;
+        other.timestamp == timestamp;
   }
 
   /**
@@ -77,8 +72,7 @@ class TeaAnalysisResult {
       healthStatus,
       confidence,
       comment,
-      createdAt,
-      updatedAt,
+      timestamp,
     );
   }
 
@@ -87,7 +81,7 @@ class TeaAnalysisResult {
    */
   @override
   String toString() {
-    return 'TeaAnalysisResult(id: $id, imagePath: $imagePath, growthStage: $growthStage, healthStatus: $healthStatus, confidence: $confidence, comment: $comment, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'TeaAnalysisResult(id: $id, imagePath: $imagePath, growthStage: $growthStage, healthStatus: $healthStatus, confidence: $confidence, comment: $comment, timestamp: $timestamp)';
   }
 
   /**
@@ -95,9 +89,9 @@ class TeaAnalysisResult {
    */
   bool get isToday {
     final now = DateTime.now();
-    return createdAt.year == now.year &&
-           createdAt.month == now.month &&
-           createdAt.day == now.day;
+    return timestamp.year == now.year &&
+           timestamp.month == now.month &&
+           timestamp.day == now.day;
   }
 
   /**

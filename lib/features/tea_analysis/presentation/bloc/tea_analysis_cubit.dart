@@ -41,36 +41,28 @@ class TeaAnalysisError extends TeaAnalysisState {
  * 状態管理とビジネスロジックの実行
  */
 class TeaAnalysisCubit extends Cubit<TeaAnalysisState> {
-  final GetAllTeaAnalyses getAllTeaAnalyses;
-  final GetTeaAnalysis getTeaAnalysis;
-  final SaveTeaAnalysis saveTeaAnalysis;
-  final UpdateTeaAnalysis updateTeaAnalysis;
-  final DeleteTeaAnalysis deleteTeaAnalysis;
-  final GetTeaAnalysesByDateRange getTeaAnalysesByDateRange;
-  final GetTeaAnalysesByGrowthStage getTeaAnalysesByGrowthStage;
-  final GetTodayTeaAnalyses getTodayTeaAnalyses;
-  final GetRecentTeaAnalyses getRecentTeaAnalyses;
+  final GetAllTeaAnalysisResults getAllTeaAnalysisResults;
+  final GetTeaAnalysisResultsForDate getTeaAnalysisResultsForDate;
+  final SaveTeaAnalysisResult saveTeaAnalysisResult;
+  final UpdateTeaAnalysisResult updateTeaAnalysisResult;
+  final DeleteTeaAnalysisResult deleteTeaAnalysisResult;
 
   TeaAnalysisCubit({
-    required this.getAllTeaAnalyses,
-    required this.getTeaAnalysis,
-    required this.saveTeaAnalysis,
-    required this.updateTeaAnalysis,
-    required this.deleteTeaAnalysis,
-    required this.getTeaAnalysesByDateRange,
-    required this.getTeaAnalysesByGrowthStage,
-    required this.getTodayTeaAnalyses,
-    required this.getRecentTeaAnalyses,
+    required this.getAllTeaAnalysisResults,
+    required this.getTeaAnalysisResultsForDate,
+    required this.saveTeaAnalysisResult,
+    required this.updateTeaAnalysisResult,
+    required this.deleteTeaAnalysisResult,
   }) : super(TeaAnalysisInitial());
 
   /**
    * 全ての茶葉解析結果を取得
    */
-  Future<void> getAllTeaAnalyses() async {
+  Future<void> loadAllResults() async {
     emit(TeaAnalysisLoading());
-    
-    final result = await getAllTeaAnalyses();
-    
+
+    final result = await getAllTeaAnalysisResults();
+
     result.fold(
       (failure) => emit(TeaAnalysisError(_mapFailureToMessage(failure))),
       (results) => emit(TeaAnalysisLoaded(results)),
@@ -78,36 +70,30 @@ class TeaAnalysisCubit extends Cubit<TeaAnalysisState> {
   }
 
   /**
-   * IDで茶葉解析結果を取得
+   * 特定の日の茶葉解析結果を取得
    */
-  Future<void> getTeaAnalysis(int id) async {
+  Future<void> loadResultsForDate(DateTime date) async {
     emit(TeaAnalysisLoading());
-    
-    final result = await getTeaAnalysis(id);
-    
+
+    final result = await getTeaAnalysisResultsForDate(date);
+
     result.fold(
       (failure) => emit(TeaAnalysisError(_mapFailureToMessage(failure))),
-      (result) {
-        if (result != null) {
-          emit(TeaAnalysisLoaded([result]));
-        } else {
-          emit(TeaAnalysisError('解析結果が見つかりません'));
-        }
-      },
+      (results) => emit(TeaAnalysisLoaded(results)),
     );
   }
 
   /**
    * 茶葉解析結果を保存
    */
-  Future<void> saveTeaAnalysis(TeaAnalysisResult teaAnalysis) async {
-    final result = await saveTeaAnalysis(teaAnalysis);
-    
-    result.fold(
+  Future<void> saveResult(TeaAnalysisResult result) async {
+    final saveResult = await saveTeaAnalysisResult(result);
+
+    saveResult.fold(
       (failure) => emit(TeaAnalysisError(_mapFailureToMessage(failure))),
-      (id) {
+      (savedResult) {
         // 保存成功後、全データを再読み込み
-        getAllTeaAnalyses();
+        loadAllResults();
       },
     );
   }
@@ -115,14 +101,14 @@ class TeaAnalysisCubit extends Cubit<TeaAnalysisState> {
   /**
    * 茶葉解析結果を更新
    */
-  Future<void> updateTeaAnalysis(TeaAnalysisResult teaAnalysis) async {
-    final result = await updateTeaAnalysis(teaAnalysis);
-    
-    result.fold(
+  Future<void> updateResult(TeaAnalysisResult result) async {
+    final updateResult = await updateTeaAnalysisResult(result);
+
+    updateResult.fold(
       (failure) => emit(TeaAnalysisError(_mapFailureToMessage(failure))),
-      (_) {
+      (updatedResult) {
         // 更新成功後、全データを再読み込み
-        getAllTeaAnalyses();
+        loadAllResults();
       },
     );
   }
@@ -130,76 +116,15 @@ class TeaAnalysisCubit extends Cubit<TeaAnalysisState> {
   /**
    * 茶葉解析結果を削除
    */
-  Future<void> deleteTeaAnalysis(int id) async {
-    final result = await deleteTeaAnalysis(id);
-    
-    result.fold(
+  Future<void> deleteResult(String id) async {
+    final deleteResult = await deleteTeaAnalysisResult(id);
+
+    deleteResult.fold(
       (failure) => emit(TeaAnalysisError(_mapFailureToMessage(failure))),
-      (_) {
+      (unit) {
         // 削除成功後、全データを再読み込み
-        getAllTeaAnalyses();
+        loadAllResults();
       },
-    );
-  }
-
-  /**
-   * 日付範囲で茶葉解析結果を検索
-   */
-  Future<void> getTeaAnalysesByDateRange(
-    DateTime startDate,
-    DateTime endDate,
-  ) async {
-    emit(TeaAnalysisLoading());
-    
-    final result = await getTeaAnalysesByDateRange(
-      DateRangeParams(startDate: startDate, endDate: endDate),
-    );
-    
-    result.fold(
-      (failure) => emit(TeaAnalysisError(_mapFailureToMessage(failure))),
-      (results) => emit(TeaAnalysisLoaded(results)),
-    );
-  }
-
-  /**
-   * 成長状態で茶葉解析結果を検索
-   */
-  Future<void> getTeaAnalysesByGrowthStage(String growthStage) async {
-    emit(TeaAnalysisLoading());
-    
-    final result = await getTeaAnalysesByGrowthStage(growthStage);
-    
-    result.fold(
-      (failure) => emit(TeaAnalysisError(_mapFailureToMessage(failure))),
-      (results) => emit(TeaAnalysisLoaded(results)),
-    );
-  }
-
-  /**
-   * 今日の茶葉解析結果を取得
-   */
-  Future<void> getTodayTeaAnalyses() async {
-    emit(TeaAnalysisLoading());
-    
-    final result = await getTodayTeaAnalyses();
-    
-    result.fold(
-      (failure) => emit(TeaAnalysisError(_mapFailureToMessage(failure))),
-      (results) => emit(TeaAnalysisLoaded(results)),
-    );
-  }
-
-  /**
-   * 最近の茶葉解析結果を取得
-   */
-  Future<void> getRecentTeaAnalyses(int limit) async {
-    emit(TeaAnalysisLoading());
-    
-    final result = await getRecentTeaAnalyses(limit);
-    
-    result.fold(
-      (failure) => emit(TeaAnalysisError(_mapFailureToMessage(failure))),
-      (results) => emit(TeaAnalysisLoaded(results)),
     );
   }
 

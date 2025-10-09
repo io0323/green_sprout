@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/errors/failures.dart';
 import '../../domain/entities/analysis_result.dart';
@@ -66,23 +67,23 @@ class AnalysisCubit extends Cubit<AnalysisState> {
    */
   Future<void> loadModel() async {
     emit(AnalysisModelLoading());
-    
+
     final result = await loadAnalysisModel();
-    
+
     result.fold(
       (failure) => emit(AnalysisError(_mapFailureToMessage(failure))),
-      (_) => emit(AnalysisModelLoaded()),
+      (unit) => emit(AnalysisModelLoaded()),
     );
   }
 
   /**
    * 画像を解析
    */
-  Future<void> analyzeImage(String imagePath) async {
+  Future<void> analyzeImageFile(File imageFile) async {
     emit(AnalysisAnalyzing());
-    
-    final result = await analyzeImage(imagePath);
-    
+
+    final result = await analyzeImage(imageFile);
+
     result.fold(
       (failure) => emit(AnalysisError(_mapFailureToMessage(failure))),
       (analysisResult) => emit(AnalysisCompleted(analysisResult)),
@@ -92,9 +93,9 @@ class AnalysisCubit extends Cubit<AnalysisState> {
   /**
    * モデルが読み込まれているかチェック
    */
-  Future<void> checkModelLoaded() async {
+  Future<void> checkIfModelLoaded() async {
     final result = await checkModelLoaded();
-    
+
     result.fold(
       (failure) => emit(AnalysisError(_mapFailureToMessage(failure))),
       (isLoaded) {

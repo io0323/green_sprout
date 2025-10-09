@@ -1,6 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/utils/app_utils.dart';
 import '../../domain/entities/tea_analysis_result.dart';
 import '../bloc/analysis_cubit.dart';
 import '../bloc/tea_analysis_cubit.dart';
@@ -10,11 +10,11 @@ import '../bloc/tea_analysis_cubit.dart';
  * クリーンアーキテクチャに基づいた解析結果画面
  */
 class AnalysisResultPage extends StatefulWidget {
-  final String imagePath;
+  final File imageFile;
 
   const AnalysisResultPage({
     super.key,
-    required this.imagePath,
+    required this.imageFile,
   });
 
   @override
@@ -29,7 +29,7 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
     super.initState();
     // 画像解析を開始
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AnalysisCubit>().analyzeImage(widget.imagePath);
+      context.read<AnalysisCubit>().analyzeImageFile(widget.imageFile);
     });
   }
 
@@ -95,7 +95,7 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
               ),
             );
           }
-          
+
           return const Center(child: CircularProgressIndicator());
         },
       ),
@@ -107,14 +107,14 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
    */
   Future<void> _saveResult() async {
     final analysisState = context.read<AnalysisCubit>().state;
-    
+
     if (analysisState is AnalysisCompleted) {
       final result = analysisState.result;
-      
+
       // 茶葉解析結果エンティティを作成
       final teaAnalysis = TeaAnalysisResult(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        imagePath: widget.imagePath,
+        imagePath: widget.imageFile.path,
         growthStage: result.growthStage,
         healthStatus: result.healthStatus,
         confidence: result.confidence,
@@ -125,7 +125,7 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
       );
 
       // 保存実行
-      await context.read<TeaAnalysisCubit>().saveTeaAnalysis(teaAnalysis);
+      await context.read<TeaAnalysisCubit>().saveResult(teaAnalysis);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -134,7 +134,7 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
             backgroundColor: Colors.green,
           ),
         );
-        
+
         Navigator.popUntil(context, (route) => route.isFirst);
       }
     }

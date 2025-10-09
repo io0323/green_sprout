@@ -1,28 +1,17 @@
-import '../../core/errors/failures.dart';
+import 'dart:io';
+import 'package:dartz/dartz.dart';
+import '../../../../core/errors/failures.dart';
 import '../entities/analysis_result.dart';
 
-/**
- * AI解析サービスのリポジトリインターフェース
- * TensorFlow Liteモデルを使用した画像解析
- */
+/// AI解析リポジトリの抽象クラス
+/// TensorFlow Liteモデルを使用した画像解析の契約を定義
 abstract class AnalysisRepository {
-  /**
-   * TensorFlow Liteモデルを読み込み
-   */
-  Future<Either<Failure, void>> loadModel();
+  /// TFLiteモデルをロードする
+  Future<Either<Failure, Unit>> loadModel();
 
-  /**
-   * 画像を解析して結果を返す
-   */
-  Future<Either<Failure, AnalysisResult>> analyzeImage(String imagePath);
+  /// 画像を解析し、結果を返す
+  Future<Either<Failure, AnalysisResult>> analyzeImage(File imageFile);
 
-  /**
-   * モデルが読み込まれているかチェック
-   */
+  /// モデルが読み込まれているかチェック
   bool get isModelLoaded;
-
-  /**
-   * リソースを解放
-   */
-  void dispose();
 }

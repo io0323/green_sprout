@@ -1,58 +1,22 @@
-import '../../core/errors/failures.dart';
+import 'package:dartz/dartz.dart';
+import '../../../../core/errors/failures.dart';
 import '../entities/tea_analysis_result.dart';
 
-/**
- * 茶葉解析結果のリポジトリインターフェース
- * ドメイン層とデータ層の境界を定義
- */
+/// 茶葉解析結果リポジトリの抽象クラス
+/// データ層とドメイン層の境界を定義
 abstract class TeaAnalysisRepository {
-  /**
-   * 全ての茶葉解析結果を取得
-   */
-  Future<Either<Failure, List<TeaAnalysisResult>>> getAllTeaAnalyses();
+  /// 全ての茶葉解析結果を取得する
+  Future<Either<Failure, List<TeaAnalysisResult>>> getAllTeaAnalysisResults();
 
-  /**
-   * IDで茶葉解析結果を取得
-   */
-  Future<Either<Failure, TeaAnalysisResult?>> getTeaAnalysis(int id);
+  /// 特定の日の茶葉解析結果を取得する
+  Future<Either<Failure, List<TeaAnalysisResult>>> getTeaAnalysisResultsForDate(DateTime date);
 
-  /**
-   * 茶葉解析結果を保存
-   */
-  Future<Either<Failure, int>> saveTeaAnalysis(TeaAnalysisResult teaAnalysis);
+  /// 新しい茶葉解析結果を保存する
+  Future<Either<Failure, TeaAnalysisResult>> saveTeaAnalysisResult(TeaAnalysisResult result);
 
-  /**
-   * 茶葉解析結果を更新
-   */
-  Future<Either<Failure, void>> updateTeaAnalysis(TeaAnalysisResult teaAnalysis);
+  /// 茶葉解析結果を更新する
+  Future<Either<Failure, TeaAnalysisResult>> updateTeaAnalysisResult(TeaAnalysisResult result);
 
-  /**
-   * 茶葉解析結果を削除
-   */
-  Future<Either<Failure, void>> deleteTeaAnalysis(int id);
-
-  /**
-   * 日付範囲で茶葉解析結果を検索
-   */
-  Future<Either<Failure, List<TeaAnalysisResult>>> getTeaAnalysesByDateRange(
-    DateTime startDate,
-    DateTime endDate,
-  );
-
-  /**
-   * 成長状態で茶葉解析結果を検索
-   */
-  Future<Either<Failure, List<TeaAnalysisResult>>> getTeaAnalysesByGrowthStage(
-    String growthStage,
-  );
-
-  /**
-   * 今日の茶葉解析結果を取得
-   */
-  Future<Either<Failure, List<TeaAnalysisResult>>> getTodayTeaAnalyses();
-
-  /**
-   * 最近の茶葉解析結果を取得
-   */
-  Future<Either<Failure, List<TeaAnalysisResult>>> getRecentTeaAnalyses(int limit);
+  /// 特定のIDの茶葉解析結果を削除する
+  Future<Either<Failure, Unit>> deleteTeaAnalysisResult(String id);
 }

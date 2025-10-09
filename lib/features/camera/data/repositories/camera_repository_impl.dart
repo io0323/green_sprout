@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failures.dart';
 import '../../domain/entities/camera_state.dart';
@@ -16,30 +17,30 @@ class CameraRepositoryImpl implements CameraRepository {
   });
 
   @override
-  Future<Either<Failure, void>> initializeCamera() async {
+  Future<Either<Failure, Unit>> initializeCamera() async {
     try {
-      await localDataSource.initializeCamera();
-      return const Right(null);
+      final result = await localDataSource.initializeCamera();
+      return result;
     } catch (e) {
       return Left(CameraFailure('カメラの初期化に失敗しました: $e'));
     }
   }
 
   @override
-  Future<Either<Failure, String>> captureImage() async {
+  Future<Either<Failure, File>> captureImage() async {
     try {
-      final imagePath = await localDataSource.captureImage();
-      return Right(imagePath);
+      final result = await localDataSource.captureImage();
+      return result;
     } catch (e) {
       return Left(CameraFailure('画像の撮影に失敗しました: $e'));
     }
   }
 
   @override
-  Future<Either<Failure, void>> disposeCamera() async {
+  Future<Either<Failure, Unit>> disposeCamera() async {
     try {
-      await localDataSource.disposeCamera();
-      return const Right(null);
+      final result = await localDataSource.disposeCamera();
+      return result;
     } catch (e) {
       return Left(CameraFailure('カメラの破棄に失敗しました: $e'));
     }

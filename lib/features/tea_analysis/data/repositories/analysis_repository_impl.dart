@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failures.dart';
 import '../../domain/entities/analysis_result.dart';
@@ -16,20 +17,20 @@ class AnalysisRepositoryImpl implements AnalysisRepository {
   });
 
   @override
-  Future<Either<Failure, void>> loadModel() async {
+  Future<Either<Failure, Unit>> loadModel() async {
     try {
-      await localDataSource.loadModel();
-      return const Right(null);
+      final result = await localDataSource.loadModel();
+      return result;
     } catch (e) {
       return Left(TFLiteFailure('モデルの読み込みに失敗しました: $e'));
     }
   }
 
   @override
-  Future<Either<Failure, AnalysisResult>> analyzeImage(String imagePath) async {
+  Future<Either<Failure, AnalysisResult>> analyzeImage(File imageFile) async {
     try {
-      final result = await localDataSource.analyzeImage(imagePath);
-      return Right(result);
+      final result = await localDataSource.analyzeImage(imageFile);
+      return result;
     } catch (e) {
       return Left(TFLiteFailure('画像解析に失敗しました: $e'));
     }
@@ -37,9 +38,4 @@ class AnalysisRepositoryImpl implements AnalysisRepository {
 
   @override
   bool get isModelLoaded => localDataSource.isModelLoaded;
-
-  @override
-  void dispose() {
-    localDataSource.dispose();
-  }
 }

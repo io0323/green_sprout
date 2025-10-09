@@ -1,7 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/camera_cubit.dart';
-import '../../tea_analysis/presentation/pages/analysis_result_page.dart';
+import '../../../tea_analysis/presentation/pages/analysis_result_page.dart';
 
 /**
  * カメラページ
@@ -41,7 +42,7 @@ class _CameraPageState extends State<CameraPage> {
               context,
               MaterialPageRoute(
                 builder: (context) => AnalysisResultPage(
-                  imagePath: state.imagePath,
+                  imageFile: File(state.imagePath),
                 ),
               ),
             );
