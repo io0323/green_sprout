@@ -6,10 +6,8 @@ import '../../../../core/errors/failures.dart';
 import '../../domain/entities/camera_state.dart';
 import 'camera_local_datasource.dart';
 
-/**
- * カメラのローカルデータソース実装
- * カメラとの直接的なやり取りを実装
- */
+/// カメラのローカルデータソース実装
+/// カメラとの直接的なやり取りを実装
 class CameraLocalDataSourceImpl implements CameraLocalDataSource {
   CameraController? _cameraController;
   List<CameraDescription>? _cameras;
@@ -21,7 +19,7 @@ class CameraLocalDataSourceImpl implements CameraLocalDataSource {
       _cameras = await availableCameras();
 
       if (_cameras!.isEmpty) {
-        return Left(CameraFailure('カメラが見つかりません'));
+        return Left(const CameraFailure('カメラが見つかりません'));
       }
 
       // バックカメラを優先的に選択
@@ -47,7 +45,7 @@ class CameraLocalDataSourceImpl implements CameraLocalDataSource {
         errorMessage: e.toString(),
         isInitialized: false,
       );
-      return Left(CameraFailure('カメラの初期化に失敗しました: $e'));
+      return Left(const CameraFailure('カメラの初期化に失敗しました: $e'));
     }
     return const Right(unit);
   }
@@ -55,7 +53,7 @@ class CameraLocalDataSourceImpl implements CameraLocalDataSource {
   @override
   Future<Either<Failure, File>> captureImage() async {
     if (_cameraController == null || !_cameraController!.value.isInitialized) {
-      return Left(CameraFailure('カメラが初期化されていません'));
+      return Left(const CameraFailure('カメラが初期化されていません'));
     }
 
     try {
@@ -75,7 +73,7 @@ class CameraLocalDataSourceImpl implements CameraLocalDataSource {
         isCapturing: false,
         errorMessage: e.toString(),
       );
-      return Left(CameraFailure('画像の撮影に失敗しました: $e'));
+      return Left(const CameraFailure('画像の撮影に失敗しました: $e'));
     }
   }
 

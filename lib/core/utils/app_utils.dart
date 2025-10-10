@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import '../constants/app_constants.dart';
 
-/**
- * ユーティリティクラス
- * アプリケーション全体で使用する共通機能
- */
+/// ユーティリティクラス
+/// アプリケーション全体で使用する共通機能
 class AppUtils {
-  /**
-   * 日時をフォーマット（相対時間）
-   */
+  /// 日時をフォーマット（相対時間）
   static String formatRelativeTime(DateTime dateTime) {
     final now = DateTime.now();
     final difference = now.difference(dateTime);
@@ -24,16 +20,12 @@ class AppUtils {
     }
   }
 
-  /**
-   * 日時をフォーマット（絶対時間）
-   */
+  /// 日時をフォーマット（絶対時間）
   static String formatAbsoluteTime(DateTime dateTime) {
     return '${dateTime.year}年${dateTime.month}月${dateTime.day}日 ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
   }
 
-  /**
-   * 信頼度に応じた色を取得
-   */
+  /// 信頼度に応じた色を取得
   static Color getConfidenceColor(double confidence) {
     if (confidence >= AppConstants.highConfidenceThreshold) {
       return Colors.green;
@@ -46,9 +38,7 @@ class AppUtils {
     }
   }
 
-  /**
-   * 健康状態に応じた色を取得
-   */
+  /// 健康状態に応じた色を取得
   static Color getHealthStatusColor(String status) {
     switch (status) {
       case HealthStatusConstants.healthy:
@@ -64,9 +54,7 @@ class AppUtils {
     }
   }
 
-  /**
-   * 健康状態に応じたアイコンを取得
-   */
+  /// 健康状態に応じたアイコンを取得
   static IconData getHealthStatusIcon(String status) {
     switch (status) {
       case HealthStatusConstants.healthy:
@@ -82,9 +70,7 @@ class AppUtils {
     }
   }
 
-  /**
-   * 成長状態に応じたアイコンを取得
-   */
+  /// 成長状態に応じたアイコンを取得
   static IconData getGrowthStageIcon(String stage) {
     switch (stage) {
       case GrowthStageConstants.bud:
@@ -100,16 +86,12 @@ class AppUtils {
     }
   }
 
-  /**
-   * 信頼度をパーセンテージ文字列に変換
-   */
+  /// 信頼度をパーセンテージ文字列に変換
   static String formatConfidence(double confidence) {
     return '${(confidence * 100).toStringAsFixed(1)}%';
   }
 
-  /**
-   * ファイルサイズを人間が読みやすい形式に変換
-   */
+  /// ファイルサイズを人間が読みやすい形式に変換
   static String formatFileSize(int bytes) {
     if (bytes < 1024) return '$bytes B';
     if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} KB';
@@ -117,16 +99,12 @@ class AppUtils {
     return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(1)} GB';
   }
 
-  /**
-   * 文字列が空かnullかチェック
-   */
+  /// 文字列が空かnullかチェック
   static bool isEmptyOrNull(String? value) {
     return value == null || value.trim().isEmpty;
   }
 
-  /**
-   * 文字列を安全にトリム
-   */
+  /// 文字列を安全にトリム
   static String? safeTrim(String? value) {
     return value?.trim().isEmpty == true ? null : value?.trim();
   }
