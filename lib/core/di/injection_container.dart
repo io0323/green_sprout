@@ -18,16 +18,12 @@ import '../../features/tea_analysis/presentation/bloc/tea_analysis_cubit.dart';
 import '../../features/tea_analysis/presentation/bloc/analysis_cubit.dart';
 import '../../features/camera/presentation/bloc/camera_cubit.dart';
 
-/**
- * 依存性注入コンテナ
- * GetItを使用してDIを管理
- */
+/// 依存性注入コンテナ
+/// GetItを使用してDIを管理
 final GetIt sl = GetIt.instance;
 
-/**
- * 依存性注入の初期化
- * アプリ起動時に呼び出される
- */
+/// 依存性注入の初期化
+/// アプリ起動時に呼び出される
 Future<void> init() async {
   // データソース
   sl.registerLazySingleton<TeaAnalysisLocalDataSource>(
