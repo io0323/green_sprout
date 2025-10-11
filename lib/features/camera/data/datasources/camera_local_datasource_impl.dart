@@ -45,7 +45,7 @@ class CameraLocalDataSourceImpl implements CameraLocalDataSource {
         errorMessage: e.toString(),
         isInitialized: false,
       );
-      return Left(const CameraFailure('カメラの初期化に失敗しました: $e'));
+      return Left(CameraFailure('カメラの初期化に失敗しました: $e'));
     }
     return const Right(unit);
   }
@@ -73,7 +73,7 @@ class CameraLocalDataSourceImpl implements CameraLocalDataSource {
         isCapturing: false,
         errorMessage: e.toString(),
       );
-      return Left(const CameraFailure('画像の撮影に失敗しました: $e'));
+      return Left(CameraFailure('画像の撮影に失敗しました: $e'));
     }
   }
 
