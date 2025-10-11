@@ -16,8 +16,8 @@ dependencies:
   camera: ^0.10.5+5
   image_picker: ^1.0.4
   
-  # TensorFlow Lite
-  tflite_flutter: ^0.10.4
+  # TensorFlow Lite (一時的に無効化)
+  # tflite_flutter: ^0.9.0
   
   # データベース
   sqflite: ^2.3.0
