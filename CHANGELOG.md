@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2024-12-19
+
+### Added
+- Comprehensive test suite implementation
+- UI/UX improvements with modern design
+- Enhanced error handling and user feedback
+- Code quality improvements and lint fixes
+
+### Changed
+- Improved home page design with gradient background
+- Enhanced error display with better visual feedback
+- Updated loading states with descriptive messages
+- Refined app bar styling with green theme
+
+### Technical Details
+- **Testing**: Added unit tests for core components
+- **UI/UX**: Modern Material Design implementation
+- **Code Quality**: Resolved lint warnings and improved code structure
+- **Error Handling**: Enhanced user experience for error states
+
 ## [1.0.0] - 2024-12-19
 
 ### Added
