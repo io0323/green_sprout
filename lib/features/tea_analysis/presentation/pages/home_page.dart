@@ -85,107 +85,103 @@ class _HomePageState extends State<HomePage> {
               );
             }
 
-          if (state is TeaAnalysisError) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.red[50],
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.red[200]!),
-                      ),
-                      child: const Icon(
-                        Icons.error_outline,
-                        size: 64,
-                        color: Colors.red,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
-                      'エラーが発生しました',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[800],
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      state.message,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 24),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        context.read<TeaAnalysisCubit>().loadAllResults();
-                      },
-                      icon: const Icon(Icons.refresh),
-                      label: const Text('再試行'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 12,
+            if (state is TeaAnalysisError) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.red[50],
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.red[200]!),
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                        child: const Icon(
+                          Icons.error_outline,
+                          size: 64,
+                          color: Colors.red,
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 24),
+                      Text(
+                        'エラーが発生しました',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        state.message,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          context.read<TeaAnalysisCubit>().loadAllResults();
+                        },
+                        icon: const Icon(Icons.refresh),
+                        label: const Text('再試行'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 12,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+              );
+            }
+
+            if (state is TeaAnalysisLoaded) {
+              return Column(
+                children: [
+                  // 今日のサマリー
+                  TodaySummaryCard(results: state.results),
+                  
+                  // 写真撮影ボタン
+                  const CameraButton(),
+                  
+                  // 最近の解析結果
+                  Expanded(
+                    child: _buildRecentResults(state.results),
+                  ),
+                ],
+              );
+            }
+
+            return const Center(
+              child: Text('データが見つかりません'),
             );
-          }
-
-          if (state is TeaAnalysisLoaded) {
-            return Column(
-              children: [
-                // 今日のサマリー
-                TodaySummaryCard(results: state.results),
-
-                // 写真撮影ボタン
-                const CameraButton(),
-
-                // 最近の解析結果一覧
-                Expanded(
-                  child: _buildRecentResults(state.results),
-                ),
-              ],
-            );
-          }
-
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+          },
+        ),
       ),
     );
   }
 
-  /**
-   * 最近の解析結果一覧を構築
-   */
   Widget _buildRecentResults(List<dynamic> results) {
-    final recentResults = results.take(5).toList();
-
-    if (recentResults.isEmpty) {
+    if (results.isEmpty) {
       return const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.eco,
+              Icons.photo_camera_outlined,
               size: 64,
               color: Colors.grey,
             ),
@@ -193,7 +189,8 @@ class _HomePageState extends State<HomePage> {
             Text(
               'まだ解析結果がありません',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
                 color: Colors.grey,
               ),
             ),
@@ -211,9 +208,9 @@ class _HomePageState extends State<HomePage> {
     }
 
     return ListView.builder(
-      itemCount: recentResults.length,
+      itemCount: results.length,
       itemBuilder: (context, index) {
-        final result = recentResults[index];
+        final result = results[index];
         return TeaAnalysisCard(result: result);
       },
     );
