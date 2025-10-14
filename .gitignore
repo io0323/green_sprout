@@ -82,7 +82,6 @@ coverage/
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
 # Web related
-lib/generated_plugin_registrant.dart
 
 # TFLite models (if large)
 # assets/models/*.tflite
