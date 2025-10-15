@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:camera/camera.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failures.dart';
 import '../../domain/entities/camera_state.dart';
@@ -20,4 +21,7 @@ abstract class CameraLocalDataSource {
 
   /// カメラが初期化されているか
   bool get isInitialized;
+
+  /// カメラコントローラーを取得
+  CameraController? get cameraController;
 }

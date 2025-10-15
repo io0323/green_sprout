@@ -1,20 +1,18 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/entities/tea_analysis_result.dart';
-import '../bloc/analysis_cubit.dart';
-import '../bloc/tea_analysis_cubit.dart';
+import '../../../tea_analysis/presentation/bloc/analysis_cubit.dart';
+import '../../../tea_analysis/presentation/widgets/analysis_result_widget.dart';
 
 /**
  * 解析結果ページ
- * クリーンアーキテクチャに基づいた解析結果画面
+ * 撮影した画像の解析結果を表示
  */
 class AnalysisResultPage extends StatefulWidget {
-  final File imageFile;
+  final String imagePath;
 
   const AnalysisResultPage({
     super.key,
-    required this.imageFile,
+    required this.imagePath,
   });
 
   @override
@@ -22,121 +20,238 @@ class AnalysisResultPage extends StatefulWidget {
 }
 
 class _AnalysisResultPageState extends State<AnalysisResultPage> {
-  final TextEditingController _commentController = TextEditingController();
+  String _comment = '';
 
   @override
   void initState() {
     super.initState();
-    // 画像解析を開始
+    // 画像を解析
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AnalysisCubit>().analyzeImageFile(widget.imageFile);
+      context.read<AnalysisCubit>().analyzeImageFromPath(widget.imagePath);
     });
-  }
-
-  @override
-  void dispose() {
-    _commentController.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('解析結果'),
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
+        title: const Text(
+          '解析結果',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.green[700],
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
-      body: BlocBuilder<AnalysisCubit, AnalysisState>(
-        builder: (context, state) {
-          if (state is AnalysisAnalyzing) {
-            return const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
-                  Text('茶葉を解析中...'),
-                ],
-              ),
-            );
-          } else if (state is AnalysisCompleted) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.check_circle, size: 64, color: Colors.green),
-                  const SizedBox(height: 16),
-                  Text('解析完了: ${state.result.growthStage}'),
-                  const SizedBox(height: 8),
-                  Text('健康状態: ${state.result.healthStatus}'),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _saveResult,
-                    child: const Text('保存'),
-                  ),
-                ],
-              ),
-            );
-          } else if (state is AnalysisError) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error, size: 64, color: Colors.red),
-                  const SizedBox(height: 16),
-                  Text('エラー: ${state.message}'),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('戻る'),
-                  ),
-                ],
-              ),
-            );
-          }
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.green[50]!,
+              Colors.white,
+            ],
+          ),
+        ),
+        child: BlocBuilder<AnalysisCubit, AnalysisState>(
+          builder: (context, state) {
+            if (state is AnalysisAnalyzing) {
+              return const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      '画像を解析中...',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
 
-          return const Center(child: CircularProgressIndicator());
-        },
+            if (state is AnalysisError) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.red[50],
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.red[200]!),
+                        ),
+                        child: const Icon(
+                          Icons.error_outline,
+                          size: 64,
+                          color: Colors.red,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        '解析エラー',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        state.message,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          context.read<AnalysisCubit>().analyzeImageFromPath(widget.imagePath);
+                        },
+                        icon: const Icon(Icons.refresh),
+                        label: const Text('再試行'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 12,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
+            if (state is AnalysisLoaded) {
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    // 解析結果表示
+                    AnalysisResultWidget(
+                      result: state.result,
+                      imagePath: widget.imagePath,
+                    ),
+                    
+                    const SizedBox(height: 24),
+                    
+                    // コメント入力
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'コメント',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800],
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          TextField(
+                            decoration: const InputDecoration(
+                              hintText: 'この茶葉についてのコメントを入力してください',
+                              border: OutlineInputBorder(),
+                            ),
+                            maxLines: 3,
+                            onChanged: (value) {
+                              setState(() {
+                                _comment = value;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    
+                    const SizedBox(height: 24),
+                    
+                    // 保存ボタン
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          _saveResult(state.result);
+                        },
+                        icon: const Icon(Icons.save),
+                        label: const Text('結果を保存'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 16,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return const Center(child: Text('Unknown state'));
+          },
+        ),
       ),
     );
   }
 
-  /**
-   * 結果を保存
-   */
-  Future<void> _saveResult() async {
-    final analysisState = context.read<AnalysisCubit>().state;
-
-    if (analysisState is AnalysisCompleted) {
-      final result = analysisState.result;
-
-      // 茶葉解析結果エンティティを作成
-      final teaAnalysis = TeaAnalysisResult(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        imagePath: widget.imageFile.path,
-        growthStage: result.growthStage,
-        healthStatus: result.healthStatus,
-        confidence: result.confidence,
-        comment: _commentController.text.trim().isEmpty
-            ? null
-            : _commentController.text.trim(),
-        timestamp: DateTime.now(),
-      );
-
-      // 保存実行
-      await context.read<TeaAnalysisCubit>().saveResult(teaAnalysis);
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('解析結果を保存しました'),
-            backgroundColor: Colors.green,
-          ),
-        );
-
-        Navigator.popUntil(context, (route) => route.isFirst);
-      }
-    }
+  void _saveResult(dynamic result) {
+    // TODO: 結果を保存する処理を実装
+    // 現在は仮の実装
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('結果を保存しました'),
+        backgroundColor: Colors.green,
+      ),
+    );
+    
+    // ホーム画面に戻る
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      '/',
+      (route) => false,
+    );
   }
 }

@@ -95,5 +95,6 @@ Future<void> init() async {
     captureImage: sl(),
     disposeCamera: sl(),
     checkCameraInitialized: sl(),
+    cameraRepository: sl(),
   ));
 }
