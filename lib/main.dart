@@ -8,6 +8,7 @@ import 'features/camera/presentation/bloc/camera_cubit.dart';
 import 'features/tea_analysis/presentation/pages/home_page.dart';
 import 'features/camera/presentation/pages/camera_page.dart';
 import 'features/logs/presentation/pages/log_list_page.dart';
+import 'features/tea_analysis/presentation/pages/analysis_result_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,6 +48,10 @@ class TeaGardenApp extends StatelessWidget {
           '/': (context) => const HomePage(),
           '/camera': (context) => const CameraPage(),
           '/logs': (context) => const LogListPage(),
+          '/analysis': (context) {
+            final args = ModalRoute.of(context)!.settings.arguments as String;
+            return AnalysisResultPage(imagePath: args);
+          },
         },
       ),
     );

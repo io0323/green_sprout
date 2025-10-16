@@ -1,7 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:camera/camera.dart';
 import '../../../../core/errors/failures.dart';
 import '../../domain/entities/camera_state.dart';
 import '../../domain/usecases/camera_usecases.dart';
+import '../../data/repositories/camera_repository_impl.dart';
 
 /**
  * カメラの状態
@@ -59,13 +61,18 @@ class CameraCubit extends Cubit<CameraBlocState> {
   final CaptureImage captureImage;
   final DisposeCamera disposeCamera;
   final CheckCameraInitialized checkCameraInitialized;
+  final CameraRepositoryImpl cameraRepository;
 
   CameraCubit({
     required this.initializeCamera,
     required this.captureImage,
     required this.disposeCamera,
     required this.checkCameraInitialized,
+    required this.cameraRepository,
   }) : super(CameraInitial());
+
+  /// カメラコントローラーを取得
+  CameraController? get cameraController => cameraRepository.localDataSource.cameraController;
 
   /**
    * カメラを初期化

@@ -90,4 +90,7 @@ class CameraLocalDataSourceImpl implements CameraLocalDataSource {
 
   @override
   bool get isInitialized => _currentState.isInitialized;
+
+  /// カメラコントローラーを取得
+  CameraController? get cameraController => _cameraController;
 }

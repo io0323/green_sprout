@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:camera/camera.dart';
 import '../bloc/camera_cubit.dart';
 
 /**
  * カメラプレビューウィジェット
- * 再利用可能なUIコンポーネント
+ * カメラの映像を表示
  */
 class CameraPreviewWidget extends StatelessWidget {
   const CameraPreviewWidget({super.key});
@@ -14,27 +15,174 @@ class CameraPreviewWidget extends StatelessWidget {
     return BlocBuilder<CameraCubit, CameraBlocState>(
       builder: (context, state) {
         if (state is CameraInitialized) {
-          // カメラプレビューを表示（実装は簡略化）
-          return Center(
-            child: AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Container(
-                color: Colors.grey,
-                child: const Center(
-                  child: Text(
-                    'カメラプレビュー',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
+          final cameraController = context.read<CameraCubit>().cameraController;
+          
+          if (cameraController != null && cameraController.value.isInitialized) {
+            return Stack(
+              children: [
+                // カメラプレビュー
+                SizedBox.expand(
+                  child: CameraPreview(cameraController),
+                ),
+                
+                // 撮影ガイド（中央の枠）
+                Center(
+                  child: Container(
+                    width: 200,
+                    height: 200,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.8),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Stack(
+                      children: [
+                        // 四角の角
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              border: Border(
+                                top: BorderSide(color: Colors.green[400]!, width: 3),
+                                left: BorderSide(color: Colors.green[400]!, width: 3),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              border: Border(
+                                top: BorderSide(color: Colors.green[400]!, width: 3),
+                                right: BorderSide(color: Colors.green[400]!, width: 3),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(color: Colors.green[400]!, width: 3),
+                                left: BorderSide(color: Colors.green[400]!, width: 3),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(color: Colors.green[400]!, width: 3),
+                                right: BorderSide(color: Colors.green[400]!, width: 3),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ),
-            ),
-          );
+                
+                // 上部のオーバーレイ
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    height: 100,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.3),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                    child: const SafeArea(
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Text(
+                          '茶葉を中央の枠に合わせてください',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                
+                // 下部のオーバーレイ
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    height: 100,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.3),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
         }
         
-        return const SizedBox.shrink();
+        // カメラが初期化されていない場合
+        return Container(
+          color: Colors.black,
+          child: const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.camera_alt_outlined,
+                  size: 64,
+                  color: Colors.white,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'カメラを初期化中...',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
       },
     );
   }

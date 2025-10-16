@@ -32,10 +32,10 @@ class AnalysisAnalyzing extends AnalysisState {}
 /**
  * 解析完了
  */
-class AnalysisCompleted extends AnalysisState {
+class AnalysisLoaded extends AnalysisState {
   final AnalysisResult result;
 
-  AnalysisCompleted(this.result);
+  AnalysisLoaded(this.result);
 }
 
 /**
@@ -77,7 +77,15 @@ class AnalysisCubit extends Cubit<AnalysisState> {
   }
 
   /**
-   * 画像を解析
+   * 画像を解析（文字列パス版）
+   */
+  Future<void> analyzeImageFromPath(String imagePath) async {
+    final imageFile = File(imagePath);
+    await analyzeImageFile(imageFile);
+  }
+
+  /**
+   * 画像を解析（File版）
    */
   Future<void> analyzeImageFile(File imageFile) async {
     emit(AnalysisAnalyzing());
@@ -86,7 +94,7 @@ class AnalysisCubit extends Cubit<AnalysisState> {
 
     result.fold(
       (failure) => emit(AnalysisError(_mapFailureToMessage(failure))),
-      (analysisResult) => emit(AnalysisCompleted(analysisResult)),
+      (analysisResult) => emit(AnalysisLoaded(analysisResult)),
     );
   }
 
