@@ -1,8 +1,11 @@
 import 'package:get_it/get_it.dart';
+import '../utils/platform_utils.dart';
 import '../../features/tea_analysis/data/datasources/analysis_local_datasource.dart';
 import '../../features/tea_analysis/data/datasources/analysis_local_datasource_impl.dart';
+import '../../features/tea_analysis/data/datasources/web_mock_analysis_datasource.dart';
 import '../../features/tea_analysis/data/datasources/tea_analysis_local_datasource.dart';
 import '../../features/tea_analysis/data/datasources/tea_analysis_local_datasource_impl.dart';
+import '../../features/tea_analysis/data/datasources/web_mock_tea_analysis_datasource.dart';
 import '../../features/tea_analysis/data/repositories/analysis_repository_impl.dart';
 import '../../features/tea_analysis/data/repositories/tea_analysis_repository_impl.dart';
 import '../../features/tea_analysis/domain/repositories/analysis_repository.dart';
@@ -11,6 +14,7 @@ import '../../features/tea_analysis/domain/usecases/analysis_usecases.dart';
 import '../../features/tea_analysis/domain/usecases/tea_analysis_usecases.dart';
 import '../../features/camera/data/datasources/camera_local_datasource.dart';
 import '../../features/camera/data/datasources/camera_local_datasource_impl.dart';
+import '../../features/camera/data/datasources/web_mock_camera_datasource.dart';
 import '../../features/camera/data/repositories/camera_repository_impl.dart';
 import '../../features/camera/domain/repositories/camera_repository.dart';
 import '../../features/camera/domain/usecases/camera_usecases.dart';
@@ -25,18 +29,34 @@ final GetIt sl = GetIt.instance;
 /// 依存性注入の初期化
 /// アプリ起動時に呼び出される
 Future<void> init() async {
-  // データソース
-  sl.registerLazySingleton<TeaAnalysisLocalDataSource>(
-    () => TeaAnalysisLocalDataSourceImpl(),
-  );
+  // データソース - プラットフォームに応じて実装を切り替え
+  if (PlatformUtils.isWeb) {
+    // Webプラットフォーム用のモック実装
+    sl.registerLazySingleton<TeaAnalysisLocalDataSource>(
+      () => WebMockTeaAnalysisDataSource(),
+    );
 
-  sl.registerLazySingleton<AnalysisLocalDataSource>(
-    () => AnalysisLocalDataSourceImpl(),
-  );
+    sl.registerLazySingleton<AnalysisLocalDataSource>(
+      () => WebMockAnalysisDataSource(),
+    );
 
-  sl.registerLazySingleton<CameraLocalDataSource>(
-    () => CameraLocalDataSourceImpl(),
-  );
+    sl.registerLazySingleton<CameraLocalDataSource>(
+      () => WebMockCameraDataSource(),
+    );
+  } else {
+    // モバイルプラットフォーム用の実装
+    sl.registerLazySingleton<TeaAnalysisLocalDataSource>(
+      () => TeaAnalysisLocalDataSourceImpl(),
+    );
+
+    sl.registerLazySingleton<AnalysisLocalDataSource>(
+      () => AnalysisLocalDataSourceImpl(),
+    );
+
+    sl.registerLazySingleton<CameraLocalDataSource>(
+      () => CameraLocalDataSourceImpl(),
+    );
+  }
 
   // リポジトリ
   sl.registerLazySingleton<TeaAnalysisRepository>(
