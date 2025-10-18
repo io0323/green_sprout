@@ -1,59 +1,385 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>茶園管理AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e8f5e8 0%, #ffffff 100%);
+            min-height: 100vh;
+        }
 
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+        .header {
+            background: linear-gradient(135deg, #2e7d32 0%, #388e3c 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
 
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
-  <base href="$FLUTTER_BASE_HREF">
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
 
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="茶園管理AIアプリ - 茶葉の成長状態と健康状態を解析">
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
 
-  <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Tea Garden AI">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+        .welcome-card {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+        .welcome-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
 
-  <title>Tea Garden AI</title>
-  <link rel="manifest" href="manifest.json">
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
 
-  <script>
-    // The value below is injected by flutter build, do not touch.
-    const serviceWorkerVersion = "{{flutter_service_worker_version}}";
-  </script>
-  <!-- This script adds the flutter initialization JS code -->
-  <script src="flutter.js" defer></script>
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .analysis-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .analysis-button {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-bottom: 1rem;
+        }
+
+        .analysis-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .analysis-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .results-list {
+            margin-top: 1rem;
+        }
+
+        .result-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            border-left: 4px solid #4caf50;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-healthy {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .status-warning {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4caf50;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <script>
-    window.addEventListener('load', function(ev) {
-      // Download main.dart.js
-      _flutter.loader.load({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-        },
-        onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine().then(function(appRunner) {
-            appRunner.runApp();
-          });
+    <div class="header">
+        <h1>🌱 茶園管理AI</h1>
+    </div>
+
+    <div class="container">
+        <div class="welcome-card">
+            <h2>茶園管理AIへようこそ</h2>
+            <p>AI技術で茶葉の健康状態を分析し、最適な栽培管理をサポートします</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-value" id="analysisCount">0</div>
+                <div class="stat-label">解析回数</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">❤️</div>
+                <div class="stat-value" id="healthRate">0%</div>
+                <div class="stat-label">健康率</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📅</div>
+                <div class="stat-value" id="todayCount">0</div>
+                <div class="stat-label">今日の解析</div>
+            </div>
+        </div>
+
+        <div class="analysis-section">
+            <h3>茶葉解析</h3>
+            <button class="analysis-button" id="analyzeBtn" onclick="startAnalysis()">
+                📸 茶葉を撮影・解析
+            </button>
+            
+            <div id="loadingSection" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>AIが茶葉を解析中...</p>
+            </div>
+
+            <div id="resultsSection">
+                <h4>最近の解析結果</h4>
+                <div id="resultsList" class="results-list">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📷</div>
+                        <p>まだ解析結果がありません</p>
+                        <p>茶葉を撮影してAI解析を開始しましょう</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        let analysisCount = 0;
+        let analysisResults = [];
+
+        function startAnalysis() {
+            const btn = document.getElementById('analyzeBtn');
+            const loadingSection = document.getElementById('loadingSection');
+            const resultsSection = document.getElementById('resultsSection');
+            
+            btn.disabled = true;
+            loadingSection.style.display = 'block';
+            resultsSection.style.display = 'none';
+
+            // 解析処理をシミュレート
+            setTimeout(() => {
+                const result = generateAnalysisResult();
+                analysisResults.unshift(result);
+                analysisCount++;
+
+                updateStats();
+                updateResultsList();
+                
+                btn.disabled = false;
+                loadingSection.style.display = 'none';
+                resultsSection.style.display = 'block';
+                
+                showToast('解析が完了しました！');
+            }, 3000);
         }
-      });
-    });
-  </script>
+
+        function generateAnalysisResult() {
+            const stages = ['発芽期', '成長期', '成熟期', '収穫期'];
+            const healthStatuses = ['健康', '注意'];
+            const comments = [
+                '茶葉の状態は良好です。適切な成長を維持しています。',
+                '軽度の葉枯れ病の兆候が確認されました。',
+                '非常に健康な茶葉です。理想的な状態を保っています。',
+                '成長が順調で、品質の高い茶葉が期待できます。',
+                '一部の葉に軽い変色が見られますが、全体的に良好です。'
+            ];
+
+            const random = Math.random();
+            const healthStatus = random < 0.8 ? '健康' : '注意';
+            const confidence = 0.75 + Math.random() * 0.2;
+
+            return {
+                id: Date.now(),
+                timestamp: new Date(),
+                growthStage: stages[Math.floor(Math.random() * stages.length)],
+                healthStatus: healthStatus,
+                confidence: confidence,
+                comment: comments[Math.floor(Math.random() * comments.length)]
+            };
+        }
+
+        function updateStats() {
+            document.getElementById('analysisCount').textContent = analysisCount;
+            
+            const healthyCount = analysisResults.filter(r => r.healthStatus === '健康').length;
+            const healthRate = analysisCount > 0 ? Math.round((healthyCount / analysisCount) * 100) : 0;
+            document.getElementById('healthRate').textContent = healthRate + '%';
+
+            const today = new Date();
+            const todayCount = analysisResults.filter(r => 
+                r.timestamp.toDateString() === today.toDateString()
+            ).length;
+            document.getElementById('todayCount').textContent = todayCount;
+        }
+
+        function updateResultsList() {
+            const resultsList = document.getElementById('resultsList');
+            
+            if (analysisResults.length === 0) {
+                resultsList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📷</div>
+                        <p>まだ解析結果がありません</p>
+                        <p>茶葉を撮影してAI解析を開始しましょう</p>
+                    </div>
+                `;
+                return;
+            }
+
+            resultsList.innerHTML = analysisResults.map(result => `
+                <div class="result-item">
+                    <div class="result-header">
+                        <strong>${result.growthStage} - ${result.healthStatus}</strong>
+                        <span class="result-status ${result.healthStatus === '健康' ? 'status-healthy' : 'status-warning'}">
+                            ${result.healthStatus}
+                        </span>
+                    </div>
+                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">
+                        ${result.timestamp.toLocaleString('ja-JP')} | 信頼度: ${Math.round(result.confidence * 100)}%
+                    </div>
+                    <div style="font-size: 0.9rem;">
+                        ${result.comment}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // 初期化
+        updateStats();
+        updateResultsList();
+    </script>
 </body>
 </html>
