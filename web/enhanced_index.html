@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>茶園管理AI - 拡張版</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e8f5e8 0%, #ffffff 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2e7d32 0%, #388e3c 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .nav-btn.active {
+            background: rgba(255,255,255,0.4);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .welcome-card {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .analysis-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .analysis-button {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-bottom: 1rem;
+        }
+
+        .analysis-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .analysis-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            margin: 1rem 0;
+        }
+
+        .results-list {
+            margin-top: 1rem;
+        }
+
+        .result-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            border-left: 4px solid #4caf50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-info {
+            flex: 1;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-healthy {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .status-warning {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.25rem 0.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .btn-edit {
+            background: #2196f3;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #f44336;
+            color: white;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4caf50;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            background: #f44336;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .export-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .export-btn {
+            background: #ff9800;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .export-btn:hover {
+            background: #f57c00;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .nav-buttons {
+                flex-wrap: wrap;
+            }
+
+            .result-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .result-actions {
+                margin-top: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌱 茶園管理AI - 拡張版</h1>
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="showTab('dashboard')">ダッシュボード</button>
+            <button class="nav-btn" onclick="showTab('analysis')">解析</button>
+            <button class="nav-btn" onclick="showTab('charts')">チャート</button>
+            <button class="nav-btn" onclick="showTab('export')">エクスポート</button>
+            <button class="nav-btn" onclick="showTab('settings')">設定</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- ダッシュボードタブ -->
+        <div id="dashboard" class="tab-content active">
+            <div class="welcome-card">
+                <h2>茶園管理AI - 拡張版</h2>
+                <p>AI技術で茶葉の健康状態を分析し、最適な栽培管理をサポートします</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value" id="analysisCount">0</div>
+                    <div class="stat-label">総解析回数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">❤️</div>
+                    <div class="stat-value" id="healthRate">0%</div>
+                    <div class="stat-label">健康率</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-value" id="todayCount">0</div>
+                    <div class="stat-label">今日の解析</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-value" id="avgConfidence">0%</div>
+                    <div class="stat-label">平均信頼度</div>
+                </div>
+            </div>
+
+            <div class="analysis-section">
+                <h3>最近の解析結果</h3>
+                <div id="recentResults" class="results-list">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📷</div>
+                        <p>まだ解析結果がありません</p>
+                        <p>茶葉を撮影してAI解析を開始しましょう</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 解析タブ -->
+        <div id="analysis" class="tab-content">
+            <div class="analysis-section">
+                <h3>茶葉解析</h3>
+                <button class="analysis-button" id="analyzeBtn" onclick="startAnalysis()">
+                    📸 茶葉を撮影・解析
+                </button>
+                
+                <div id="loadingSection" class="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>AIが茶葉を解析中...</p>
+                </div>
+
+                <div id="resultsSection">
+                    <h4>解析履歴</h4>
+                    <div id="resultsList" class="results-list">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📷</div>
+                            <p>まだ解析結果がありません</p>
+                            <p>茶葉を撮影してAI解析を開始しましょう</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- チャートタブ -->
+        <div id="charts" class="tab-content">
+            <div class="chart-container">
+                <h3>健康状態の推移</h3>
+                <div class="chart-wrapper">
+                    <canvas id="healthChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <h3>成長段階の分布</h3>
+                <div class="chart-wrapper">
+                    <canvas id="growthChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- エクスポートタブ -->
+        <div id="export" class="tab-content">
+            <div class="export-section">
+                <h3>データエクスポート</h3>
+                <p>解析結果を様々な形式でエクスポートできます</p>
+                <div class="export-buttons">
+                    <button class="export-btn" onclick="exportToCSV()">CSV形式でエクスポート</button>
+                    <button class="export-btn" onclick="exportToJSON()">JSON形式でエクスポート</button>
+                    <button class="export-btn" onclick="exportToPDF()">PDFレポート生成</button>
+                    <button class="export-btn" onclick="exportCharts()">チャート画像保存</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 設定タブ -->
+        <div id="settings" class="tab-content">
+            <div class="analysis-section">
+                <h3>アプリ設定</h3>
+                <div class="form-group">
+                    <label>解析結果の保存期間（日数）:</label>
+                    <input type="number" id="retentionDays" value="30" min="1" max="365">
+                </div>
+                <div class="form-group">
+                    <label>自動解析の間隔（分）:</label>
+                    <input type="number" id="autoAnalysisInterval" value="60" min="5" max="1440">
+                </div>
+                <div class="form-group">
+                    <label>通知設定:</label>
+                    <select id="notificationSettings">
+                        <option value="all">すべての通知</option>
+                        <option value="important">重要な通知のみ</option>
+                        <option value="none">通知なし</option>
+                    </select>
+                </div>
+                <button class="analysis-button" onclick="saveSettings()">設定を保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 編集モーダル -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>解析結果を編集</h3>
+                <span class="close" onclick="closeEditModal()">&times;</span>
+            </div>
+            <form id="editForm">
+                <div class="form-group">
+                    <label>成長段階:</label>
+                    <select id="editGrowthStage">
+                        <option value="発芽期">発芽期</option>
+                        <option value="成長期">成長期</option>
+                        <option value="成熟期">成熟期</option>
+                        <option value="収穫期">収穫期</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>健康状態:</label>
+                    <select id="editHealthStatus">
+                        <option value="健康">健康</option>
+                        <option value="注意">注意</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>信頼度:</label>
+                    <input type="number" id="editConfidence" min="0" max="100" step="1">
+                </div>
+                <div class="form-group">
+                    <label>コメント:</label>
+                    <textarea id="editComment"></textarea>
+                </div>
+                <button type="submit" class="analysis-button">保存</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        let analysisCount = 0;
+        let analysisResults = [];
+        let healthChart = null;
+        let growthChart = null;
+        let editingResultId = null;
+
+        // ローカルストレージからデータを読み込み
+        function loadData() {
+            const saved = localStorage.getItem('teaGardenData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                analysisCount = data.analysisCount || 0;
+                analysisResults = data.analysisResults || [];
+            }
+        }
+
+        // データをローカルストレージに保存
+        function saveData() {
+            const data = {
+                analysisCount: analysisCount,
+                analysisResults: analysisResults
+            };
+            localStorage.setItem('teaGardenData', JSON.stringify(data));
+        }
+
+        // タブ切り替え
+        function showTab(tabName) {
+            // すべてのタブコンテンツを非表示
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // すべてのナビゲーションボタンを非アクティブ
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => btn.classList.remove('active'));
+
+            // 選択されたタブを表示
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            // チャートタブが選択された場合、チャートを更新
+            if (tabName === 'charts') {
+                updateCharts();
+            }
+        }
+
+        function startAnalysis() {
+            const btn = document.getElementById('analyzeBtn');
+            const loadingSection = document.getElementById('loadingSection');
+            const resultsSection = document.getElementById('resultsSection');
+            
+            btn.disabled = true;
+            loadingSection.style.display = 'block';
+            resultsSection.style.display = 'none';
+
+            // 解析処理をシミュレート
+            setTimeout(() => {
+                const result = generateAnalysisResult();
+                analysisResults.unshift(result);
+                analysisCount++;
+
+                updateStats();
+                updateResultsList();
+                updateRecentResults();
+                
+                btn.disabled = false;
+                loadingSection.style.display = 'none';
+                resultsSection.style.display = 'block';
+                
+                saveData();
+                showToast('解析が完了しました！');
+            }, 3000);
+        }
+
+        function generateAnalysisResult() {
+            const stages = ['発芽期', '成長期', '成熟期', '収穫期'];
+            const healthStatuses = ['健康', '注意'];
+            const comments = [
+                '茶葉の状態は良好です。適切な成長を維持しています。',
+                '軽度の葉枯れ病の兆候が確認されました。',
+                '非常に健康な茶葉です。理想的な状態を保っています。',
+                '成長が順調で、品質の高い茶葉が期待できます。',
+                '一部の葉に軽い変色が見られますが、全体的に良好です。'
+            ];
+
+            const random = Math.random();
+            const healthStatus = random < 0.8 ? '健康' : '注意';
+            const confidence = 0.75 + Math.random() * 0.2;
+
+            return {
+                id: Date.now(),
+                timestamp: new Date(),
+                growthStage: stages[Math.floor(Math.random() * stages.length)],
+                healthStatus: healthStatus,
+                confidence: confidence,
+                comment: comments[Math.floor(Math.random() * comments.length)]
+            };
+        }
+
+        function updateStats() {
+            document.getElementById('analysisCount').textContent = analysisCount;
+            
+            const healthyCount = analysisResults.filter(r => r.healthStatus === '健康').length;
+            const healthRate = analysisCount > 0 ? Math.round((healthyCount / analysisCount) * 100) : 0;
+            document.getElementById('healthRate').textContent = healthRate + '%';
+
+            const today = new Date();
+            const todayCount = analysisResults.filter(r => 
+                r.timestamp.toDateString() === today.toDateString()
+            ).length;
+            document.getElementById('todayCount').textContent = todayCount;
+
+            const avgConfidence = analysisCount > 0 ? 
+                Math.round(analysisResults.reduce((sum, r) => sum + r.confidence, 0) / analysisCount * 100) : 0;
+            document.getElementById('avgConfidence').textContent = avgConfidence + '%';
+        }
+
+        function updateResultsList() {
+            const resultsList = document.getElementById('resultsList');
+            
+            if (analysisResults.length === 0) {
+                resultsList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📷</div>
+                        <p>まだ解析結果がありません</p>
+                        <p>茶葉を撮影してAI解析を開始しましょう</p>
+                    </div>
+                `;
+                return;
+            }
+
+            resultsList.innerHTML = analysisResults.map(result => `
+                <div class="result-item">
+                    <div class="result-info">
+                        <div class="result-header">
+                            <strong>${result.growthStage} - ${result.healthStatus}</strong>
+                            <span class="result-status ${result.healthStatus === '健康' ? 'status-healthy' : 'status-warning'}">
+                                ${result.healthStatus}
+                            </span>
+                        </div>
+                        <div style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">
+                            ${result.timestamp.toLocaleString('ja-JP')} | 信頼度: ${Math.round(result.confidence * 100)}%
+                        </div>
+                        <div style="font-size: 0.9rem;">
+                            ${result.comment}
+                        </div>
+                    </div>
+                    <div class="result-actions">
+                        <button class="btn-small btn-edit" onclick="editResult(${result.id})">編集</button>
+                        <button class="btn-small btn-delete" onclick="deleteResult(${result.id})">削除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateRecentResults() {
+            const recentResults = document.getElementById('recentResults');
+            const recent = analysisResults.slice(0, 5);
+            
+            if (recent.length === 0) {
+                recentResults.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📷</div>
+                        <p>まだ解析結果がありません</p>
+                        <p>茶葉を撮影してAI解析を開始しましょう</p>
+                    </div>
+                `;
+                return;
+            }
+
+            recentResults.innerHTML = recent.map(result => `
+                <div class="result-item">
+                    <div class="result-info">
+                        <div class="result-header">
+                            <strong>${result.growthStage} - ${result.healthStatus}</strong>
+                            <span class="result-status ${result.healthStatus === '健康' ? 'status-healthy' : 'status-warning'}">
+                                ${result.healthStatus}
+                            </span>
+                        </div>
+                        <div style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">
+                            ${result.timestamp.toLocaleString('ja-JP')} | 信頼度: ${Math.round(result.confidence * 100)}%
+                        </div>
+                        <div style="font-size: 0.9rem;">
+                            ${result.comment}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editResult(id) {
+            const result = analysisResults.find(r => r.id === id);
+            if (!result) return;
+
+            editingResultId = id;
+            document.getElementById('editGrowthStage').value = result.growthStage;
+            document.getElementById('editHealthStatus').value = result.healthStatus;
+            document.getElementById('editConfidence').value = Math.round(result.confidence * 100);
+            document.getElementById('editComment').value = result.comment;
+            
+            document.getElementById('editModal').style.display = 'block';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+            editingResultId = null;
+        }
+
+        function deleteResult(id) {
+            if (confirm('この解析結果を削除しますか？')) {
+                analysisResults = analysisResults.filter(r => r.id !== id);
+                updateStats();
+                updateResultsList();
+                updateRecentResults();
+                saveData();
+                showToast('解析結果を削除しました');
+            }
+        }
+
+        function updateCharts() {
+            if (analysisResults.length === 0) return;
+
+            // 健康状態の推移チャート
+            const healthCtx = document.getElementById('healthChart').getContext('2d');
+            if (healthChart) healthChart.destroy();
+            
+            const last7Days = analysisResults.slice(0, 7).reverse();
+            healthChart = new Chart(healthCtx, {
+                type: 'line',
+                data: {
+                    labels: last7Days.map(r => r.timestamp.toLocaleDateString('ja-JP')),
+                    datasets: [{
+                        label: '健康率 (%)',
+                        data: last7Days.map(r => r.healthStatus === '健康' ? 100 : 0),
+                        borderColor: '#4caf50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            // 成長段階の分布チャート
+            const growthCtx = document.getElementById('growthChart').getContext('2d');
+            if (growthChart) growthChart.destroy();
+            
+            const stageCounts = {};
+            analysisResults.forEach(r => {
+                stageCounts[r.growthStage] = (stageCounts[r.growthStage] || 0) + 1;
+            });
+            
+            growthChart = new Chart(growthCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(stageCounts),
+                    datasets: [{
+                        data: Object.values(stageCounts),
+                        backgroundColor: ['#4caf50', '#2196f3', '#ff9800', '#f44336']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        function exportToCSV() {
+            if (analysisResults.length === 0) {
+                showToast('エクスポートするデータがありません', 'error');
+                return;
+            }
+
+            const csvContent = [
+                ['日時', '成長段階', '健康状態', '信頼度', 'コメント'],
+                ...analysisResults.map(r => [
+                    r.timestamp.toLocaleString('ja-JP'),
+                    r.growthStage,
+                    r.healthStatus,
+                    Math.round(r.confidence * 100) + '%',
+                    r.comment
+                ])
+            ].map(row => row.join(',')).join('\n');
+
+            downloadFile(csvContent, 'tea_analysis_results.csv', 'text/csv');
+            showToast('CSVファイルをエクスポートしました');
+        }
+
+        function exportToJSON() {
+            if (analysisResults.length === 0) {
+                showToast('エクスポートするデータがありません', 'error');
+                return;
+            }
+
+            const jsonContent = JSON.stringify(analysisResults, null, 2);
+            downloadFile(jsonContent, 'tea_analysis_results.json', 'application/json');
+            showToast('JSONファイルをエクスポートしました');
+        }
+
+        function exportToPDF() {
+            showToast('PDFレポート機能は準備中です');
+        }
+
+        function exportCharts() {
+            if (!healthChart && !growthChart) {
+                showToast('エクスポートするチャートがありません', 'error');
+                return;
+            }
+
+            if (healthChart) {
+                const link = document.createElement('a');
+                link.download = 'health_chart.png';
+                link.href = healthChart.toBase64Image();
+                link.click();
+            }
+
+            if (growthChart) {
+                const link = document.createElement('a');
+                link.download = 'growth_chart.png';
+                link.href = growthChart.toBase64Image();
+                link.click();
+            }
+
+            showToast('チャート画像を保存しました');
+        }
+
+        function downloadFile(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function saveSettings() {
+            const settings = {
+                retentionDays: document.getElementById('retentionDays').value,
+                autoAnalysisInterval: document.getElementById('autoAnalysisInterval').value,
+                notificationSettings: document.getElementById('notificationSettings').value
+            };
+            localStorage.setItem('teaGardenSettings', JSON.stringify(settings));
+            showToast('設定を保存しました');
+        }
+
+        function loadSettings() {
+            const saved = localStorage.getItem('teaGardenSettings');
+            if (saved) {
+                const settings = JSON.parse(saved);
+                document.getElementById('retentionDays').value = settings.retentionDays || 30;
+                document.getElementById('autoAnalysisInterval').value = settings.autoAnalysisInterval || 60;
+                document.getElementById('notificationSettings').value = settings.notificationSettings || 'all';
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // 編集フォームの送信処理
+        document.getElementById('editForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (editingResultId) {
+                const result = analysisResults.find(r => r.id === editingResultId);
+                if (result) {
+                    result.growthStage = document.getElementById('editGrowthStage').value;
+                    result.healthStatus = document.getElementById('editHealthStatus').value;
+                    result.confidence = document.getElementById('editConfidence').value / 100;
+                    result.comment = document.getElementById('editComment').value;
+                    
+                    updateStats();
+                    updateResultsList();
+                    updateRecentResults();
+                    saveData();
+                    closeEditModal();
+                    showToast('解析結果を更新しました');
+                }
+            }
+        });
+
+        // モーダル外クリックで閉じる
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target === modal) {
+                closeEditModal();
+            }
+        }
+
+        // 初期化
+        loadData();
+        loadSettings();
+        updateStats();
+        updateResultsList();
+        updateRecentResults();
+    </script>
+</body>
+</html>
