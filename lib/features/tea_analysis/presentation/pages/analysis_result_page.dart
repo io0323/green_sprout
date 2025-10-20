@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../tea_analysis/presentation/bloc/analysis_cubit.dart';
+import '../../../tea_analysis/presentation/bloc/tea_analysis_cubit.dart';
 import '../../../tea_analysis/presentation/widgets/analysis_result_widget.dart';
+import '../../../../core/di/injection_container.dart';
+import '../../domain/entities/tea_analysis_result.dart';
 
 /**
  * 解析結果ページ
@@ -21,14 +24,23 @@ class AnalysisResultPage extends StatefulWidget {
 
 class _AnalysisResultPageState extends State<AnalysisResultPage> {
   String _comment = '';
+  late TeaAnalysisCubit _teaAnalysisCubit;
 
   @override
   void initState() {
     super.initState();
+    _teaAnalysisCubit = sl<TeaAnalysisCubit>();
+    
     // 画像を解析
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AnalysisCubit>().analyzeImageFromPath(widget.imagePath);
     });
+  }
+
+  @override
+  void dispose() {
+    _teaAnalysisCubit.close();
+    super.dispose();
   }
 
   @override
@@ -237,21 +249,53 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
     );
   }
 
-  void _saveResult(dynamic result) {
-    // TODO: 結果を保存する処理を実装
-    // 現在は仮の実装
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('結果を保存しました'),
-        backgroundColor: Colors.green,
-      ),
-    );
-    
-    // ホーム画面に戻る
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      '/',
-      (route) => false,
-    );
+  /**
+   * 解析結果をデータベースに保存する
+   */
+  void _saveResult(dynamic result) async {
+    try {
+      // TeaAnalysisResultエンティティを作成
+      final teaAnalysisResult = TeaAnalysisResult(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        imagePath: widget.imagePath,
+        growthStage: result.growthStage ?? '不明',
+        healthStatus: result.healthStatus ?? '不明',
+        confidence: result.confidence ?? 0.0,
+        comment: _comment.isNotEmpty ? _comment : null,
+        timestamp: DateTime.now(),
+      );
+
+      // 保存処理を実行
+      await _teaAnalysisCubit.saveTeaAnalysisResult(teaAnalysisResult);
+
+      // 成功メッセージを表示
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('解析結果を保存しました'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
+
+        // ホーム画面に戻る
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/',
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      // エラーメッセージを表示
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('保存に失敗しました: $e'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    }
   }
 }
