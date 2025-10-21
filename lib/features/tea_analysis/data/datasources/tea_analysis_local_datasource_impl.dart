@@ -31,8 +31,12 @@ class TeaAnalysisLocalDataSourceImpl implements TeaAnalysisLocalDataSource {
     );
   }
 
-  /// データベース作成時の処理
+  /**
+   * データベース作成時の処理
+   * インデックスとテーブル最適化を含む
+   */
   Future<void> _onCreate(Database db, int version) async {
+    // メインテーブルの作成
     await db.execute('''
       CREATE TABLE ${AppConstants.teaAnalysisTable} (
         id TEXT PRIMARY KEY,
@@ -41,22 +45,56 @@ class TeaAnalysisLocalDataSourceImpl implements TeaAnalysisLocalDataSource {
         health_status TEXT NOT NULL,
         confidence REAL NOT NULL,
         comment TEXT,
-        timestamp INTEGER NOT NULL
+        timestamp INTEGER NOT NULL,
+        created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+        updated_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now'))
       )
+    ''');
+
+    // パフォーマンス向上のためのインデックス作成
+    await db.execute('''
+      CREATE INDEX idx_tea_analysis_timestamp 
+      ON ${AppConstants.teaAnalysisTable} (timestamp DESC)
+    ''');
+
+    await db.execute('''
+      CREATE INDEX idx_tea_analysis_growth_stage 
+      ON ${AppConstants.teaAnalysisTable} (growth_stage)
+    ''');
+
+    await db.execute('''
+      CREATE INDEX idx_tea_analysis_health_status 
+      ON ${AppConstants.teaAnalysisTable} (health_status)
+    ''');
+
+    await db.execute('''
+      CREATE INDEX idx_tea_analysis_date 
+      ON ${AppConstants.teaAnalysisTable} (date(timestamp/1000, 'unixepoch'))
     ''');
   }
 
   @override
   Future<Either<Failure, TeaAnalysisResult>> saveTeaAnalysisResult(TeaAnalysisResult result) async {
+    Database? db;
     try {
-      final db = await database;
-      final model = TeaAnalysisResultModel.fromEntity(result);
+      db = await database;
+      
+      // トランザクション内で保存処理を実行
+      await db.transaction((txn) async {
+        final model = TeaAnalysisResultModel.fromEntity(result);
+        final now = DateTime.now().millisecondsSinceEpoch;
+        
+        // 更新時刻を設定
+        final modelMap = model.toMap();
+        modelMap['created_at'] = now;
+        modelMap['updated_at'] = now;
 
-      await db.insert(
-        AppConstants.teaAnalysisTable,
-        model.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+        await txn.insert(
+          AppConstants.teaAnalysisTable,
+          modelMap,
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      });
 
       return Right(result);
     } catch (e) {
@@ -66,11 +104,15 @@ class TeaAnalysisLocalDataSourceImpl implements TeaAnalysisLocalDataSource {
 
   @override
   Future<Either<Failure, List<TeaAnalysisResult>>> getAllTeaAnalysisResults() async {
+    Database? db;
     try {
-      final db = await database;
+      db = await database;
+      
+      // パフォーマンス向上のためLIMITを設定（必要に応じてページネーション）
       final maps = await db.query(
         AppConstants.teaAnalysisTable,
         orderBy: 'timestamp DESC',
+        limit: 1000, // 最大1000件まで取得
       );
 
       final results = maps.map((map) => TeaAnalysisResultModel.fromMap(map).toEntity()).toList();
@@ -117,15 +159,21 @@ class TeaAnalysisLocalDataSourceImpl implements TeaAnalysisLocalDataSource {
 
   @override
   Future<Either<Failure, List<TeaAnalysisResult>>> getTeaAnalysisResultsForDate(DateTime date) async {
+    Database? db;
     try {
-      final db = await database;
+      db = await database;
+      
+      // 日付範囲の計算を最適化
       final startOfDay = DateTime(date.year, date.month, date.day);
       final endOfDay = startOfDay.add(const Duration(days: 1));
+      
+      final startTimestamp = startOfDay.millisecondsSinceEpoch;
+      final endTimestamp = endOfDay.millisecondsSinceEpoch;
 
       final maps = await db.query(
         AppConstants.teaAnalysisTable,
         where: 'timestamp >= ? AND timestamp < ?',
-        whereArgs: [startOfDay.millisecondsSinceEpoch, endOfDay.millisecondsSinceEpoch],
+        whereArgs: [startTimestamp, endTimestamp],
         orderBy: 'timestamp DESC',
       );
 

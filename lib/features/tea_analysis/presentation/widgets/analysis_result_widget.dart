@@ -18,42 +18,57 @@ class AnalysisResultWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return Semantics(
+      label: '茶葉解析結果',
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
           // 画像表示
           Center(
-            child: Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
+            child: Semantics(
+              label: '撮影した茶葉の画像',
+              child: Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.file(
+                    File(imagePath),
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        color: Colors.grey[200],
+                        child: const Icon(
+                          Icons.image_not_supported,
+                          size: 64,
+                          color: Colors.grey,
+                        ),
+                      );
+                    },
                   ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.file(
-                  File(imagePath),
-                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -116,17 +131,30 @@ class AnalysisResultWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              LinearProgressIndicator(
-                value: result.confidence,
-                backgroundColor: Colors.grey[200],
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  _getConfidenceColor(result.confidence),
+              Semantics(
+                label: '信頼度 ${(result.confidence * 100).toStringAsFixed(1)}%',
+                child: LinearProgressIndicator(
+                  value: result.confidence,
+                  backgroundColor: Colors.grey[200],
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    _getConfidenceColor(result.confidence),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                _getConfidenceDescription(result.confidence),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                  fontStyle: FontStyle.italic,
                 ),
               ),
             ],
           ),
         ],
       ),
+    ),
     );
   }
 
@@ -237,6 +265,21 @@ class AnalysisResultWidget extends StatelessWidget {
       return Colors.orange;
     } else {
       return Colors.red;
+    }
+  }
+
+  /**
+   * 信頼度に基づく説明文を取得
+   */
+  String _getConfidenceDescription(double confidence) {
+    if (confidence >= 0.9) {
+      return '非常に高い信頼度です。解析結果は非常に正確です。';
+    } else if (confidence >= 0.8) {
+      return '高い信頼度です。解析結果は正確です。';
+    } else if (confidence >= 0.6) {
+      return '中程度の信頼度です。解析結果は概ね正確です。';
+    } else {
+      return '低い信頼度です。解析結果の確認をお勧めします。';
     }
   }
 }
