@@ -16,8 +16,8 @@ dependencies:
   camera: ^0.10.5+5
   image_picker: ^1.0.4
   
-  # TensorFlow Lite (将来の実装)
-  # tflite_flutter: ^0.10.4
+  # TensorFlow Lite
+  tflite_flutter: ^0.10.4
   
   # データベース
   sqflite: ^2.3.0
@@ -46,6 +46,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+  integration_test:
+    sdk: flutter
 
 flutter:
   uses-material-design: true
