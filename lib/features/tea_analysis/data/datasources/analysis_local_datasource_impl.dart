@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:dartz/dartz.dart';
 import 'package:image/image.dart' as img;
 // import 'package:tflite_flutter/tflite_flutter.dart';
@@ -9,7 +10,7 @@ import '../../domain/entities/analysis_result.dart';
 import 'analysis_local_datasource.dart';
 
 /// AI解析のローカルデータソースの実装クラス
-/// ハイブリッド実装：TensorFlow Lite + フォールバック機能
+/// 画像特徴量ベースの解析機能（TensorFlow Liteは将来の実装）
 class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
   // Interpreter? _interpreter;
   bool _isModelLoaded = false;
@@ -58,7 +59,7 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
   @override
   Future<Either<Failure, Unit>> loadModel() async {
     try {
-      // TensorFlow Liteの利用可能性をチェック
+      // TensorFlow Liteモデルの読み込み（将来の実装）
       try {
         // _interpreter = await Interpreter.fromAsset(AppConstants.modelPath);
         _isTFLiteAvailable = false; // 現在は無効化
@@ -75,7 +76,7 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
     }
   }
 
-  /// TensorFlow Liteを使用した解析（将来の実装）
+  /// TensorFlow Liteを使用した画像解析（将来の実装）
   Future<Either<Failure, AnalysisResult>> _analyzeWithTFLite(img.Image image) async {
     // 将来のTensorFlow Lite実装
     await Future.delayed(const Duration(milliseconds: 100));
@@ -141,5 +142,11 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
     } catch (e) {
       return Left(TFLiteFailure('フォールバック解析に失敗しました: $e'));
     }
+  }
+
+  /// リソースの解放
+  void dispose() {
+    // _interpreter?.close();
+    // _interpreter = null;
   }
 }

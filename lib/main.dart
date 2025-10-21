@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'core/di/injection_container.dart' as di;
 import 'features/tea_analysis/presentation/pages/web_home_page.dart';
 
 void main() async {
@@ -22,7 +23,7 @@ void main() async {
 
 Future<void> _initializeMobileApp() async {
   // モバイル用の依存性注入初期化
-  // 現在はWeb対応のため簡素化
+  await di.init();
 }
 
 class TeaGardenApp extends StatelessWidget {
