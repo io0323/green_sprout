@@ -3,20 +3,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tea_garden_ai/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Tea Garden AI app smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const TeaGardenApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify that our app title is displayed.
+    expect(find.text('茶園管理AI'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Verify that the camera button is present.
+    expect(find.text('茶葉を撮影・解析'), findsOneWidget);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify that the app bar is present.
+    expect(find.byType(AppBar), findsOneWidget);
   });
 }
