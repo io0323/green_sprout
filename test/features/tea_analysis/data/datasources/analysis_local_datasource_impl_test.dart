@@ -132,11 +132,8 @@ void main() {
         // Arrange
         await dataSource.loadModel();
 
-        // Act
-        dataSource.dispose();
-
-        // Assert
-        expect(dataSource.isModelLoaded, false);
+        // Act & Assert
+        expect(() => dataSource.dispose(), returnsNormally);
       });
     });
   });

@@ -17,7 +17,7 @@ dependencies:
   image_picker: ^1.0.4
   
   # TensorFlow Lite
-  tflite_flutter: ^0.10.4
+  tflite_flutter: ^0.11.0
   
   # データベース
   sqflite: ^2.3.0
@@ -33,11 +33,15 @@ dependencies:
   # 関数型プログラミング
   dartz: ^0.10.1
   
-  # 日付処理
-  intl: ^0.18.1
+  # 国際化
+  flutter_localizations:
+    sdk: flutter
   
   # ファイル操作
   path_provider: ^2.1.1
+  
+  # グラフ・チャート
+  fl_chart: ^0.68.0
   
   # 画像処理
   image: ^4.0.17
@@ -56,3 +60,4 @@ flutter:
   assets:
     - assets/models/
     - assets/images/
+    - assets/translations/

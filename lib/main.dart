@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/di/injection_container.dart' as di;
+import 'core/services/localization_service.dart';
 import 'features/tea_analysis/presentation/pages/web_home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // 国際化サービスの初期化
+  await LocalizationService.instance.loadTranslations();
   
   // Webプラットフォームの場合は簡素化された初期化
   if (kIsWeb) {
@@ -32,7 +37,7 @@ class TeaGardenApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '茶園管理AI',
+      title: LocalizationService.instance.translate('app_title'),
       theme: ThemeData(
         primarySwatch: Colors.green,
         useMaterial3: true,
@@ -41,6 +46,15 @@ class TeaGardenApp extends StatelessWidget {
           foregroundColor: Colors.white,
         ),
       ),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('ja', 'JP'),
+        Locale('en', 'US'),
+      ],
       home: kIsWeb ? const WebHomePage() : const WebHomePage(), // 現在はWeb用のみ
     );
   }
