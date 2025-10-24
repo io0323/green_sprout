@@ -217,10 +217,7 @@ class SecureHttpClient {
     }
 
     // コンテンツタイプの検証
-    final contentType = response.headers['content-type'];
-    if (contentType != null && !contentType.contains('application/json')) {
-      return false;
-    }
+    // NOTE: Removed restrictive content-type check to allow non-JSON responses.
 
     // レスポンスサイズの検証（10MB制限）
     if (response.bodyBytes.length > 10 * 1024 * 1024) {
