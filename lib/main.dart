@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/services/localization_service.dart';
+import 'core/theme/tea_garden_theme.dart';
 import 'features/tea_analysis/presentation/pages/web_home_page.dart';
 
 void main() async {
@@ -38,14 +39,9 @@ class TeaGardenApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: LocalizationService.instance.translate('app_title'),
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        useMaterial3: true,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.green,
-          foregroundColor: Colors.white,
-        ),
-      ),
+      theme: TeaGardenTheme.lightTheme,
+      darkTheme: TeaGardenTheme.darkTheme,
+      themeMode: ThemeMode.system,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
