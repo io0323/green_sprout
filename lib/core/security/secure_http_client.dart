@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 class SecureHttpClient {
   static const Duration _defaultTimeout = Duration(seconds: 30);
   static const int _maxRetries = 3;
-  
+
   late http.Client _client;
   final Map<String, String> _defaultHeaders = {
     'Content-Type': 'application/json',
@@ -129,13 +129,13 @@ class SecureHttpClient {
     Duration? timeout,
   }) async {
     final request = http.MultipartRequest('POST', Uri.parse(url));
-    
+
     // ヘッダーを追加
     request.headers.addAll({..._defaultHeaders, ...?headers});
-    
+
     // ファイルを追加
     request.files.add(await http.MultipartFile.fromPath(fieldName, file.path));
-    
+
     return await _makeRequest(
       () => request.send(),
       timeout: timeout,
@@ -160,7 +160,7 @@ class SecureHttpClient {
         final response = await requestFunction().timeout(
           timeout ?? _defaultTimeout,
         );
-        
+
         // MultipartRequestの場合はResponseに変換
         if (response is http.StreamedResponse) {
           final body = await response.stream.bytesToString();
@@ -173,7 +173,7 @@ class SecureHttpClient {
             reasonPhrase: response.reasonPhrase,
           );
         }
-        
+
         return response as http.Response;
       } on TimeoutException {
         lastException = TimeoutException('Request timeout');

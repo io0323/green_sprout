@@ -162,14 +162,16 @@ class _LogListPageState extends State<LogListPage> {
                 if (_selectedFilter != 'all') {
                   switch (_selectedFilter) {
                     case 'growth_stage':
-                      filterMatch = result.growthStage == '芽' || result.growthStage == '若葉';
+                      filterMatch = result.growthStage == '芽' ||
+                          result.growthStage == '若葉';
                       break;
                     case 'health_status':
                       filterMatch = result.healthStatus == '健康';
                       break;
                     case 'recent':
                       final DateTime now = DateTime.now();
-                      filterMatch = now.difference(result.timestamp).inDays <= 7;
+                      filterMatch =
+                          now.difference(result.timestamp).inDays <= 7;
                       break;
                   }
                 }
@@ -218,7 +220,8 @@ class _LogListPageState extends State<LogListPage> {
                             color: Colors.grey,
                           ),
                         ),
-                        if (_searchQuery.isNotEmpty || _selectedFilter != 'all') ...[
+                        if (_searchQuery.isNotEmpty ||
+                            _selectedFilter != 'all') ...[
                           const SizedBox(height: 16),
                           ElevatedButton(
                             onPressed: () {
@@ -274,10 +277,13 @@ class _LogListPageState extends State<LogListPage> {
                         ),
                         _buildStatItem(
                           '今週',
-                          state.results.where((r) {
-                            final DateTime now = DateTime.now();
-                            return now.difference(r.timestamp).inDays <= 7;
-                          }).length.toString(),
+                          state.results
+                              .where((r) {
+                                final DateTime now = DateTime.now();
+                                return now.difference(r.timestamp).inDays <= 7;
+                              })
+                              .length
+                              .toString(),
                           Icons.calendar_today_outlined,
                           Colors.orange,
                         ),
@@ -289,7 +295,8 @@ class _LogListPageState extends State<LogListPage> {
                   if (_selectedFilter != 'all' || _searchQuery.isNotEmpty)
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 16),
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
                         color: Colors.green[50],
                         borderRadius: BorderRadius.circular(8),
@@ -297,7 +304,8 @@ class _LogListPageState extends State<LogListPage> {
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.filter_alt, size: 16, color: Colors.green[700]),
+                          Icon(Icons.filter_alt,
+                              size: 16, color: Colors.green[700]),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
@@ -315,7 +323,8 @@ class _LogListPageState extends State<LogListPage> {
                                 _selectedFilter = 'all';
                               });
                             },
-                            child: Icon(Icons.close, size: 16, color: Colors.green[700]),
+                            child: Icon(Icons.close,
+                                size: 16, color: Colors.green[700]),
                           ),
                         ],
                       ),
@@ -348,7 +357,8 @@ class _LogListPageState extends State<LogListPage> {
     );
   }
 
-  Widget _buildStatItem(String label, String value, IconData icon, Color color) {
+  Widget _buildStatItem(
+      String label, String value, IconData icon, Color color) {
     return Column(
       children: [
         Icon(icon, color: color, size: 24),

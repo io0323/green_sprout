@@ -30,7 +30,7 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
   void initState() {
     super.initState();
     _teaAnalysisCubit = sl<TeaAnalysisCubit>();
-    
+
     // 画像を解析
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AnalysisCubit>().analyzeImageFromPath(widget.imagePath);
@@ -136,7 +136,9 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                       const SizedBox(height: 24),
                       ElevatedButton.icon(
                         onPressed: () {
-                          context.read<AnalysisCubit>().analyzeImageFromPath(widget.imagePath);
+                          context
+                              .read<AnalysisCubit>()
+                              .analyzeImageFromPath(widget.imagePath);
                         },
                         icon: const Icon(Icons.refresh),
                         label: const Text('再試行'),
@@ -168,9 +170,9 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                       result: state.result,
                       imagePath: widget.imagePath,
                     ),
-                    
+
                     const SizedBox(height: 24),
-                    
+
                     // コメント入力
                     Container(
                       padding: const EdgeInsets.all(16),
@@ -212,9 +214,9 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                         ],
                       ),
                     ),
-                    
+
                     const SizedBox(height: 24),
-                    
+
                     // 保存ボタン
                     SizedBox(
                       width: double.infinity,

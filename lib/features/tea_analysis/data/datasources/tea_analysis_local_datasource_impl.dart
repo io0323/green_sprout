@@ -74,16 +74,17 @@ class TeaAnalysisLocalDataSourceImpl implements TeaAnalysisLocalDataSource {
   }
 
   @override
-  Future<Either<Failure, TeaAnalysisResult>> saveTeaAnalysisResult(TeaAnalysisResult result) async {
+  Future<Either<Failure, TeaAnalysisResult>> saveTeaAnalysisResult(
+      TeaAnalysisResult result) async {
     Database? db;
     try {
       db = await database;
-      
+
       // トランザクション内で保存処理を実行
       await db.transaction((txn) async {
         final model = TeaAnalysisResultModel.fromEntity(result);
         final now = DateTime.now().millisecondsSinceEpoch;
-        
+
         // 更新時刻を設定
         final modelMap = model.toMap();
         modelMap['created_at'] = now;
@@ -103,11 +104,12 @@ class TeaAnalysisLocalDataSourceImpl implements TeaAnalysisLocalDataSource {
   }
 
   @override
-  Future<Either<Failure, List<TeaAnalysisResult>>> getAllTeaAnalysisResults() async {
+  Future<Either<Failure, List<TeaAnalysisResult>>>
+      getAllTeaAnalysisResults() async {
     Database? db;
     try {
       db = await database;
-      
+
       // パフォーマンス向上のためLIMITを設定（必要に応じてページネーション）
       final maps = await db.query(
         AppConstants.teaAnalysisTable,
@@ -115,7 +117,9 @@ class TeaAnalysisLocalDataSourceImpl implements TeaAnalysisLocalDataSource {
         limit: 1000, // 最大1000件まで取得
       );
 
-      final results = maps.map((map) => TeaAnalysisResultModel.fromMap(map).toEntity()).toList();
+      final results = maps
+          .map((map) => TeaAnalysisResultModel.fromMap(map).toEntity())
+          .toList();
       return Right(results);
     } catch (e) {
       return Left(CacheFailure('データの読み込みに失敗しました: $e'));
@@ -139,7 +143,8 @@ class TeaAnalysisLocalDataSourceImpl implements TeaAnalysisLocalDataSource {
   }
 
   @override
-  Future<Either<Failure, TeaAnalysisResult>> updateTeaAnalysisResult(TeaAnalysisResult result) async {
+  Future<Either<Failure, TeaAnalysisResult>> updateTeaAnalysisResult(
+      TeaAnalysisResult result) async {
     try {
       final db = await database;
       final model = TeaAnalysisResultModel.fromEntity(result);
@@ -158,15 +163,16 @@ class TeaAnalysisLocalDataSourceImpl implements TeaAnalysisLocalDataSource {
   }
 
   @override
-  Future<Either<Failure, List<TeaAnalysisResult>>> getTeaAnalysisResultsForDate(DateTime date) async {
+  Future<Either<Failure, List<TeaAnalysisResult>>> getTeaAnalysisResultsForDate(
+      DateTime date) async {
     Database? db;
     try {
       db = await database;
-      
+
       // 日付範囲の計算を最適化
       final startOfDay = DateTime(date.year, date.month, date.day);
       final endOfDay = startOfDay.add(const Duration(days: 1));
-      
+
       final startTimestamp = startOfDay.millisecondsSinceEpoch;
       final endTimestamp = endOfDay.millisecondsSinceEpoch;
 
@@ -177,7 +183,9 @@ class TeaAnalysisLocalDataSourceImpl implements TeaAnalysisLocalDataSource {
         orderBy: 'timestamp DESC',
       );
 
-      final results = maps.map((map) => TeaAnalysisResultModel.fromMap(map).toEntity()).toList();
+      final results = maps
+          .map((map) => TeaAnalysisResultModel.fromMap(map).toEntity())
+          .toList();
       return Right(results);
     } catch (e) {
       return Left(CacheFailure('指定日のデータの読み込みに失敗しました: $e'));

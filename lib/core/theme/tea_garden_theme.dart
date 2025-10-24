@@ -9,16 +9,16 @@ class TeaGardenTheme {
   static const Color lightGreen = Color(0xFF4CAF50);
   static const Color darkGreen = Color(0xFF1B5E20);
   static const Color accentGreen = Color(0xFF66BB6A);
-  
+
   static const Color backgroundLight = Color(0xFFF8F9FA);
   static const Color backgroundDark = Color(0xFF121212);
   static const Color surfaceLight = Color(0xFFFFFFFF);
   static const Color surfaceDark = Color(0xFF1E1E1E);
-  
+
   static const Color textPrimary = Color(0xFF212121);
   static const Color textSecondary = Color(0xFF757575);
   static const Color textLight = Color(0xFFFFFFFF);
-  
+
   static const Color errorColor = Color(0xFFD32F2F);
   static const Color warningColor = Color(0xFFFF9800);
   static const Color successColor = Color(0xFF4CAF50);
@@ -85,7 +85,8 @@ class TeaGardenTheme {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: primaryGreen, width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
     );
   }
@@ -151,7 +152,8 @@ class TeaGardenTheme {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: lightGreen, width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
     );
   }
@@ -175,20 +177,20 @@ class TeaGardenTheme {
    * シャドウ
    */
   static List<BoxShadow> get cardShadow => [
-    BoxShadow(
-      color: Colors.black.withOpacity(0.1),
-      blurRadius: 8,
-      offset: const Offset(0, 2),
-    ),
-  ];
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
+        ),
+      ];
 
   static List<BoxShadow> get buttonShadow => [
-    BoxShadow(
-      color: primaryGreen.withOpacity(0.3),
-      blurRadius: 4,
-      offset: const Offset(0, 2),
-    ),
-  ];
+        BoxShadow(
+          color: primaryGreen.withOpacity(0.3),
+          blurRadius: 4,
+          offset: const Offset(0, 2),
+        ),
+      ];
 
   /**
    * ボーダーラディウス
@@ -293,7 +295,8 @@ class ResponsiveHelper {
     return MediaQuery.of(context).size.width >= Breakpoints.tablet;
   }
 
-  static double getResponsiveWidth(BuildContext context, {
+  static double getResponsiveWidth(
+    BuildContext context, {
     required double mobile,
     required double tablet,
     required double desktop,

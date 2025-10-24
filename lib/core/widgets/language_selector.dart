@@ -35,7 +35,8 @@ class _LanguageSelectorState extends State<LanguageSelector> {
         Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
       },
       itemBuilder: (BuildContext context) {
-        return LocalizationService.instance.availableLanguages.map((String languageCode) {
+        return LocalizationService.instance.availableLanguages
+            .map((String languageCode) {
           return PopupMenuItem<String>(
             value: languageCode,
             child: Row(
@@ -45,7 +46,8 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                   color: Colors.green,
                 ),
                 const SizedBox(width: 8),
-                Text(LocalizationService.instance.getLanguageName(languageCode)),
+                Text(
+                    LocalizationService.instance.getLanguageName(languageCode)),
               ],
             ),
           );
@@ -80,9 +82,11 @@ class _LanguageDialogState extends State<LanguageDialog> {
       title: Text(t('language_settings')),
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        children: LocalizationService.instance.availableLanguages.map((String languageCode) {
+        children: LocalizationService.instance.availableLanguages
+            .map((String languageCode) {
           return RadioListTile<String>(
-            title: Text(LocalizationService.instance.getLanguageName(languageCode)),
+            title: Text(
+                LocalizationService.instance.getLanguageName(languageCode)),
             value: languageCode,
             groupValue: _selectedLanguage,
             onChanged: (String? value) {
@@ -103,7 +107,8 @@ class _LanguageDialogState extends State<LanguageDialog> {
             LocalizationService.instance.setLanguage(_selectedLanguage);
             Navigator.of(context).pop();
             // アプリ全体を再構築
-            Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('/', (route) => false);
           },
           child: Text(t('save')),
         ),

@@ -60,16 +60,15 @@ class CaptureButtonWidget extends StatelessWidget {
                       : Icon(
                           Icons.camera_alt,
                           size: 40,
-                          color: isEnabled
-                              ? Colors.green[400]
-                              : Colors.grey[400],
+                          color:
+                              isEnabled ? Colors.green[400] : Colors.grey[400],
                         ),
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // 撮影説明
             Text(
               isCapturing
@@ -79,15 +78,13 @@ class CaptureButtonWidget extends StatelessWidget {
                       : 'カメラを初期化中...',
               style: TextStyle(
                 fontSize: 16,
-                color: isEnabled
-                    ? Colors.green[700]
-                    : Colors.grey[600],
+                color: isEnabled ? Colors.green[700] : Colors.grey[600],
                 fontWeight: FontWeight.w500,
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // 撮影のヒント
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

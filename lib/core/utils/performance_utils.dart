@@ -25,11 +25,11 @@ class PerformanceUtils {
       timer.stop();
       final duration = timer.elapsed;
       _timers.remove(name);
-      
+
       if (kDebugMode) {
         print('⏱️ $name: ${duration.inMilliseconds}ms');
       }
-      
+
       return duration;
     }
     return Duration.zero;
@@ -43,11 +43,11 @@ class PerformanceUtils {
       final memoryInfo = ProcessInfo.currentRss;
       final memoryMB = memoryInfo / (1024 * 1024);
       _memoryLogs.add('$context: ${memoryMB.toStringAsFixed(2)}MB');
-      
+
       if (_memoryLogs.length > 100) {
         _memoryLogs.removeAt(0); // 古いログを削除
       }
-      
+
       print('🧠 Memory $context: ${memoryMB.toStringAsFixed(2)}MB');
     }
   }
@@ -68,7 +68,7 @@ class PerformanceUtils {
    * 非同期処理のデバウンス
    */
   static Timer? _debounceTimer;
-  
+
   static void debounce(
     String key,
     Duration delay,
@@ -85,12 +85,12 @@ class PerformanceUtils {
     try {
       final file = File(path);
       if (!await file.exists()) return null;
-      
+
       final bytes = await file.readAsBytes();
-      
+
       // メモリ使用量をログ
       logMemoryUsage('Image loaded: ${path.split('/').last}');
-      
+
       return bytes;
     } catch (e) {
       if (kDebugMode) {
@@ -110,9 +110,9 @@ class PerformanceUtils {
   ) {
     final startIndex = page * pageSize;
     final endIndex = (startIndex + pageSize).clamp(0, list.length);
-    
+
     if (startIndex >= list.length) return [];
-    
+
     return list.sublist(startIndex, endIndex);
   }
 
@@ -122,11 +122,15 @@ class PerformanceUtils {
   static void detectMemoryLeaks() {
     if (kDebugMode) {
       final currentMemory = ProcessInfo.currentRss / (1024 * 1024);
-      
-      if (currentMemory > 200) { // 200MB以上で警告
-        print('⚠️ High memory usage detected: ${currentMemory.toStringAsFixed(2)}MB');
+
+      if (currentMemory > 200) {
+        // 200MB以上で警告
+        print(
+            '⚠️ High memory usage detected: ${currentMemory.toStringAsFixed(2)}MB');
         print('📊 Recent memory logs:');
-        for (final log in _memoryLogs.length > 10 ? _memoryLogs.sublist(_memoryLogs.length - 10) : _memoryLogs) {
+        for (final log in _memoryLogs.length > 10
+            ? _memoryLogs.sublist(_memoryLogs.length - 10)
+            : _memoryLogs) {
           print('   $log');
         }
       }
@@ -140,7 +144,8 @@ class PerformanceUtils {
     return {
       'active_timers': _timers.length,
       'memory_logs_count': _memoryLogs.length,
-      'current_memory_mb': (ProcessInfo.currentRss / (1024 * 1024)).toStringAsFixed(2),
+      'current_memory_mb':
+          (ProcessInfo.currentRss / (1024 * 1024)).toStringAsFixed(2),
     };
   }
 }
@@ -168,9 +173,9 @@ class ImageCacheManager {
       final firstKey = _cache.keys.first;
       _cache.remove(firstKey);
     }
-    
+
     _cache[key] = bytes;
-    
+
     if (kDebugMode) {
       print('📸 Cached image: $key (${bytes.length} bytes)');
     }
@@ -194,7 +199,7 @@ class ImageCacheManager {
       0,
       (sum, bytes) => sum + bytes.length,
     );
-    
+
     return {
       'cached_images': _cache.length,
       'total_size_bytes': totalSize,

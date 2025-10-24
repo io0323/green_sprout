@@ -17,19 +17,19 @@ class AccessibilityHelper {
     String? action,
   }) {
     String label = baseLabel;
-    
+
     if (additionalInfo != null) {
       label += '、$additionalInfo';
     }
-    
+
     if (status != null) {
       label += '、状態: $status';
     }
-    
+
     if (action != null) {
       label += '、$action';
     }
-    
+
     return label;
   }
 
@@ -39,10 +39,10 @@ class AccessibilityHelper {
   static double calculateContrastRatio(Color color1, Color color2) {
     final luminance1 = _calculateLuminance(color1);
     final luminance2 = _calculateLuminance(color2);
-    
+
     final lighter = luminance1 > luminance2 ? luminance1 : luminance2;
     final darker = luminance1 > luminance2 ? luminance2 : luminance1;
-    
+
     return (lighter + 0.05) / (darker + 0.05);
   }
 
@@ -53,7 +53,7 @@ class AccessibilityHelper {
     final r = _linearizeColorComponent(color.red / 255.0);
     final g = _linearizeColorComponent(color.green / 255.0);
     final b = _linearizeColorComponent(color.blue / 255.0);
-    
+
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
   }
 
@@ -71,16 +71,17 @@ class AccessibilityHelper {
   /**
    * アクセシブルな色を取得
    */
-  static Color getAccessibleColor(Color backgroundColor, {
+  static Color getAccessibleColor(
+    Color backgroundColor, {
     Color? lightColor,
     Color? darkColor,
   }) {
     final light = lightColor ?? Colors.white;
     final dark = darkColor ?? Colors.black;
-    
+
     final lightContrast = calculateContrastRatio(backgroundColor, light);
     final darkContrast = calculateContrastRatio(backgroundColor, dark);
-    
+
     return lightContrast > darkContrast ? light : dark;
   }
 
@@ -90,10 +91,10 @@ class AccessibilityHelper {
   static double getScaledFontSize(BuildContext context, double baseFontSize) {
     final mediaQuery = MediaQuery.of(context);
     final textScaleFactor = mediaQuery.textScaleFactor;
-    
+
     // 最小・最大スケールファクターを制限
     final clampedScaleFactor = textScaleFactor.clamp(0.8, 2.0);
-    
+
     return baseFontSize * clampedScaleFactor;
   }
 
@@ -189,7 +190,7 @@ class AccessibleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isEnabled = onPressed != null && !isLoading;
-    final effectiveSemanticsLabel = semanticsLabel ?? 
+    final effectiveSemanticsLabel = semanticsLabel ??
         AccessibilityHelper.generateSemanticsLabel(
           baseLabel: text,
           status: isLoading ? '読み込み中' : null,
@@ -215,7 +216,8 @@ class AccessibleButton extends StatelessWidget {
           color: isEnabled
               ? (backgroundColor ?? TeaGardenTheme.primaryGreen)
               : TeaGardenTheme.textSecondary,
-          borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
+          borderRadius:
+              BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
           boxShadow: TeaGardenTheme.buttonShadow,
         ),
         child: Row(
@@ -286,7 +288,7 @@ class AccessibleImage extends StatelessWidget {
         height: height,
         fit: fit,
         errorBuilder: (context, error, stackTrace) {
-          return errorWidget ?? 
+          return errorWidget ??
               Container(
                 width: width,
                 height: height,
@@ -355,11 +357,14 @@ class AccessibleTextField extends StatelessWidget {
           labelText: label,
           hintText: hint,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
+            borderRadius:
+                BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
-            borderSide: const BorderSide(color: TeaGardenTheme.primaryGreen, width: 2),
+            borderRadius:
+                BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
+            borderSide:
+                const BorderSide(color: TeaGardenTheme.primaryGreen, width: 2),
           ),
           contentPadding: const EdgeInsets.symmetric(
             horizontal: TeaGardenTheme.spacingM,
@@ -391,16 +396,15 @@ class AccessibleProgressIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final percentage = (value * 100).round();
-    final effectiveSemanticsLabel = semanticsLabel ?? 
-        '進捗: $percentage%';
+    final effectiveSemanticsLabel = semanticsLabel ?? '進捗: $percentage%';
 
     return Semantics(
       label: effectiveSemanticsLabel,
       value: '$percentage%',
       child: LinearProgressIndicator(
         value: value,
-        backgroundColor: backgroundColor ?? 
-            TeaGardenTheme.textSecondary.withOpacity(0.2),
+        backgroundColor:
+            backgroundColor ?? TeaGardenTheme.textSecondary.withOpacity(0.2),
         valueColor: AlwaysStoppedAnimation<Color>(
           valueColor ?? TeaGardenTheme.primaryGreen,
         ),
@@ -416,10 +420,12 @@ class AccessibilitySettingsDialog extends StatefulWidget {
   const AccessibilitySettingsDialog({super.key});
 
   @override
-  State<AccessibilitySettingsDialog> createState() => _AccessibilitySettingsDialogState();
+  State<AccessibilitySettingsDialog> createState() =>
+      _AccessibilitySettingsDialogState();
 }
 
-class _AccessibilitySettingsDialogState extends State<AccessibilitySettingsDialog> {
+class _AccessibilitySettingsDialogState
+    extends State<AccessibilitySettingsDialog> {
   bool _highContrast = false;
   bool _largeText = false;
   bool _reduceMotion = false;

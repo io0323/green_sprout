@@ -22,11 +22,11 @@ class SecurityUtils {
     try {
       final key = _generateKey();
       final iv = _generateIV();
-      
+
       // 簡単なXOR暗号化（本番環境ではより強固な暗号化を使用）
       final encrypted = _xorEncrypt(data, key);
       final combined = '$iv:$encrypted';
-      
+
       return base64Encode(utf8.encode(combined));
     } catch (e) {
       if (kDebugMode) {
@@ -45,14 +45,14 @@ class SecurityUtils {
     try {
       final decoded = utf8.decode(base64Decode(encryptedData));
       final parts = decoded.split(':');
-      
+
       if (parts.length != 2) {
         throw Exception('Invalid encrypted data format');
       }
-      
+
       final iv = parts[0];
       final encrypted = parts[1];
-      
+
       final key = _generateKey();
       return _xorDecrypt(encrypted, key);
     } catch (e) {
@@ -70,13 +70,11 @@ class SecurityUtils {
    * @return ハッシュ化されたパスワード
    */
   static String hashPassword(String password, {String? salt}) {
-    final saltBytes = salt != null 
-        ? utf8.encode(salt) 
-        : _generateSalt();
-    
+    final saltBytes = salt != null ? utf8.encode(salt) : _generateSalt();
+
     final passwordBytes = utf8.encode(password);
     final combined = List<int>.from(saltBytes)..addAll(passwordBytes);
-    
+
     final hash = sha256.convert(combined);
     return base64Encode(hash.bytes);
   }
@@ -99,9 +97,10 @@ class SecurityUtils {
    * @return ランダム文字列
    */
   static String generateSecureRandomString(int length) {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const chars =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     final random = Random.secure();
-    
+
     return String.fromCharCodes(
       Iterable.generate(
         length,
@@ -215,7 +214,7 @@ class SecurityUtils {
         print('Details: $details');
       }
     }
-    
+
     // 実際の実装では、セキュリティログサービスに送信
   }
 
@@ -239,24 +238,24 @@ class SecurityUtils {
   static String _xorEncrypt(String data, String key) {
     final dataBytes = utf8.encode(data);
     final keyBytes = utf8.encode(key);
-    
+
     final encrypted = <int>[];
     for (int i = 0; i < dataBytes.length; i++) {
       encrypted.add(dataBytes[i] ^ keyBytes[i % keyBytes.length]);
     }
-    
+
     return base64Encode(encrypted);
   }
 
   static String _xorDecrypt(String encrypted, String key) {
     final encryptedBytes = base64Decode(encrypted);
     final keyBytes = utf8.encode(key);
-    
+
     final decrypted = <int>[];
     for (int i = 0; i < encryptedBytes.length; i++) {
       decrypted.add(encryptedBytes[i] ^ keyBytes[i % keyBytes.length]);
     }
-    
+
     return utf8.decode(decrypted);
   }
 

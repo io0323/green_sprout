@@ -101,9 +101,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
             ],
           ),
         ),
-        child: _isAnalyzing
-            ? _buildAnalyzingView()
-            : _buildMainContent(),
+        child: _isAnalyzing ? _buildAnalyzingView() : _buildMainContent(),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _isAnalyzing ? null : _startAnalysis,
@@ -219,8 +217,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
     final todayResults = _analysisResults.where((result) {
       final now = DateTime.now();
       return result.timestamp.year == now.year &&
-             result.timestamp.month == now.month &&
-             result.timestamp.day == now.day;
+          result.timestamp.month == now.month &&
+          result.timestamp.day == now.day;
     }).toList();
 
     return Card(
@@ -265,7 +263,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                 Expanded(
                   child: _buildSummaryItem(
                     '健康率',
-                    todayResults.isNotEmpty 
+                    todayResults.isNotEmpty
                         ? '${((todayResults.where((r) => r.healthStatus == '健康').length / todayResults.length) * 100).toInt()}%'
                         : '0%',
                     Icons.favorite,
@@ -280,7 +278,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
     );
   }
 
-  Widget _buildSummaryItem(String label, String value, IconData icon, Color color) {
+  Widget _buildSummaryItem(
+      String label, String value, IconData icon, Color color) {
     return Column(
       children: [
         Icon(icon, color: color, size: 32),
@@ -377,15 +376,15 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: result.healthStatus == '健康' 
-                    ? Colors.green[100] 
+                color: result.healthStatus == '健康'
+                    ? Colors.green[100]
                     : Colors.orange[100],
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
                 Icons.eco,
-                color: result.healthStatus == '健康' 
-                    ? Colors.green[600] 
+                color: result.healthStatus == '健康'
+                    ? Colors.green[600]
                     : Colors.orange[600],
                 size: 30,
               ),
@@ -424,8 +423,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: result.healthStatus == '健康' 
-                    ? Colors.green[100] 
+                color: result.healthStatus == '健康'
+                    ? Colors.green[100]
                     : Colors.orange[100],
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -434,8 +433,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  color: result.healthStatus == '健康' 
-                      ? Colors.green[700] 
+                  color: result.healthStatus == '健康'
+                      ? Colors.green[700]
                       : Colors.orange[700],
                 ),
               ),
@@ -457,10 +456,17 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
     // 新しい解析結果を追加
     final newResult = TeaAnalysisResult(
       id: (_analysisResults.length + 1).toString(),
-      imagePath: 'assets/sample_tea_${DateTime.now().millisecondsSinceEpoch % 3 + 1}.jpg',
+      imagePath:
+          'assets/sample_tea_${DateTime.now().millisecondsSinceEpoch % 3 + 1}.jpg',
       timestamp: DateTime.now(),
-      healthStatus: DateTime.now().millisecondsSinceEpoch % 10 < 2 ? '注意' : '健康',
-      growthStage: ['発芽期', '成長期', '成熟期', '収穫期'][DateTime.now().millisecondsSinceEpoch % 4],
+      healthStatus:
+          DateTime.now().millisecondsSinceEpoch % 10 < 2 ? '注意' : '健康',
+      growthStage: [
+        '発芽期',
+        '成長期',
+        '成熟期',
+        '収穫期'
+      ][DateTime.now().millisecondsSinceEpoch % 4],
       confidence: 0.8 + (DateTime.now().millisecondsSinceEpoch % 20) / 100,
       comment: '新しい解析が完了しました。茶葉の状態を確認しました。',
     );
@@ -500,10 +506,13 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
               return ListTile(
                 leading: Icon(
                   Icons.eco,
-                  color: result.healthStatus == '健康' ? Colors.green : Colors.orange,
+                  color: result.healthStatus == '健康'
+                      ? Colors.green
+                      : Colors.orange,
                 ),
                 title: Text('${result.growthStage} - ${result.healthStatus}'),
-                subtitle: Text('${result.timestamp.year}/${result.timestamp.month}/${result.timestamp.day}'),
+                subtitle: Text(
+                    '${result.timestamp.year}/${result.timestamp.month}/${result.timestamp.day}'),
                 trailing: Text('${(result.confidence * 100).toInt()}%'),
               );
             },

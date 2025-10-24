@@ -72,7 +72,8 @@ class CameraCubit extends Cubit<CameraBlocState> {
   }) : super(CameraInitial());
 
   /// カメラコントローラーを取得
-  CameraController? get cameraController => cameraRepository.localDataSource.cameraController;
+  CameraController? get cameraController =>
+      cameraRepository.localDataSource.cameraController;
 
   /**
    * カメラを初期化

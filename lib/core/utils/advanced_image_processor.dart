@@ -16,23 +16,20 @@ class AdvancedImageProcessor {
   static img.Image preprocessImage(img.Image image) {
     // 1. ノイズ除去（ガウシアンフィルタ）
     var processed = img.gaussianBlur(image, radius: 1);
-    
+
     // 2. コントラスト調整
     processed = img.adjustColor(processed, contrast: 1.2);
-    
+
     // 3. 明度調整
     processed = img.adjustColor(processed, brightness: 1.1);
-    
+
     // 4. シャープネス向上
-    processed = img.convolution(processed, filter: [
-      -1, -1, -1,
-      -1,  9, -1,
-      -1, -1, -1
-    ]);
-    
+    processed =
+        img.convolution(processed, filter: [-1, -1, -1, -1, 9, -1, -1, -1, -1]);
+
     // 5. リサイズ（アスペクト比を保持）
     processed = _resizeWithAspectRatio(processed, _targetSize);
-    
+
     return processed;
   }
 
@@ -42,10 +39,10 @@ class AdvancedImageProcessor {
   static img.Image _resizeWithAspectRatio(img.Image image, int targetSize) {
     final originalWidth = image.width;
     final originalHeight = image.height;
-    
+
     // アスペクト比を計算
     final aspectRatio = originalWidth / originalHeight;
-    
+
     int newWidth, newHeight;
     if (aspectRatio > 1) {
       // 横長の場合
@@ -56,10 +53,10 @@ class AdvancedImageProcessor {
       newHeight = targetSize;
       newWidth = (targetSize * aspectRatio).round();
     }
-    
+
     // リサイズ
     var resized = img.copyResize(image, width: newWidth, height: newHeight);
-    
+
     // パディングを追加して正方形にする
     return _addPadding(resized, targetSize);
   }
@@ -71,20 +68,20 @@ class AdvancedImageProcessor {
     if (image.width == targetSize && image.height == targetSize) {
       return image;
     }
-    
+
     // 中央に配置するためのオフセットを計算
     final offsetX = (targetSize - image.width) ~/ 2;
     final offsetY = (targetSize - image.height) ~/ 2;
-    
+
     // 新しい画像を作成
     final padded = img.Image(width: targetSize, height: targetSize);
-    
+
     // 背景を白で塗りつぶし
     img.fill(padded, color: img.ColorRgb8(255, 255, 255));
-    
+
     // 元の画像を中央に配置
     img.compositeImage(padded, image, dstX: offsetX, dstY: offsetY);
-    
+
     return padded;
   }
 
@@ -95,26 +92,26 @@ class AdvancedImageProcessor {
   static Float32List imageToFloat32List(img.Image image) {
     final pixels = image.getBytes();
     final floatList = Float32List(_targetSize * _targetSize * _channels);
-    
+
     int index = 0;
     for (int y = 0; y < _targetSize; y++) {
       for (int x = 0; x < _targetSize; x++) {
         final pixelIndex = (y * _targetSize + x) * 4; // RGBA
-        
+
         // RGB値を取得（0-255から0-1に正規化）
         final r = pixels[pixelIndex] / 255.0;
         final g = pixels[pixelIndex + 1] / 255.0;
         final b = pixels[pixelIndex + 2] / 255.0;
-        
+
         // ImageNetの平均と標準偏差で正規化
-        floatList[index] = (r - 0.485) / 0.229;     // R
+        floatList[index] = (r - 0.485) / 0.229; // R
         floatList[index + 1] = (g - 0.456) / 0.224; // G
         floatList[index + 2] = (b - 0.406) / 0.225; // B
-        
+
         index += 3;
       }
     }
-    
+
     return floatList;
   }
 
@@ -125,16 +122,17 @@ class AdvancedImageProcessor {
   static ImageQuality assessImageQuality(img.Image image) {
     // 1. ぼやけの評価（ラプラシアン分散）
     final blurScore = _calculateBlurScore(image);
-    
+
     // 2. 明度の評価
     final brightnessScore = _calculateBrightnessScore(image);
-    
+
     // 3. コントラストの評価
     final contrastScore = _calculateContrastScore(image);
-    
+
     // 4. 総合スコアの計算
-    final overallScore = (blurScore * 0.4 + brightnessScore * 0.3 + contrastScore * 0.3);
-    
+    final overallScore =
+        (blurScore * 0.4 + brightnessScore * 0.3 + contrastScore * 0.3);
+
     return ImageQuality(
       blurScore: blurScore,
       brightnessScore: brightnessScore,
@@ -149,27 +147,24 @@ class AdvancedImageProcessor {
   static double _calculateBlurScore(img.Image image) {
     // グレースケールに変換
     final gray = img.grayscale(image);
-    
+
     // ラプラシアンフィルタを適用
-    final laplacian = img.convolution(gray, filter: [
-      0,  1,  0,
-      1, -4,  1,
-      0,  1,  0
-    ]);
-    
+    final laplacian =
+        img.convolution(gray, filter: [0, 1, 0, 1, -4, 1, 0, 1, 0]);
+
     // 分散を計算
     final pixels = laplacian.getBytes();
     double sum = 0;
     double sumSquared = 0;
-    
+
     for (final pixel in pixels) {
       sum += pixel;
       sumSquared += pixel * pixel;
     }
-    
+
     final mean = sum / pixels.length;
     final variance = (sumSquared / pixels.length) - (mean * mean);
-    
+
     // スコアを0-1の範囲に正規化
     return (variance / 10000).clamp(0.0, 1.0);
   }
@@ -180,18 +175,18 @@ class AdvancedImageProcessor {
   static double _calculateBrightnessScore(img.Image image) {
     final pixels = image.getBytes();
     double totalBrightness = 0;
-    
+
     for (int i = 0; i < pixels.length; i += 4) {
       // RGBの平均を計算
       final brightness = (pixels[i] + pixels[i + 1] + pixels[i + 2]) / 3;
       totalBrightness += brightness;
     }
-    
+
     final averageBrightness = totalBrightness / (pixels.length / 4);
-    
+
     // 理想的な明度（128）からの偏差を計算
     final deviation = (averageBrightness - 128).abs() / 128;
-    
+
     return (1.0 - deviation).clamp(0.0, 1.0);
   }
 
@@ -202,15 +197,15 @@ class AdvancedImageProcessor {
     final pixels = image.getBytes();
     int minBrightness = 255;
     int maxBrightness = 0;
-    
+
     for (int i = 0; i < pixels.length; i += 4) {
       final brightness = (pixels[i] + pixels[i + 1] + pixels[i + 2]) ~/ 3;
       minBrightness = minBrightness < brightness ? minBrightness : brightness;
       maxBrightness = maxBrightness > brightness ? maxBrightness : brightness;
     }
-    
+
     final contrast = maxBrightness - minBrightness;
-    
+
     // スコアを0-1の範囲に正規化
     return (contrast / 255).clamp(0.0, 1.0);
   }
@@ -223,21 +218,21 @@ class AdvancedImageProcessor {
     final pixels = image.getBytes();
     double totalH = 0, totalS = 0, totalL = 0;
     int pixelCount = 0;
-    
+
     for (int i = 0; i < pixels.length; i += 4) {
       final r = pixels[i];
       final g = pixels[i + 1];
       final b = pixels[i + 2];
-      
+
       // RGBからHSLに変換
       final hsl = _rgbToHsl(r, g, b);
-      
+
       totalH += hsl.h;
       totalS += hsl.s;
       totalL += hsl.l;
       pixelCount++;
     }
-    
+
     return ImageFeatures(
       averageHue: totalH / pixelCount,
       averageSaturation: totalS / pixelCount,
@@ -253,20 +248,20 @@ class AdvancedImageProcessor {
     final rf = r / 255.0;
     final gf = g / 255.0;
     final bf = b / 255.0;
-    
+
     final max = [rf, gf, bf].reduce((a, b) => a > b ? a : b);
     final min = [rf, gf, bf].reduce((a, b) => a < b ? a : b);
-    
+
     double h, s, l;
-    
+
     l = (max + min) / 2;
-    
+
     if (max == min) {
       h = s = 0; // 無彩色
     } else {
       final d = max - min;
       s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-      
+
       if (max == rf) {
         h = (gf - bf) / d + (gf < bf ? 6 : 0);
       } else if (max == gf) {
@@ -276,7 +271,7 @@ class AdvancedImageProcessor {
       }
       h /= 6;
     }
-    
+
     return HSL(h * 360, s, l);
   }
 }

@@ -7,8 +7,9 @@ import 'package:flutter/services.dart';
  */
 class LocalizationService {
   static LocalizationService? _instance;
-  static LocalizationService get instance => _instance ??= LocalizationService._();
-  
+  static LocalizationService get instance =>
+      _instance ??= LocalizationService._();
+
   LocalizationService._();
 
   Map<String, dynamic> _translations = {};
@@ -19,7 +20,8 @@ class LocalizationService {
    */
   Future<void> loadTranslations() async {
     try {
-      final String jsonString = await rootBundle.loadString('assets/translations/translations.json');
+      final String jsonString =
+          await rootBundle.loadString('assets/translations/translations.json');
       _translations = json.decode(jsonString);
     } catch (e) {
       // フォールバック: デフォルトの日本語翻訳
@@ -86,9 +88,9 @@ class LocalizationService {
    */
   String translate(String key, {Map<String, dynamic>? params}) {
     try {
-      String text = _translations[_currentLanguage]?[key] ?? 
-                   _translations['ja']?[key] ?? 
-                   key;
+      String text = _translations[_currentLanguage]?[key] ??
+          _translations['ja']?[key] ??
+          key;
 
       // パラメータ置換
       if (params != null) {

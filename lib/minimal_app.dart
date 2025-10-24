@@ -110,12 +110,13 @@ class _MyHomePageState extends State<MyHomePage> {
   void _analyzeTea() {
     setState(() {
       _counter++;
-      _analysisResults.insert(0, '解析結果 #$_counter - ${DateTime.now().toString().substring(0, 19)}');
+      _analysisResults.insert(
+          0, '解析結果 #$_counter - ${DateTime.now().toString().substring(0, 19)}');
       if (_analysisResults.length > 5) {
         _analysisResults.removeLast();
       }
     });
-    
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('茶葉の解析が完了しました！'),

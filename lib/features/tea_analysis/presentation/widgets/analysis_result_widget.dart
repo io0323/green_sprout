@@ -36,129 +36,130 @@ class AnalysisResultWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-          // 画像表示
-          Center(
-            child: Semantics(
-              label: '撮影した茶葉の画像',
-              child: Container(
-                width: 200,
-                height: 200,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
+            // 画像表示
+            Center(
+              child: Semantics(
+                label: '撮影した茶葉の画像',
+                child: Container(
+                  width: 200,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.file(
+                      File(imagePath),
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          color: Colors.grey[200],
+                          child: const Icon(
+                            Icons.image_not_supported,
+                            size: 64,
+                            color: Colors.grey,
+                          ),
+                        );
+                      },
                     ),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.file(
-                    File(imagePath),
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        color: Colors.grey[200],
-                        child: const Icon(
-                          Icons.image_not_supported,
-                          size: 64,
-                          color: Colors.grey,
-                        ),
-                      );
-                    },
                   ),
                 ),
               ),
             ),
-          ),
-          
-          const SizedBox(height: 24),
-          
-          // 解析結果
-          Text(
-            '解析結果',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey[800],
-            ),
-          ),
-          
-          const SizedBox(height: 16),
-          
-          // 成長状態
-          _buildResultItem(
-            '成長状態',
-            result.growthStage,
-            _getGrowthStageIcon(result.growthStage),
-            _getGrowthStageColor(result.growthStage),
-          ),
-          
-          const SizedBox(height: 12),
-          
-          // 健康状態
-          _buildResultItem(
-            '健康状態',
-            result.healthStatus,
-            _getHealthStatusIcon(result.healthStatus),
-            _getHealthStatusColor(result.healthStatus),
-          ),
-          
-          const SizedBox(height: 12),
-          
-          // 信頼度
-          _buildResultItem(
-            '信頼度',
-            '${(result.confidence * 100).toStringAsFixed(1)}%',
-            Icons.analytics_outlined,
-            Colors.blue,
-          ),
-          
-          const SizedBox(height: 24),
-          
-          // 信頼度バー
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '解析の信頼度',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[700],
-                ),
+
+            const SizedBox(height: 24),
+
+            // 解析結果
+            Text(
+              '解析結果',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey[800],
               ),
-              const SizedBox(height: 8),
-              Semantics(
-                label: '信頼度 ${(result.confidence * 100).toStringAsFixed(1)}%',
-                child: LinearProgressIndicator(
-                  value: result.confidence,
-                  backgroundColor: Colors.grey[200],
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    _getConfidenceColor(result.confidence),
+            ),
+
+            const SizedBox(height: 16),
+
+            // 成長状態
+            _buildResultItem(
+              '成長状態',
+              result.growthStage,
+              _getGrowthStageIcon(result.growthStage),
+              _getGrowthStageColor(result.growthStage),
+            ),
+
+            const SizedBox(height: 12),
+
+            // 健康状態
+            _buildResultItem(
+              '健康状態',
+              result.healthStatus,
+              _getHealthStatusIcon(result.healthStatus),
+              _getHealthStatusColor(result.healthStatus),
+            ),
+
+            const SizedBox(height: 12),
+
+            // 信頼度
+            _buildResultItem(
+              '信頼度',
+              '${(result.confidence * 100).toStringAsFixed(1)}%',
+              Icons.analytics_outlined,
+              Colors.blue,
+            ),
+
+            const SizedBox(height: 24),
+
+            // 信頼度バー
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '解析の信頼度',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700],
                   ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                _getConfidenceDescription(result.confidence),
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[600],
-                  fontStyle: FontStyle.italic,
+                const SizedBox(height: 8),
+                Semantics(
+                  label: '信頼度 ${(result.confidence * 100).toStringAsFixed(1)}%',
+                  child: LinearProgressIndicator(
+                    value: result.confidence,
+                    backgroundColor: Colors.grey[200],
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      _getConfidenceColor(result.confidence),
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                const SizedBox(height: 8),
+                Text(
+                  _getConfidenceDescription(result.confidence),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
-    ),
     );
   }
 
-  Widget _buildResultItem(String label, String value, IconData icon, Color color) {
+  Widget _buildResultItem(
+      String label, String value, IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(

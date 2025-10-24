@@ -82,7 +82,8 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
    * TensorFlow Liteを使用した画像解析
    * 実際のAIモデルによる茶葉の成長状態と健康状態の分類
    */
-  Future<Either<Failure, AnalysisResult>> _analyzeWithTFLite(img.Image image) async {
+  Future<Either<Failure, AnalysisResult>> _analyzeWithTFLite(
+      img.Image image) async {
     try {
       if (_interpreter == null) {
         return Left(const TFLiteFailure('TensorFlow Liteモデルが読み込まれていません'));
@@ -90,21 +91,22 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
 
       // 画像をRGB配列に変換
       final input = _imageToByteListFloat32(image);
-      
+
       // モデルの入力と出力の形状を取得
       final inputShape = _interpreter!.getInputTensor(0).shape;
       final outputShape = _interpreter!.getOutputTensor(0).shape;
-      
+
       // 入力データを正しい形状にリシェイプ
       final reshapedInput = input.reshape(inputShape);
-      final output = List.filled(outputShape.reduce((a, b) => a * b), 0.0).reshape(outputShape);
-      
+      final output = List.filled(outputShape.reduce((a, b) => a * b), 0.0)
+          .reshape(outputShape);
+
       // 推論実行
       _interpreter!.run(reshapedInput, output);
-      
+
       // 結果を解析
       final result = _parseModelOutput(output);
-      
+
       return Right(result);
     } catch (e) {
       return Left(TFLiteFailure('TensorFlow Lite解析に失敗しました: $e'));
@@ -112,7 +114,8 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
   }
 
   /// フォールバック：画像特徴量ベースの簡易解析
-  Future<Either<Failure, AnalysisResult>> _analyzeWithFallback(img.Image image) async {
+  Future<Either<Failure, AnalysisResult>> _analyzeWithFallback(
+      img.Image image) async {
     try {
       // 画像の平均色を計算
       double totalR = 0, totalG = 0, totalB = 0;
@@ -173,9 +176,10 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
    * 224x224x3のRGB画像を正規化して配列に変換
    */
   List<double> _imageToByteListFloat32(img.Image image) {
-    final bytes = Float32List(AppConstants.inputImageSize * AppConstants.inputImageSize * 3);
+    final bytes = Float32List(
+        AppConstants.inputImageSize * AppConstants.inputImageSize * 3);
     int bufferIndex = 0;
-    
+
     for (int y = 0; y < AppConstants.inputImageSize; y++) {
       for (int x = 0; x < AppConstants.inputImageSize; x++) {
         final pixel = image.getPixel(x, y);
@@ -185,7 +189,7 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
         bytes[bufferIndex++] = pixel.b / 255.0;
       }
     }
-    
+
     return bytes;
   }
 
@@ -196,26 +200,26 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
   AnalysisResult _parseModelOutput(List output) {
     // 出力配列から確率を取得
     final probabilities = output[0] as List<double>;
-    
+
     // クラス名の定義
     const growthStages = ['芽', '若葉', '成葉', '老葉'];
     const healthStatuses = ['健康', '損傷'];
-    
+
     // 最も高い確率のインデックスを取得
     int maxIndex = 0;
     double maxProb = probabilities[0];
-    
+
     for (int i = 1; i < probabilities.length; i++) {
       if (probabilities[i] > maxProb) {
         maxProb = probabilities[i];
         maxIndex = i;
       }
     }
-    
+
     // インデックスから成長状態と健康状態を計算
     final growthStageIndex = maxIndex ~/ 2;
     final healthStatusIndex = maxIndex % 2;
-    
+
     return AnalysisResult(
       growthStage: growthStages[growthStageIndex],
       healthStatus: healthStatuses[healthStatusIndex],

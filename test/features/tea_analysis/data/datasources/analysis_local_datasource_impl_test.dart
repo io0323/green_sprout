@@ -21,7 +21,7 @@ void main() {
     Future<File> createTestImageFile() async {
       // 224x224のテスト画像を作成
       final image = img.Image(width: 224, height: 224);
-      
+
       // 緑色のグラデーション画像を作成
       for (int y = 0; y < image.height; y++) {
         for (int x = 0; x < image.width; x++) {
@@ -29,17 +29,18 @@ void main() {
           image.setPixel(x, y, img.ColorRgb8(50, green, 50));
         }
       }
-      
+
       // 一時ファイルに保存
       final tempDir = Directory.systemTemp;
       final file = File('${tempDir.path}/test_tea_image.jpg');
       await file.writeAsBytes(img.encodeJpg(image));
-      
+
       return file;
     }
 
     group('analyzeImage', () {
-      test('should return AnalysisResult when image analysis succeeds', () async {
+      test('should return AnalysisResult when image analysis succeeds',
+          () async {
         // Arrange
         final imageFile = await createTestImageFile();
 
@@ -53,7 +54,8 @@ void main() {
           (analysisResult) {
             expect(analysisResult, isA<AnalysisResult>());
             expect(analysisResult.growthStage, isIn(['芽', '若葉', '成葉', '老葉']));
-            expect(analysisResult.healthStatus, isIn(['健康', '軽微な損傷', '損傷', '病気']));
+            expect(
+                analysisResult.healthStatus, isIn(['健康', '軽微な損傷', '損傷', '病気']));
             expect(analysisResult.confidence, greaterThanOrEqualTo(0.0));
             expect(analysisResult.confidence, lessThanOrEqualTo(1.0));
           },
@@ -71,7 +73,8 @@ void main() {
         expect(result.isLeft(), true);
         result.fold(
           (failure) => expect(failure, isA<TFLiteFailure>()),
-          (analysisResult) => fail('Expected failure but got success: $analysisResult'),
+          (analysisResult) =>
+              fail('Expected failure but got success: $analysisResult'),
         );
       });
 

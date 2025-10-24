@@ -34,7 +34,8 @@ class CloudSyncServiceImpl implements CloudSyncService {
   CloudSyncServiceImpl({
     required http.Client httpClient,
     required SharedPreferences prefs,
-  }) : _httpClient = httpClient, _prefs = prefs;
+  })  : _httpClient = httpClient,
+        _prefs = prefs;
 
   @override
   Future<bool> isConnected() async {
@@ -43,7 +44,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
         Uri.parse('$_baseUrl/health'),
         headers: {'Content-Type': 'application/json'},
       ).timeout(const Duration(seconds: 5));
-      
+
       return response.statusCode == 200;
     } catch (e) {
       return false;
@@ -59,10 +60,10 @@ class CloudSyncServiceImpl implements CloudSyncService {
     try {
       final userId = await _getUserId();
       final lastSync = _prefs.getString(_lastSyncKey);
-      
+
       // 最後の同期以降のデータのみを送信
       final filteredResults = _filterResultsSinceLastSync(results, lastSync);
-      
+
       if (filteredResults.isEmpty) {
         return; // 同期するデータがない
       }
@@ -100,9 +101,10 @@ class CloudSyncServiceImpl implements CloudSyncService {
     try {
       final userId = await _getUserId();
       final lastSync = _prefs.getString(_lastSyncKey);
-      
+
       final response = await _httpClient.get(
-        Uri.parse('$_baseUrl$_syncEndpoint?userId=$userId&since=${lastSync ?? ''}'),
+        Uri.parse(
+            '$_baseUrl$_syncEndpoint?userId=$userId&since=${lastSync ?? ''}'),
         headers: {
           'Authorization': 'Bearer ${await _getAuthToken()}',
         },
@@ -113,10 +115,10 @@ class CloudSyncServiceImpl implements CloudSyncService {
         final results = (data['results'] as List)
             .map((json) => _resultFromJson(json))
             .toList();
-        
+
         // 同期成功時はタイムスタンプを更新
         await _prefs.setString(_lastSyncKey, DateTime.now().toIso8601String());
-        
+
         return results;
       } else {
         throw ServerFailure('同期に失敗しました: ${response.statusCode}');
@@ -163,7 +165,8 @@ class CloudSyncServiceImpl implements CloudSyncService {
   Future<String> _getAuthToken() async {
     // 簡易的な認証（実際の実装では適切な認証システムを使用）
     final userId = await _getUserId();
-    return base64.encode(utf8.encode('$userId:${DateTime.now().millisecondsSinceEpoch}'));
+    return base64.encode(
+        utf8.encode('$userId:${DateTime.now().millisecondsSinceEpoch}'));
   }
 
   /**
@@ -182,7 +185,9 @@ class CloudSyncServiceImpl implements CloudSyncService {
       return results;
     }
 
-    return results.where((result) => result.timestamp.isAfter(lastSync)).toList();
+    return results
+        .where((result) => result.timestamp.isAfter(lastSync))
+        .toList();
   }
 
   /**
@@ -315,7 +320,8 @@ class SyncStatusNotifier extends ChangeNotifier {
   String get message => _message;
   int get pendingItems => _pendingItems;
 
-  void setStatus(SyncStatus status, {String message = '', int pendingItems = 0}) {
+  void setStatus(SyncStatus status,
+      {String message = '', int pendingItems = 0}) {
     _status = status;
     _message = message;
     _pendingItems = pendingItems;
@@ -323,7 +329,8 @@ class SyncStatusNotifier extends ChangeNotifier {
   }
 
   void setSyncing({int pendingItems = 0}) {
-    setStatus(SyncStatus.syncing, message: '同期中...', pendingItems: pendingItems);
+    setStatus(SyncStatus.syncing,
+        message: '同期中...', pendingItems: pendingItems);
   }
 
   void setSuccess({String message = '同期完了'}) {

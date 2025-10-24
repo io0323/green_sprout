@@ -79,14 +79,15 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
    * Web用のTensorFlow Lite解析シミュレーション
    * 実際のAI解析を模擬した高度な画像特徴量解析
    */
-  Future<Either<Failure, AnalysisResult>> _analyzeWithTFLite(img.Image image) async {
+  Future<Either<Failure, AnalysisResult>> _analyzeWithTFLite(
+      img.Image image) async {
     try {
       // AI解析をシミュレート（実際の処理時間を模擬）
       await Future.delayed(const Duration(milliseconds: 800));
-      
+
       // より高度な画像特徴量解析
       final result = _advancedImageAnalysis(image);
-      
+
       return Right(result);
     } catch (e) {
       return Left(TFLiteFailure('Web解析に失敗しました: $e'));
@@ -94,7 +95,8 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
   }
 
   /// フォールバック：画像特徴量ベースの簡易解析
-  Future<Either<Failure, AnalysisResult>> _analyzeWithFallback(img.Image image) async {
+  Future<Either<Failure, AnalysisResult>> _analyzeWithFallback(
+      img.Image image) async {
     try {
       // 画像の平均色を計算
       double totalR = 0, totalG = 0, totalB = 0;
@@ -159,12 +161,15 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
     final colorStats = _calculateColorStatistics(image);
     final textureStats = _calculateTextureStatistics(image);
     final shapeStats = _calculateShapeStatistics(image);
-    
+
     // 特徴量を組み合わせて判定
-    final growthStage = _determineGrowthStage(colorStats, textureStats, shapeStats);
-    final healthStatus = _determineHealthStatus(colorStats, textureStats, shapeStats);
-    final confidence = _calculateConfidence(colorStats, textureStats, shapeStats);
-    
+    final growthStage =
+        _determineGrowthStage(colorStats, textureStats, shapeStats);
+    final healthStatus =
+        _determineHealthStatus(colorStats, textureStats, shapeStats);
+    final confidence =
+        _calculateConfidence(colorStats, textureStats, shapeStats);
+
     return AnalysisResult(
       growthStage: growthStage,
       healthStatus: healthStatus,
@@ -178,7 +183,7 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
   Map<String, double> _calculateColorStatistics(img.Image image) {
     double totalR = 0, totalG = 0, totalB = 0;
     int pixelCount = 0;
-    
+
     for (int y = 0; y < image.height; y++) {
       for (int x = 0; x < image.width; x++) {
         final pixel = image.getPixel(x, y);
@@ -188,11 +193,11 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
         pixelCount++;
       }
     }
-    
+
     final avgR = totalR / pixelCount;
     final avgG = totalG / pixelCount;
     final avgB = totalB / pixelCount;
-    
+
     return {
       'avgR': avgR,
       'avgG': avgG,
@@ -208,26 +213,31 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
   Map<String, double> _calculateTextureStatistics(img.Image image) {
     double totalVariation = 0;
     int variationCount = 0;
-    
+
     for (int y = 1; y < image.height - 1; y++) {
       for (int x = 1; x < image.width - 1; x++) {
         final center = image.getPixel(x, y);
         final neighbors = [
-          image.getPixel(x-1, y-1), image.getPixel(x, y-1), image.getPixel(x+1, y-1),
-          image.getPixel(x-1, y), image.getPixel(x+1, y),
-          image.getPixel(x-1, y+1), image.getPixel(x, y+1), image.getPixel(x+1, y+1),
+          image.getPixel(x - 1, y - 1),
+          image.getPixel(x, y - 1),
+          image.getPixel(x + 1, y - 1),
+          image.getPixel(x - 1, y),
+          image.getPixel(x + 1, y),
+          image.getPixel(x - 1, y + 1),
+          image.getPixel(x, y + 1),
+          image.getPixel(x + 1, y + 1),
         ];
-        
+
         for (final neighbor in neighbors) {
-          final variation = (center.r - neighbor.r).abs() + 
-                          (center.g - neighbor.g).abs() + 
-                          (center.b - neighbor.b).abs();
+          final variation = (center.r - neighbor.r).abs() +
+              (center.g - neighbor.g).abs() +
+              (center.b - neighbor.b).abs();
           totalVariation += variation;
           variationCount++;
         }
       }
     }
-    
+
     return {
       'textureVariation': totalVariation / variationCount,
       'smoothness': 1.0 - (totalVariation / variationCount) / 765.0, // 正規化
@@ -241,26 +251,26 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
     // エッジ検出の簡易実装
     int edgeCount = 0;
     int totalPixels = image.width * image.height;
-    
+
     for (int y = 1; y < image.height - 1; y++) {
       for (int x = 1; x < image.width - 1; x++) {
         final center = image.getPixel(x, y);
         final right = image.getPixel(x + 1, y);
         final down = image.getPixel(x, y + 1);
-        
-        final horizontalDiff = (center.r - right.r).abs() + 
-                              (center.g - right.g).abs() + 
-                              (center.b - right.b).abs();
-        final verticalDiff = (center.r - down.r).abs() + 
-                            (center.g - down.g).abs() + 
-                            (center.b - down.b).abs();
-        
+
+        final horizontalDiff = (center.r - right.r).abs() +
+            (center.g - right.g).abs() +
+            (center.b - right.b).abs();
+        final verticalDiff = (center.r - down.r).abs() +
+            (center.g - down.g).abs() +
+            (center.b - down.b).abs();
+
         if (horizontalDiff > 50 || verticalDiff > 50) {
           edgeCount++;
         }
       }
     }
-    
+
     return {
       'edgeDensity': edgeCount / totalPixels,
       'complexity': edgeCount / totalPixels,
@@ -270,14 +280,13 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
   /**
    * 成長状態の判定
    */
-  String _determineGrowthStage(Map<String, double> colorStats, 
-                              Map<String, double> textureStats, 
-                              Map<String, double> shapeStats) {
+  String _determineGrowthStage(Map<String, double> colorStats,
+      Map<String, double> textureStats, Map<String, double> shapeStats) {
     final brightness = colorStats['brightness']!;
     final greenness = colorStats['greenness']!;
     final smoothness = textureStats['smoothness']!;
     final complexity = shapeStats['complexity']!;
-    
+
     // 複合的な判定ロジック
     if (brightness > 200 && greenness > 0.6 && smoothness > 0.8) {
       return '芽';
@@ -293,17 +302,16 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
   /**
    * 健康状態の判定
    */
-  String _determineHealthStatus(Map<String, double> colorStats, 
-                               Map<String, double> textureStats, 
-                               Map<String, double> shapeStats) {
+  String _determineHealthStatus(Map<String, double> colorStats,
+      Map<String, double> textureStats, Map<String, double> shapeStats) {
     final greenness = colorStats['greenness']!;
     final smoothness = textureStats['smoothness']!;
     final brightness = colorStats['brightness']!;
-    
+
     // 健康度のスコア計算
-    final healthScore = (greenness * 0.4) + (smoothness * 0.3) + 
-                       ((brightness / 255.0) * 0.3);
-    
+    final healthScore =
+        (greenness * 0.4) + (smoothness * 0.3) + ((brightness / 255.0) * 0.3);
+
     if (healthScore > 0.7) {
       return '健康';
     } else if (healthScore > 0.5) {
@@ -318,14 +326,14 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
   /**
    * 信頼度の計算
    */
-  double _calculateConfidence(Map<String, double> colorStats, 
-                             Map<String, double> textureStats, 
-                             Map<String, double> shapeStats) {
+  double _calculateConfidence(Map<String, double> colorStats,
+      Map<String, double> textureStats, Map<String, double> shapeStats) {
     // 特徴量の一貫性に基づく信頼度計算
-    final colorConsistency = 1.0 - (colorStats['brightness']! / 255.0 - 0.5).abs() * 2;
+    final colorConsistency =
+        1.0 - (colorStats['brightness']! / 255.0 - 0.5).abs() * 2;
     final textureConsistency = textureStats['smoothness']!;
     final shapeConsistency = 1.0 - shapeStats['complexity']!;
-    
+
     return (colorConsistency + textureConsistency + shapeConsistency) / 3.0;
   }
 

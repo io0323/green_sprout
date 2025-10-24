@@ -153,10 +153,10 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   // 今日のサマリー
                   TodaySummaryCard(results: state.results),
-                  
+
                   // 写真撮影ボタン
                   const CameraButton(),
-                  
+
                   // 最近の解析結果
                   Expanded(
                     child: _buildRecentResults(state.results),

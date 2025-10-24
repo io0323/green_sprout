@@ -23,10 +23,10 @@ abstract class WearableDeviceService {
  */
 class WearableDeviceServiceImpl implements WearableDeviceService {
   static const MethodChannel _channel = MethodChannel('tea_garden_wearable');
-  
-  final StreamController<WearableEvent> _eventController = 
+
+  final StreamController<WearableEvent> _eventController =
       StreamController<WearableEvent>.broadcast();
-  
+
   bool _isConnected = false;
   Timer? _heartbeatTimer;
 
@@ -141,7 +141,8 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
    * ハートビートを開始
    */
   void _startHeartbeat() {
-    _heartbeatTimer = Timer.periodic(const Duration(seconds: 30), (timer) async {
+    _heartbeatTimer =
+        Timer.periodic(const Duration(seconds: 30), (timer) async {
       if (_isConnected) {
         try {
           await _channel.invokeMethod('sendHeartbeat');
@@ -177,11 +178,13 @@ class WearableEvent {
 
   WearableEvent._(this.type, {this.data, this.error});
 
-  factory WearableEvent.connected() => WearableEvent._(WearableEventType.connected);
-  factory WearableEvent.disconnected() => WearableEvent._(WearableEventType.disconnected);
-  factory WearableEvent.dataReceived(Map<String, dynamic> data) => 
+  factory WearableEvent.connected() =>
+      WearableEvent._(WearableEventType.connected);
+  factory WearableEvent.disconnected() =>
+      WearableEvent._(WearableEventType.disconnected);
+  factory WearableEvent.dataReceived(Map<String, dynamic> data) =>
       WearableEvent._(WearableEventType.dataReceived, data: data);
-  factory WearableEvent.error(String error) => 
+  factory WearableEvent.error(String error) =>
       WearableEvent._(WearableEventType.error, error: error);
 }
 
@@ -224,7 +227,8 @@ class WearableAnalysisCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       result.growthStage,
-                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.bold),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),

@@ -90,8 +90,8 @@ class TeaAnalysisResult {
   bool get isToday {
     final now = DateTime.now();
     return timestamp.year == now.year &&
-           timestamp.month == now.month &&
-           timestamp.day == now.day;
+        timestamp.month == now.month &&
+        timestamp.day == now.day;
   }
 
   /**

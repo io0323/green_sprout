@@ -19,7 +19,7 @@ class WebMockCameraDataSource implements CameraLocalDataSource {
     if (!PlatformUtils.isWeb) {
       return const Left(ServerFailure('Web用のモックデータソースはWebプラットフォームでのみ使用可能です'));
     }
-    
+
     // カメラ初期化をシミュレート
     await Future.delayed(const Duration(milliseconds: 500));
     _currentState = _currentState.copyWith(isInitialized: true);
@@ -31,15 +31,16 @@ class WebMockCameraDataSource implements CameraLocalDataSource {
     if (!PlatformUtils.isWeb) {
       return const Left(ServerFailure('Web用のモックデータソースはWebプラットフォームでのみ使用可能です'));
     }
-    
+
     // Webでは実際のカメラキャプチャはできないため、
     // ファイル選択ダイアログをシミュレート
     await Future.delayed(const Duration(milliseconds: 300));
-    
+
     // モック画像ファイルを作成
-    final mockImagePath = '/tmp/mock_tea_${DateTime.now().millisecondsSinceEpoch}.jpg';
+    final mockImagePath =
+        '/tmp/mock_tea_${DateTime.now().millisecondsSinceEpoch}.jpg';
     final mockFile = File(mockImagePath);
-    
+
     // 実際のファイルは作成しないが、パスを返す
     _currentState = _currentState.copyWith(capturedImagePath: mockImagePath);
     return Right(mockFile);
@@ -50,7 +51,7 @@ class WebMockCameraDataSource implements CameraLocalDataSource {
     if (!PlatformUtils.isWeb) {
       return const Left(ServerFailure('Web用のモックデータソースはWebプラットフォームでのみ使用可能です'));
     }
-    
+
     // カメラ破棄をシミュレート
     await Future.delayed(const Duration(milliseconds: 200));
     _currentState = const CameraState();

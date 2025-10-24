@@ -37,7 +37,7 @@ class MetricsCollector {
     );
 
     _metrics.add(metric);
-    
+
     if (kDebugMode) {
       print('Metric recorded: $name = $value $unit');
     }
@@ -89,7 +89,7 @@ class MetricsCollector {
   double stopTimer(String name) {
     final duration = PerformanceUtils.stopTimer(name);
     final timer = _timers.remove(name);
-    
+
     if (timer != null) {
       recordMetric(
         'timer.$name',
@@ -98,7 +98,7 @@ class MetricsCollector {
         tags: timer.tags,
       );
     }
-    
+
     return duration;
   }
 
@@ -114,7 +114,7 @@ class MetricsCollector {
       unit: 'bytes',
       tags: {'operation': operation},
     );
-    
+
     PerformanceUtils.logMemoryUsage(operation);
   }
 
@@ -131,7 +131,7 @@ class MetricsCollector {
         'context': context ?? 'unknown',
       },
     );
-    
+
     if (kDebugMode) {
       print('Error recorded: $error (context: $context)');
     }
@@ -147,7 +147,7 @@ class MetricsCollector {
       'user.actions',
       tags: {'action': action},
     );
-    
+
     if (details != null) {
       details.forEach((key, value) {
         recordMetric(
@@ -184,7 +184,7 @@ class MetricsCollector {
         'url': _sanitizeUrl(url),
       },
     );
-    
+
     recordMetric(
       'network.request.size',
       responseSize.toDouble(),
@@ -194,7 +194,7 @@ class MetricsCollector {
         'url': _sanitizeUrl(url),
       },
     );
-    
+
     incrementCounter(
       'network.requests.total',
       tags: {
@@ -226,7 +226,7 @@ class MetricsCollector {
         'table': table,
       },
     );
-    
+
     recordMetric(
       'database.operation.records',
       recordCount.toDouble(),
@@ -258,8 +258,8 @@ class MetricsCollector {
 
     if (tags != null) {
       filteredMetrics = filteredMetrics.where((metric) {
-        return tags.entries.every((entry) =>
-            metric.tags[entry.key] == entry.value);
+        return tags.entries
+            .every((entry) => metric.tags[entry.key] == entry.value);
       }).toList();
     }
 
@@ -277,7 +277,7 @@ class MetricsCollector {
     Map<String, String>? tags,
   }) {
     final metrics = getMetrics(name: name, tags: tags);
-    
+
     if (metrics.isEmpty) {
       return MetricStatistics(
         count: 0,
