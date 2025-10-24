@@ -13,10 +13,12 @@ class SecurityUtils {
   static String _getEncryptionKey() {
     final key = Platform.environment['ENCRYPTION_KEY'];
     if (key == null || key.isEmpty) {
-      throw Exception('Encryption key not set in environment variable ENCRYPTION_KEY');
+      throw Exception(
+          'Encryption key not set in environment variable ENCRYPTION_KEY');
     }
     return key;
   }
+
   static const int _saltLength = 16;
   static const int _iterations = 10000;
 
@@ -228,7 +230,7 @@ class SecurityUtils {
   // プライベートメソッド
 
   static String _generateKey() {
-    final keyBytes = utf8.encode(_encryptionKey);
+    final keyBytes = utf8.encode(_getEncryptionKey());
     final hash = sha256.convert(keyBytes);
     return base64Encode(hash.bytes);
   }

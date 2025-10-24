@@ -13,7 +13,7 @@ class MetricsCollector {
 
   final List<MetricData> _metrics = [];
   final Map<String, Timer> _timers = {};
-  final PerformanceUtils _performanceUtils = PerformanceUtils();
+  // PerformanceUtils is now used statically
 
   /**
    * メトリクスを記録する
@@ -93,13 +93,13 @@ class MetricsCollector {
     if (timer != null) {
       recordMetric(
         'timer.$name',
-        duration,
+        duration.inMilliseconds.toDouble(),
         unit: 'milliseconds',
         tags: timer.tags,
       );
     }
 
-    return duration;
+    return duration.inMilliseconds.toDouble();
   }
 
   /**

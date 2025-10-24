@@ -36,6 +36,14 @@ class PerformanceUtils {
   }
 
   /**
+   * 現在のメモリ使用量を取得
+   */
+  static double getCurrentMemoryUsage() {
+    final memoryInfo = ProcessInfo.currentRss;
+    return memoryInfo.toDouble();
+  }
+
+  /**
    * メモリ使用量をログに記録
    */
   static void logMemoryUsage(String context) {
