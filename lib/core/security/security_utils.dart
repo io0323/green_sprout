@@ -163,18 +163,8 @@ class SecurityUtils {
    * @return 値
    */
   static Future<String?> secureRetrieve(String key) async {
-    try {
-      // 実際の実装では、SecureStorageやKeychainを使用
-      if (kDebugMode) {
-        print('Securely retrieved: $key');
-      }
-      return null;
-    } catch (e) {
-      if (kDebugMode) {
-        print('Secure retrieve error: $e');
-      }
-      return null;
-    }
+    // 実際の実装では、SecureStorageやKeychainを使用
+    throw UnimplementedError('secureRetrieve is not implemented.');
   }
 
   /**
