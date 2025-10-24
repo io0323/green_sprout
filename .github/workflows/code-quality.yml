@@ -1,0 +1,120 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  code-quality:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.0'
+        channel: 'stable'
+    
+    - name: Install dependencies
+      run: flutter pub get
+    
+    - name: Check code formatting
+      run: flutter format --dry-run --set-exit-if-changed .
+    
+    - name: Analyze code
+      run: flutter analyze --fatal-infos
+    
+    - name: Check for unused imports
+      run: |
+        find lib -name "*.dart" -exec grep -l "import.*dart:" {} \; | \
+        xargs -I {} sh -c 'echo "Checking {}"; dart analyze {}'
+    
+    - name: Check for TODO comments
+      run: |
+        if grep -r "TODO\|FIXME\|HACK" lib/ --include="*.dart"; then
+          echo "Found TODO/FIXME/HACK comments"
+          exit 1
+        fi
+    
+    - name: Check for print statements
+      run: |
+        if grep -r "print(" lib/ --include="*.dart"; then
+          echo "Found print statements in production code"
+          exit 1
+        fi
+    
+    - name: Check for debug statements
+      run: |
+        if grep -r "debugPrint\|debugDump" lib/ --include="*.dart"; then
+          echo "Found debug statements in production code"
+          exit 1
+        fi
+
+  dependency-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.0'
+        channel: 'stable'
+    
+    - name: Install dependencies
+      run: flutter pub get
+    
+    - name: Check for outdated dependencies
+      run: flutter pub outdated
+    
+    - name: Check for security vulnerabilities
+      run: flutter pub audit
+    
+    - name: Verify pubspec.yaml
+      run: |
+        flutter pub deps
+        flutter pub get --offline
+
+  documentation-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.0'
+        channel: 'stable'
+    
+    - name: Install dependencies
+      run: flutter pub get
+    
+    - name: Check documentation
+      run: |
+        find lib -name "*.dart" -exec grep -L "///" {} \; | \
+        grep -v "main.dart" | \
+        grep -v "generated" | \
+        head -10
+    
+    - name: Generate documentation
+      run: flutter doc
+    
+    - name: Check README
+      run: |
+        if [ ! -f README.md ]; then
+          echo "README.md not found"
+          exit 1
+        fi
+    
+    - name: Check CHANGELOG
+      run: |
+        if [ ! -f CHANGELOG.md ]; then
+          echo "CHANGELOG.md not found"
+          exit 1
+        fi
