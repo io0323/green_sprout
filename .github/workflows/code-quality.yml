@@ -47,8 +47,9 @@ jobs:
         fi
           exit 1
         fi
-    
-    - name: Check for print statements
+        # Find print statements not inside kDebugMode blocks and not commented out
+        if grep -r "print(" lib/ --include="*.dart" | grep -v "//" | grep -v "kDebugMode" | grep -v "'print(" | grep -v '"print(' ; then
+          echo "Found print statements in production code (not in kDebugMode or comments)"
       run: |
         if grep -r "print(" lib/ --include="*.dart"; then
           echo "Found print statements in production code"
