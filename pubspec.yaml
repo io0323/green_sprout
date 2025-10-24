@@ -45,6 +45,12 @@ dependencies:
   
   # 画像処理
   image: ^4.0.17
+  
+  # HTTP通信
+  http: ^1.1.0
+  
+  # ローカルストレージ
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
