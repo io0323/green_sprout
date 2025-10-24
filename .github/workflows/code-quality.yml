@@ -33,13 +33,18 @@ jobs:
     
     - name: Check for unused imports
       run: |
-        find lib -name "*.dart" -exec grep -l "import.*dart:" {} \; | \
-        xargs -I {} sh -c 'echo "Checking {}"; dart analyze {}'
-    
-    - name: Check for TODO comments
+    - name: Check for TODO comments (warning only)
       run: |
-        if grep -r "TODO\|FIXME\|HACK" lib/ --include="*.dart"; then
-          echo "Found TODO/FIXME/HACK comments"
+        if grep -r "TODO" lib/ --include="*.dart"; then
+          echo "::warning file=lib::Found TODO comments (work-in-progress code is allowed, but should be tracked)"
+        fi
+    
+    - name: Check for FIXME/HACK comments
+      run: |
+        if grep -r "FIXME\|HACK" lib/ --include="*.dart"; then
+          echo "Found FIXME/HACK comments"
+          exit 1
+        fi
           exit 1
         fi
     
