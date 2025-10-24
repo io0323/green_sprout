@@ -9,7 +9,14 @@ import 'package:flutter/foundation.dart';
  * アプリケーションのセキュリティを強化するための機能を提供
  */
 class SecurityUtils {
-  static const String _encryptionKey = 'tea_garden_ai_secret_key_2024';
+  // Encryption key should be loaded securely from environment variable
+  static String _getEncryptionKey() {
+    final key = Platform.environment['ENCRYPTION_KEY'];
+    if (key == null || key.isEmpty) {
+      throw Exception('Encryption key not set in environment variable ENCRYPTION_KEY');
+    }
+    return key;
+  }
   static const int _saltLength = 16;
   static const int _iterations = 10000;
 
