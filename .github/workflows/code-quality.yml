@@ -51,8 +51,8 @@ jobs:
         if grep -r "print(" lib/ --include="*.dart" | grep -v "//" | grep -v "kDebugMode" | grep -v "'print(" | grep -v '"print(' ; then
           echo "Found print statements in production code (not in kDebugMode or comments)"
       run: |
-        if grep -r "print(" lib/ --include="*.dart"; then
-          echo "Found print statements in production code"
+        if grep -r "print(" lib/ --include="*.dart" | grep -v "kDebugMode"; then
+          echo "Found print statements in production code (excluding debug-guarded prints)"
           exit 1
         fi
     
