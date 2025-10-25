@@ -193,7 +193,7 @@ class SecureHttpClient {
   /// レスポンスを検証する
   /// @param response レスポンス
   /// @return 検証結果
-  bool _validateResponse(http.Response response) {
+  bool validateResponse(http.Response response) {
     // ステータスコードの検証
     if (response.statusCode < 200 || response.statusCode >= 300) {
       return false;

@@ -26,7 +26,6 @@ class SecurityUtils {
   }
 
   static const int _saltLength = 16;
-  static const int _iterations = 10000;
 
   /// データを暗号化する
   /// @param data 暗号化するデータ
@@ -61,7 +60,6 @@ class SecurityUtils {
         throw Exception('Invalid encrypted data format');
       }
 
-      final iv = parts[0];
       final encrypted = parts[1];
 
       final key = _generateKey();
@@ -135,7 +133,6 @@ class SecurityUtils {
   /// @param value 値
   static Future<void> secureStore(String key, String value) async {
     try {
-      final encryptedValue = encrypt(value);
       // 実際の実装では、SecureStorageやKeychainを使用
       if (kDebugMode) {
         print('Securely stored: $key');

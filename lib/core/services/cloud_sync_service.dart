@@ -19,7 +19,6 @@ abstract class CloudSyncService {
 class CloudSyncServiceImpl implements CloudSyncService {
   static const String _baseUrl = 'https://api.tea-garden-ai.com';
   static const String _syncEndpoint = '/api/v1/sync';
-  static const String _authEndpoint = '/api/v1/auth';
   static const String _autoSyncKey = 'auto_sync_enabled';
   static const String _lastSyncKey = 'last_sync_timestamp';
   static const String _userIdKey = 'user_id';

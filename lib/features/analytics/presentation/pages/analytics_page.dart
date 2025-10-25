@@ -330,7 +330,6 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
               : statusCounts.reduce((a, b) => a > b ? a : b).toDouble(),
           barGroups: healthStatuses.asMap().entries.map((entry) {
             final index = entry.key;
-            final status = entry.value;
             final count = statusCounts[index];
             final colors = [
               Colors.green,
@@ -460,7 +459,6 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
               : rangeCounts.reduce((a, b) => a > b ? a : b).toDouble(),
           barGroups: confidenceRanges.asMap().entries.map((entry) {
             final index = entry.key;
-            final range = entry.value;
             final count = rangeCounts[index];
 
             return BarChartGroupData(

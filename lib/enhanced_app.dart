@@ -36,7 +36,6 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
   int _analysisCount = 0;
   bool _isAnalyzing = false;
   final List<Map<String, dynamic>> _results = [];
-  int _currentTabIndex = 0;
   late TabController _tabController;
 
   @override
@@ -92,9 +91,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
           labelColor: Colors.white,
           unselectedLabelColor: Colors.white70,
           onTap: (index) {
-            setState(() {
-              _currentTabIndex = index;
-            });
+            // Tab selection handled by TabController
           },
           tabs: const [
             Tab(icon: Icon(Icons.dashboard), text: 'ダッシュボード'),
@@ -830,7 +827,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
   void _downloadFile(String content, String filename, String mimeType) {
     final blob = html.Blob([content], mimeType);
     final url = html.Url.createObjectUrlFromBlob(blob);
-    final anchor = html.AnchorElement(href: url)
+    html.AnchorElement(href: url)
       ..setAttribute('download', filename)
       ..click();
     html.Url.revokeObjectUrl(url);
