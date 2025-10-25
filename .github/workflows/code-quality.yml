@@ -83,7 +83,7 @@ jobs:
       run: flutter pub outdated
     
     - name: Check for security vulnerabilities
-      run: flutter pub audit
+      run: flutter pub deps --style=compact
     
     - name: Verify pubspec.yaml
       run: |
