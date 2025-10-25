@@ -84,7 +84,7 @@ class AdvancedAnalysisEngine {
       _primaryModel!.run(reshapedInput, output);
 
       // 結果を解析
-      return _parsePrimaryModelOutput(output);
+      return _parsePrimaryModelOutput(output.cast<List<double>>());
     } catch (e) {
       return _getFallbackResult();
     }
@@ -175,7 +175,8 @@ class AdvancedAnalysisEngine {
     final gray = img.grayscale(image);
 
     // エッジ検出
-    final edges = img.convolution(gray, [-1, -1, -1, -1, 8, -1, -1, -1, -1]);
+    final edges =
+        img.convolution(gray, filter: [-1, -1, -1, -1, 8, -1, -1, -1, -1]);
 
     // エッジ密度の計算
     final edgePixels = edges.getBytes();
@@ -252,7 +253,8 @@ class AdvancedAnalysisEngine {
   List<Contour> _detectContours(img.Image image) {
     // 簡易的な輪郭検出（実際の実装ではより高度なアルゴリズムを使用）
     final gray = img.grayscale(image);
-    final edges = img.convolution(gray, [-1, -1, -1, -1, 8, -1, -1, -1, -1]);
+    final edges =
+        img.convolution(gray, filter: [-1, -1, -1, -1, 8, -1, -1, -1, -1]);
 
     // 輪郭点を検出
     final contours = <Contour>[];

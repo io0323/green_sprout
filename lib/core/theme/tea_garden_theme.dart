@@ -35,12 +35,10 @@ class TeaGardenTheme {
         primary: primaryGreen,
         secondary: accentGreen,
         surface: surfaceLight,
-        background: backgroundLight,
         error: errorColor,
         onPrimary: textLight,
         onSecondary: textLight,
         onSurface: textPrimary,
-        onBackground: textPrimary,
         onError: textLight,
       ),
       appBarTheme: const AppBarTheme(
@@ -69,10 +67,10 @@ class TeaGardenTheme {
           ),
         ),
       ),
-      cardTheme: CardThemeData(
+      cardTheme: const CardThemeData(
         elevation: 4,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
         color: surfaceLight,
       ),
@@ -102,12 +100,10 @@ class TeaGardenTheme {
         primary: lightGreen,
         secondary: accentGreen,
         surface: surfaceDark,
-        background: backgroundDark,
         error: errorColor,
         onPrimary: textPrimary,
         onSecondary: textPrimary,
         onSurface: textLight,
-        onBackground: textLight,
         onError: textLight,
       ),
       appBarTheme: const AppBarTheme(
@@ -136,10 +132,10 @@ class TeaGardenTheme {
           ),
         ),
       ),
-      cardTheme: CardThemeData(
+      cardTheme: const CardThemeData(
         elevation: 4,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
         color: surfaceDark,
       ),
