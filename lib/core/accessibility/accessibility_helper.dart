@@ -65,7 +65,7 @@ class AccessibilityHelper {
     if (component <= 0.03928) {
       return component / 12.92;
     } else {
-      return pow((component + 0.055) / 1.055, 2.4).toDouble();
+      return pow((component + 0.055) / 1.055, 2.4);
     }
   }
 
