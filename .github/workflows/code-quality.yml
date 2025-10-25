@@ -33,6 +33,11 @@ jobs:
     
     - name: Check for unused imports
       run: |
+        # Check for unused imports in Dart files
+        if dart analyze . | grep "Unused import"; then
+          echo "Found unused imports"
+          exit 1
+        fi
     - name: Check for TODO comments (warning only)
       run: |
         if grep -r "TODO" lib/ --include="*.dart"; then
