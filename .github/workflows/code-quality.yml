@@ -113,7 +113,7 @@ jobs:
         head -10
     
     - name: Generate documentation
-      run: flutter doc
+      run: dart doc
     
     - name: Check README
       run: |
