@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'dart:html' as html;
+import 'src/web_storage_stub.dart'
+    if (dart.library.html) 'src/web_storage_web.dart';
 
 void main() {
   runApp(const EnhancedTeaGardenApp());
@@ -53,8 +54,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
 
   void _loadData() {
     // ローカルストレージからデータを読み込み
-    final storage = html.window.localStorage;
-    final savedData = storage['teaGardenData'];
+    final savedData = getLocalStorage('teaGardenData');
     if (savedData != null) {
       final data = jsonDecode(savedData);
       setState(() {
@@ -68,12 +68,11 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
 
   void _saveData() {
     // データをローカルストレージに保存
-    final storage = html.window.localStorage;
     final data = {
       'analysisCount': _analysisCount,
       'analysisResults': _results,
     };
-    storage['teaGardenData'] = jsonEncode(data);
+    setLocalStorage('teaGardenData', jsonEncode(data));
   }
 
   @override
@@ -694,6 +693,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
       'comment': '新しい解析が完了しました。茶葉の状態を確認しました。',
     };
 
+    if (!mounted)
+      return; // <- important: avoid using context if widget disposed
+
     setState(() {
       _results.insert(0, result);
       _analysisCount++;
@@ -825,12 +827,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
   }
 
   void _downloadFile(String content, String filename, String mimeType) {
-    final blob = html.Blob([content], mimeType);
-    final url = html.Url.createObjectUrlFromBlob(blob);
-    html.AnchorElement(href: url)
-      ..setAttribute('download', filename)
-      ..click();
-    html.Url.revokeObjectUrl(url);
+    downloadFile(content, filename, mimeType);
   }
 }
 
