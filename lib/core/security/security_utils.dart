@@ -4,10 +4,8 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 
-/**
- * セキュリティユーティリティクラス
- * アプリケーションのセキュリティを強化するための機能を提供
- */
+/// セキュリティユーティリティクラス
+/// アプリケーションのセキュリティを強化するための機能を提供
 class SecurityUtils {
   // Encryption key should be loaded securely from environment variable
   /// Loads the encryption key from the environment variable ENCRYPTION_KEY.
@@ -30,11 +28,9 @@ class SecurityUtils {
   static const int _saltLength = 16;
   static const int _iterations = 10000;
 
-  /**
-   * データを暗号化する
-   * @param data 暗号化するデータ
-   * @return 暗号化されたデータ
-   */
+  /// データを暗号化する
+  /// @param data 暗号化するデータ
+  /// @return 暗号化されたデータ
   static String encrypt(String data) {
     try {
       final key = _generateKey();
@@ -53,11 +49,9 @@ class SecurityUtils {
     }
   }
 
-  /**
-   * データを復号化する
-   * @param encryptedData 暗号化されたデータ
-   * @return 復号化されたデータ
-   */
+  /// データを復号化する
+  /// @param encryptedData 暗号化されたデータ
+  /// @return 復号化されたデータ
   static String decrypt(String encryptedData) {
     try {
       final decoded = utf8.decode(base64Decode(encryptedData));
@@ -80,12 +74,10 @@ class SecurityUtils {
     }
   }
 
-  /**
-   * パスワードのハッシュを生成する
-   * @param password パスワード
-   * @param salt ソルト（オプション）
-   * @return ハッシュ化されたパスワード
-   */
+  /// パスワードのハッシュを生成する
+  /// @param password パスワード
+  /// @param salt ソルト（オプション）
+  /// @return ハッシュ化されたパスワード
   static String hashPassword(String password, {String? salt}) {
     final saltBytes = salt != null ? utf8.encode(salt) : _generateSalt();
 
@@ -96,23 +88,19 @@ class SecurityUtils {
     return base64Encode(hash.bytes);
   }
 
-  /**
-   * パスワードを検証する
-   * @param password パスワード
-   * @param hash ハッシュ
-   * @param salt ソルト
-   * @return 検証結果
-   */
+  /// パスワードを検証する
+  /// @param password パスワード
+  /// @param hash ハッシュ
+  /// @param salt ソルト
+  /// @return 検証結果
   static bool verifyPassword(String password, String hash, String salt) {
     final hashedPassword = hashPassword(password, salt: salt);
     return hashedPassword == hash;
   }
 
-  /**
-   * 安全なランダム文字列を生成する
-   * @param length 長さ
-   * @return ランダム文字列
-   */
+  /// 安全なランダム文字列を生成する
+  /// @param length 長さ
+  /// @return ランダム文字列
   static String generateSecureRandomString(int length) {
     const chars =
         'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -126,31 +114,25 @@ class SecurityUtils {
     );
   }
 
-  /**
-   * データの整合性を検証する
-   * @param data データ
-   * @param checksum チェックサム
-   * @return 検証結果
-   */
+  /// データの整合性を検証する
+  /// @param data データ
+  /// @param checksum チェックサム
+  /// @return 検証結果
   static bool verifyIntegrity(String data, String checksum) {
     final calculatedChecksum = _calculateChecksum(data);
     return calculatedChecksum == checksum;
   }
 
-  /**
-   * データのチェックサムを計算する
-   * @param data データ
-   * @return チェックサム
-   */
+  /// データのチェックサムを計算する
+  /// @param data データ
+  /// @return チェックサム
   static String calculateChecksum(String data) {
     return _calculateChecksum(data);
   }
 
-  /**
-   * セキュアなストレージにデータを保存する
-   * @param key キー
-   * @param value 値
-   */
+  /// セキュアなストレージにデータを保存する
+  /// @param key キー
+  /// @param value 値
   static Future<void> secureStore(String key, String value) async {
     try {
       final encryptedValue = encrypt(value);
@@ -165,11 +147,9 @@ class SecurityUtils {
     }
   }
 
-  /**
-   * セキュアなストレージからデータを取得する
-   * @param key キー
-   * @return 値
-   */
+  /// セキュアなストレージからデータを取得する
+  /// @param key キー
+  /// @return 値
   static Future<String?> secureRetrieve(String key) async {
     // 実際の実装では、SecureStorageやKeychainを使用
     if (kDebugMode) {
@@ -181,10 +161,8 @@ class SecurityUtils {
     return null;
   }
 
-  /**
-   * セキュアなストレージからデータを削除する
-   * @param key キー
-   */
+  /// セキュアなストレージからデータを削除する
+  /// @param key キー
   static Future<void> secureDelete(String key) async {
     try {
       // 実際の実装では、SecureStorageやKeychainを使用
@@ -198,10 +176,8 @@ class SecurityUtils {
     }
   }
 
-  /**
-   * アプリケーションのセキュリティ状態をチェックする
-   * @return セキュリティ状態
-   */
+  /// アプリケーションのセキュリティ状態をチェックする
+  /// @return セキュリティ状態
   static Map<String, bool> checkSecurityStatus() {
     return {
       'debugMode': kDebugMode,
@@ -215,11 +191,9 @@ class SecurityUtils {
     };
   }
 
-  /**
-   * セキュリティログを記録する
-   * @param event イベント
-   * @param details 詳細
-   */
+  /// セキュリティログを記録する
+  /// @param event イベント
+  /// @param details 詳細
   static void logSecurityEvent(String event, {Map<String, dynamic>? details}) {
     if (kDebugMode) {
       print('Security Event: $event');

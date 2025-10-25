@@ -4,10 +4,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-/**
- * セキュアなHTTPクライアント
- * セキュリティを強化したHTTP通信を提供
- */
+/// セキュアなHTTPクライアント
+/// セキュリティを強化したHTTP通信を提供
 class SecureHttpClient {
   static const Duration _defaultTimeout = Duration(seconds: 30);
   static const int _maxRetries = 3;
@@ -22,13 +20,11 @@ class SecureHttpClient {
     _client = http.Client();
   }
 
-  /**
-   * GETリクエストを送信する
-   * @param url URL
-   * @param headers ヘッダー
-   * @param timeout タイムアウト
-   * @return レスポンス
-   */
+  /// GETリクエストを送信する
+  /// @param url URL
+  /// @param headers ヘッダー
+  /// @param timeout タイムアウト
+  /// @return レスポンス
   Future<http.Response> get(
     String url, {
     Map<String, String>? headers,
@@ -43,14 +39,12 @@ class SecureHttpClient {
     );
   }
 
-  /**
-   * POSTリクエストを送信する
-   * @param url URL
-   * @param body ボディ
-   * @param headers ヘッダー
-   * @param timeout タイムアウト
-   * @return レスポンス
-   */
+  /// POSTリクエストを送信する
+  /// @param url URL
+  /// @param body ボディ
+  /// @param headers ヘッダー
+  /// @param timeout タイムアウト
+  /// @return レスポンス
   Future<http.Response> post(
     String url, {
     Object? body,
@@ -67,14 +61,12 @@ class SecureHttpClient {
     );
   }
 
-  /**
-   * PUTリクエストを送信する
-   * @param url URL
-   * @param body ボディ
-   * @param headers ヘッダー
-   * @param timeout タイムアウト
-   * @return レスポンス
-   */
+  /// PUTリクエストを送信する
+  /// @param url URL
+  /// @param body ボディ
+  /// @param headers ヘッダー
+  /// @param timeout タイムアウト
+  /// @return レスポンス
   Future<http.Response> put(
     String url, {
     Object? body,
@@ -91,13 +83,11 @@ class SecureHttpClient {
     );
   }
 
-  /**
-   * DELETEリクエストを送信する
-   * @param url URL
-   * @param headers ヘッダー
-   * @param timeout タイムアウト
-   * @return レスポンス
-   */
+  /// DELETEリクエストを送信する
+  /// @param url URL
+  /// @param headers ヘッダー
+  /// @param timeout タイムアウト
+  /// @return レスポンス
   Future<http.Response> delete(
     String url, {
     Map<String, String>? headers,
@@ -112,15 +102,13 @@ class SecureHttpClient {
     );
   }
 
-  /**
-   * ファイルをアップロードする
-   * @param url URL
-   * @param file ファイル
-   * @param fieldName フィールド名
-   * @param headers ヘッダー
-   * @param timeout タイムアウト
-   * @return レスポンス
-   */
+  /// ファイルをアップロードする
+  /// @param url URL
+  /// @param file ファイル
+  /// @param fieldName フィールド名
+  /// @param headers ヘッダー
+  /// @param timeout タイムアウト
+  /// @return レスポンス
   Future<http.Response> uploadFile(
     String url,
     File file,
@@ -142,12 +130,10 @@ class SecureHttpClient {
     );
   }
 
-  /**
-   * リクエストを実行する（リトライ機能付き）
-   * @param requestFunction リクエスト関数
-   * @param timeout タイムアウト
-   * @return レスポンス
-   */
+  /// リクエストを実行する（リトライ機能付き）
+  /// @param requestFunction リクエスト関数
+  /// @param timeout タイムアウト
+  /// @return レスポンス
   Future<http.Response> _makeRequest(
     Future<dynamic> Function() requestFunction, {
     Duration? timeout,
@@ -205,11 +191,9 @@ class SecureHttpClient {
     throw lastException ?? Exception('Max retries exceeded');
   }
 
-  /**
-   * レスポンスを検証する
-   * @param response レスポンス
-   * @return 検証結果
-   */
+  /// レスポンスを検証する
+  /// @param response レスポンス
+  /// @return 検証結果
   bool _validateResponse(http.Response response) {
     // ステータスコードの検証
     if (response.statusCode < 200 || response.statusCode >= 300) {
@@ -227,16 +211,12 @@ class SecureHttpClient {
     return true;
   }
 
-  /**
-   * クライアントを閉じる
-   */
+  /// クライアントを閉じる
   void close() {
     _client.close();
   }
 
-  /**
-   * デストラクタ
-   */
+  /// デストラクタ
   void dispose() {
     close();
   }

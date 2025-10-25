@@ -4,10 +4,8 @@ import '../../domain/entities/tea_analysis_result.dart';
 import '../../domain/repositories/tea_analysis_repository.dart';
 import '../datasources/tea_analysis_local_datasource.dart';
 
-/**
- * 茶葉解析結果リポジトリの実装
- * データ層とドメイン層の境界を実装
- */
+/// 茶葉解析結果リポジトリの実装
+/// データ層とドメイン層の境界を実装
 class TeaAnalysisRepositoryImpl implements TeaAnalysisRepository {
   final TeaAnalysisLocalDataSource localDataSource;
 

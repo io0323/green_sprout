@@ -15,9 +15,7 @@ void main() {
       dataSource = AnalysisLocalDataSourceImpl();
     });
 
-    /**
-     * テスト用の画像ファイルを作成
-     */
+    /// テスト用の画像ファイルを作成
     Future<File> createTestImageFile() async {
       // 224x224のテスト画像を作成
       final image = img.Image(width: 224, height: 224);

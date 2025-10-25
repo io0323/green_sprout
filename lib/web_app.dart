@@ -4,10 +4,8 @@ void main() {
   runApp(const TeaGardenWebApp());
 }
 
-/**
- * 茶園管理AI - Web専用アプリ
- * 依存性注入やBLoCを使わないシンプルな実装
- */
+/// 茶園管理AI - Web専用アプリ
+/// 依存性注入やBLoCを使わないシンプルな実装
 class TeaGardenWebApp extends StatelessWidget {
   const TeaGardenWebApp({super.key});
 
@@ -26,10 +24,8 @@ class TeaGardenWebApp extends StatelessWidget {
   }
 }
 
-/**
- * メインホームページ
- * 茶葉解析の機能を提供
- */
+/// メインホームページ
+/// 茶葉解析の機能を提供
 class TeaGardenHomePage extends StatefulWidget {
   const TeaGardenHomePage({super.key});
 
@@ -529,9 +525,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
   }
 }
 
-/**
- * 茶葉解析結果のデータクラス
- */
+/// 茶葉解析結果のデータクラス
 class TeaAnalysisResult {
   final String id;
   final String imagePath;

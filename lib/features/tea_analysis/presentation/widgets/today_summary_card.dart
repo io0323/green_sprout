@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/tea_analysis_result.dart';
 
-/**
- * 今日のサマリーカードウィジェット
- * 再利用可能なUIコンポーネント
- */
+/// 今日のサマリーカードウィジェット
+/// 再利用可能なUIコンポーネント
 class TodaySummaryCard extends StatelessWidget {
   final List<TeaAnalysisResult> results;
 

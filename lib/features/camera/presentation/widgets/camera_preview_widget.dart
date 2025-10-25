@@ -3,10 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:camera/camera.dart';
 import '../bloc/camera_cubit.dart';
 
-/**
- * カメラプレビューウィジェット
- * カメラの映像を表示
- */
+/// カメラプレビューウィジェット
+/// カメラの映像を表示
 class CameraPreviewWidget extends StatelessWidget {
   const CameraPreviewWidget({super.key});
 

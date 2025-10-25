@@ -6,10 +6,8 @@ import 'package:tea_garden_ai/core/errors/failures.dart';
 import 'package:tea_garden_ai/features/camera/domain/entities/camera_state.dart';
 import 'package:tea_garden_ai/features/camera/data/datasources/camera_local_datasource.dart';
 
-/**
- * Web用のモックカメラデータソース
- * 実際のカメラの代わりにファイル選択を使用
- */
+/// Web用のモックカメラデータソース
+/// 実際のカメラの代わりにファイル選択を使用
 class WebMockCameraDataSource implements CameraLocalDataSource {
   CameraState _currentState = const CameraState();
   CameraController? _mockController;

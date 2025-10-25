@@ -3,14 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import '../theme/tea_garden_theme.dart';
 
-/**
- * アクセシビリティ機能の強化ユーティリティ
- * 視覚障害、聴覚障害、運動障害に対応
- */
+/// アクセシビリティ機能の強化ユーティリティ
+/// 視覚障害、聴覚障害、運動障害に対応
 class AccessibilityHelper {
-  /**
-   * セマンティクスラベルを生成
-   */
+  /// セマンティクスラベルを生成
   static String generateSemanticsLabel({
     required String baseLabel,
     String? additionalInfo,
@@ -34,9 +30,7 @@ class AccessibilityHelper {
     return label;
   }
 
-  /**
-   * 色のコントラスト比を計算
-   */
+  /// 色のコントラスト比を計算
   static double calculateContrastRatio(Color color1, Color color2) {
     final luminance1 = _calculateLuminance(color1);
     final luminance2 = _calculateLuminance(color2);
@@ -47,9 +41,7 @@ class AccessibilityHelper {
     return (lighter + 0.05) / (darker + 0.05);
   }
 
-  /**
-   * 色の輝度を計算
-   */
+  /// 色の輝度を計算
   static double _calculateLuminance(Color color) {
     final r = _linearizeColorComponent(color.red / 255.0);
     final g = _linearizeColorComponent(color.green / 255.0);
@@ -58,9 +50,7 @@ class AccessibilityHelper {
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
   }
 
-  /**
-   * 色成分を線形化
-   */
+  /// 色成分を線形化
   static double _linearizeColorComponent(double component) {
     if (component <= 0.03928) {
       return component / 12.92;
@@ -69,9 +59,7 @@ class AccessibilityHelper {
     }
   }
 
-  /**
-   * アクセシブルな色を取得
-   */
+  /// アクセシブルな色を取得
   static Color getAccessibleColor(
     Color backgroundColor, {
     Color? lightColor,
@@ -86,9 +74,7 @@ class AccessibilityHelper {
     return lightContrast > darkContrast ? light : dark;
   }
 
-  /**
-   * フォントサイズをスケール
-   */
+  /// フォントサイズをスケール
   static double getScaledFontSize(BuildContext context, double baseFontSize) {
     final mediaQuery = MediaQuery.of(context);
     final textScaleFactor = mediaQuery.textScaleFactor;
@@ -99,25 +85,19 @@ class AccessibilityHelper {
     return baseFontSize * clampedScaleFactor;
   }
 
-  /**
-   * タッチターゲットサイズを確認
-   */
+  /// タッチターゲットサイズを確認
   static bool isTouchTargetAccessible(Size size) {
     const minSize = 44.0; // iOS/Android の最小タッチターゲットサイズ
     return size.width >= minSize && size.height >= minSize;
   }
 
-  /**
-   * フォーカス可能な要素の順序を管理
-   */
+  /// フォーカス可能な要素の順序を管理
   static List<FocusNode> createFocusOrder(List<Widget> widgets) {
     return List.generate(widgets.length, (index) => FocusNode());
   }
 }
 
-/**
- * アクセシブルなカードウィジェット
- */
+/// アクセシブルなカードウィジェット
 class AccessibleCard extends StatelessWidget {
   final Widget child;
   final String? semanticsLabel;
@@ -163,9 +143,7 @@ class AccessibleCard extends StatelessWidget {
   }
 }
 
-/**
- * アクセシブルなボタン
- */
+/// アクセシブルなボタン
 class AccessibleButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
@@ -257,9 +235,7 @@ class AccessibleButton extends StatelessWidget {
   }
 }
 
-/**
- * アクセシブルな画像
- */
+/// アクセシブルな画像
 class AccessibleImage extends StatelessWidget {
   final String imagePath;
   final String semanticsLabel;
@@ -305,9 +281,7 @@ class AccessibleImage extends StatelessWidget {
   }
 }
 
-/**
- * アクセシブルなテキストフィールド
- */
+/// アクセシブルなテキストフィールド
 class AccessibleTextField extends StatelessWidget {
   final String label;
   final String? hint;
@@ -377,9 +351,7 @@ class AccessibleTextField extends StatelessWidget {
   }
 }
 
-/**
- * アクセシブルなプログレスインジケーター
- */
+/// アクセシブルなプログレスインジケーター
 class AccessibleProgressIndicator extends StatelessWidget {
   final double value;
   final String? semanticsLabel;
@@ -414,9 +386,7 @@ class AccessibleProgressIndicator extends StatelessWidget {
   }
 }
 
-/**
- * アクセシビリティ設定ダイアログ
- */
+/// アクセシビリティ設定ダイアログ
 class AccessibilitySettingsDialog extends StatefulWidget {
   const AccessibilitySettingsDialog({super.key});
 

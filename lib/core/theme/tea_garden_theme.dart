@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-/**
- * 茶園管理AI用のカスタムテーマ
- * モダンで美しいデザインシステム
- */
+/// 茶園管理AI用のカスタムテーマ
+/// モダンで美しいデザインシステム
 class TeaGardenTheme {
   static const Color primaryGreen = Color(0xFF2E7D32);
   static const Color lightGreen = Color(0xFF4CAF50);
@@ -24,9 +22,7 @@ class TeaGardenTheme {
   static const Color successColor = Color(0xFF4CAF50);
   static const Color infoColor = Color(0xFF2196F3);
 
-  /**
-   * ライトテーマ
-   */
+  /// ライトテーマ
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
@@ -67,7 +63,7 @@ class TeaGardenTheme {
           ),
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
@@ -89,9 +85,7 @@ class TeaGardenTheme {
     );
   }
 
-  /**
-   * ダークテーマ
-   */
+  /// ダークテーマ
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
@@ -132,7 +126,7 @@ class TeaGardenTheme {
           ),
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
@@ -154,9 +148,7 @@ class TeaGardenTheme {
     );
   }
 
-  /**
-   * グラデーション
-   */
+  /// グラデーション
   static const LinearGradient primaryGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
@@ -169,9 +161,7 @@ class TeaGardenTheme {
     colors: [backgroundLight, Color(0xFFE8F5E8)],
   );
 
-  /**
-   * シャドウ
-   */
+  /// シャドウ
   static List<BoxShadow> get cardShadow => [
         BoxShadow(
           color: Colors.black.withOpacity(0.1),
@@ -188,17 +178,13 @@ class TeaGardenTheme {
         ),
       ];
 
-  /**
-   * ボーダーラディウス
-   */
+  /// ボーダーラディウス
   static const double borderRadiusSmall = 8.0;
   static const double borderRadiusMedium = 12.0;
   static const double borderRadiusLarge = 16.0;
   static const double borderRadiusXLarge = 24.0;
 
-  /**
-   * スペーシング
-   */
+  /// スペーシング
   static const double spacingXS = 4.0;
   static const double spacingS = 8.0;
   static const double spacingM = 16.0;
@@ -206,9 +192,7 @@ class TeaGardenTheme {
   static const double spacingXL = 32.0;
   static const double spacingXXL = 48.0;
 
-  /**
-   * タイポグラフィ
-   */
+  /// タイポグラフィ
   static const TextStyle heading1 = TextStyle(
     fontSize: 32,
     fontWeight: FontWeight.bold,
@@ -252,9 +236,7 @@ class TeaGardenTheme {
   );
 }
 
-/**
- * アニメーション定数
- */
+/// アニメーション定数
 class AnimationConstants {
   static const Duration shortDuration = Duration(milliseconds: 200);
   static const Duration mediumDuration = Duration(milliseconds: 300);
@@ -265,18 +247,14 @@ class AnimationConstants {
   static const Curve slideCurve = Curves.easeOutCubic;
 }
 
-/**
- * レスポンシブデザイン用のブレークポイント
- */
+/// レスポンシブデザイン用のブレークポイント
 class Breakpoints {
   static const double mobile = 600;
   static const double tablet = 900;
   static const double desktop = 1200;
 }
 
-/**
- * レスポンシブヘルパー
- */
+/// レスポンシブヘルパー
 class ResponsiveHelper {
   static bool isMobile(BuildContext context) {
     return MediaQuery.of(context).size.width < Breakpoints.mobile;

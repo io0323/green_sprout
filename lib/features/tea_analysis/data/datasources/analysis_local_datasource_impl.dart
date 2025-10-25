@@ -9,10 +9,8 @@ import '../../../../core/errors/failures.dart';
 import '../../domain/entities/analysis_result.dart';
 import 'analysis_local_datasource.dart';
 
-/**
- * AI解析のローカルデータソースの実装クラス
- * TensorFlow Liteを使用した画像解析機能
- */
+/// AI解析のローカルデータソースの実装クラス
+/// TensorFlow Liteを使用した画像解析機能
 class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
   Interpreter? _interpreter;
   bool _isModelLoaded = false;
@@ -78,10 +76,8 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
     }
   }
 
-  /**
-   * TensorFlow Liteを使用した画像解析
-   * 実際のAIモデルによる茶葉の成長状態と健康状態の分類
-   */
+  /// TensorFlow Liteを使用した画像解析
+  /// 実際のAIモデルによる茶葉の成長状態と健康状態の分類
   Future<Either<Failure, AnalysisResult>> _analyzeWithTFLite(
       img.Image image) async {
     try {
@@ -171,10 +167,8 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
     }
   }
 
-  /**
-   * 画像をTensorFlow Liteの入力形式（Float32配列）に変換
-   * 224x224x3のRGB画像を正規化して配列に変換
-   */
+  /// 画像をTensorFlow Liteの入力形式（Float32配列）に変換
+  /// 224x224x3のRGB画像を正規化して配列に変換
   List<double> _imageToByteListFloat32(img.Image image) {
     final bytes = Float32List(
         AppConstants.inputImageSize * AppConstants.inputImageSize * 3);
@@ -193,10 +187,8 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
     return bytes;
   }
 
-  /**
-   * モデルの出力を解析して茶葉の状態を判定
-   * 8クラス分類（成長状態4クラス × 健康状態2クラス）
-   */
+  /// モデルの出力を解析して茶葉の状態を判定
+  /// 8クラス分類（成長状態4クラス × 健康状態2クラス）
   AnalysisResult _parseModelOutput(List output) {
     // 出力配列から確率を取得
     final probabilities = output[0] as List<double>;
@@ -227,9 +219,7 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
     );
   }
 
-  /**
-   * リソースの解放
-   */
+  /// リソースの解放
   void dispose() {
     _interpreter?.close();
     _interpreter = null;

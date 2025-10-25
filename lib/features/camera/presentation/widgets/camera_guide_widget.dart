@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-/**
- * カメラガイドウィジェット
- * 再利用可能なUIコンポーネント
- */
+/// カメラガイドウィジェット
+/// 再利用可能なUIコンポーネント
 class CameraGuideWidget extends StatelessWidget {
   const CameraGuideWidget({super.key});
 

@@ -3,10 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../tea_analysis/presentation/bloc/tea_analysis_cubit.dart';
 import '../../../tea_analysis/presentation/widgets/tea_analysis_card.dart';
 
-/**
- * 日誌一覧ページ
- * 過去の茶葉解析結果を表示
- */
+/// 日誌一覧ページ
+/// 過去の茶葉解析結果を表示
 class LogListPage extends StatefulWidget {
   const LogListPage({super.key});
 

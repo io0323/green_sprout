@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 
-/**
- * 国際化サービスクラス
- * アプリケーションの多言語対応を管理
- */
+/// 国際化サービスクラス
+/// アプリケーションの多言語対応を管理
 class LocalizationService {
   static LocalizationService? _instance;
   static LocalizationService get instance =>
@@ -15,9 +13,7 @@ class LocalizationService {
   Map<String, dynamic> _translations = {};
   String _currentLanguage = 'ja';
 
-  /**
-   * 翻訳データを読み込み
-   */
+  /// 翻訳データを読み込み
   Future<void> loadTranslations() async {
     try {
       final String jsonString =
@@ -71,21 +67,15 @@ class LocalizationService {
     }
   }
 
-  /**
-   * 言語を設定
-   */
+  /// 言語を設定
   void setLanguage(String languageCode) {
     _currentLanguage = languageCode;
   }
 
-  /**
-   * 現在の言語を取得
-   */
+  /// 現在の言語を取得
   String get currentLanguage => _currentLanguage;
 
-  /**
-   * 翻訳テキストを取得
-   */
+  /// 翻訳テキストを取得
   String translate(String key, {Map<String, dynamic>? params}) {
     try {
       String text = _translations[_currentLanguage]?[key] ??
@@ -105,14 +95,10 @@ class LocalizationService {
     }
   }
 
-  /**
-   * 利用可能な言語リストを取得
-   */
+  /// 利用可能な言語リストを取得
   List<String> get availableLanguages => _translations.keys.toList();
 
-  /**
-   * 言語名を取得
-   */
+  /// 言語名を取得
   String getLanguageName(String languageCode) {
     switch (languageCode) {
       case 'ja':
@@ -125,9 +111,7 @@ class LocalizationService {
   }
 }
 
-/**
- * 翻訳ヘルパー関数
- */
+/// 翻訳ヘルパー関数
 String t(String key, {Map<String, dynamic>? params}) {
   return LocalizationService.instance.translate(key, params: params);
 }

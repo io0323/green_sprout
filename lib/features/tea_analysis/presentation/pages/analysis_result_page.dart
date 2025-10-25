@@ -6,10 +6,8 @@ import '../../../tea_analysis/presentation/widgets/analysis_result_widget.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../domain/entities/tea_analysis_result.dart';
 
-/**
- * 解析結果ページ
- * 撮影した画像の解析結果を表示
- */
+/// 解析結果ページ
+/// 撮影した画像の解析結果を表示
 class AnalysisResultPage extends StatefulWidget {
   final String imagePath;
 
@@ -251,9 +249,7 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
     );
   }
 
-  /**
-   * 解析結果をデータベースに保存する
-   */
+  /// 解析結果をデータベースに保存する
   void _saveResult(dynamic result) async {
     try {
       // TeaAnalysisResultエンティティを作成

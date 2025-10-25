@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-/**
- * Web用の簡素化されたホームページ
- * 依存性注入を使わずに直接実装
- */
+/// Web用の簡素化されたホームページ
+/// 依存性注入を使わずに直接実装
 class WebHomePage extends StatefulWidget {
   const WebHomePage({super.key});
 

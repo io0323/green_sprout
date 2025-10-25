@@ -31,10 +31,8 @@ class TeaAnalysisLocalDataSourceImpl implements TeaAnalysisLocalDataSource {
     );
   }
 
-  /**
-   * データベース作成時の処理
-   * インデックスとテーブル最適化を含む
-   */
+  /// データベース作成時の処理
+  /// インデックスとテーブル最適化を含む
   Future<void> _onCreate(Database db, int version) async {
     // メインテーブルの作成
     await db.execute('''

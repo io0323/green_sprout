@@ -6,10 +6,8 @@ import '../widgets/tea_analysis_card.dart';
 import '../widgets/camera_button.dart';
 import '../widgets/today_summary_card.dart';
 
-/**
- * ホームページ
- * クリーンアーキテクチャに基づいたホーム画面
- */
+/// ホームページ
+/// クリーンアーキテクチャに基づいたホーム画面
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 

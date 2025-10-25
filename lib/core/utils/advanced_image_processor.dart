@@ -1,18 +1,14 @@
 import 'dart:typed_data';
 import 'package:image/image.dart' as img;
 
-/**
- * 高度な画像前処理と特徴抽出ユーティリティ
- * AIモデルの精度向上のための画像処理機能
- */
+/// 高度な画像前処理と特徴抽出ユーティリティ
+/// AIモデルの精度向上のための画像処理機能
 class AdvancedImageProcessor {
   static const int _targetSize = 224;
   static const int _channels = 3;
 
-  /**
-   * 画像の高度な前処理
-   * ノイズ除去、コントラスト調整、正規化を含む
-   */
+  /// 画像の高度な前処理
+  /// ノイズ除去、コントラスト調整、正規化を含む
   static img.Image preprocessImage(img.Image image) {
     // 1. ノイズ除去（ガウシアンフィルタ）
     var processed = img.gaussianBlur(image, radius: 1);
@@ -33,9 +29,7 @@ class AdvancedImageProcessor {
     return processed;
   }
 
-  /**
-   * アスペクト比を保持したリサイズ
-   */
+  /// アスペクト比を保持したリサイズ
   static img.Image _resizeWithAspectRatio(img.Image image, int targetSize) {
     final originalWidth = image.width;
     final originalHeight = image.height;
@@ -61,9 +55,7 @@ class AdvancedImageProcessor {
     return _addPadding(resized, targetSize);
   }
 
-  /**
-   * パディングを追加して正方形にする
-   */
+  /// パディングを追加して正方形にする
   static img.Image _addPadding(img.Image image, int targetSize) {
     if (image.width == targetSize && image.height == targetSize) {
       return image;
@@ -85,10 +77,8 @@ class AdvancedImageProcessor {
     return padded;
   }
 
-  /**
-   * 画像をTensorFlow Lite用のFloat32Listに変換
-   * 正規化とチャンネル順序の調整を含む
-   */
+  /// 画像をTensorFlow Lite用のFloat32Listに変換
+  /// 正規化とチャンネル順序の調整を含む
   static Float32List imageToFloat32List(img.Image image) {
     final pixels = image.getBytes();
     final floatList = Float32List(_targetSize * _targetSize * _channels);
@@ -115,10 +105,8 @@ class AdvancedImageProcessor {
     return floatList;
   }
 
-  /**
-   * 画像の品質を評価
-   * ぼやけ、明度、コントラストを評価
-   */
+  /// 画像の品質を評価
+  /// ぼやけ、明度、コントラストを評価
   static ImageQuality assessImageQuality(img.Image image) {
     // 1. ぼやけの評価（ラプラシアン分散）
     final blurScore = _calculateBlurScore(image);
@@ -141,9 +129,7 @@ class AdvancedImageProcessor {
     );
   }
 
-  /**
-   * ぼやけスコアの計算（ラプラシアン分散）
-   */
+  /// ぼやけスコアの計算（ラプラシアン分散）
   static double _calculateBlurScore(img.Image image) {
     // グレースケールに変換
     final gray = img.grayscale(image);
@@ -169,9 +155,7 @@ class AdvancedImageProcessor {
     return (variance / 10000).clamp(0.0, 1.0);
   }
 
-  /**
-   * 明度スコアの計算
-   */
+  /// 明度スコアの計算
   static double _calculateBrightnessScore(img.Image image) {
     final pixels = image.getBytes();
     double totalBrightness = 0;
@@ -190,9 +174,7 @@ class AdvancedImageProcessor {
     return (1.0 - deviation).clamp(0.0, 1.0);
   }
 
-  /**
-   * コントラストスコアの計算
-   */
+  /// コントラストスコアの計算
   static double _calculateContrastScore(img.Image image) {
     final pixels = image.getBytes();
     int minBrightness = 255;
@@ -210,10 +192,8 @@ class AdvancedImageProcessor {
     return (contrast / 255).clamp(0.0, 1.0);
   }
 
-  /**
-   * 画像の特徴量を抽出
-   * 色相、彩度、明度の統計情報
-   */
+  /// 画像の特徴量を抽出
+  /// 色相、彩度、明度の統計情報
   static ImageFeatures extractFeatures(img.Image image) {
     final pixels = image.getBytes();
     double totalH = 0, totalS = 0, totalL = 0;
@@ -241,9 +221,7 @@ class AdvancedImageProcessor {
     );
   }
 
-  /**
-   * RGBからHSLに変換
-   */
+  /// RGBからHSLに変換
   static HSL _rgbToHsl(int r, int g, int b) {
     final rf = r / 255.0;
     final gf = g / 255.0;
@@ -276,9 +254,7 @@ class AdvancedImageProcessor {
   }
 }
 
-/**
- * 画像品質の評価結果
- */
+/// 画像品質の評価結果
 class ImageQuality {
   final double blurScore;
   final double brightnessScore;
@@ -296,9 +272,7 @@ class ImageQuality {
   bool get isPoorQuality => overallScore < 0.4;
 }
 
-/**
- * 画像の特徴量
- */
+/// 画像の特徴量
 class ImageFeatures {
   final double averageHue;
   final double averageSaturation;
@@ -313,9 +287,7 @@ class ImageFeatures {
   });
 }
 
-/**
- * HSL色空間
- */
+/// HSL色空間
 class HSL {
   final double h; // 色相 (0-360)
   final double s; // 彩度 (0-1)

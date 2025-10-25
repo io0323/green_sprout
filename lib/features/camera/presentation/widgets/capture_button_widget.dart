@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/camera_cubit.dart';
 
-/**
- * 撮影ボタンウィジェット
- * カメラの撮影ボタン
- */
+/// 撮影ボタンウィジェット
+/// カメラの撮影ボタン
 class CaptureButtonWidget extends StatelessWidget {
   const CaptureButtonWidget({super.key});
 

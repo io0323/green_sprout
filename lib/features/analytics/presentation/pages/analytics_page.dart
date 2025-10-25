@@ -5,10 +5,8 @@ import '../../../tea_analysis/presentation/bloc/tea_analysis_cubit.dart';
 import '../../../tea_analysis/domain/entities/tea_analysis_result.dart';
 import '../../../../core/services/localization_service.dart';
 
-/**
- * 茶園分析ページ
- * 茶葉解析結果の統計とグラフを表示
- */
+/// 茶園分析ページ
+/// 茶葉解析結果の統計とグラフを表示
 class AnalyticsPage extends StatefulWidget {
   const AnalyticsPage({super.key});
 

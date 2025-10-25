@@ -5,10 +5,8 @@ import '../../domain/entities/analysis_result.dart';
 import '../../domain/repositories/analysis_repository.dart';
 import '../datasources/analysis_local_datasource.dart';
 
-/**
- * AI解析リポジトリの実装
- * TensorFlow Liteモデルを使用した画像解析
- */
+/// AI解析リポジトリの実装
+/// TensorFlow Liteモデルを使用した画像解析
 class AnalysisRepositoryImpl implements AnalysisRepository {
   final AnalysisLocalDataSource localDataSource;
 

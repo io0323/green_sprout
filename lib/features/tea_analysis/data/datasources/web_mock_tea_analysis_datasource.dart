@@ -4,10 +4,8 @@ import 'package:tea_garden_ai/core/errors/failures.dart';
 import 'package:tea_garden_ai/features/tea_analysis/domain/entities/tea_analysis_result.dart';
 import 'package:tea_garden_ai/features/tea_analysis/data/datasources/tea_analysis_local_datasource.dart';
 
-/**
- * Web用のモックデータソース
- * 実際のデータベースの代わりにメモリ内のデータを使用
- */
+/// Web用のモックデータソース
+/// 実際のデータベースの代わりにメモリ内のデータを使用
 class WebMockTeaAnalysisDataSource implements TeaAnalysisLocalDataSource {
   final List<TeaAnalysisResult> _mockData = [
     TeaAnalysisResult(

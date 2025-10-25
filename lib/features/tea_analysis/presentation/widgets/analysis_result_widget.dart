@@ -2,10 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import '../../domain/entities/analysis_result.dart';
 
-/**
- * 解析結果ウィジェット
- * 解析結果を表示するウィジェット
- */
+/// 解析結果ウィジェット
+/// 解析結果を表示するウィジェット
 class AnalysisResultWidget extends StatelessWidget {
   final AnalysisResult result;
   final String imagePath;
@@ -269,9 +267,7 @@ class AnalysisResultWidget extends StatelessWidget {
     }
   }
 
-  /**
-   * 信頼度に基づく説明文を取得
-   */
+  /// 信頼度に基づく説明文を取得
   String _getConfidenceDescription(double confidence) {
     if (confidence >= 0.9) {
       return '非常に高い信頼度です。解析結果は非常に正確です。';

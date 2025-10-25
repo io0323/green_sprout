@@ -3,10 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:tea_garden_ai/main.dart' as app;
 
-/**
- * 茶葉解析機能の統合テスト
- * 実際のアプリケーションの動作をテスト
- */
+/// 茶葉解析機能の統合テスト
+/// 実際のアプリケーションの動作をテスト
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 

@@ -5,9 +5,7 @@ import 'package:flutter/services.dart';
 import '../errors/failures.dart';
 import '../../features/tea_analysis/domain/entities/tea_analysis_result.dart';
 
-/**
- * ウェアラブルデバイスサービスのインターフェース
- */
+/// ウェアラブルデバイスサービスのインターフェース
 abstract class WearableDeviceService {
   Future<bool> isConnected();
   Future<void> connect();
@@ -17,10 +15,8 @@ abstract class WearableDeviceService {
   Stream<WearableEvent> get eventStream;
 }
 
-/**
- * ウェアラブルデバイスサービスの実装
- * Wear OS (Android) と watchOS (iOS) に対応
- */
+/// ウェアラブルデバイスサービスの実装
+/// Wear OS (Android) と watchOS (iOS) に対応
 class WearableDeviceServiceImpl implements WearableDeviceService {
   static const MethodChannel _channel = MethodChannel('tea_garden_wearable');
 
@@ -137,9 +133,7 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
   @override
   Stream<WearableEvent> get eventStream => _eventController.stream;
 
-  /**
-   * ハートビートを開始
-   */
+  /// ハートビートを開始
   void _startHeartbeat() {
     _heartbeatTimer =
         Timer.periodic(const Duration(seconds: 30), (timer) async {
@@ -154,9 +148,7 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
     });
   }
 
-  /**
-   * ハートビートを停止
-   */
+  /// ハートビートを停止
   void _stopHeartbeat() {
     _heartbeatTimer?.cancel();
     _heartbeatTimer = null;
@@ -168,9 +160,7 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
   }
 }
 
-/**
- * ウェアラブルイベント
- */
+/// ウェアラブルイベント
 class WearableEvent {
   final WearableEventType type;
   final Map<String, dynamic>? data;
@@ -195,9 +185,7 @@ enum WearableEventType {
   error,
 }
 
-/**
- * ウェアラブル専用のUIコンポーネント
- */
+/// ウェアラブル専用のUIコンポーネント
 class WearableAnalysisCard extends StatelessWidget {
   final TeaAnalysisResult result;
   final VoidCallback? onTap;
@@ -314,9 +302,7 @@ class WearableAnalysisCard extends StatelessWidget {
   }
 }
 
-/**
- * ウェアラブル用の簡易カメラコントロール
- */
+/// ウェアラブル用の簡易カメラコントロール
 class WearableCameraControl extends StatelessWidget {
   final VoidCallback? onCapture;
   final bool isCapturing;
@@ -361,9 +347,7 @@ class WearableCameraControl extends StatelessWidget {
   }
 }
 
-/**
- * ウェアラブル専用の通知ウィジェット
- */
+/// ウェアラブル専用の通知ウィジェット
 class WearableNotification extends StatelessWidget {
   final String title;
   final String message;
@@ -426,9 +410,7 @@ class WearableNotification extends StatelessWidget {
   }
 }
 
-/**
- * ウェアラブル失敗エラー
- */
+/// ウェアラブル失敗エラー
 class WearableFailure extends Failure {
   const WearableFailure(super.message);
 }

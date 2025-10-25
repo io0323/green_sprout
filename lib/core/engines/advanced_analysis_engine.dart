@@ -5,18 +5,14 @@ import '../utils/advanced_image_processor.dart';
 import '../../core/errors/failures.dart';
 import '../../features/tea_analysis/domain/entities/analysis_result.dart';
 
-/**
- * 高度なAI解析エンジン
- * 複数の解析手法を組み合わせた高精度な茶葉解析システム
- */
+/// 高度なAI解析エンジン
+/// 複数の解析手法を組み合わせた高精度な茶葉解析システム
 class AdvancedAnalysisEngine {
   Interpreter? _primaryModel;
   Interpreter? _secondaryModel;
   bool _isInitialized = false;
 
-  /**
-   * 解析エンジンを初期化
-   */
+  /// 解析エンジンを初期化
   Future<void> initialize() async {
     try {
       // プライマリモデル（成長状態分類）の読み込み
@@ -33,10 +29,8 @@ class AdvancedAnalysisEngine {
     }
   }
 
-  /**
-   * 高度な画像解析を実行
-   * 複数の解析手法を組み合わせた高精度解析
-   */
+  /// 高度な画像解析を実行
+  /// 複数の解析手法を組み合わせた高精度解析
   Future<AnalysisResult> analyzeImage(img.Image image) async {
     if (!_isInitialized) {
       await initialize();
@@ -59,9 +53,7 @@ class AdvancedAnalysisEngine {
     return _combineResults(results, quality);
   }
 
-  /**
-   * プライマリモデルによる解析
-   */
+  /// プライマリモデルによる解析
   Future<AnalysisResult> _analyzeWithPrimaryModel(img.Image image) async {
     if (_primaryModel == null) {
       return _getFallbackResult();
@@ -90,9 +82,7 @@ class AdvancedAnalysisEngine {
     }
   }
 
-  /**
-   * 特徴抽出による解析
-   */
+  /// 特徴抽出による解析
   Future<AnalysisResult> _analyzeWithFeatureExtraction(img.Image image) async {
     final features = AdvancedImageProcessor.extractFeatures(image);
 
@@ -107,9 +97,7 @@ class AdvancedAnalysisEngine {
     );
   }
 
-  /**
-   * アンサンブル手法による解析
-   */
+  /// アンサンブル手法による解析
   Future<AnalysisResult> _analyzeWithEnsembleMethod(img.Image image) async {
     // 複数の小さなモデルやルールベースの解析を組み合わせ
     final results = <AnalysisResult>[];
@@ -127,9 +115,7 @@ class AdvancedAnalysisEngine {
     return _combineEnsembleResults(results);
   }
 
-  /**
-   * 色相ベースの解析
-   */
+  /// 色相ベースの解析
   AnalysisResult _analyzeByColor(img.Image image) {
     final features = AdvancedImageProcessor.extractFeatures(image);
 
@@ -167,9 +153,7 @@ class AdvancedAnalysisEngine {
     );
   }
 
-  /**
-   * テクスチャベースの解析
-   */
+  /// テクスチャベースの解析
   AnalysisResult _analyzeByTexture(img.Image image) {
     // グレースケール変換
     final gray = img.grayscale(image);
@@ -214,9 +198,7 @@ class AdvancedAnalysisEngine {
     );
   }
 
-  /**
-   * 形状ベースの解析
-   */
+  /// 形状ベースの解析
   AnalysisResult _analyzeByShape(img.Image image) {
     // 輪郭検出
     final contours = _detectContours(image);
@@ -247,9 +229,7 @@ class AdvancedAnalysisEngine {
     );
   }
 
-  /**
-   * 輪郭検出
-   */
+  /// 輪郭検出
   List<Contour> _detectContours(img.Image image) {
     // 簡易的な輪郭検出（実際の実装ではより高度なアルゴリズムを使用）
     final gray = img.grayscale(image);
@@ -272,9 +252,7 @@ class AdvancedAnalysisEngine {
     return contours;
   }
 
-  /**
-   * プライマリモデルの出力を解析
-   */
+  /// プライマリモデルの出力を解析
   AnalysisResult _parsePrimaryModelOutput(List<List<double>> output) {
     // 出力の形状に応じて解析
     if (output.isEmpty || output[0].isEmpty) {
@@ -303,9 +281,7 @@ class AdvancedAnalysisEngine {
     );
   }
 
-  /**
-   * 成長状態の分類
-   */
+  /// 成長状態の分類
   String _classifyGrowthStage(ImageFeatures features) {
     if (features.averageHue < 60 && features.averageSaturation > 0.6) {
       return '芽';
@@ -318,9 +294,7 @@ class AdvancedAnalysisEngine {
     }
   }
 
-  /**
-   * 健康状態の分類
-   */
+  /// 健康状態の分類
   String _classifyHealthStatus(ImageFeatures features) {
     if (features.averageSaturation > 0.5 && features.averageLightness > 0.4) {
       return '健康';
@@ -333,9 +307,7 @@ class AdvancedAnalysisEngine {
     }
   }
 
-  /**
-   * アンサンブル結果の統合
-   */
+  /// アンサンブル結果の統合
   AnalysisResult _combineEnsembleResults(List<AnalysisResult> results) {
     // 重み付き投票
     final growthStageVotes = <String, double>{};
@@ -368,9 +340,7 @@ class AdvancedAnalysisEngine {
     );
   }
 
-  /**
-   * 複数の結果を統合
-   */
+  /// 複数の結果を統合
   AnalysisResult _combineResults(
       List<AnalysisResult> results, ImageQuality quality) {
     // 画像品質に基づく重み付け
@@ -417,9 +387,7 @@ class AdvancedAnalysisEngine {
     );
   }
 
-  /**
-   * 最大値のインデックスを取得
-   */
+  /// 最大値のインデックスを取得
   int _findMaxIndex(List<double> list) {
     int maxIndex = 0;
     double maxValue = list[0];
@@ -434,9 +402,7 @@ class AdvancedAnalysisEngine {
     return maxIndex;
   }
 
-  /**
-   * フォールバック結果
-   */
+  /// フォールバック結果
   AnalysisResult _getFallbackResult() {
     return AnalysisResult(
       growthStage: '成葉',
@@ -445,9 +411,7 @@ class AdvancedAnalysisEngine {
     );
   }
 
-  /**
-   * リソースの解放
-   */
+  /// リソースの解放
   void dispose() {
     _primaryModel?.close();
     _secondaryModel?.close();
@@ -455,9 +419,7 @@ class AdvancedAnalysisEngine {
   }
 }
 
-/**
- * 輪郭点
- */
+/// 輪郭点
 class Contour {
   final int x;
   final int y;

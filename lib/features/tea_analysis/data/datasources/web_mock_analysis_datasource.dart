@@ -6,10 +6,8 @@ import '../../../../core/errors/failures.dart';
 import '../../domain/entities/analysis_result.dart';
 import 'analysis_local_datasource.dart';
 
-/**
- * Web用の画像解析データソース
- * 画像特徴量ベースの解析機能（Webプラットフォーム用のモック実装）
- */
+/// Web用の画像解析データソース
+/// 画像特徴量ベースの解析機能（Webプラットフォーム用のモック実装）
 class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
   // Interpreter? _interpreter;
   bool _isModelLoaded = false;
@@ -75,10 +73,8 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
   @override
   bool get isModelLoaded => _isModelLoaded;
 
-  /**
-   * Web用のTensorFlow Lite解析シミュレーション
-   * 実際のAI解析を模擬した高度な画像特徴量解析
-   */
+  /// Web用のTensorFlow Lite解析シミュレーション
+  /// 実際のAI解析を模擬した高度な画像特徴量解析
   Future<Either<Failure, AnalysisResult>> _analyzeWithTFLite(
       img.Image image) async {
     try {
@@ -152,10 +148,8 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
     }
   }
 
-  /**
-   * 高度な画像特徴量解析
-   * 複数の画像特徴量を組み合わせたより精密な解析
-   */
+  /// 高度な画像特徴量解析
+  /// 複数の画像特徴量を組み合わせたより精密な解析
   AnalysisResult _advancedImageAnalysis(img.Image image) {
     // 複数の画像特徴量を計算
     final colorStats = _calculateColorStatistics(image);
@@ -177,9 +171,7 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
     );
   }
 
-  /**
-   * 色統計の計算
-   */
+  /// 色統計の計算
   Map<String, double> _calculateColorStatistics(img.Image image) {
     double totalR = 0, totalG = 0, totalB = 0;
     int pixelCount = 0;
@@ -207,9 +199,7 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
     };
   }
 
-  /**
-   * テクスチャ統計の計算
-   */
+  /// テクスチャ統計の計算
   Map<String, double> _calculateTextureStatistics(img.Image image) {
     double totalVariation = 0;
     int variationCount = 0;
@@ -244,9 +234,7 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
     };
   }
 
-  /**
-   * 形状統計の計算
-   */
+  /// 形状統計の計算
   Map<String, double> _calculateShapeStatistics(img.Image image) {
     // エッジ検出の簡易実装
     int edgeCount = 0;
@@ -277,9 +265,7 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
     };
   }
 
-  /**
-   * 成長状態の判定
-   */
+  /// 成長状態の判定
   String _determineGrowthStage(Map<String, double> colorStats,
       Map<String, double> textureStats, Map<String, double> shapeStats) {
     final brightness = colorStats['brightness']!;
@@ -299,9 +285,7 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
     }
   }
 
-  /**
-   * 健康状態の判定
-   */
+  /// 健康状態の判定
   String _determineHealthStatus(Map<String, double> colorStats,
       Map<String, double> textureStats, Map<String, double> shapeStats) {
     final greenness = colorStats['greenness']!;
@@ -323,9 +307,7 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
     }
   }
 
-  /**
-   * 信頼度の計算
-   */
+  /// 信頼度の計算
   double _calculateConfidence(Map<String, double> colorStats,
       Map<String, double> textureStats, Map<String, double> shapeStats) {
     // 特徴量の一貫性に基づく信頼度計算
@@ -337,9 +319,7 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
     return (colorConsistency + textureConsistency + shapeConsistency) / 3.0;
   }
 
-  /**
-   * リソースの解放
-   */
+  /// リソースの解放
   void dispose() {
     // Web用のため特にリソース解放は不要
   }

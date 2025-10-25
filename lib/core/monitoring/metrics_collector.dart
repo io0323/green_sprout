@@ -2,10 +2,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:tea_garden_ai/core/utils/performance_utils.dart';
 
-/**
- * メトリクス収集サービス
- * アプリケーションのパフォーマンスメトリクスを収集・分析
- */
+/// メトリクス収集サービス
+/// アプリケーションのパフォーマンスメトリクスを収集・分析
 class MetricsCollector {
   static final MetricsCollector _instance = MetricsCollector._internal();
   factory MetricsCollector() => _instance;
@@ -17,13 +15,11 @@ class MetricsCollector {
   // It is now used statically to simplify usage and avoid unnecessary object creation,
   // since all its methods are static and do not require instance state.
 
-  /**
-   * メトリクスを記録する
-   * @param name メトリクス名
-   * @param value 値
-   * @param unit 単位
-   * @param tags タグ
-   */
+  /// メトリクスを記録する
+  /// @param name メトリクス名
+  /// @param value 値
+  /// @param unit 単位
+  /// @param tags タグ
   void recordMetric(
     String name,
     double value, {
@@ -45,12 +41,10 @@ class MetricsCollector {
     }
   }
 
-  /**
-   * カウンターメトリクスを増加させる
-   * @param name メトリクス名
-   * @param increment 増加値
-   * @param tags タグ
-   */
+  /// カウンターメトリクスを増加させる
+  /// @param name メトリクス名
+  /// @param increment 増加値
+  /// @param tags タグ
   void incrementCounter(
     String name, {
     double increment = 1.0,
@@ -59,12 +53,10 @@ class MetricsCollector {
     recordMetric(name, increment, unit: 'count', tags: tags);
   }
 
-  /**
-   * ゲージメトリクスを設定する
-   * @param name メトリクス名
-   * @param value 値
-   * @param tags タグ
-   */
+  /// ゲージメトリクスを設定する
+  /// @param name メトリクス名
+  /// @param value 値
+  /// @param tags タグ
   void setGauge(
     String name,
     double value, {
@@ -73,21 +65,17 @@ class MetricsCollector {
     recordMetric(name, value, unit: 'gauge', tags: tags);
   }
 
-  /**
-   * タイマーを開始する
-   * @param name タイマー名
-   * @param tags タグ
-   */
+  /// タイマーを開始する
+  /// @param name タイマー名
+  /// @param tags タグ
   void startTimer(String name, {Map<String, String>? tags}) {
     PerformanceUtils.startTimer(name);
     _timers[name] = Timer(name, tags: tags);
   }
 
-  /**
-   * タイマーを停止する
-   * @param name タイマー名
-   * @return 経過時間（ミリ秒）
-   */
+  /// タイマーを停止する
+  /// @param name タイマー名
+  /// @return 経過時間（ミリ秒）
   double stopTimer(String name) {
     final duration = PerformanceUtils.stopTimer(name);
     final timer = _timers.remove(name);
@@ -104,10 +92,8 @@ class MetricsCollector {
     return duration.inMilliseconds.toDouble();
   }
 
-  /**
-   * メモリ使用量を記録する
-   * @param operation 操作名
-   */
+  /// メモリ使用量を記録する
+  /// @param operation 操作名
   void recordMemoryUsage(String operation) {
     final memoryUsage = PerformanceUtils.getCurrentMemoryUsage();
     recordMetric(
@@ -120,11 +106,9 @@ class MetricsCollector {
     PerformanceUtils.logMemoryUsage(operation);
   }
 
-  /**
-   * エラーを記録する
-   * @param error エラー
-   * @param context コンテキスト
-   */
+  /// エラーを記録する
+  /// @param error エラー
+  /// @param context コンテキスト
   void recordError(dynamic error, {String? context}) {
     incrementCounter(
       'errors.total',
@@ -139,11 +123,9 @@ class MetricsCollector {
     }
   }
 
-  /**
-   * ユーザーアクションを記録する
-   * @param action アクション
-   * @param details 詳細
-   */
+  /// ユーザーアクションを記録する
+  /// @param action アクション
+  /// @param details 詳細
   void recordUserAction(String action, {Map<String, dynamic>? details}) {
     incrementCounter(
       'user.actions',
@@ -161,14 +143,12 @@ class MetricsCollector {
     }
   }
 
-  /**
-   * ネットワークリクエストを記録する
-   * @param url URL
-   * @param method HTTPメソッド
-   * @param statusCode ステータスコード
-   * @param duration 処理時間
-   * @param responseSize レスポンスサイズ
-   */
+  /// ネットワークリクエストを記録する
+  /// @param url URL
+  /// @param method HTTPメソッド
+  /// @param statusCode ステータスコード
+  /// @param duration 処理時間
+  /// @param responseSize レスポンスサイズ
   void recordNetworkRequest(
     String url,
     String method,
@@ -206,13 +186,11 @@ class MetricsCollector {
     );
   }
 
-  /**
-   * データベース操作を記録する
-   * @param operation 操作
-   * @param table テーブル
-   * @param duration 処理時間
-   * @param recordCount レコード数
-   */
+  /// データベース操作を記録する
+  /// @param operation 操作
+  /// @param table テーブル
+  /// @param duration 処理時間
+  /// @param recordCount レコード数
   void recordDatabaseOperation(
     String operation,
     String table,
@@ -240,12 +218,10 @@ class MetricsCollector {
     );
   }
 
-  /**
-   * メトリクスを取得する
-   * @param name メトリクス名（オプション）
-   * @param tags タグフィルター（オプション）
-   * @return メトリクスリスト
-   */
+  /// メトリクスを取得する
+  /// @param name メトリクス名（オプション）
+  /// @param tags タグフィルター（オプション）
+  /// @return メトリクスリスト
   List<MetricData> getMetrics({
     String? name,
     Map<String, String>? tags,
@@ -268,12 +244,10 @@ class MetricsCollector {
     return filteredMetrics;
   }
 
-  /**
-   * メトリクス統計を取得する
-   * @param name メトリクス名
-   * @param tags タグフィルター（オプション）
-   * @return 統計情報
-   */
+  /// メトリクス統計を取得する
+  /// @param name メトリクス名
+  /// @param tags タグフィルター（オプション）
+  /// @return 統計情報
   MetricStatistics getMetricStatistics(
     String name, {
     Map<String, String>? tags,
@@ -302,18 +276,14 @@ class MetricsCollector {
     );
   }
 
-  /**
-   * メトリクスをクリアする
-   */
+  /// メトリクスをクリアする
   void clearMetrics() {
     _metrics.clear();
     _timers.clear();
   }
 
-  /**
-   * メトリクスレポートを生成する
-   * @return レポート文字列
-   */
+  /// メトリクスレポートを生成する
+  /// @return レポート文字列
   String generateReport() {
     final buffer = StringBuffer();
     buffer.writeln('=== Metrics Report ===');
@@ -337,11 +307,9 @@ class MetricsCollector {
     return buffer.toString();
   }
 
-  /**
-   * URLをサニタイズする
-   * @param url URL
-   * @return サニタイズされたURL
-   */
+  /// URLをサニタイズする
+  /// @param url URL
+  /// @return サニタイズされたURL
   String _sanitizeUrl(String url) {
     try {
       final uri = Uri.parse(url);
@@ -352,9 +320,7 @@ class MetricsCollector {
   }
 }
 
-/**
- * メトリクスデータクラス
- */
+/// メトリクスデータクラス
 class MetricData {
   final String name;
   final double value;
@@ -381,9 +347,7 @@ class MetricData {
   }
 }
 
-/**
- * タイマークラス
- */
+/// タイマークラス
 class Timer {
   final String name;
   final Map<String, String> tags;
@@ -394,9 +358,7 @@ class Timer {
         startTime = DateTime.now();
 }
 
-/**
- * メトリクス統計クラス
- */
+/// メトリクス統計クラス
 class MetricStatistics {
   final int count;
   final double sum;

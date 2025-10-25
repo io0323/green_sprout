@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import '../theme/tea_garden_theme.dart';
 
-/**
- * モダンなカードウィジェット
- * 美しいシャドウとアニメーション付き
- */
+/// モダンなカードウィジェット
+/// 美しいシャドウとアニメーション付き
 class ModernCard extends StatefulWidget {
   final Widget child;
   final EdgeInsets? padding;
@@ -102,9 +100,7 @@ class _ModernCardState extends State<ModernCard>
   }
 }
 
-/**
- * アニメーション付きボタン
- */
+/// アニメーション付きボタン
 class AnimatedButton extends StatefulWidget {
   final String text;
   final VoidCallback? onPressed;
@@ -238,9 +234,7 @@ class _AnimatedButtonState extends State<AnimatedButton>
   }
 }
 
-/**
- * 美しいローディングインジケーター
- */
+/// 美しいローディングインジケーター
 class BeautifulLoadingIndicator extends StatefulWidget {
   final String? message;
   final Color? color;
@@ -346,9 +340,7 @@ class _BeautifulLoadingIndicatorState extends State<BeautifulLoadingIndicator>
   }
 }
 
-/**
- * 美しいエラーメッセージウィジェット
- */
+/// 美しいエラーメッセージウィジェット
 class BeautifulErrorMessage extends StatelessWidget {
   final String message;
   final VoidCallback? onRetry;
@@ -416,9 +408,7 @@ class BeautifulErrorMessage extends StatelessWidget {
   }
 }
 
-/**
- * 美しい成功メッセージウィジェット
- */
+/// 美しい成功メッセージウィジェット
 class BeautifulSuccessMessage extends StatefulWidget {
   final String message;
   final VoidCallback? onDismiss;

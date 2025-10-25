@@ -6,9 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../errors/failures.dart';
 import '../../features/tea_analysis/domain/entities/tea_analysis_result.dart';
 
-/**
- * クラウド同期サービスのインターフェース
- */
+/// クラウド同期サービスのインターフェース
 abstract class CloudSyncService {
   Future<bool> isConnected();
   Future<void> syncToCloud(List<TeaAnalysisResult> results);
@@ -17,10 +15,8 @@ abstract class CloudSyncService {
   Future<bool> isAutoSyncEnabled();
 }
 
-/**
- * クラウド同期サービスの実装
- * Firebase Firestore または REST API を使用
- */
+/// クラウド同期サービスの実装
+/// Firebase Firestore または REST API を使用
 class CloudSyncServiceImpl implements CloudSyncService {
   static const String _baseUrl = 'https://api.tea-garden-ai.com';
   static const String _syncEndpoint = '/api/v1/sync';
@@ -139,9 +135,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
     return _prefs.getBool(_autoSyncKey) ?? false;
   }
 
-  /**
-   * ユーザーIDを取得または生成
-   */
+  /// ユーザーIDを取得または生成
   Future<String> _getUserId() async {
     String? userId = _prefs.getString(_userIdKey);
     if (userId == null) {
@@ -151,18 +145,14 @@ class CloudSyncServiceImpl implements CloudSyncService {
     return userId;
   }
 
-  /**
-   * ユーザーIDを生成
-   */
+  /// ユーザーIDを生成
   String _generateUserId() {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     final random = (timestamp % 10000).toString().padLeft(4, '0');
     return 'user_${timestamp}_$random';
   }
 
-  /**
-   * 認証トークンを取得
-   */
+  /// 認証トークンを取得
   Future<String> _getAuthToken() async {
     // 簡易的な認証（実際の実装では適切な認証システムを使用）
     final userId = await _getUserId();
@@ -170,9 +160,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
         utf8.encode('$userId:${DateTime.now().millisecondsSinceEpoch}'));
   }
 
-  /**
-   * 最後の同期以降の結果をフィルタリング
-   */
+  /// 最後の同期以降の結果をフィルタリング
   List<TeaAnalysisResult> _filterResultsSinceLastSync(
     List<TeaAnalysisResult> results,
     String? lastSyncTimestamp,
@@ -191,9 +179,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
         .toList();
   }
 
-  /**
-   * TeaAnalysisResultをJSONに変換
-   */
+  /// TeaAnalysisResultをJSONに変換
   Map<String, dynamic> _resultToJson(TeaAnalysisResult result) {
     return {
       'id': result.id,
@@ -206,9 +192,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
     };
   }
 
-  /**
-   * JSONからTeaAnalysisResultに変換
-   */
+  /// JSONからTeaAnalysisResultに変換
   TeaAnalysisResult _resultFromJson(Map<String, dynamic> json) {
     return TeaAnalysisResult(
       id: json['id'],
@@ -222,28 +206,22 @@ class CloudSyncServiceImpl implements CloudSyncService {
   }
 }
 
-/**
- * オフライン同期キュー
- * ネットワークが利用できない場合のデータを管理
- */
+/// オフライン同期キュー
+/// ネットワークが利用できない場合のデータを管理
 class OfflineSyncQueue {
   static const String _queueKey = 'offline_sync_queue';
   final SharedPreferences _prefs;
 
   OfflineSyncQueue(this._prefs);
 
-  /**
-   * オフラインキューに追加
-   */
+  /// オフラインキューに追加
   Future<void> addToQueue(TeaAnalysisResult result) async {
     final queue = await getQueue();
     queue.add(result);
     await _saveQueue(queue);
   }
 
-  /**
-   * オフラインキューを取得
-   */
+  /// オフラインキューを取得
   Future<List<TeaAnalysisResult>> getQueue() async {
     final jsonString = _prefs.getString(_queueKey);
     if (jsonString == null) return [];
@@ -252,24 +230,18 @@ class OfflineSyncQueue {
     return jsonList.map((json) => _resultFromJson(json)).toList();
   }
 
-  /**
-   * オフラインキューをクリア
-   */
+  /// オフラインキューをクリア
   Future<void> clearQueue() async {
     await _prefs.remove(_queueKey);
   }
 
-  /**
-   * キューを保存
-   */
+  /// キューを保存
   Future<void> _saveQueue(List<TeaAnalysisResult> queue) async {
     final jsonList = queue.map((result) => _resultToJson(result)).toList();
     await _prefs.setString(_queueKey, json.encode(jsonList));
   }
 
-  /**
-   * TeaAnalysisResultをJSONに変換
-   */
+  /// TeaAnalysisResultをJSONに変換
   Map<String, dynamic> _resultToJson(TeaAnalysisResult result) {
     return {
       'id': result.id,
@@ -282,9 +254,7 @@ class OfflineSyncQueue {
     };
   }
 
-  /**
-   * JSONからTeaAnalysisResultに変換
-   */
+  /// JSONからTeaAnalysisResultに変換
   TeaAnalysisResult _resultFromJson(Map<String, dynamic> json) {
     return TeaAnalysisResult(
       id: json['id'],
@@ -298,9 +268,7 @@ class OfflineSyncQueue {
   }
 }
 
-/**
- * 同期状態管理
- */
+/// 同期状態管理
 enum SyncStatus {
   idle,
   syncing,
@@ -309,9 +277,7 @@ enum SyncStatus {
   offline,
 }
 
-/**
- * 同期状態の通知
- */
+/// 同期状態の通知
 class SyncStatusNotifier extends ChangeNotifier {
   SyncStatus _status = SyncStatus.idle;
   String _message = '';

@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import '../../../../core/utils/app_utils.dart';
 import '../../domain/entities/tea_analysis_result.dart';
 
-/**
- * 茶葉解析結果カードウィジェット
- * 再利用可能なUIコンポーネント
- */
+/// 茶葉解析結果カードウィジェット
+/// 再利用可能なUIコンポーネント
 class TeaAnalysisCard extends StatelessWidget {
   final TeaAnalysisResult result;
 

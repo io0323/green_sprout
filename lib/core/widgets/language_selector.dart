@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../core/services/localization_service.dart';
 
-/**
- * 言語設定ウィジェット
- * アプリケーションの言語を切り替えるためのウィジェット
- */
+/// 言語設定ウィジェット
+/// アプリケーションの言語を切り替えるためのウィジェット
 class LanguageSelector extends StatefulWidget {
   const LanguageSelector({super.key});
 
@@ -57,9 +55,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
   }
 }
 
-/**
- * 言語設定ダイアログ
- */
+/// 言語設定ダイアログ
 class LanguageDialog extends StatefulWidget {
   const LanguageDialog({super.key});
 
