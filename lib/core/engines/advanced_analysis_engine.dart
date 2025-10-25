@@ -84,7 +84,7 @@ class AdvancedAnalysisEngine {
       _primaryModel!.run(reshapedInput, output);
 
       // 結果を解析
-      return _parsePrimaryModelOutput(_safeCastToListOfListDouble(output));
+      return _parsePrimaryModelOutput(output.cast<List<double>>());
     } catch (e) {
       return _getFallbackResult();
     }
