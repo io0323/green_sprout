@@ -1,5 +1,5 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
 import '../theme/tea_garden_theme.dart';
 
 /**
@@ -64,7 +64,7 @@ class AccessibilityHelper {
     if (component <= 0.03928) {
       return component / 12.92;
     } else {
-      return ((component + 0.055) / 1.055).pow(2.4);
+      return pow((component + 0.055) / 1.055, 2.4).toDouble();
     }
   }
 
