@@ -31,7 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('茶園管理AI'),
+        title: const Text('茶園管理AI'),
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
       ),
@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(
+            const Icon(
               Icons.eco,
               size: 100,
               color: Colors.green,
@@ -118,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
         content: Text('茶葉の解析が完了しました！'),
         backgroundColor: Colors.green,
       ),
