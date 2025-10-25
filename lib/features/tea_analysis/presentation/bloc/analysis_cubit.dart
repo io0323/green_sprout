@@ -99,19 +99,18 @@ class AnalysisCubit extends Cubit<AnalysisState> {
 
   /// エラーをメッセージに変換
   String _mapFailureToMessage(Failure failure) {
-    switch (failure.runtimeType) {
-      case ServerFailure:
-        return 'サーバーエラーが発生しました: ${failure.message}';
-      case CacheFailure:
-        return 'データエラーが発生しました: ${failure.message}';
-      case NetworkFailure:
-        return 'ネットワークエラーが発生しました: ${failure.message}';
-      case CameraFailure:
-        return 'カメラエラーが発生しました: ${failure.message}';
-      case TFLiteFailure:
-        return 'AI解析エラーが発生しました: ${failure.message}';
-      default:
-        return '不明なエラーが発生しました: ${failure.message}';
+    if (failure is ServerFailure) {
+      return 'サーバーエラーが発生しました: ${failure.message}';
+    } else if (failure is CacheFailure) {
+      return 'データエラーが発生しました: ${failure.message}';
+    } else if (failure is NetworkFailure) {
+      return 'ネットワークエラーが発生しました: ${failure.message}';
+    } else if (failure is CameraFailure) {
+      return 'カメラエラーが発生しました: ${failure.message}';
+    } else if (failure is TFLiteFailure) {
+      return 'AI解析エラーが発生しました: ${failure.message}';
+    } else {
+      return '不明なエラーが発生しました: ${failure.message}';
     }
   }
 }
