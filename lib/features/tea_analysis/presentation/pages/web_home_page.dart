@@ -357,12 +357,14 @@ class _WebHomePageState extends State<WebHomePage> {
     });
 
     // 成功メッセージを表示
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('解析が完了しました！'),
-        backgroundColor: Colors.green,
-      ),
-    );
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('解析が完了しました！'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
   }
 
   void _showLogsDialog() {
