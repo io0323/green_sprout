@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_web_libraries_in_flutter
 // lib/src/web_storage_web.dart
 import 'dart:html' as html;
 

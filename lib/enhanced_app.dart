@@ -693,8 +693,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
       'comment': '新しい解析が完了しました。茶葉の状態を確認しました。',
     };
 
-    if (!mounted)
+    if (!mounted) {
       return; // <- important: avoid using context if widget disposed
+    }
 
     setState(() {
       _results.insert(0, result);
