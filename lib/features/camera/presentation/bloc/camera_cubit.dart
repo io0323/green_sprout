@@ -114,16 +114,16 @@ class CameraCubit extends Cubit<CameraBlocState> {
 
   /// エラーをメッセージに変換
   String _mapFailureToMessage(Failure failure) {
-    switch (failure.runtimeType) {
-      case ServerFailure:
+    switch (failure) {
+      case ServerFailure _:
         return 'サーバーエラーが発生しました: ${failure.message}';
-      case CacheFailure:
+      case CacheFailure _:
         return 'データエラーが発生しました: ${failure.message}';
-      case NetworkFailure:
+      case NetworkFailure _:
         return 'ネットワークエラーが発生しました: ${failure.message}';
-      case CameraFailure:
+      case CameraFailure _:
         return 'カメラエラーが発生しました: ${failure.message}';
-      case TFLiteFailure:
+      case TFLiteFailure _:
         return 'AI解析エラーが発生しました: ${failure.message}';
       default:
         return '不明なエラーが発生しました: ${failure.message}';
