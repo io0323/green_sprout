@@ -316,11 +316,13 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
       _isAnalyzing = false;
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('解析が完了しました！'),
-        backgroundColor: Colors.green,
-      ),
-    );
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('解析が完了しました！'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
   }
 }
