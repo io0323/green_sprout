@@ -13,7 +13,9 @@ class MetricsCollector {
 
   final List<MetricData> _metrics = [];
   final Map<String, Timer> _timers = {};
-  // PerformanceUtils is now used statically
+  // Previously, PerformanceUtils was instantiated as an object for each MetricsCollector.
+  // It is now used statically to simplify usage and avoid unnecessary object creation,
+  // since all its methods are static and do not require instance state.
 
   /**
    * メトリクスを記録する
