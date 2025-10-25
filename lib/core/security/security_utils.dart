@@ -15,7 +15,7 @@ class SecurityUtils {
     if (key == null || key.isEmpty) {
       // Fallback for development/testing only. DO NOT use in production.
       if (kDebugMode) {
-        print(
+        debugPrint(
             'Warning: ENCRYPTION_KEY environment variable not set. Using fallback key.');
         return 'default_fallback_key_please_change'; // Change this for local testing
       }
@@ -42,7 +42,7 @@ class SecurityUtils {
       return base64Encode(utf8.encode(combined));
     } catch (e) {
       if (kDebugMode) {
-        print('Encryption error: $e');
+        debugPrint('Encryption error: $e');
       }
       return data; // エラー時は元のデータを返す
     }
@@ -66,7 +66,7 @@ class SecurityUtils {
       return _xorDecrypt(encrypted, key);
     } catch (e) {
       if (kDebugMode) {
-        print('Decryption error: $e');
+        debugPrint('Decryption error: $e');
       }
       return encryptedData; // エラー時は元のデータを返す
     }
@@ -135,11 +135,11 @@ class SecurityUtils {
     try {
       // 実際の実装では、SecureStorageやKeychainを使用
       if (kDebugMode) {
-        print('Securely stored: $key');
+        debugPrint('Securely stored: $key');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Secure store error: $e');
+        debugPrint('Secure store error: $e');
       }
     }
   }
@@ -150,7 +150,7 @@ class SecurityUtils {
   static Future<String?> secureRetrieve(String key) async {
     // 実際の実装では、SecureStorageやKeychainを使用
     if (kDebugMode) {
-      print('Securely retrieved: $key');
+      debugPrint('Securely retrieved: $key');
       // Return a dummy value for development/testing
       return null;
     }
@@ -164,11 +164,11 @@ class SecurityUtils {
     try {
       // 実際の実装では、SecureStorageやKeychainを使用
       if (kDebugMode) {
-        print('Securely deleted: $key');
+        debugPrint('Securely deleted: $key');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Secure delete error: $e');
+        debugPrint('Secure delete error: $e');
       }
     }
   }
@@ -193,9 +193,9 @@ class SecurityUtils {
   /// @param details 詳細
   static void logSecurityEvent(String event, {Map<String, dynamic>? details}) {
     if (kDebugMode) {
-      print('Security Event: $event');
+      debugPrint('Security Event: $event');
       if (details != null) {
-        print('Details: $details');
+        debugPrint('Details: $details');
       }
     }
 

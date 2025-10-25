@@ -21,7 +21,7 @@ class PerformanceUtils {
       _timers.remove(name);
 
       if (kDebugMode) {
-        print('⏱️ $name: ${duration.inMilliseconds}ms');
+        debugPrint('⏱️ $name: ${duration.inMilliseconds}ms');
       }
 
       return duration;
@@ -46,7 +46,7 @@ class PerformanceUtils {
         _memoryLogs.removeAt(0); // 古いログを削除
       }
 
-      print('🧠 Memory $context: ${memoryMB.toStringAsFixed(2)}MB');
+      debugPrint('🧠 Memory $context: ${memoryMB.toStringAsFixed(2)}MB');
     }
   }
 
@@ -84,7 +84,7 @@ class PerformanceUtils {
       return bytes;
     } catch (e) {
       if (kDebugMode) {
-        print('❌ Failed to load image: $e');
+        debugPrint('❌ Failed to load image: $e');
       }
       return null;
     }
@@ -111,13 +111,13 @@ class PerformanceUtils {
 
       if (currentMemory > 200) {
         // 200MB以上で警告
-        print(
+        debugPrint(
             '⚠️ High memory usage detected: ${currentMemory.toStringAsFixed(2)}MB');
-        print('📊 Recent memory logs:');
+        debugPrint('📊 Recent memory logs:');
         for (final log in _memoryLogs.length > 10
             ? _memoryLogs.sublist(_memoryLogs.length - 10)
             : _memoryLogs) {
-          print('   $log');
+          debugPrint('   $log');
         }
       }
     }
@@ -155,7 +155,7 @@ class ImageCacheManager {
     _cache[key] = bytes;
 
     if (kDebugMode) {
-      print('📸 Cached image: $key (${bytes.length} bytes)');
+      debugPrint('📸 Cached image: $key (${bytes.length} bytes)');
     }
   }
 
@@ -163,7 +163,7 @@ class ImageCacheManager {
   static void clearCache() {
     _cache.clear();
     if (kDebugMode) {
-      print('🗑️ Image cache cleared');
+      debugPrint('🗑️ Image cache cleared');
     }
   }
 

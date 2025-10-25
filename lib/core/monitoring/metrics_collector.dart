@@ -36,7 +36,7 @@ class MetricsCollector {
     _metrics.add(metric);
 
     if (kDebugMode) {
-      print('Metric recorded: $name = $value $unit');
+      debugPrint('Metric recorded: $name = $value $unit');
     }
   }
 
@@ -118,7 +118,7 @@ class MetricsCollector {
     );
 
     if (kDebugMode) {
-      print('Error recorded: $error (context: $context)');
+      debugPrint('Error recorded: $error (context: $context)');
     }
   }
 

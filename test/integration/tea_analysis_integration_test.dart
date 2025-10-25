@@ -64,9 +64,16 @@ void main() {
       app.main();
       await tester.pumpAndSettle();
 
-      // 複数回連続でボタンをタップ
+      // Find the camera button once and get its center coordinates
+      final cameraFinder = find.byIcon(Icons.camera_alt);
+      expect(cameraFinder, findsOneWidget,
+          reason: 'camera button must be present at test start');
+      final Offset cameraCenter = tester.getCenter(cameraFinder);
+
+      // Tap the same screen coordinate multiple times to simulate rapid taps
       for (int i = 0; i < 3; i++) {
-        await tester.tap(find.byIcon(Icons.camera_alt));
+        await tester.tapAt(cameraCenter);
+        // short wait between taps to simulate rapid user interaction
         await tester.pump(const Duration(milliseconds: 100));
       }
 
