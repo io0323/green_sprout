@@ -6,7 +6,10 @@ export 'tflite_stub.dart' // default for web
 /// Abstract base class for TFLite wrapper
 abstract class TfliteWrapper {
   /// Factory that returns the concrete wrapper instance
-  static Future<TfliteWrapper?> create();
+  static Future<TfliteWrapper?> create() {
+    throw UnimplementedError(
+        'create() must be implemented by concrete classes');
+  }
 
   /// Whether TFLite is available on this platform
   bool get available;
