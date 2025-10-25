@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -12,13 +13,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: MyHomePage(),
+      home: const MyHomePage(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -44,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
               size: 100,
               color: Colors.green,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               '茶園管理AIが正常に動作しています！',
               style: TextStyle(
@@ -53,12 +55,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.green,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               '解析回数: $_counter',
               style: TextStyle(fontSize: 18),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _analyzeTea,
               style: ElevatedButton.styleFrom(
@@ -68,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               child: Text('茶葉を解析'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             if (_analysisResults.isNotEmpty) ...[
               Text(
                 '最近の解析結果:',
@@ -89,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: ListTile(
                         leading: Icon(Icons.eco, color: Colors.green),
                         title: Text(_analysisResults[index]),
-                        subtitle: Text('解析完了'),
+                        subtitle: const Text('解析完了'),
                       ),
                     );
                   },
@@ -102,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: _analyzeTea,
         backgroundColor: Colors.green,
-        child: Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
