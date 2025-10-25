@@ -63,13 +63,12 @@ class TeaGardenTheme {
           ),
         ),
       ),
-      cardTheme: CardThemeData(
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        color: surfaceLight,
-      ),
+      // cardTheme: const CardTheme(
+      //   elevation: 4,
+      //   shape: RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.all(Radius.circular(16)),
+      //   ),
+      // ).copyWith(color: surfaceLight),
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -126,13 +125,12 @@ class TeaGardenTheme {
           ),
         ),
       ),
-      cardTheme: CardThemeData(
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        color: surfaceDark,
-      ),
+      // cardTheme: const CardTheme(
+      //   elevation: 4,
+      //   shape: RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.all(Radius.circular(16)),
+      //   ),
+      // ).copyWith(color: surfaceDark),
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
