@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-/**
- * 写真撮影ボタンウィジェット
- * 再利用可能なUIコンポーネント
- */
+/// 写真撮影ボタンウィジェット
+/// 再利用可能なUIコンポーネント
 class CameraButton extends StatelessWidget {
   const CameraButton({super.key});
 

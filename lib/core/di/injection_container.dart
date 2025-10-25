@@ -97,24 +97,24 @@ Future<void> init() async {
 
   // BLoC
   sl.registerFactory(() => TeaAnalysisCubit(
-    getAllTeaAnalysisResults: sl(),
-    getTeaAnalysisResultsForDate: sl(),
-    saveTeaAnalysisResult: sl(),
-    updateTeaAnalysisResult: sl(),
-    deleteTeaAnalysisResult: sl(),
-  ));
+        getAllTeaAnalysisResults: sl(),
+        getTeaAnalysisResultsForDate: sl(),
+        saveTeaAnalysisResult: sl(),
+        updateTeaAnalysisResult: sl(),
+        deleteTeaAnalysisResult: sl(),
+      ));
 
   sl.registerFactory(() => AnalysisCubit(
-    loadAnalysisModel: sl(),
-    analyzeImage: sl(),
-    checkModelLoaded: sl(),
-  ));
+        loadAnalysisModel: sl(),
+        analyzeImage: sl(),
+        checkModelLoaded: sl(),
+      ));
 
   sl.registerFactory(() => CameraCubit(
-    initializeCamera: sl(),
-    captureImage: sl(),
-    disposeCamera: sl(),
-    checkCameraInitialized: sl(),
-    cameraRepository: sl(),
-  ));
+        initializeCamera: sl(),
+        captureImage: sl(),
+        disposeCamera: sl(),
+        checkCameraInitialized: sl(),
+        cameraRepository: sl(),
+      ));
 }

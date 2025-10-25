@@ -4,10 +4,8 @@ import '../../domain/entities/tea_analysis_result.dart';
 import '../../domain/repositories/tea_analysis_repository.dart';
 import '../datasources/tea_analysis_local_datasource.dart';
 
-/**
- * 茶葉解析結果リポジトリの実装
- * データ層とドメイン層の境界を実装
- */
+/// 茶葉解析結果リポジトリの実装
+/// データ層とドメイン層の境界を実装
 class TeaAnalysisRepositoryImpl implements TeaAnalysisRepository {
   final TeaAnalysisLocalDataSource localDataSource;
 
@@ -16,7 +14,8 @@ class TeaAnalysisRepositoryImpl implements TeaAnalysisRepository {
   });
 
   @override
-  Future<Either<Failure, List<TeaAnalysisResult>>> getAllTeaAnalysisResults() async {
+  Future<Either<Failure, List<TeaAnalysisResult>>>
+      getAllTeaAnalysisResults() async {
     try {
       final result = await localDataSource.getAllTeaAnalysisResults();
       return result;
@@ -26,7 +25,8 @@ class TeaAnalysisRepositoryImpl implements TeaAnalysisRepository {
   }
 
   @override
-  Future<Either<Failure, List<TeaAnalysisResult>>> getTeaAnalysisResultsForDate(DateTime date) async {
+  Future<Either<Failure, List<TeaAnalysisResult>>> getTeaAnalysisResultsForDate(
+      DateTime date) async {
     try {
       final result = await localDataSource.getTeaAnalysisResultsForDate(date);
       return result;
@@ -36,7 +36,8 @@ class TeaAnalysisRepositoryImpl implements TeaAnalysisRepository {
   }
 
   @override
-  Future<Either<Failure, TeaAnalysisResult>> saveTeaAnalysisResult(TeaAnalysisResult result) async {
+  Future<Either<Failure, TeaAnalysisResult>> saveTeaAnalysisResult(
+      TeaAnalysisResult result) async {
     try {
       final savedResult = await localDataSource.saveTeaAnalysisResult(result);
       return savedResult;
@@ -46,9 +47,11 @@ class TeaAnalysisRepositoryImpl implements TeaAnalysisRepository {
   }
 
   @override
-  Future<Either<Failure, TeaAnalysisResult>> updateTeaAnalysisResult(TeaAnalysisResult result) async {
+  Future<Either<Failure, TeaAnalysisResult>> updateTeaAnalysisResult(
+      TeaAnalysisResult result) async {
     try {
-      final updatedResult = await localDataSource.updateTeaAnalysisResult(result);
+      final updatedResult =
+          await localDataSource.updateTeaAnalysisResult(result);
       return updatedResult;
     } catch (e) {
       return Left(CacheFailure('データの更新に失敗しました: $e'));

@@ -6,10 +6,8 @@ import '../../../tea_analysis/presentation/widgets/analysis_result_widget.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../domain/entities/tea_analysis_result.dart';
 
-/**
- * 解析結果ページ
- * 撮影した画像の解析結果を表示
- */
+/// 解析結果ページ
+/// 撮影した画像の解析結果を表示
 class AnalysisResultPage extends StatefulWidget {
   final String imagePath;
 
@@ -30,7 +28,7 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
   void initState() {
     super.initState();
     _teaAnalysisCubit = sl<TeaAnalysisCubit>();
-    
+
     // 画像を解析
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AnalysisCubit>().analyzeImageFromPath(widget.imagePath);
@@ -136,7 +134,9 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                       const SizedBox(height: 24),
                       ElevatedButton.icon(
                         onPressed: () {
-                          context.read<AnalysisCubit>().analyzeImageFromPath(widget.imagePath);
+                          context
+                              .read<AnalysisCubit>()
+                              .analyzeImageFromPath(widget.imagePath);
                         },
                         icon: const Icon(Icons.refresh),
                         label: const Text('再試行'),
@@ -168,9 +168,9 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                       result: state.result,
                       imagePath: widget.imagePath,
                     ),
-                    
+
                     const SizedBox(height: 24),
-                    
+
                     // コメント入力
                     Container(
                       padding: const EdgeInsets.all(16),
@@ -212,9 +212,9 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                         ],
                       ),
                     ),
-                    
+
                     const SizedBox(height: 24),
-                    
+
                     // 保存ボタン
                     SizedBox(
                       width: double.infinity,
@@ -249,9 +249,7 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
     );
   }
 
-  /**
-   * 解析結果をデータベースに保存する
-   */
+  /// 解析結果をデータベースに保存する
   void _saveResult(dynamic result) async {
     try {
       // TeaAnalysisResultエンティティを作成

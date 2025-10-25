@@ -109,7 +109,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
               child: _buildStatItem('解析回数', '$_analysisCount', Icons.analytics),
             ),
             Expanded(
-              child: _buildStatItem('健康率', '${_getHealthRate()}%', Icons.favorite),
+              child:
+                  _buildStatItem('健康率', '${_getHealthRate()}%', Icons.favorite),
             ),
           ],
         ),
@@ -204,7 +205,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
               const Center(
                 child: Column(
                   children: [
-                    Icon(Icons.photo_camera_outlined, size: 50, color: Colors.grey),
+                    Icon(Icons.photo_camera_outlined,
+                        size: 50, color: Colors.grey),
                     SizedBox(height: 10),
                     Text('まだ解析結果がありません'),
                   ],
@@ -227,7 +229,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
         borderRadius: BorderRadius.circular(8),
         border: Border(
           left: BorderSide(
-            color: result['healthStatus'] == '健康' ? Colors.green : Colors.orange,
+            color:
+                result['healthStatus'] == '健康' ? Colors.green : Colors.orange,
             width: 4,
           ),
         ),
@@ -245,8 +248,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: result['healthStatus'] == '健康' 
-                      ? Colors.green[100] 
+                  color: result['healthStatus'] == '健康'
+                      ? Colors.green[100]
                       : Colors.orange[100],
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -255,8 +258,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: result['healthStatus'] == '健康' 
-                        ? Colors.green[700] 
+                    color: result['healthStatus'] == '健康'
+                        ? Colors.green[700]
                         : Colors.orange[700],
                   ),
                 ),
@@ -280,7 +283,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
 
   int _getHealthRate() {
     if (_results.isEmpty) return 0;
-    final healthyCount = _results.where((r) => r['healthStatus'] == '健康').length;
+    final healthyCount =
+        _results.where((r) => r['healthStatus'] == '健康').length;
     return ((healthyCount / _results.length) * 100).round();
   }
 
@@ -292,9 +296,16 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
     await Future.delayed(const Duration(seconds: 3));
 
     final result = {
-      'growthStage': ['発芽期', '成長期', '成熟期', '収穫期'][DateTime.now().millisecondsSinceEpoch % 4],
-      'healthStatus': DateTime.now().millisecondsSinceEpoch % 10 < 2 ? '注意' : '健康',
-      'confidence': (75 + (DateTime.now().millisecondsSinceEpoch % 25)).toString(),
+      'growthStage': [
+        '発芽期',
+        '成長期',
+        '成熟期',
+        '収穫期'
+      ][DateTime.now().millisecondsSinceEpoch % 4],
+      'healthStatus':
+          DateTime.now().millisecondsSinceEpoch % 10 < 2 ? '注意' : '健康',
+      'confidence':
+          (75 + (DateTime.now().millisecondsSinceEpoch % 25)).toString(),
       'timestamp': DateTime.now().toString().substring(0, 19),
       'comment': '新しい解析が完了しました。茶葉の状態を確認しました。',
     };
@@ -305,11 +316,13 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
       _isAnalyzing = false;
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('解析が完了しました！'),
-        backgroundColor: Colors.green,
-      ),
-    );
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('解析が完了しました！'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
   }
 }

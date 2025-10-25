@@ -8,10 +8,10 @@ import 'features/tea_analysis/presentation/pages/web_home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // 国際化サービスの初期化
   await LocalizationService.instance.loadTranslations();
-  
+
   // Webプラットフォームの場合は簡素化された初期化
   if (kIsWeb) {
     runApp(const TeaGardenApp());

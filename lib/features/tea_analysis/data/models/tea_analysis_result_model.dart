@@ -1,9 +1,7 @@
 import '../../domain/entities/tea_analysis_result.dart';
 
-/**
- * 茶葉解析結果のデータモデル
- * データ層とドメイン層の変換を担当
- */
+/// 茶葉解析結果のデータモデル
+/// データ層とドメイン層の変換を担当
 class TeaAnalysisResultModel {
   final String id;
   final String imagePath;
@@ -23,9 +21,7 @@ class TeaAnalysisResultModel {
     required this.timestamp,
   });
 
-  /**
-   * エンティティからデータモデルに変換
-   */
+  /// エンティティからデータモデルに変換
   factory TeaAnalysisResultModel.fromEntity(TeaAnalysisResult entity) {
     return TeaAnalysisResultModel(
       id: entity.id,
@@ -38,9 +34,7 @@ class TeaAnalysisResultModel {
     );
   }
 
-  /**
-   * データモデルからエンティティに変換
-   */
+  /// データモデルからエンティティに変換
   TeaAnalysisResult toEntity() {
     return TeaAnalysisResult(
       id: id,
@@ -53,9 +47,7 @@ class TeaAnalysisResultModel {
     );
   }
 
-  /**
-   * Mapからデータモデルに変換
-   */
+  /// Mapからデータモデルに変換
   factory TeaAnalysisResultModel.fromMap(Map<String, dynamic> map) {
     return TeaAnalysisResultModel(
       id: map['id'] as String,
@@ -68,9 +60,7 @@ class TeaAnalysisResultModel {
     );
   }
 
-  /**
-   * データモデルからMapに変換
-   */
+  /// データモデルからMapに変換
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -83,9 +73,7 @@ class TeaAnalysisResultModel {
     };
   }
 
-  /**
-   * データモデルの等価性を比較
-   */
+  /// データモデルの等価性を比較
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
@@ -99,9 +87,7 @@ class TeaAnalysisResultModel {
         other.timestamp == timestamp;
   }
 
-  /**
-   * ハッシュコードを生成
-   */
+  /// ハッシュコードを生成
   @override
   int get hashCode {
     return Object.hash(
@@ -115,9 +101,7 @@ class TeaAnalysisResultModel {
     );
   }
 
-  /**
-   * 文字列表現
-   */
+  /// 文字列表現
   @override
   String toString() {
     return 'TeaAnalysisResultModel(id: $id, imagePath: $imagePath, growthStage: $growthStage, healthStatus: $healthStatus, confidence: $confidence, comment: $comment, timestamp: $timestamp)';

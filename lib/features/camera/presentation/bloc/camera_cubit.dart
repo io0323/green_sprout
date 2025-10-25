@@ -5,57 +5,41 @@ import '../../domain/entities/camera_state.dart';
 import '../../domain/usecases/camera_usecases.dart';
 import '../../data/repositories/camera_repository_impl.dart';
 
-/**
- * カメラの状態
- */
+/// カメラの状態
 abstract class CameraBlocState {}
 
-/**
- * 初期状態
- */
+/// 初期状態
 class CameraInitial extends CameraBlocState {}
 
-/**
- * カメラ初期化中
- */
+/// カメラ初期化中
 class CameraInitializing extends CameraBlocState {}
 
-/**
- * カメラ初期化完了
- */
+/// カメラ初期化完了
 class CameraInitialized extends CameraBlocState {
   final CameraState cameraState;
 
   CameraInitialized(this.cameraState);
 }
 
-/**
- * 撮影中
- */
+/// 撮影中
 class CameraCapturing extends CameraBlocState {}
 
-/**
- * 撮影完了
- */
+/// 撮影完了
 class CameraCaptured extends CameraBlocState {
   final String imagePath;
 
   CameraCaptured(this.imagePath);
 }
 
-/**
- * エラー状態
- */
+/// エラー状態
 class CameraError extends CameraBlocState {
   final String message;
 
   CameraError(this.message);
 }
 
-/**
- * カメラのCubit
- * カメラの状態管理と操作
- */
+/// カメラのCubit
+/// カメラの状態管理と操作
 class CameraCubit extends Cubit<CameraBlocState> {
   final InitializeCamera initializeCamera;
   final CaptureImage captureImage;
@@ -72,11 +56,10 @@ class CameraCubit extends Cubit<CameraBlocState> {
   }) : super(CameraInitial());
 
   /// カメラコントローラーを取得
-  CameraController? get cameraController => cameraRepository.localDataSource.cameraController;
+  CameraController? get cameraController =>
+      cameraRepository.localDataSource.cameraController;
 
-  /**
-   * カメラを初期化
-   */
+  /// カメラを初期化
   Future<void> initialize() async {
     emit(CameraInitializing());
 
@@ -102,9 +85,7 @@ class CameraCubit extends Cubit<CameraBlocState> {
     );
   }
 
-  /**
-   * 画像を撮影
-   */
+  /// 画像を撮影
   Future<void> capture() async {
     emit(CameraCapturing());
 
@@ -116,9 +97,7 @@ class CameraCubit extends Cubit<CameraBlocState> {
     );
   }
 
-  /**
-   * カメラを破棄
-   */
+  /// カメラを破棄
   Future<void> dispose() async {
     final result = await disposeCamera();
 
@@ -128,27 +107,23 @@ class CameraCubit extends Cubit<CameraBlocState> {
     );
   }
 
-  /**
-   * 状態をリセット
-   */
+  /// 状態をリセット
   void reset() {
     emit(CameraInitial());
   }
 
-  /**
-   * エラーをメッセージに変換
-   */
+  /// エラーをメッセージに変換
   String _mapFailureToMessage(Failure failure) {
-    switch (failure.runtimeType) {
-      case ServerFailure:
+    switch (failure) {
+      case ServerFailure _:
         return 'サーバーエラーが発生しました: ${failure.message}';
-      case CacheFailure:
+      case CacheFailure _:
         return 'データエラーが発生しました: ${failure.message}';
-      case NetworkFailure:
+      case NetworkFailure _:
         return 'ネットワークエラーが発生しました: ${failure.message}';
-      case CameraFailure:
+      case CameraFailure _:
         return 'カメラエラーが発生しました: ${failure.message}';
-      case TFLiteFailure:
+      case TFLiteFailure _:
         return 'AI解析エラーが発生しました: ${failure.message}';
       default:
         return '不明なエラーが発生しました: ${failure.message}';

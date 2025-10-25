@@ -4,10 +4,8 @@ import '../bloc/camera_cubit.dart';
 import '../widgets/camera_preview_widget.dart';
 import '../widgets/capture_button_widget.dart';
 
-/**
- * カメラページ
- * 茶葉の撮影を行う画面
- */
+/// カメラページ
+/// 茶葉の撮影を行う画面
 class CameraPage extends StatefulWidget {
   const CameraPage({super.key});
 

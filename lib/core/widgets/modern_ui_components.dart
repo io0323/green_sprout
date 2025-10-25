@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import '../theme/tea_garden_theme.dart';
 
-/**
- * モダンなカードウィジェット
- * 美しいシャドウとアニメーション付き
- */
+/// モダンなカードウィジェット
+/// 美しいシャドウとアニメーション付き
 class ModernCard extends StatefulWidget {
   final Widget child;
   final EdgeInsets? padding;
@@ -67,12 +65,19 @@ class _ModernCardState extends State<ModernCard>
         color: Colors.transparent,
         child: InkWell(
           onTap: widget.onTap,
-          onTapDown: widget.enableAnimation ? (_) => _animationController.forward() : null,
-          onTapUp: widget.enableAnimation ? (_) => _animationController.reverse() : null,
-          onTapCancel: widget.enableAnimation ? () => _animationController.reverse() : null,
+          onTapDown: widget.enableAnimation
+              ? (_) => _animationController.forward()
+              : null,
+          onTapUp: widget.enableAnimation
+              ? (_) => _animationController.reverse()
+              : null,
+          onTapCancel: widget.enableAnimation
+              ? () => _animationController.reverse()
+              : null,
           borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusLarge),
           child: Padding(
-            padding: widget.padding ?? const EdgeInsets.all(TeaGardenTheme.spacingL),
+            padding:
+                widget.padding ?? const EdgeInsets.all(TeaGardenTheme.spacingL),
             child: widget.child,
           ),
         ),
@@ -95,9 +100,7 @@ class _ModernCardState extends State<ModernCard>
   }
 }
 
-/**
- * アニメーション付きボタン
- */
+/// アニメーション付きボタン
 class AnimatedButton extends StatefulWidget {
   final String text;
   final VoidCallback? onPressed;
@@ -160,9 +163,15 @@ class _AnimatedButtonState extends State<AnimatedButton>
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: widget.isEnabled && !widget.isLoading ? (_) => _animationController.forward() : null,
-      onTapUp: widget.isEnabled && !widget.isLoading ? (_) => _animationController.reverse() : null,
-      onTapCancel: widget.isEnabled && !widget.isLoading ? () => _animationController.reverse() : null,
+      onTapDown: widget.isEnabled && !widget.isLoading
+          ? (_) => _animationController.forward()
+          : null,
+      onTapUp: widget.isEnabled && !widget.isLoading
+          ? (_) => _animationController.reverse()
+          : null,
+      onTapCancel: widget.isEnabled && !widget.isLoading
+          ? () => _animationController.reverse()
+          : null,
       onTap: widget.isEnabled && !widget.isLoading ? widget.onPressed : null,
       child: AnimatedBuilder(
         animation: _animationController,
@@ -178,7 +187,8 @@ class _AnimatedButtonState extends State<AnimatedButton>
                 color: widget.isEnabled
                     ? (widget.backgroundColor ?? TeaGardenTheme.primaryGreen)
                     : TeaGardenTheme.textSecondary,
-                borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
+                borderRadius:
+                    BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
                 boxShadow: TeaGardenTheme.buttonShadow,
               ),
               child: Row(
@@ -192,7 +202,8 @@ class _AnimatedButtonState extends State<AnimatedButton>
                         height: 20,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
                         ),
                       ),
                     ),
@@ -223,9 +234,7 @@ class _AnimatedButtonState extends State<AnimatedButton>
   }
 }
 
-/**
- * 美しいローディングインジケーター
- */
+/// 美しいローディングインジケーター
 class BeautifulLoadingIndicator extends StatefulWidget {
   final String? message;
   final Color? color;
@@ -237,7 +246,8 @@ class BeautifulLoadingIndicator extends StatefulWidget {
   });
 
   @override
-  State<BeautifulLoadingIndicator> createState() => _BeautifulLoadingIndicatorState();
+  State<BeautifulLoadingIndicator> createState() =>
+      _BeautifulLoadingIndicatorState();
 }
 
 class _BeautifulLoadingIndicatorState extends State<BeautifulLoadingIndicator>
@@ -254,7 +264,7 @@ class _BeautifulLoadingIndicatorState extends State<BeautifulLoadingIndicator>
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
-    
+
     _pulseController = AnimationController(
       duration: const Duration(milliseconds: 1000),
       vsync: this,
@@ -300,7 +310,7 @@ class _BeautifulLoadingIndicatorState extends State<BeautifulLoadingIndicator>
                   child: Container(
                     width: 60,
                     height: 60,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: TeaGardenTheme.primaryGradient,
                     ),
@@ -330,9 +340,7 @@ class _BeautifulLoadingIndicatorState extends State<BeautifulLoadingIndicator>
   }
 }
 
-/**
- * 美しいエラーメッセージウィジェット
- */
+/// 美しいエラーメッセージウィジェット
 class BeautifulErrorMessage extends StatelessWidget {
   final String message;
   final VoidCallback? onRetry;
@@ -400,9 +408,7 @@ class BeautifulErrorMessage extends StatelessWidget {
   }
 }
 
-/**
- * 美しい成功メッセージウィジェット
- */
+/// 美しい成功メッセージウィジェット
 class BeautifulSuccessMessage extends StatefulWidget {
   final String message;
   final VoidCallback? onDismiss;
@@ -414,7 +420,8 @@ class BeautifulSuccessMessage extends StatefulWidget {
   });
 
   @override
-  State<BeautifulSuccessMessage> createState() => _BeautifulSuccessMessageState();
+  State<BeautifulSuccessMessage> createState() =>
+      _BeautifulSuccessMessageState();
 }
 
 class _BeautifulSuccessMessageState extends State<BeautifulSuccessMessage>
@@ -430,7 +437,7 @@ class _BeautifulSuccessMessageState extends State<BeautifulSuccessMessage>
       duration: AnimationConstants.mediumDuration,
       vsync: this,
     );
-    
+
     _scaleAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
@@ -438,7 +445,7 @@ class _BeautifulSuccessMessageState extends State<BeautifulSuccessMessage>
       parent: _animationController,
       curve: AnimationConstants.bounceCurve,
     ));
-    
+
     _opacityAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
@@ -469,7 +476,8 @@ class _BeautifulSuccessMessageState extends State<BeautifulSuccessMessage>
               padding: const EdgeInsets.all(TeaGardenTheme.spacingL),
               decoration: BoxDecoration(
                 color: TeaGardenTheme.successColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusLarge),
+                borderRadius:
+                    BorderRadius.circular(TeaGardenTheme.borderRadiusLarge),
                 border: Border.all(
                   color: TeaGardenTheme.successColor.withOpacity(0.3),
                   width: 2,
@@ -477,7 +485,7 @@ class _BeautifulSuccessMessageState extends State<BeautifulSuccessMessage>
               ),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.check_circle,
                     color: TeaGardenTheme.successColor,
                     size: 32,

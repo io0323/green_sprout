@@ -9,13 +9,16 @@ abstract class TeaAnalysisRepository {
   Future<Either<Failure, List<TeaAnalysisResult>>> getAllTeaAnalysisResults();
 
   /// 特定の日の茶葉解析結果を取得する
-  Future<Either<Failure, List<TeaAnalysisResult>>> getTeaAnalysisResultsForDate(DateTime date);
+  Future<Either<Failure, List<TeaAnalysisResult>>> getTeaAnalysisResultsForDate(
+      DateTime date);
 
   /// 新しい茶葉解析結果を保存する
-  Future<Either<Failure, TeaAnalysisResult>> saveTeaAnalysisResult(TeaAnalysisResult result);
+  Future<Either<Failure, TeaAnalysisResult>> saveTeaAnalysisResult(
+      TeaAnalysisResult result);
 
   /// 茶葉解析結果を更新する
-  Future<Either<Failure, TeaAnalysisResult>> updateTeaAnalysisResult(TeaAnalysisResult result);
+  Future<Either<Failure, TeaAnalysisResult>> updateTeaAnalysisResult(
+      TeaAnalysisResult result);
 
   /// 特定のIDの茶葉解析結果を削除する
   Future<Either<Failure, Unit>> deleteTeaAnalysisResult(String id);

@@ -98,6 +98,5 @@ void main() {
       expect(healthyResult.isHealthy, true);
       expect(unhealthyResult.isHealthy, false);
     });
-
   });
 }

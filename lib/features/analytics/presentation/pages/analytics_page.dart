@@ -5,10 +5,8 @@ import '../../../tea_analysis/presentation/bloc/tea_analysis_cubit.dart';
 import '../../../tea_analysis/domain/entities/tea_analysis_result.dart';
 import '../../../../core/services/localization_service.dart';
 
-/**
- * 茶園分析ページ
- * 茶葉解析結果の統計とグラフを表示
- */
+/// 茶園分析ページ
+/// 茶葉解析結果の統計とグラフを表示
 class AnalyticsPage extends StatefulWidget {
   const AnalyticsPage({super.key});
 
@@ -88,7 +86,8 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                    const Icon(Icons.error_outline,
+                        size: 64, color: Colors.red),
                     const SizedBox(height: 16),
                     Text(t('error')),
                     const SizedBox(height: 16),
@@ -174,8 +173,9 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
   Widget _buildStatsSummary(List<TeaAnalysisResult> results) {
     final totalCount = results.length;
     final healthyCount = results.where((r) => r.healthStatus == '健康').length;
-    final avgConfidence = results.isNotEmpty 
-        ? results.map((r) => r.confidence).reduce((a, b) => a + b) / results.length 
+    final avgConfidence = results.isNotEmpty
+        ? results.map((r) => r.confidence).reduce((a, b) => a + b) /
+            results.length
         : 0.0;
 
     return Container(
@@ -217,7 +217,9 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
               Expanded(
                 child: _buildStatCard(
                   '健康率',
-                  totalCount > 0 ? '${((healthyCount / totalCount) * 100).toInt()}%' : '0%',
+                  totalCount > 0
+                      ? '${((healthyCount / totalCount) * 100).toInt()}%'
+                      : '0%',
                   Icons.health_and_safety_outlined,
                   Colors.green,
                 ),
@@ -238,7 +240,8 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
     );
   }
 
-  Widget _buildStatCard(String title, String value, IconData icon, Color color) {
+  Widget _buildStatCard(
+      String title, String value, IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -285,8 +288,13 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
             final index = entry.key;
             final stage = entry.value;
             final count = stageCounts[index];
-            final colors = [Colors.lightGreen, Colors.green, Colors.teal, Colors.brown];
-            
+            final colors = [
+              Colors.lightGreen,
+              Colors.green,
+              Colors.teal,
+              Colors.brown
+            ];
+
             return PieChartSectionData(
               color: colors[index],
               value: count.toDouble(),
@@ -317,13 +325,19 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
       BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceAround,
-          maxY: statusCounts.isEmpty ? 1 : statusCounts.reduce((a, b) => a > b ? a : b).toDouble(),
+          maxY: statusCounts.isEmpty
+              ? 1
+              : statusCounts.reduce((a, b) => a > b ? a : b).toDouble(),
           barGroups: healthStatuses.asMap().entries.map((entry) {
             final index = entry.key;
-            final status = entry.value;
             final count = statusCounts[index];
-            final colors = [Colors.green, Colors.orange, Colors.red, Colors.red[800]!];
-            
+            final colors = [
+              Colors.green,
+              Colors.orange,
+              Colors.red,
+              Colors.red[800]!
+            ];
+
             return BarChartGroupData(
               x: index,
               barRods: [
@@ -331,7 +345,8 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                   toY: count.toDouble(),
                   color: colors[index],
                   width: 20,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(4)),
                 ),
               ],
             );
@@ -367,7 +382,8 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
     // 日付ごとの解析数を計算
     final Map<String, int> dailyCounts = {};
     for (final result in results) {
-      final dateKey = '${result.timestamp.year}-${result.timestamp.month.toString().padLeft(2, '0')}-${result.timestamp.day.toString().padLeft(2, '0')}';
+      final dateKey =
+          '${result.timestamp.year}-${result.timestamp.month.toString().padLeft(2, '0')}-${result.timestamp.day.toString().padLeft(2, '0')}';
       dailyCounts[dateKey] = (dailyCounts[dateKey] ?? 0) + 1;
     }
 
@@ -428,7 +444,9 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
       final parts = range.split('-');
       final min = int.parse(parts[0]) / 100.0;
       final max = int.parse(parts[1].replaceAll('%', '')) / 100.0;
-      return results.where((r) => r.confidence >= min && r.confidence <= max).length;
+      return results
+          .where((r) => r.confidence >= min && r.confidence <= max)
+          .length;
     }).toList();
 
     return _buildChartContainer(
@@ -436,12 +454,13 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
       BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceAround,
-          maxY: rangeCounts.isEmpty ? 1 : rangeCounts.reduce((a, b) => a > b ? a : b).toDouble(),
+          maxY: rangeCounts.isEmpty
+              ? 1
+              : rangeCounts.reduce((a, b) => a > b ? a : b).toDouble(),
           barGroups: confidenceRanges.asMap().entries.map((entry) {
             final index = entry.key;
-            final range = entry.value;
             final count = rangeCounts[index];
-            
+
             return BarChartGroupData(
               x: index,
               barRods: [
@@ -449,7 +468,8 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                   toY: count.toDouble(),
                   color: Colors.blue,
                   width: 20,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(4)),
                 ),
               ],
             );
@@ -516,7 +536,8 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
     );
   }
 
-  List<TeaAnalysisResult> _filterResultsByPeriod(List<TeaAnalysisResult> results) {
+  List<TeaAnalysisResult> _filterResultsByPeriod(
+      List<TeaAnalysisResult> results) {
     final now = DateTime.now();
     DateTime startDate;
 
@@ -534,7 +555,9 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
         startDate = now.subtract(const Duration(days: 7));
     }
 
-    return results.where((result) => result.timestamp.isAfter(startDate)).toList();
+    return results
+        .where((result) => result.timestamp.isAfter(startDate))
+        .toList();
   }
 
   String _getPeriodText() {

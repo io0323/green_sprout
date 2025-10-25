@@ -51,6 +51,9 @@ dependencies:
   
   # ローカルストレージ
   shared_preferences: ^2.2.2
+  
+  # セキュリティ
+  crypto: ^3.0.3
 
 dev_dependencies:
   flutter_test:

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-/**
- * Web用の簡素化されたホームページ
- * 依存性注入を使わずに直接実装
- */
+/// Web用の簡素化されたホームページ
+/// 依存性注入を使わずに直接実装
 class WebHomePage extends StatefulWidget {
   const WebHomePage({super.key});
 
@@ -100,10 +98,10 @@ class _WebHomePageState extends State<WebHomePage> {
                 children: [
                   // 今日のサマリー
                   _buildTodaySummary(),
-                  
+
                   // 写真撮影ボタン
                   _buildCameraButton(),
-                  
+
                   // 最近の解析結果
                   Expanded(
                     child: _buildRecentResults(),
@@ -119,8 +117,8 @@ class _WebHomePageState extends State<WebHomePage> {
       final timestamp = result['timestamp'] as DateTime;
       final now = DateTime.now();
       return timestamp.year == now.year &&
-             timestamp.month == now.month &&
-             timestamp.day == now.day;
+          timestamp.month == now.month &&
+          timestamp.day == now.day;
     }).toList();
 
     return Container(
@@ -294,7 +292,9 @@ class _WebHomePageState extends State<WebHomePage> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: healthStatus == '健康' ? Colors.green[100] : Colors.orange[100],
+                  color: healthStatus == '健康'
+                      ? Colors.green[100]
+                      : Colors.orange[100],
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -302,7 +302,9 @@ class _WebHomePageState extends State<WebHomePage> {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: healthStatus == '健康' ? Colors.green[700] : Colors.orange[700],
+                    color: healthStatus == '健康'
+                        ? Colors.green[700]
+                        : Colors.orange[700],
                   ),
                 ),
               ),
@@ -334,10 +336,17 @@ class _WebHomePageState extends State<WebHomePage> {
     // 新しい結果を追加
     final newResult = {
       'id': (_mockResults.length + 1).toString(),
-      'imagePath': '/assets/images/sample_tea_${DateTime.now().millisecondsSinceEpoch % 3 + 1}.jpg',
+      'imagePath':
+          '/assets/images/sample_tea_${DateTime.now().millisecondsSinceEpoch % 3 + 1}.jpg',
       'timestamp': DateTime.now(),
-      'healthStatus': DateTime.now().millisecondsSinceEpoch % 10 < 2 ? '注意' : '健康',
-      'growthStage': ['発芽期', '成長期', '成熟期', '収穫期'][DateTime.now().millisecondsSinceEpoch % 4],
+      'healthStatus':
+          DateTime.now().millisecondsSinceEpoch % 10 < 2 ? '注意' : '健康',
+      'growthStage': [
+        '発芽期',
+        '成長期',
+        '成熟期',
+        '収穫期'
+      ][DateTime.now().millisecondsSinceEpoch % 4],
       'confidence': 0.8 + (DateTime.now().millisecondsSinceEpoch % 20) / 100,
       'comment': '新しい解析結果です。茶葉の状態を確認しました。',
     };
@@ -348,12 +357,14 @@ class _WebHomePageState extends State<WebHomePage> {
     });
 
     // 成功メッセージを表示
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('解析が完了しました！'),
-        backgroundColor: Colors.green,
-      ),
-    );
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('解析が完了しました！'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
   }
 
   void _showLogsDialog() {
@@ -371,8 +382,10 @@ class _WebHomePageState extends State<WebHomePage> {
               final timestamp = result['timestamp'] as DateTime;
               return ListTile(
                 leading: const Icon(Icons.eco, color: Colors.green),
-                title: Text('${result['growthStage']} - ${result['healthStatus']}'),
-                subtitle: Text('${timestamp.year}/${timestamp.month}/${timestamp.day}'),
+                title: Text(
+                    '${result['growthStage']} - ${result['healthStatus']}'),
+                subtitle: Text(
+                    '${timestamp.year}/${timestamp.month}/${timestamp.day}'),
                 trailing: Text('${(result['confidence'] * 100).toInt()}%'),
               );
             },
@@ -388,4 +401,3 @@ class _WebHomePageState extends State<WebHomePage> {
     );
   }
 }
-

@@ -5,10 +5,8 @@ import '../../domain/entities/camera_state.dart';
 import '../../domain/repositories/camera_repository.dart';
 import '../datasources/camera_local_datasource.dart';
 
-/**
- * カメラリポジトリの実装
- * カメラの操作と状態管理
- */
+/// カメラリポジトリの実装
+/// カメラの操作と状態管理
 class CameraRepositoryImpl implements CameraRepository {
   final CameraLocalDataSource localDataSource;
 

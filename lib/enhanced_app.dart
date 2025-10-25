@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'dart:html' as html;
+import 'src/web_storage_stub.dart'
+    if (dart.library.html) 'src/web_storage_web.dart';
 
 void main() {
   runApp(const EnhancedTeaGardenApp());
@@ -27,14 +28,15 @@ class EnhancedTeaGardenHomePage extends StatefulWidget {
   const EnhancedTeaGardenHomePage({super.key});
 
   @override
-  State<EnhancedTeaGardenHomePage> createState() => _EnhancedTeaGardenHomePageState();
+  State<EnhancedTeaGardenHomePage> createState() =>
+      _EnhancedTeaGardenHomePageState();
 }
 
-class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage> with TickerProviderStateMixin {
+class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
+    with TickerProviderStateMixin {
   int _analysisCount = 0;
   bool _isAnalyzing = false;
   final List<Map<String, dynamic>> _results = [];
-  int _currentTabIndex = 0;
   late TabController _tabController;
 
   @override
@@ -52,26 +54,25 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage> w
 
   void _loadData() {
     // ローカルストレージからデータを読み込み
-    final storage = html.window.localStorage;
-    final savedData = storage['teaGardenData'];
+    final savedData = getLocalStorage('teaGardenData');
     if (savedData != null) {
       final data = jsonDecode(savedData);
       setState(() {
         _analysisCount = data['analysisCount'] ?? 0;
         _results.clear();
-        _results.addAll((data['analysisResults'] as List).cast<Map<String, dynamic>>());
+        _results.addAll(
+            (data['analysisResults'] as List).cast<Map<String, dynamic>>());
       });
     }
   }
 
   void _saveData() {
     // データをローカルストレージに保存
-    final storage = html.window.localStorage;
     final data = {
       'analysisCount': _analysisCount,
       'analysisResults': _results,
     };
-    storage['teaGardenData'] = jsonEncode(data);
+    setLocalStorage('teaGardenData', jsonEncode(data));
   }
 
   @override
@@ -89,9 +90,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage> w
           labelColor: Colors.white,
           unselectedLabelColor: Colors.white70,
           onTap: (index) {
-            setState(() {
-              _currentTabIndex = index;
-            });
+            // Tab selection handled by TabController
           },
           tabs: const [
             Tab(icon: Icon(Icons.dashboard), text: 'ダッシュボード'),
@@ -217,25 +216,36 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage> w
   }
 
   Widget _buildStatsGrid() {
-    final healthyCount = _results.where((r) => r['healthStatus'] == '健康').length;
-    final healthRate = _results.isNotEmpty ? (healthyCount / _results.length * 100).round() : 0;
+    final healthyCount =
+        _results.where((r) => r['healthStatus'] == '健康').length;
+    final healthRate = _results.isNotEmpty
+        ? (healthyCount / _results.length * 100).round()
+        : 0;
     final today = DateTime.now();
     final todayCount = _results.where((r) {
       final timestamp = DateTime.parse(r['timestamp']);
       return timestamp.year == today.year &&
-             timestamp.month == today.month &&
-             timestamp.day == today.day;
+          timestamp.month == today.month &&
+          timestamp.day == today.day;
     }).length;
-    final avgConfidence = _results.isNotEmpty 
-        ? (_results.map((r) => r['confidence'] as double).reduce((a, b) => a + b) / _results.length * 100).round()
+    final avgConfidence = _results.isNotEmpty
+        ? (_results
+                    .map((r) => r['confidence'] as double)
+                    .reduce((a, b) => a + b) /
+                _results.length *
+                100)
+            .round()
         : 0;
 
     return Row(
       children: [
-        Expanded(child: _buildStatCard('総解析回数', '$_analysisCount', Icons.analytics)),
+        Expanded(
+            child: _buildStatCard('総解析回数', '$_analysisCount', Icons.analytics)),
         Expanded(child: _buildStatCard('健康率', '$healthRate%', Icons.favorite)),
         Expanded(child: _buildStatCard('今日の解析', '$todayCount', Icons.today)),
-        Expanded(child: _buildStatCard('平均信頼度', '$avgConfidence%', Icons.trending_up)),
+        Expanded(
+            child:
+                _buildStatCard('平均信頼度', '$avgConfidence%', Icons.trending_up)),
       ],
     );
   }
@@ -333,7 +343,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage> w
               const Center(
                 child: Column(
                   children: [
-                    Icon(Icons.photo_camera_outlined, size: 50, color: Colors.grey),
+                    Icon(Icons.photo_camera_outlined,
+                        size: 50, color: Colors.grey),
                     SizedBox(height: 10),
                     Text('まだ解析結果がありません'),
                   ],
@@ -367,7 +378,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage> w
               const Center(
                 child: Column(
                   children: [
-                    Icon(Icons.photo_camera_outlined, size: 50, color: Colors.grey),
+                    Icon(Icons.photo_camera_outlined,
+                        size: 50, color: Colors.grey),
                     SizedBox(height: 10),
                     Text('まだ解析結果がありません'),
                   ],
@@ -390,7 +402,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage> w
         borderRadius: BorderRadius.circular(8),
         border: Border(
           left: BorderSide(
-            color: result['healthStatus'] == '健康' ? Colors.green : Colors.orange,
+            color:
+                result['healthStatus'] == '健康' ? Colors.green : Colors.orange,
             width: 4,
           ),
         ),
@@ -409,10 +422,11 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage> w
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: result['healthStatus'] == '健康' 
-                            ? Colors.green[100] 
+                        color: result['healthStatus'] == '健康'
+                            ? Colors.green[100]
                             : Colors.orange[100],
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -421,8 +435,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage> w
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
-                          color: result['healthStatus'] == '健康' 
-                              ? Colors.green[700] 
+                          color: result['healthStatus'] == '健康'
+                              ? Colors.green[700]
                               : Colors.orange[700],
                         ),
                       ),
@@ -431,7 +445,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage> w
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '${result['timestamp']} | 信頼度: ${result['confidence']}%',
+                  '${result['timestamp']} | 信頼度: ${((result['confidence'] as double) * 100).round()}%',
                   style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
                 const SizedBox(height: 4),
@@ -477,7 +491,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage> w
               ),
             ),
             const SizedBox(height: 16),
-            Container(
+            SizedBox(
               height: 200,
               child: _buildHealthChart(),
             ),
@@ -503,7 +517,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage> w
               ),
             ),
             const SizedBox(height: 16),
-            Container(
+            SizedBox(
               height: 200,
               child: _buildGrowthChart(),
             ),
@@ -665,12 +679,22 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage> w
     await Future.delayed(const Duration(seconds: 3));
 
     final result = {
-      'growthStage': ['発芽期', '成長期', '成熟期', '収穫期'][DateTime.now().millisecondsSinceEpoch % 4],
-      'healthStatus': DateTime.now().millisecondsSinceEpoch % 10 < 2 ? '注意' : '健康',
-      'confidence': (75 + (DateTime.now().millisecondsSinceEpoch % 25)).toString(),
+      'growthStage': [
+        '発芽期',
+        '成長期',
+        '成熟期',
+        '収穫期'
+      ][DateTime.now().millisecondsSinceEpoch % 4],
+      'healthStatus':
+          DateTime.now().millisecondsSinceEpoch % 10 < 2 ? '注意' : '健康',
+      'confidence': (75 + (DateTime.now().millisecondsSinceEpoch % 25)) / 100.0,
       'timestamp': DateTime.now().toString().substring(0, 19),
       'comment': '新しい解析が完了しました。茶葉の状態を確認しました。',
     };
+
+    if (!mounted) {
+      return; // <- important: avoid using context if widget disposed
+    }
 
     setState(() {
       _results.insert(0, result);
@@ -750,7 +774,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage> w
 
     final csvContent = [
       '日時,成長段階,健康状態,信頼度,コメント',
-      ..._results.map((r) => '${r['timestamp']},${r['growthStage']},${r['healthStatus']},${r['confidence']}%,${r['comment']}')
+      ..._results.map((r) =>
+          '${r['timestamp']},${r['growthStage']},${r['healthStatus']},${((r['confidence'] as double) * 100).round()}%,${r['comment']}')
     ].join('\n');
 
     _downloadFile(csvContent, 'tea_analysis_results.csv', 'text/csv');
@@ -802,12 +827,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage> w
   }
 
   void _downloadFile(String content, String filename, String mimeType) {
-    final blob = html.Blob([content], mimeType);
-    final url = html.Url.createObjectUrlFromBlob(blob);
-    final anchor = html.AnchorElement(href: url)
-      ..setAttribute('download', filename)
-      ..click();
-    html.Url.revokeObjectUrl(url);
+    downloadFile(content, filename, mimeType);
   }
 }
 
@@ -828,11 +848,12 @@ class HealthChartPainter extends CustomPainter {
 
     final path = Path();
     final stepX = size.width / (data.length - 1);
-    
+
     for (int i = 0; i < data.length; i++) {
-      final y = size.height - (data[i]['healthStatus'] == '健康' ? 20.0 : size.height - 20);
+      final y = size.height -
+          (data[i]['healthStatus'] == '健康' ? 20.0 : size.height - 20);
       final x = i * stepX;
-      
+
       if (i == 0) {
         path.moveTo(x, y);
       } else {
@@ -858,13 +879,13 @@ class GrowthChartPainter extends CustomPainter {
 
     final total = data.values.reduce((a, b) => a + b);
     final colors = [Colors.green, Colors.blue, Colors.orange, Colors.red];
-    
+
     double startAngle = 0;
     int colorIndex = 0;
 
     for (final entry in data.entries) {
       final sweepAngle = (entry.value / total) * 2 * 3.14159;
-      
+
       final paint = Paint()
         ..color = colors[colorIndex % colors.length]
         ..style = PaintingStyle.fill;

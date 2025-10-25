@@ -5,23 +5,23 @@ class AppConstants {
   // データベース関連
   static const String databaseName = 'tea_analysis.db';
   static const int databaseVersion = 1;
-  
+
   // テーブル名
   static const String teaAnalysisTable = 'tea_analysis_results';
-  
+
   // TensorFlow Lite関連
   static const String modelPath = 'assets/models/tea_model.tflite';
   static const int inputImageSize = 224;
   static const int inputChannels = 3;
-  
+
   // カメラ関連
   static const ResolutionPreset cameraResolution = ResolutionPreset.high;
-  
+
   // UI関連
   static const double cardElevation = 4.0;
   static const double borderRadius = 12.0;
   static const double padding = 16.0;
-  
+
   // 信頼度の閾値
   static const double highConfidenceThreshold = 0.8;
   static const double mediumConfidenceThreshold = 0.6;
@@ -34,7 +34,7 @@ class GrowthStageConstants {
   static const String youngLeaf = '若葉';
   static const String matureLeaf = '成葉';
   static const String oldLeaf = '老葉';
-  
+
   static const List<String> allStages = [
     bud,
     youngLeaf,
@@ -49,7 +49,7 @@ class HealthStatusConstants {
   static const String slightlyDamaged = '軽微な損傷';
   static const String damaged = '損傷';
   static const String diseased = '病気';
-  
+
   static const List<String> allStatuses = [
     healthy,
     slightlyDamaged,

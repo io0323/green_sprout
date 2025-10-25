@@ -4,10 +4,8 @@ import 'package:tea_garden_ai/core/errors/failures.dart';
 import 'package:tea_garden_ai/features/tea_analysis/domain/entities/tea_analysis_result.dart';
 import 'package:tea_garden_ai/features/tea_analysis/data/datasources/tea_analysis_local_datasource.dart';
 
-/**
- * Web用のモックデータソース
- * 実際のデータベースの代わりにメモリ内のデータを使用
- */
+/// Web用のモックデータソース
+/// 実際のデータベースの代わりにメモリ内のデータを使用
 class WebMockTeaAnalysisDataSource implements TeaAnalysisLocalDataSource {
   final List<TeaAnalysisResult> _mockData = [
     TeaAnalysisResult(
@@ -40,37 +38,40 @@ class WebMockTeaAnalysisDataSource implements TeaAnalysisLocalDataSource {
   ];
 
   @override
-  Future<Either<Failure, List<TeaAnalysisResult>>> getAllTeaAnalysisResults() async {
+  Future<Either<Failure, List<TeaAnalysisResult>>>
+      getAllTeaAnalysisResults() async {
     if (!PlatformUtils.isWeb) {
       return const Left(ServerFailure('Web用のモックデータソースはWebプラットフォームでのみ使用可能です'));
     }
-    
+
     // 非同期処理をシミュレート
     await Future.delayed(const Duration(milliseconds: 500));
     return Right(List.from(_mockData));
   }
 
   @override
-  Future<Either<Failure, List<TeaAnalysisResult>>> getTeaAnalysisResultsForDate(DateTime date) async {
+  Future<Either<Failure, List<TeaAnalysisResult>>> getTeaAnalysisResultsForDate(
+      DateTime date) async {
     if (!PlatformUtils.isWeb) {
       return const Left(ServerFailure('Web用のモックデータソースはWebプラットフォームでのみ使用可能です'));
     }
-    
+
     await Future.delayed(const Duration(milliseconds: 300));
     final results = _mockData.where((result) {
       return result.timestamp.year == date.year &&
-             result.timestamp.month == date.month &&
-             result.timestamp.day == date.day;
+          result.timestamp.month == date.month &&
+          result.timestamp.day == date.day;
     }).toList();
     return Right(results);
   }
 
   @override
-  Future<Either<Failure, TeaAnalysisResult>> saveTeaAnalysisResult(TeaAnalysisResult result) async {
+  Future<Either<Failure, TeaAnalysisResult>> saveTeaAnalysisResult(
+      TeaAnalysisResult result) async {
     if (!PlatformUtils.isWeb) {
       return const Left(ServerFailure('Web用のモックデータソースはWebプラットフォームでのみ使用可能です'));
     }
-    
+
     await Future.delayed(const Duration(milliseconds: 200));
     final newId = (_mockData.length + 1).toString();
     final newResult = result.copyWith(id: newId);
@@ -79,11 +80,12 @@ class WebMockTeaAnalysisDataSource implements TeaAnalysisLocalDataSource {
   }
 
   @override
-  Future<Either<Failure, TeaAnalysisResult>> updateTeaAnalysisResult(TeaAnalysisResult result) async {
+  Future<Either<Failure, TeaAnalysisResult>> updateTeaAnalysisResult(
+      TeaAnalysisResult result) async {
     if (!PlatformUtils.isWeb) {
       return const Left(ServerFailure('Web用のモックデータソースはWebプラットフォームでのみ使用可能です'));
     }
-    
+
     await Future.delayed(const Duration(milliseconds: 200));
     final index = _mockData.indexWhere((r) => r.id == result.id);
     if (index != -1) {
@@ -98,12 +100,12 @@ class WebMockTeaAnalysisDataSource implements TeaAnalysisLocalDataSource {
     if (!PlatformUtils.isWeb) {
       return const Left(ServerFailure('Web用のモックデータソースはWebプラットフォームでのみ使用可能です'));
     }
-    
+
     await Future.delayed(const Duration(milliseconds: 200));
     final initialLength = _mockData.length;
     _mockData.removeWhere((result) => result.id == id);
     final finalLength = _mockData.length;
-    
+
     if (initialLength > finalLength) {
       return const Right(unit);
     }

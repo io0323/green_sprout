@@ -5,7 +5,8 @@ import '../entities/tea_analysis_result.dart';
 import '../repositories/tea_analysis_repository.dart';
 
 /// 全ての茶葉解析結果を取得するユースケース
-class GetAllTeaAnalysisResults implements UseCaseNoParams<List<TeaAnalysisResult>> {
+class GetAllTeaAnalysisResults
+    implements UseCaseNoParams<List<TeaAnalysisResult>> {
   final TeaAnalysisRepository repository;
 
   GetAllTeaAnalysisResults(this.repository);
@@ -17,7 +18,8 @@ class GetAllTeaAnalysisResults implements UseCaseNoParams<List<TeaAnalysisResult
 }
 
 /// 特定の日の茶葉解析結果を取得するユースケース
-class GetTeaAnalysisResultsForDate implements UseCase<List<TeaAnalysisResult>, DateTime> {
+class GetTeaAnalysisResultsForDate
+    implements UseCase<List<TeaAnalysisResult>, DateTime> {
   final TeaAnalysisRepository repository;
 
   GetTeaAnalysisResultsForDate(this.repository);
@@ -29,25 +31,29 @@ class GetTeaAnalysisResultsForDate implements UseCase<List<TeaAnalysisResult>, D
 }
 
 /// 茶葉解析結果を保存するユースケース
-class SaveTeaAnalysisResult implements UseCase<TeaAnalysisResult, TeaAnalysisResult> {
+class SaveTeaAnalysisResult
+    implements UseCase<TeaAnalysisResult, TeaAnalysisResult> {
   final TeaAnalysisRepository repository;
 
   SaveTeaAnalysisResult(this.repository);
 
   @override
-  Future<Either<Failure, TeaAnalysisResult>> call(TeaAnalysisResult result) async {
+  Future<Either<Failure, TeaAnalysisResult>> call(
+      TeaAnalysisResult result) async {
     return await repository.saveTeaAnalysisResult(result);
   }
 }
 
 /// 茶葉解析結果を更新するユースケース
-class UpdateTeaAnalysisResult implements UseCase<TeaAnalysisResult, TeaAnalysisResult> {
+class UpdateTeaAnalysisResult
+    implements UseCase<TeaAnalysisResult, TeaAnalysisResult> {
   final TeaAnalysisRepository repository;
 
   UpdateTeaAnalysisResult(this.repository);
 
   @override
-  Future<Either<Failure, TeaAnalysisResult>> call(TeaAnalysisResult result) async {
+  Future<Either<Failure, TeaAnalysisResult>> call(
+      TeaAnalysisResult result) async {
     return await repository.updateTeaAnalysisResult(result);
   }
 }

@@ -1,13 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../errors/failures.dart';
 import '../../features/tea_analysis/domain/entities/tea_analysis_result.dart';
 
-/**
- * ウェアラブルデバイスサービスのインターフェース
- */
+/// ウェアラブルデバイスサービスのインターフェース
 abstract class WearableDeviceService {
   Future<bool> isConnected();
   Future<void> connect();
@@ -17,16 +14,14 @@ abstract class WearableDeviceService {
   Stream<WearableEvent> get eventStream;
 }
 
-/**
- * ウェアラブルデバイスサービスの実装
- * Wear OS (Android) と watchOS (iOS) に対応
- */
+/// ウェアラブルデバイスサービスの実装
+/// Wear OS (Android) と watchOS (iOS) に対応
 class WearableDeviceServiceImpl implements WearableDeviceService {
   static const MethodChannel _channel = MethodChannel('tea_garden_wearable');
-  
-  final StreamController<WearableEvent> _eventController = 
+
+  final StreamController<WearableEvent> _eventController =
       StreamController<WearableEvent>.broadcast();
-  
+
   bool _isConnected = false;
   Timer? _heartbeatTimer;
 
@@ -137,11 +132,10 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
   @override
   Stream<WearableEvent> get eventStream => _eventController.stream;
 
-  /**
-   * ハートビートを開始
-   */
+  /// ハートビートを開始
   void _startHeartbeat() {
-    _heartbeatTimer = Timer.periodic(const Duration(seconds: 30), (timer) async {
+    _heartbeatTimer =
+        Timer.periodic(const Duration(seconds: 30), (timer) async {
       if (_isConnected) {
         try {
           await _channel.invokeMethod('sendHeartbeat');
@@ -153,9 +147,7 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
     });
   }
 
-  /**
-   * ハートビートを停止
-   */
+  /// ハートビートを停止
   void _stopHeartbeat() {
     _heartbeatTimer?.cancel();
     _heartbeatTimer = null;
@@ -167,9 +159,7 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
   }
 }
 
-/**
- * ウェアラブルイベント
- */
+/// ウェアラブルイベント
 class WearableEvent {
   final WearableEventType type;
   final Map<String, dynamic>? data;
@@ -177,11 +167,13 @@ class WearableEvent {
 
   WearableEvent._(this.type, {this.data, this.error});
 
-  factory WearableEvent.connected() => WearableEvent._(WearableEventType.connected);
-  factory WearableEvent.disconnected() => WearableEvent._(WearableEventType.disconnected);
-  factory WearableEvent.dataReceived(Map<String, dynamic> data) => 
+  factory WearableEvent.connected() =>
+      WearableEvent._(WearableEventType.connected);
+  factory WearableEvent.disconnected() =>
+      WearableEvent._(WearableEventType.disconnected);
+  factory WearableEvent.dataReceived(Map<String, dynamic> data) =>
       WearableEvent._(WearableEventType.dataReceived, data: data);
-  factory WearableEvent.error(String error) => 
+  factory WearableEvent.error(String error) =>
       WearableEvent._(WearableEventType.error, error: error);
 }
 
@@ -192,9 +184,7 @@ enum WearableEventType {
   error,
 }
 
-/**
- * ウェアラブル専用のUIコンポーネント
- */
+/// ウェアラブル専用のUIコンポーネント
 class WearableAnalysisCard extends StatelessWidget {
   final TeaAnalysisResult result;
   final VoidCallback? onTap;
@@ -224,7 +214,8 @@ class WearableAnalysisCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       result.growthStage,
-                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.bold),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -310,9 +301,7 @@ class WearableAnalysisCard extends StatelessWidget {
   }
 }
 
-/**
- * ウェアラブル用の簡易カメラコントロール
- */
+/// ウェアラブル用の簡易カメラコントロール
 class WearableCameraControl extends StatelessWidget {
   final VoidCallback? onCapture;
   final bool isCapturing;
@@ -344,7 +333,7 @@ class WearableCameraControl extends StatelessWidget {
         child: InkWell(
           onTap: isCapturing ? null : onCapture,
           borderRadius: BorderRadius.circular(30),
-          child: Center(
+          child: const Center(
             child: Icon(
               Icons.camera_alt,
               color: Colors.white,
@@ -357,9 +346,7 @@ class WearableCameraControl extends StatelessWidget {
   }
 }
 
-/**
- * ウェアラブル専用の通知ウィジェット
- */
+/// ウェアラブル専用の通知ウィジェット
 class WearableNotification extends StatelessWidget {
   final String title;
   final String message;
@@ -422,9 +409,7 @@ class WearableNotification extends StatelessWidget {
   }
 }
 
-/**
- * ウェアラブル失敗エラー
- */
+/// ウェアラブル失敗エラー
 class WearableFailure extends Failure {
   const WearableFailure(super.message);
 }
