@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 /// セキュアなHTTPクライアント
@@ -168,13 +167,13 @@ class SecureHttpClient {
           await Future.delayed(Duration(seconds: retryCount * 2));
         }
       } on SocketException {
-        lastException = SocketException('Network error');
+        lastException = const SocketException('Network error');
         retryCount++;
         if (retryCount < _maxRetries) {
           await Future.delayed(Duration(seconds: retryCount * 2));
         }
       } on HttpException {
-        lastException = HttpException('HTTP error');
+        lastException = const HttpException('HTTP error');
         retryCount++;
         if (retryCount < _maxRetries) {
           await Future.delayed(Duration(seconds: retryCount * 2));

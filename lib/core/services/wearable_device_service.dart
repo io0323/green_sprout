@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../errors/failures.dart';
@@ -334,7 +333,7 @@ class WearableCameraControl extends StatelessWidget {
         child: InkWell(
           onTap: isCapturing ? null : onCapture,
           borderRadius: BorderRadius.circular(30),
-          child: Center(
+          child: const Center(
             child: Icon(
               Icons.camera_alt,
               color: Colors.white,

@@ -213,7 +213,7 @@ class _LogListPageState extends State<LogListPage> {
                           _searchQuery.isNotEmpty || _selectedFilter != 'all'
                               ? '検索条件を変更してみてください'
                               : '写真を撮って茶葉を解析してみましょう',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 14,
                             color: Colors.grey,
                           ),

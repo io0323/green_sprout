@@ -310,7 +310,7 @@ class _BeautifulLoadingIndicatorState extends State<BeautifulLoadingIndicator>
                   child: Container(
                     width: 60,
                     height: 60,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: TeaGardenTheme.primaryGradient,
                     ),
@@ -485,7 +485,7 @@ class _BeautifulSuccessMessageState extends State<BeautifulSuccessMessage>
               ),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.check_circle,
                     color: TeaGardenTheme.successColor,
                     size: 32,

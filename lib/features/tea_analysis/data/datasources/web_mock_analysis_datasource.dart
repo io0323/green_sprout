@@ -48,7 +48,7 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
       final imageBytes = await imageFile.readAsBytes();
       final image = img.decodeImage(imageBytes);
       if (image == null) {
-        return Left(const TFLiteFailure('画像の読み込みに失敗しました'));
+        return const Left(TFLiteFailure('画像の読み込みに失敗しました'));
       }
 
       // 画像をリサイズ

@@ -5,7 +5,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,14 +20,14 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  List<String> _analysisResults = [];
+  final List<String> _analysisResults = [];
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.green,
             ),
             const SizedBox(height: 20),
-            Text(
+            const Text(
               '茶園管理AIが正常に動作しています！',
               style: TextStyle(
                 fontSize: 24,
@@ -58,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(height: 20),
             Text(
               '解析回数: $_counter',
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -66,30 +66,31 @@ class _MyHomePageState extends State<MyHomePage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               ),
-              child: Text('茶葉を解析'),
+              child: const Text('茶葉を解析'),
             ),
             const SizedBox(height: 20),
             if (_analysisResults.isNotEmpty) ...[
-              Text(
+              const Text(
                 '最近の解析結果:',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10),
-              Container(
+              const SizedBox(height: 10),
+              SizedBox(
                 height: 200,
                 width: 300,
                 child: ListView.builder(
                   itemCount: _analysisResults.length,
                   itemBuilder: (context, index) {
                     return Card(
-                      margin: EdgeInsets.all(5),
+                      margin: const EdgeInsets.all(5),
                       child: ListTile(
-                        leading: Icon(Icons.eco, color: Colors.green),
+                        leading: const Icon(Icons.eco, color: Colors.green),
                         title: Text(_analysisResults[index]),
                         subtitle: const Text('解析完了'),
                       ),

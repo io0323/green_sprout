@@ -31,7 +31,7 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
       final imageBytes = await imageFile.readAsBytes();
       final image = img.decodeImage(imageBytes);
       if (image == null) {
-        return Left(const TFLiteFailure('画像の読み込みに失敗しました'));
+        return const Left(TFLiteFailure('画像の読み込みに失敗しました'));
       }
 
       // 画像をリサイズ
@@ -82,7 +82,7 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
       img.Image image) async {
     try {
       if (_interpreter == null) {
-        return Left(const TFLiteFailure('TensorFlow Liteモデルが読み込まれていません'));
+        return const Left(TFLiteFailure('TensorFlow Liteモデルが読み込まれていません'));
       }
 
       // 画像をRGB配列に変換

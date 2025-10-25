@@ -495,7 +495,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
               ),
             ),
             const SizedBox(height: 16),
-            Container(
+            SizedBox(
               height: 200,
               child: _buildHealthChart(),
             ),
@@ -521,7 +521,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
               ),
             ),
             const SizedBox(height: 16),
-            Container(
+            SizedBox(
               height: 200,
               child: _buildGrowthChart(),
             ),

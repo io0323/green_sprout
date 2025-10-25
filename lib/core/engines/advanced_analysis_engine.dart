@@ -1,8 +1,6 @@
-import 'dart:typed_data';
 import 'package:image/image.dart' as img;
 import 'package:tflite_flutter/tflite_flutter.dart';
 import '../utils/advanced_image_processor.dart';
-import '../../core/errors/failures.dart';
 import '../../features/tea_analysis/domain/entities/analysis_result.dart';
 
 /// 高度なAI解析エンジン
@@ -404,7 +402,7 @@ class AdvancedAnalysisEngine {
 
   /// フォールバック結果
   AnalysisResult _getFallbackResult() {
-    return AnalysisResult(
+    return const AnalysisResult(
       growthStage: '成葉',
       healthStatus: '健康',
       confidence: 0.5,
