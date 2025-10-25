@@ -1,24 +1,23 @@
 import 'package:image/image.dart' as img;
-import 'package:tflite_flutter/tflite_flutter.dart';
+import '../../src/tflite_interface.dart';
 import '../utils/advanced_image_processor.dart';
 import '../../features/tea_analysis/domain/entities/analysis_result.dart';
 
 /// 高度なAI解析エンジン
 /// 複数の解析手法を組み合わせた高精度な茶葉解析システム
 class AdvancedAnalysisEngine {
-  Interpreter? _primaryModel;
-  Interpreter? _secondaryModel;
+  TfliteWrapper? _primaryModel;
+  TfliteWrapper? _secondaryModel;
   bool _isInitialized = false;
 
   /// 解析エンジンを初期化
   Future<void> initialize() async {
     try {
       // プライマリモデル（成長状態分類）の読み込み
-      _primaryModel =
-          await Interpreter.fromAsset('assets/models/tea_model.tflite');
+      _primaryModel = TfliteWrapper.create();
 
       // セカンダリモデル（健康状態分類）の読み込み（将来の実装）
-      // _secondaryModel = await Interpreter.fromAsset('assets/models/health_model.tflite');
+      // _secondaryModel = TfliteWrapper.create();
 
       _isInitialized = true;
     } catch (e) {

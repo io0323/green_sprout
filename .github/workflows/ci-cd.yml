@@ -170,7 +170,15 @@ jobs:
       run: flutter pub get
     
     - name: Run performance tests
-      run: flutter test --coverage test/performance/
+      run: |
+        echo "Repository test directory listing:"
+        ls -la test || true
+        if [ -d test/performance ] && [ "$(ls -A test/performance)" ]; then
+          echo "Running performance tests in test/performance/"
+          flutter test --coverage test/performance/
+        else
+          echo "No performance tests found at test/performance — skipping."
+        fi
     
     - name: Generate performance report
       run: |
