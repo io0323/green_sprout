@@ -445,7 +445,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '${result['timestamp']} | 信頼度: ${result['confidence']}%',
+                  '${result['timestamp']} | 信頼度: ${((result['confidence'] as double) * 100).round()}%',
                   style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
                 const SizedBox(height: 4),
@@ -687,8 +687,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
       ][DateTime.now().millisecondsSinceEpoch % 4],
       'healthStatus':
           DateTime.now().millisecondsSinceEpoch % 10 < 2 ? '注意' : '健康',
-      'confidence':
-          (75 + (DateTime.now().millisecondsSinceEpoch % 25)).toString(),
+      'confidence': (75 + (DateTime.now().millisecondsSinceEpoch % 25)) / 100.0,
       'timestamp': DateTime.now().toString().substring(0, 19),
       'comment': '新しい解析が完了しました。茶葉の状態を確認しました。',
     };
@@ -776,7 +775,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     final csvContent = [
       '日時,成長段階,健康状態,信頼度,コメント',
       ..._results.map((r) =>
-          '${r['timestamp']},${r['growthStage']},${r['healthStatus']},${r['confidence']}%,${r['comment']}')
+          '${r['timestamp']},${r['growthStage']},${r['healthStatus']},${((r['confidence'] as double) * 100).round()}%,${r['comment']}')
     ].join('\n');
 
     _downloadFile(csvContent, 'tea_analysis_results.csv', 'text/csv');
