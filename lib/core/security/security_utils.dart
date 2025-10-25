@@ -10,11 +10,18 @@ import 'package:flutter/foundation.dart';
  */
 class SecurityUtils {
   // Encryption key should be loaded securely from environment variable
+  /// Loads the encryption key from the environment variable ENCRYPTION_KEY.
+  /// In production, this must be set. For development or testing, a fallback key is used.
   static String _getEncryptionKey() {
     final key = Platform.environment['ENCRYPTION_KEY'];
     if (key == null || key.isEmpty) {
+      // Fallback for development/testing only. DO NOT use in production.
+      if (kDebugMode) {
+        print('Warning: ENCRYPTION_KEY environment variable not set. Using fallback key.');
+        return 'default_fallback_key_please_change'; // Change this for local testing
+      }
       throw Exception(
-          'Encryption key not set in environment variable ENCRYPTION_KEY');
+          'Encryption key not set in environment variable ENCRYPTION_KEY. Please set this variable in your deployment environment.');
     }
     return key;
   }
