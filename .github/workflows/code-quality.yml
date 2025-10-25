@@ -39,20 +39,16 @@ jobs:
           echo "::warning file=lib::Found TODO comments (work-in-progress code is allowed, but should be tracked)"
         fi
     
-    - name: Check for FIXME/HACK comments
+    - name: Check for FIXME/HACK comments and print statements
       run: |
+        # Check for FIXME/HACK comments
         if grep -r "FIXME\|HACK" lib/ --include="*.dart"; then
           echo "Found FIXME/HACK comments"
-          exit 1
-        fi
           exit 1
         fi
         # Find print statements not inside kDebugMode blocks and not commented out
         if grep -r "print(" lib/ --include="*.dart" | grep -v "//" | grep -v "kDebugMode" | grep -v "'print(" | grep -v '"print(' ; then
           echo "Found print statements in production code (not in kDebugMode or comments)"
-      run: |
-        if grep -r "print(" lib/ --include="*.dart" | grep -v "kDebugMode"; then
-          echo "Found print statements in production code (excluding debug-guarded prints)"
           exit 1
         fi
     
