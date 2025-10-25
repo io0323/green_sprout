@@ -14,10 +14,10 @@ class AdvancedAnalysisEngine {
   Future<void> initialize() async {
     try {
       // プライマリモデル（成長状態分類）の読み込み
-      _primaryModel = TfliteWrapper.create();
+      _primaryModel = await TfliteWrapper.create();
 
       // セカンダリモデル（健康状態分類）の読み込み（将来の実装）
-      // _secondaryModel = TfliteWrapper.create();
+      // _secondaryModel = await TfliteWrapper.create();
 
       _isInitialized = true;
     } catch (e) {
@@ -60,20 +60,12 @@ class AdvancedAnalysisEngine {
       // 画像をFloat32Listに変換
       final input = AdvancedImageProcessor.imageToFloat32List(image);
 
-      // モデルの入力形状を取得
-      final inputShape = _primaryModel!.getInputTensor(0).shape;
-      final outputShape = _primaryModel!.getOutputTensor(0).shape;
-
-      // 入力データをリシェイプ
-      final reshapedInput = input.reshape(inputShape);
-      final output = List.filled(outputShape.reduce((a, b) => a * b), 0.0)
-          .reshape(outputShape);
-
-      // 推論実行
-      _primaryModel!.run(reshapedInput, output);
+      // Use the wrapper's convenience runModel & getModelOutput methods
+      _primaryModel!.runModel(input);
+      final output = _primaryModel!.getModelOutput();
 
       // 結果を解析
-      return _parsePrimaryModelOutput(output.cast<List<double>>());
+      return _parsePrimaryModelOutput(output);
     } catch (e) {
       return _getFallbackResult();
     }
@@ -410,8 +402,8 @@ class AdvancedAnalysisEngine {
 
   /// リソースの解放
   void dispose() {
-    _primaryModel?.close();
-    _secondaryModel?.close();
+    _primaryModel?.dispose();
+    _secondaryModel?.dispose();
     _isInitialized = false;
   }
 }
