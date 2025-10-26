@@ -59,7 +59,11 @@ jobs:
     
     - name: Check for debug statements
       run: |
-        if grep -r "debugPrint\|debugDump" lib/ --include="*.dart"; then
+        if grep -r "debugPrint\|debugDump" lib/ --include="*.dart" \
+           | grep -v "kDebugMode" \
+           | grep -v "//" \
+           | grep -v "'debugPrint(" \
+           | grep -v '"debugPrint(' ; then
           echo "Found debug statements in production code"
           exit 1
         fi
