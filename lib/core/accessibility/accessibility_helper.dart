@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import '../theme/tea_garden_theme.dart';
 
@@ -42,20 +41,8 @@ class AccessibilityHelper {
 
   /// 色の輝度を計算
   static double _calculateLuminance(Color color) {
-    final r = _linearizeColorComponent((color.r * 255.0).round() / 255.0);
-    final g = _linearizeColorComponent((color.g * 255.0).round() / 255.0);
-    final b = _linearizeColorComponent((color.b * 255.0).round() / 255.0);
-
-    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-  }
-
-  /// 色成分を線形化
-  static double _linearizeColorComponent(double component) {
-    if (component <= 0.03928) {
-      return component / 12.92;
-    } else {
-      return pow((component + 0.055) / 1.055, 2.4).toDouble();
-    }
+    // Use Flutter's built-in computeLuminance for better accuracy
+    return color.computeLuminance();
   }
 
   /// アクセシブルな色を取得

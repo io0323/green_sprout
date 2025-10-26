@@ -10,7 +10,8 @@ void setLocalStorage(String key, String value) {
 }
 
 void downloadFile(String content, String filename, String mimeType) {
-  final blob = html.Blob([content], mimeType);
+  // Cast List<String> to List<dynamic> for Blob compatibility
+  final blob = html.Blob([content] as List<dynamic>, mimeType);
   final url = html.Url.createObjectUrlFromBlob(blob);
   html.AnchorElement(href: url)
     ..setAttribute('download', filename)
