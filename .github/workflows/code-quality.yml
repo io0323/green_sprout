@@ -1,0 +1,134 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  code-quality:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.5'
+        channel: 'stable'
+    
+    - name: Check Flutter version
+      run: flutter --version
+    
+    - name: Install dependencies
+      run: flutter pub get
+    
+    - name: Check code formatting
+      run: dart format --set-exit-if-changed .
+    
+    - name: Analyze code
+      run: flutter analyze --fatal-infos
+    
+    - name: Check for unused imports
+      run: |
+        # Check for unused imports in Dart files
+        if dart analyze . | grep "Unused import"; then
+          echo "Found unused imports"
+          exit 1
+        fi
+    - name: Check for TODO comments (warning only)
+      run: |
+        if grep -r "TODO" lib/ --include="*.dart"; then
+          echo "::warning file=lib::Found TODO comments (work-in-progress code is allowed, but should be tracked)"
+        fi
+    
+    - name: Check for FIXME/HACK comments and print statements
+      run: |
+        # Check for FIXME/HACK comments
+        if grep -r "FIXME\|HACK" lib/ --include="*.dart"; then
+          echo "Found FIXME/HACK comments"
+          exit 1
+        fi
+        # Find print statements not inside kDebugMode blocks and not commented out
+        if grep -r "print(" lib/ --include="*.dart" | grep -v "//" | grep -v "kDebugMode" | grep -v "'print(" | grep -v '"print(' ; then
+          echo "Found print statements in production code (not in kDebugMode or comments)"
+          exit 1
+        fi
+    
+    - name: Check for debug statements
+      run: |
+        if grep -r "debugPrint\|debugDump" lib/ --include="*.dart" \
+           | grep -v "kDebugMode" \
+           | grep -v "//" \
+           | grep -v "'debugPrint(" \
+           | grep -v '"debugPrint(' ; then
+          echo "Found debug statements in production code"
+          exit 1
+        fi
+
+  dependency-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.5'
+        channel: 'stable'
+    
+    - name: Install dependencies
+      run: flutter pub get
+    
+    - name: Check for outdated dependencies
+      run: flutter pub outdated
+    
+    - name: Check for security vulnerabilities
+      run: flutter pub deps --style=compact
+    
+    - name: Verify pubspec.yaml
+      run: |
+        flutter pub deps
+        flutter pub get --offline
+
+  documentation-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.5'
+        channel: 'stable'
+    
+    - name: Install dependencies
+      run: flutter pub get
+    
+    - name: Check documentation
+      run: |
+        find lib -name "*.dart" -exec grep -L "///" {} \; | \
+        grep -v "main.dart" | \
+        grep -v "generated" | \
+        head -10
+    
+    - name: Generate documentation
+      run: dart doc
+    
+    - name: Check README
+      run: |
+        if [ ! -f README.md ]; then
+          echo "README.md not found"
+          exit 1
+        fi
+    
+    - name: Check CHANGELOG
+      run: |
+        if [ ! -f CHANGELOG.md ]; then
+          echo "CHANGELOG.md not found"
+          exit 1
+        fi

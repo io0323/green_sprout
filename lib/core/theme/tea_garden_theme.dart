@@ -1,32 +1,28 @@
 import 'package:flutter/material.dart';
 
-/**
- * 茶園管理AI用のカスタムテーマ
- * モダンで美しいデザインシステム
- */
+/// 茶園管理AI用のカスタムテーマ
+/// モダンで美しいデザインシステム
 class TeaGardenTheme {
   static const Color primaryGreen = Color(0xFF2E7D32);
   static const Color lightGreen = Color(0xFF4CAF50);
   static const Color darkGreen = Color(0xFF1B5E20);
   static const Color accentGreen = Color(0xFF66BB6A);
-  
+
   static const Color backgroundLight = Color(0xFFF8F9FA);
   static const Color backgroundDark = Color(0xFF121212);
   static const Color surfaceLight = Color(0xFFFFFFFF);
   static const Color surfaceDark = Color(0xFF1E1E1E);
-  
+
   static const Color textPrimary = Color(0xFF212121);
   static const Color textSecondary = Color(0xFF757575);
   static const Color textLight = Color(0xFFFFFFFF);
-  
+
   static const Color errorColor = Color(0xFFD32F2F);
   static const Color warningColor = Color(0xFFFF9800);
   static const Color successColor = Color(0xFF4CAF50);
   static const Color infoColor = Color(0xFF2196F3);
 
-  /**
-   * ライトテーマ
-   */
+  /// ライトテーマ
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
@@ -35,12 +31,10 @@ class TeaGardenTheme {
         primary: primaryGreen,
         secondary: accentGreen,
         surface: surfaceLight,
-        background: backgroundLight,
         error: errorColor,
         onPrimary: textLight,
         onSecondary: textLight,
         onSurface: textPrimary,
-        onBackground: textPrimary,
         onError: textLight,
       ),
       appBarTheme: const AppBarTheme(
@@ -69,13 +63,12 @@ class TeaGardenTheme {
           ),
         ),
       ),
-      cardTheme: CardThemeData(
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        color: surfaceLight,
-      ),
+      // cardTheme: const CardTheme(
+      //   elevation: 4,
+      //   shape: RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.all(Radius.circular(16)),
+      //   ),
+      // ).copyWith(color: surfaceLight),
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -85,14 +78,13 @@ class TeaGardenTheme {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: primaryGreen, width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
     );
   }
 
-  /**
-   * ダークテーマ
-   */
+  /// ダークテーマ
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
@@ -101,12 +93,10 @@ class TeaGardenTheme {
         primary: lightGreen,
         secondary: accentGreen,
         surface: surfaceDark,
-        background: backgroundDark,
         error: errorColor,
         onPrimary: textPrimary,
         onSecondary: textPrimary,
         onSurface: textLight,
-        onBackground: textLight,
         onError: textLight,
       ),
       appBarTheme: const AppBarTheme(
@@ -135,13 +125,12 @@ class TeaGardenTheme {
           ),
         ),
       ),
-      cardTheme: CardThemeData(
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        color: surfaceDark,
-      ),
+      // cardTheme: const CardTheme(
+      //   elevation: 4,
+      //   shape: RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.all(Radius.circular(16)),
+      //   ),
+      // ).copyWith(color: surfaceDark),
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -151,14 +140,13 @@ class TeaGardenTheme {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: lightGreen, width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
     );
   }
 
-  /**
-   * グラデーション
-   */
+  /// グラデーション
   static const LinearGradient primaryGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
@@ -171,36 +159,30 @@ class TeaGardenTheme {
     colors: [backgroundLight, Color(0xFFE8F5E8)],
   );
 
-  /**
-   * シャドウ
-   */
+  /// シャドウ
   static List<BoxShadow> get cardShadow => [
-    BoxShadow(
-      color: Colors.black.withOpacity(0.1),
-      blurRadius: 8,
-      offset: const Offset(0, 2),
-    ),
-  ];
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
+        ),
+      ];
 
   static List<BoxShadow> get buttonShadow => [
-    BoxShadow(
-      color: primaryGreen.withOpacity(0.3),
-      blurRadius: 4,
-      offset: const Offset(0, 2),
-    ),
-  ];
+        BoxShadow(
+          color: primaryGreen.withOpacity(0.3),
+          blurRadius: 4,
+          offset: const Offset(0, 2),
+        ),
+      ];
 
-  /**
-   * ボーダーラディウス
-   */
+  /// ボーダーラディウス
   static const double borderRadiusSmall = 8.0;
   static const double borderRadiusMedium = 12.0;
   static const double borderRadiusLarge = 16.0;
   static const double borderRadiusXLarge = 24.0;
 
-  /**
-   * スペーシング
-   */
+  /// スペーシング
   static const double spacingXS = 4.0;
   static const double spacingS = 8.0;
   static const double spacingM = 16.0;
@@ -208,9 +190,7 @@ class TeaGardenTheme {
   static const double spacingXL = 32.0;
   static const double spacingXXL = 48.0;
 
-  /**
-   * タイポグラフィ
-   */
+  /// タイポグラフィ
   static const TextStyle heading1 = TextStyle(
     fontSize: 32,
     fontWeight: FontWeight.bold,
@@ -254,9 +234,7 @@ class TeaGardenTheme {
   );
 }
 
-/**
- * アニメーション定数
- */
+/// アニメーション定数
 class AnimationConstants {
   static const Duration shortDuration = Duration(milliseconds: 200);
   static const Duration mediumDuration = Duration(milliseconds: 300);
@@ -267,18 +245,14 @@ class AnimationConstants {
   static const Curve slideCurve = Curves.easeOutCubic;
 }
 
-/**
- * レスポンシブデザイン用のブレークポイント
- */
+/// レスポンシブデザイン用のブレークポイント
 class Breakpoints {
   static const double mobile = 600;
   static const double tablet = 900;
   static const double desktop = 1200;
 }
 
-/**
- * レスポンシブヘルパー
- */
+/// レスポンシブヘルパー
 class ResponsiveHelper {
   static bool isMobile(BuildContext context) {
     return MediaQuery.of(context).size.width < Breakpoints.mobile;
@@ -293,7 +267,8 @@ class ResponsiveHelper {
     return MediaQuery.of(context).size.width >= Breakpoints.tablet;
   }
 
-  static double getResponsiveWidth(BuildContext context, {
+  static double getResponsiveWidth(
+    BuildContext context, {
     required double mobile,
     required double tablet,
     required double desktop,

@@ -19,7 +19,7 @@ class CameraLocalDataSourceImpl implements CameraLocalDataSource {
       _cameras = await availableCameras();
 
       if (_cameras!.isEmpty) {
-        return Left(const CameraFailure('カメラが見つかりません'));
+        return const Left(CameraFailure('カメラが見つかりません'));
       }
 
       // バックカメラを優先的に選択
@@ -53,7 +53,7 @@ class CameraLocalDataSourceImpl implements CameraLocalDataSource {
   @override
   Future<Either<Failure, File>> captureImage() async {
     if (_cameraController == null || !_cameraController!.value.isInitialized) {
-      return Left(const CameraFailure('カメラが初期化されていません'));
+      return const Left(CameraFailure('カメラが初期化されていません'));
     }
 
     try {
@@ -92,5 +92,6 @@ class CameraLocalDataSourceImpl implements CameraLocalDataSource {
   bool get isInitialized => _currentState.isInitialized;
 
   /// カメラコントローラーを取得
+  @override
   CameraController? get cameraController => _cameraController;
 }

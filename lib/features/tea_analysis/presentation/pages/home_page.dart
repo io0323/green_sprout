@@ -6,10 +6,8 @@ import '../widgets/tea_analysis_card.dart';
 import '../widgets/camera_button.dart';
 import '../widgets/today_summary_card.dart';
 
-/**
- * ホームページ
- * クリーンアーキテクチャに基づいたホーム画面
- */
+/// ホームページ
+/// クリーンアーキテクチャに基づいたホーム画面
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -153,10 +151,10 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   // 今日のサマリー
                   TodaySummaryCard(results: state.results),
-                  
+
                   // 写真撮影ボタン
                   const CameraButton(),
-                  
+
                   // 最近の解析結果
                   Expanded(
                     child: _buildRecentResults(state.results),

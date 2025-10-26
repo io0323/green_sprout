@@ -1,7 +1,5 @@
-/**
- * 茶葉解析結果のドメインエンティティ
- * ビジネスロジックの中核となるオブジェクト
- */
+/// 茶葉解析結果のドメインエンティティ
+/// ビジネスロジックの中核となるオブジェクト
 class TeaAnalysisResult {
   final String id;
   final String imagePath;
@@ -21,9 +19,7 @@ class TeaAnalysisResult {
     required this.timestamp,
   });
 
-  /**
-   * コメントを更新した新しいインスタンスを作成
-   */
+  /// コメントを更新した新しいインスタンスを作成
   TeaAnalysisResult copyWith({
     String? id,
     String? imagePath,
@@ -44,9 +40,7 @@ class TeaAnalysisResult {
     );
   }
 
-  /**
-   * エンティティの等価性を比較
-   */
+  /// エンティティの等価性を比較
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
@@ -60,9 +54,7 @@ class TeaAnalysisResult {
         other.timestamp == timestamp;
   }
 
-  /**
-   * ハッシュコードを生成
-   */
+  /// ハッシュコードを生成
   @override
   int get hashCode {
     return Object.hash(
@@ -76,34 +68,26 @@ class TeaAnalysisResult {
     );
   }
 
-  /**
-   * 文字列表現
-   */
+  /// 文字列表現
   @override
   String toString() {
     return 'TeaAnalysisResult(id: $id, imagePath: $imagePath, growthStage: $growthStage, healthStatus: $healthStatus, confidence: $confidence, comment: $comment, timestamp: $timestamp)';
   }
 
-  /**
-   * 今日の解析結果かどうかを判定
-   */
+  /// 今日の解析結果かどうかを判定
   bool get isToday {
     final now = DateTime.now();
     return timestamp.year == now.year &&
-           timestamp.month == now.month &&
-           timestamp.day == now.day;
+        timestamp.month == now.month &&
+        timestamp.day == now.day;
   }
 
-  /**
-   * 信頼度が高いかどうかを判定
-   */
+  /// 信頼度が高いかどうかを判定
   bool get isHighConfidence {
     return confidence >= 0.8;
   }
 
-  /**
-   * 健康状態が良好かどうかを判定
-   */
+  /// 健康状態が良好かどうかを判定
   bool get isHealthy {
     return healthStatus == '健康';
   }

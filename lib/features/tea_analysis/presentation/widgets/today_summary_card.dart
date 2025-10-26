@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/tea_analysis_result.dart';
 
-/**
- * 今日のサマリーカードウィジェット
- * 再利用可能なUIコンポーネント
- */
+/// 今日のサマリーカードウィジェット
+/// 再利用可能なUIコンポーネント
 class TodaySummaryCard extends StatelessWidget {
   final List<TeaAnalysisResult> results;
 
@@ -18,8 +16,8 @@ class TodaySummaryCard extends StatelessWidget {
     final today = DateTime.now();
     final todayResults = results.where((result) {
       return result.timestamp.year == today.year &&
-             result.timestamp.month == today.month &&
-             result.timestamp.day == today.day;
+          result.timestamp.month == today.month &&
+          result.timestamp.day == today.day;
     }).toList();
 
     return Container(

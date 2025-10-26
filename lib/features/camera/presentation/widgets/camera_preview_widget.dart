@@ -3,10 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:camera/camera.dart';
 import '../bloc/camera_cubit.dart';
 
-/**
- * カメラプレビューウィジェット
- * カメラの映像を表示
- */
+/// カメラプレビューウィジェット
+/// カメラの映像を表示
 class CameraPreviewWidget extends StatelessWidget {
   const CameraPreviewWidget({super.key});
 
@@ -16,15 +14,16 @@ class CameraPreviewWidget extends StatelessWidget {
       builder: (context, state) {
         if (state is CameraInitialized) {
           final cameraController = context.read<CameraCubit>().cameraController;
-          
-          if (cameraController != null && cameraController.value.isInitialized) {
+
+          if (cameraController != null &&
+              cameraController.value.isInitialized) {
             return Stack(
               children: [
                 // カメラプレビュー
                 SizedBox.expand(
                   child: CameraPreview(cameraController),
                 ),
-                
+
                 // 撮影ガイド（中央の枠）
                 Center(
                   child: Container(
@@ -48,8 +47,10 @@ class CameraPreviewWidget extends StatelessWidget {
                             height: 20,
                             decoration: BoxDecoration(
                               border: Border(
-                                top: BorderSide(color: Colors.green[400]!, width: 3),
-                                left: BorderSide(color: Colors.green[400]!, width: 3),
+                                top: BorderSide(
+                                    color: Colors.green[400]!, width: 3),
+                                left: BorderSide(
+                                    color: Colors.green[400]!, width: 3),
                               ),
                             ),
                           ),
@@ -62,8 +63,10 @@ class CameraPreviewWidget extends StatelessWidget {
                             height: 20,
                             decoration: BoxDecoration(
                               border: Border(
-                                top: BorderSide(color: Colors.green[400]!, width: 3),
-                                right: BorderSide(color: Colors.green[400]!, width: 3),
+                                top: BorderSide(
+                                    color: Colors.green[400]!, width: 3),
+                                right: BorderSide(
+                                    color: Colors.green[400]!, width: 3),
                               ),
                             ),
                           ),
@@ -76,8 +79,10 @@ class CameraPreviewWidget extends StatelessWidget {
                             height: 20,
                             decoration: BoxDecoration(
                               border: Border(
-                                bottom: BorderSide(color: Colors.green[400]!, width: 3),
-                                left: BorderSide(color: Colors.green[400]!, width: 3),
+                                bottom: BorderSide(
+                                    color: Colors.green[400]!, width: 3),
+                                left: BorderSide(
+                                    color: Colors.green[400]!, width: 3),
                               ),
                             ),
                           ),
@@ -90,8 +95,10 @@ class CameraPreviewWidget extends StatelessWidget {
                             height: 20,
                             decoration: BoxDecoration(
                               border: Border(
-                                bottom: BorderSide(color: Colors.green[400]!, width: 3),
-                                right: BorderSide(color: Colors.green[400]!, width: 3),
+                                bottom: BorderSide(
+                                    color: Colors.green[400]!, width: 3),
+                                right: BorderSide(
+                                    color: Colors.green[400]!, width: 3),
                               ),
                             ),
                           ),
@@ -100,7 +107,7 @@ class CameraPreviewWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                
+
                 // 上部のオーバーレイ
                 Positioned(
                   top: 0,
@@ -134,7 +141,7 @@ class CameraPreviewWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                
+
                 // 下部のオーバーレイ
                 Positioned(
                   bottom: 0,
@@ -158,7 +165,7 @@ class CameraPreviewWidget extends StatelessWidget {
             );
           }
         }
-        
+
         // カメラが初期化されていない場合
         return Container(
           color: Colors.black,
