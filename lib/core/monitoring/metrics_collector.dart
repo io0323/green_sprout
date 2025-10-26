@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:tea_garden_ai/core/utils/performance_utils.dart';
+import '../utils/app_logger.dart';
 
 /// メトリクス収集サービス
 /// アプリケーションのパフォーマンスメトリクスを収集・分析
@@ -36,7 +37,7 @@ class MetricsCollector {
     _metrics.add(metric);
 
     if (kDebugMode) {
-      debugPrint('Metric recorded: $name = $value $unit');
+      AppLogger.debug('Metric recorded: $name = $value $unit');
     }
   }
 
@@ -118,7 +119,7 @@ class MetricsCollector {
     );
 
     if (kDebugMode) {
-      debugPrint('Error recorded: $error (context: $context)');
+      AppLogger.debugError('Error recorded: $error (context: $context)');
     }
   }
 

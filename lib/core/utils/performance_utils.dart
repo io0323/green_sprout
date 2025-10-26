@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'app_logger.dart';
 
 /// パフォーマンス監視とメモリ管理のユーティリティクラス
 class PerformanceUtils {
@@ -20,9 +21,7 @@ class PerformanceUtils {
       final duration = timer.elapsed;
       _timers.remove(name);
 
-      if (kDebugMode) {
-        debugPrint('⏱️ $name: ${duration.inMilliseconds}ms');
-      }
+      AppLogger.debug('⏱️ $name: ${duration.inMilliseconds}ms');
 
       return duration;
     }
@@ -46,7 +45,7 @@ class PerformanceUtils {
         _memoryLogs.removeAt(0); // 古いログを削除
       }
 
-      debugPrint('🧠 Memory $context: ${memoryMB.toStringAsFixed(2)}MB');
+      AppLogger.debug('🧠 Memory $context: ${memoryMB.toStringAsFixed(2)}MB');
     }
   }
 
@@ -83,9 +82,7 @@ class PerformanceUtils {
 
       return bytes;
     } catch (e) {
-      if (kDebugMode) {
-        debugPrint('❌ Failed to load image: $e');
-      }
+      AppLogger.debugError('❌ Failed to load image', e);
       return null;
     }
   }
@@ -111,13 +108,13 @@ class PerformanceUtils {
 
       if (currentMemory > 200) {
         // 200MB以上で警告
-        debugPrint(
-            '⚠️ High memory usage detected: ${currentMemory.toStringAsFixed(2)}MB');
-        debugPrint('📊 Recent memory logs:');
+        AppLogger.debugWarning(
+            'High memory usage detected: ${currentMemory.toStringAsFixed(2)}MB');
+        AppLogger.debug('📊 Recent memory logs:');
         for (final log in _memoryLogs.length > 10
             ? _memoryLogs.sublist(_memoryLogs.length - 10)
             : _memoryLogs) {
-          debugPrint('   $log');
+          AppLogger.debug('   $log');
         }
       }
     }
@@ -155,7 +152,7 @@ class ImageCacheManager {
     _cache[key] = bytes;
 
     if (kDebugMode) {
-      debugPrint('📸 Cached image: $key (${bytes.length} bytes)');
+      AppLogger.debug('📸 Cached image: $key (${bytes.length} bytes)');
     }
   }
 
@@ -163,7 +160,7 @@ class ImageCacheManager {
   static void clearCache() {
     _cache.clear();
     if (kDebugMode) {
-      debugPrint('🗑️ Image cache cleared');
+      AppLogger.debug('🗑️ Image cache cleared');
     }
   }
 

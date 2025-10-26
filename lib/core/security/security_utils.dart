@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
+import '../utils/app_logger.dart';
 
 /// セキュリティユーティリティクラス
 /// アプリケーションのセキュリティを強化するための機能を提供
@@ -15,8 +16,8 @@ class SecurityUtils {
     if (key == null || key.isEmpty) {
       // Fallback for development/testing only. DO NOT use in production.
       if (kDebugMode) {
-        debugPrint(
-            'Warning: ENCRYPTION_KEY environment variable not set. Using fallback key.');
+        AppLogger.debugWarning(
+            'ENCRYPTION_KEY environment variable not set. Using fallback key.');
         return 'default_fallback_key_please_change'; // Change this for local testing
       }
       throw Exception(
@@ -42,7 +43,7 @@ class SecurityUtils {
       return base64Encode(utf8.encode(combined));
     } catch (e) {
       if (kDebugMode) {
-        debugPrint('Encryption error: $e');
+        AppLogger.debugError('Encryption error', e);
       }
       return data; // エラー時は元のデータを返す
     }
@@ -66,7 +67,7 @@ class SecurityUtils {
       return _xorDecrypt(encrypted, key);
     } catch (e) {
       if (kDebugMode) {
-        debugPrint('Decryption error: $e');
+        AppLogger.debugError('Decryption error', e);
       }
       return encryptedData; // エラー時は元のデータを返す
     }
@@ -135,11 +136,11 @@ class SecurityUtils {
     try {
       // 実際の実装では、SecureStorageやKeychainを使用
       if (kDebugMode) {
-        debugPrint('Securely stored: $key');
+        AppLogger.debug('Securely stored: $key');
       }
     } catch (e) {
       if (kDebugMode) {
-        debugPrint('Secure store error: $e');
+        AppLogger.debugError('Secure store error', e);
       }
     }
   }
@@ -150,7 +151,7 @@ class SecurityUtils {
   static Future<String?> secureRetrieve(String key) async {
     // 実際の実装では、SecureStorageやKeychainを使用
     if (kDebugMode) {
-      debugPrint('Securely retrieved: $key');
+      AppLogger.debug('Securely retrieved: $key');
       // Return a dummy value for development/testing
       return null;
     }
@@ -164,11 +165,11 @@ class SecurityUtils {
     try {
       // 実際の実装では、SecureStorageやKeychainを使用
       if (kDebugMode) {
-        debugPrint('Securely deleted: $key');
+        AppLogger.debug('Securely deleted: $key');
       }
     } catch (e) {
       if (kDebugMode) {
-        debugPrint('Secure delete error: $e');
+        AppLogger.debugError('Secure delete error', e);
       }
     }
   }
@@ -193,9 +194,9 @@ class SecurityUtils {
   /// @param details 詳細
   static void logSecurityEvent(String event, {Map<String, dynamic>? details}) {
     if (kDebugMode) {
-      debugPrint('Security Event: $event');
+      AppLogger.debug('Security Event: $event');
       if (details != null) {
-        debugPrint('Details: $details');
+        AppLogger.debug('Details: $details');
       }
     }
 
