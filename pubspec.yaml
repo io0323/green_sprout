@@ -52,6 +52,9 @@ dependencies:
   # ローカルストレージ
   shared_preferences: ^2.2.2
   
+  # Web関連
+  web: ^0.5.1
+  
   # セキュリティ
   crypto: ^3.0.3
 

@@ -197,7 +197,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                     'AI技術で茶葉の健康状態を分析',
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white.withValues(alpha: 0.9),
                     ),
                   ),
                 ],

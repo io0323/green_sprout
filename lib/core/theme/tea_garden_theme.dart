@@ -162,7 +162,7 @@ class TeaGardenTheme {
   /// シャドウ
   static List<BoxShadow> get cardShadow => [
         BoxShadow(
-          color: Colors.black.withOpacity(0.1),
+          color: Colors.black.withValues(alpha: 0.1),
           blurRadius: 8,
           offset: const Offset(0, 2),
         ),
@@ -170,7 +170,7 @@ class TeaGardenTheme {
 
   static List<BoxShadow> get buttonShadow => [
         BoxShadow(
-          color: primaryGreen.withOpacity(0.3),
+          color: primaryGreen.withValues(alpha: 0.3),
           blurRadius: 4,
           offset: const Offset(0, 2),
         ),
