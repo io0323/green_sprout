@@ -3,10 +3,9 @@ import 'dart:typed_data';
 import 'package:dartz/dartz.dart';
 import 'package:image/image.dart' as img;
 
-// Conditional import: use native tflite_flutter, or stub for web
-// On web (dart.library.html exists), use stub; otherwise use real package
-import 'tflite_flutter_stub.dart'
-    if (dart.library.io) 'package:tflite_flutter/tflite_flutter.dart';
+// Use the platform-abstracted TFLite service
+// This automatically selects native or web stub based on platform
+import '../../../../ml/tflite_interface.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/errors/failures.dart';
@@ -16,8 +15,7 @@ import 'analysis_local_datasource.dart';
 /// AI解析のローカルデータソースの実装クラス
 /// TensorFlow Liteを使用した画像解析機能
 class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
-  // ignore: avoid_web_libraries_in_flutter
-  Interpreter? _interpreter;
+  dynamic _interpreter; // Platform-agnostic interpreter
   bool _isModelLoaded = false;
   bool _isTFLiteAvailable = false;
 
@@ -64,20 +62,34 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
   @override
   Future<Either<Failure, Unit>> loadModel() async {
     try {
-      // TensorFlow Liteモデルの読み込み
-      try {
-        _interpreter = await Interpreter.fromAsset(AppConstants.modelPath);
-        _isTFLiteAvailable = true;
+      // Check if TFLite is available on this platform
+      _isTFLiteAvailable = TfliteService.isAvailable;
+
+      if (!_isTFLiteAvailable) {
+        // Web platform or TFLite not available - use fallback
         _isModelLoaded = true;
         return const Right(unit);
-      } catch (e) {
-        // TensorFlow Liteが利用できない場合はフォールバックモード
+      }
+
+      // TensorFlow Liteモデルの読み込み
+      _interpreter = await TfliteService.createInterpreterFromAsset(
+        AppConstants.modelPath,
+      );
+
+      if (_interpreter != null) {
+        _isModelLoaded = true;
+        return const Right(unit);
+      } else {
+        // Model loading failed - use fallback
         _isTFLiteAvailable = false;
         _isModelLoaded = true;
         return const Right(unit);
       }
     } catch (e) {
-      return Left(TFLiteFailure('モデルの読み込みに失敗しました: $e'));
+      // Model loading failed - use fallback
+      _isTFLiteAvailable = false;
+      _isModelLoaded = true;
+      return const Right(unit);
     }
   }
 
