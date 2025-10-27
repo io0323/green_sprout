@@ -111,7 +111,6 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
 
       // 入力データを正しい形状にリシェイプ
       final reshapedInput = _reshape(input, inputShape);
-      final outputSize = outputShape.reduce((a, b) => a * b);
       final output = _createNestedList(outputShape, 0.0);
 
       // 推論実行
