@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../extensions/color_extensions.dart';
 
 /// 茶園管理AI用のカスタムテーマ
 /// モダンで美しいデザインシステム

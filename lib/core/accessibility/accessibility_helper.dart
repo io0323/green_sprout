@@ -63,7 +63,8 @@ class AccessibilityHelper {
   /// フォントサイズをスケール
   static double getScaledFontSize(BuildContext context, double baseFontSize) {
     final mediaQuery = MediaQuery.of(context);
-    final textScaleFactor = mediaQuery.textScaler.scale(1.0);
+    // Use textScaleFactor for compatibility
+    final textScaleFactor = mediaQuery.textScaleFactor;
 
     // 最小・最大スケールファクターを制限
     final clampedScaleFactor = textScaleFactor.clamp(0.8, 2.0);
