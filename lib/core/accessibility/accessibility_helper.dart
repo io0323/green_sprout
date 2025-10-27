@@ -64,6 +64,7 @@ class AccessibilityHelper {
   static double getScaledFontSize(BuildContext context, double baseFontSize) {
     final mediaQuery = MediaQuery.of(context);
     // Use textScaleFactor for compatibility
+    // ignore: deprecated_member_use
     final textScaleFactor = mediaQuery.textScaleFactor;
 
     // 最小・最大スケールファクターを制限
