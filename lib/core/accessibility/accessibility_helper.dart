@@ -256,7 +256,7 @@ class AccessibleImage extends StatelessWidget {
               Container(
                 width: width,
                 height: height,
-                color: TeaGardenTheme.textSecondary.withValues(alpha: 0.1),
+                color: TeaGardenTheme.textSecondary.withOpacity(0.1),
                 child: const Icon(
                   Icons.image_not_supported,
                   color: TeaGardenTheme.textSecondary,
@@ -363,8 +363,8 @@ class AccessibleProgressIndicator extends StatelessWidget {
       value: '$percentage%',
       child: LinearProgressIndicator(
         value: value,
-        backgroundColor: backgroundColor ??
-            TeaGardenTheme.textSecondary.withValues(alpha: 0.2),
+        backgroundColor:
+            backgroundColor ?? TeaGardenTheme.textSecondary.withOpacity(0.2),
         valueColor: AlwaysStoppedAnimation<Color>(
           valueColor ?? TeaGardenTheme.primaryGreen,
         ),

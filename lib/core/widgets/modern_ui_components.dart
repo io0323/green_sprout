@@ -364,10 +364,10 @@ class BeautifulErrorMessage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(TeaGardenTheme.spacingL),
               decoration: BoxDecoration(
-                color: TeaGardenTheme.errorColor.withValues(alpha: 0.1),
+                color: TeaGardenTheme.errorColor.withOpacity(0.1),
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: TeaGardenTheme.errorColor.withValues(alpha: 0.3),
+                  color: TeaGardenTheme.errorColor.withOpacity(0.3),
                   width: 2,
                 ),
               ),
@@ -475,11 +475,11 @@ class _BeautifulSuccessMessageState extends State<BeautifulSuccessMessage>
             child: Container(
               padding: const EdgeInsets.all(TeaGardenTheme.spacingL),
               decoration: BoxDecoration(
-                color: TeaGardenTheme.successColor.withValues(alpha: 0.1),
+                color: TeaGardenTheme.successColor.withOpacity(0.1),
                 borderRadius:
                     BorderRadius.circular(TeaGardenTheme.borderRadiusLarge),
                 border: Border.all(
-                  color: TeaGardenTheme.successColor.withValues(alpha: 0.3),
+                  color: TeaGardenTheme.successColor.withOpacity(0.3),
                   width: 2,
                 ),
               ),

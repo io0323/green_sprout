@@ -31,7 +31,7 @@ class CameraPreviewWidget extends StatelessWidget {
                     height: 200,
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.8),
+                        color: Colors.white.withOpacity(0.8),
                         width: 2,
                       ),
                       borderRadius: BorderRadius.circular(12),
@@ -120,7 +120,7 @@ class CameraPreviewWidget extends StatelessWidget {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          Colors.black.withValues(alpha: 0.3),
+                          Colors.black.withOpacity(0.3),
                           Colors.transparent,
                         ],
                       ),
@@ -154,7 +154,7 @@ class CameraPreviewWidget extends StatelessWidget {
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
                         colors: [
-                          Colors.black.withValues(alpha: 0.3),
+                          Colors.black.withOpacity(0.3),
                           Colors.transparent,
                         ],
                       ),
