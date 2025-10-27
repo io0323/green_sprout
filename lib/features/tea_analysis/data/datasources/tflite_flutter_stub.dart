@@ -8,9 +8,18 @@ class Interpreter {
   }
 
   void close() {}
-  List<Object> getInputTensors() => [];
-  List<Object> getOutputTensors() => [];
+  List<Tensor> getInputTensors() => [];
+  List<Tensor> getOutputTensors() => [];
   void run(Object input, Object output) {
+    throw UnsupportedError('TFLite is not supported on Web platform');
+  }
+
+  // Additional methods used by code
+  Tensor getInputTensor(int index) {
+    throw UnsupportedError('TFLite is not supported on Web platform');
+  }
+
+  Tensor getOutputTensor(int index) {
     throw UnsupportedError('TFLite is not supported on Web platform');
   }
 }
@@ -19,4 +28,7 @@ class Interpreter {
 class Tensor {
   List<int> shape = [];
   String type = '';
+
+  // Add missing methods
+  dynamic get data => [];
 }

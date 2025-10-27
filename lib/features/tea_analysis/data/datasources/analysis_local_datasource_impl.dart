@@ -3,9 +3,10 @@ import 'dart:typed_data';
 import 'package:dartz/dartz.dart';
 import 'package:image/image.dart' as img;
 
-// Conditional import: use tflite_flutter on mobile, null on web
-import 'package:tflite_flutter/tflite_flutter.dart' // For mobile/desktop
-    if (dart.library.html) 'tflite_flutter_stub.dart'; // Web stub
+// Conditional import: use native tflite_flutter, or stub for web
+// On web (dart.library.html exists), use stub; otherwise use real package
+import 'tflite_flutter_stub.dart'
+    if (dart.library.io) 'package:tflite_flutter/tflite_flutter.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/errors/failures.dart';
@@ -97,9 +98,9 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
       final outputShape = _interpreter!.getOutputTensor(0).shape;
 
       // 入力データを正しい形状にリシェイプ
-      final reshapedInput = input.reshape(inputShape);
-      final output = List.filled(outputShape.reduce((a, b) => a * b), 0.0)
-          .reshape(outputShape);
+      final reshapedInput = _reshape(input, inputShape);
+      final outputSize = outputShape.reduce((a, b) => a * b);
+      final output = _createNestedList(outputShape, 0.0);
 
       // 推論実行
       _interpreter!.run(reshapedInput, output);
@@ -227,5 +228,22 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
   void dispose() {
     _interpreter?.close();
     _interpreter = null;
+  }
+
+  /// Helper: reshape list to desired shape
+  List _reshape(List input, List<int> shape) {
+    // Simple implementation - flatten to 1D then rebuild
+    final flattened = input.expand((e) => e is List ? e : [e]).toList();
+    return _createNestedList(shape, flattened);
+  }
+
+  /// Helper: create nested list based on shape
+  dynamic _createNestedList(List<int> shape, dynamic fill) {
+    if (shape.length == 1) {
+      return List.filled(shape[0], fill);
+    }
+    final first = shape[0];
+    final rest = shape.sublist(1);
+    return List.generate(first, (_) => _createNestedList(rest, fill));
   }
 }
