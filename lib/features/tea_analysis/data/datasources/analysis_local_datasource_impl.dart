@@ -2,7 +2,10 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:dartz/dartz.dart';
 import 'package:image/image.dart' as img;
-import 'package:tflite_flutter/tflite_flutter.dart';
+
+// Conditional import: use tflite_flutter on mobile, null on web
+import 'package:tflite_flutter/tflite_flutter.dart' // For mobile/desktop
+    if (dart.library.html) 'tflite_flutter_stub.dart'; // Web stub
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/errors/failures.dart';
@@ -12,6 +15,7 @@ import 'analysis_local_datasource.dart';
 /// AI解析のローカルデータソースの実装クラス
 /// TensorFlow Liteを使用した画像解析機能
 class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
+  // ignore: avoid_web_libraries_in_flutter
   Interpreter? _interpreter;
   bool _isModelLoaded = false;
   bool _isTFLiteAvailable = false;
