@@ -2,7 +2,10 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:dartz/dartz.dart';
 import 'package:image/image.dart' as img;
-import 'package:tflite_flutter/tflite_flutter.dart';
+
+// Use the platform-abstracted TFLite service
+// This automatically selects native or web stub based on platform
+import '../../../../ml/tflite_interface.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/errors/failures.dart';
@@ -12,7 +15,7 @@ import 'analysis_local_datasource.dart';
 /// AI解析のローカルデータソースの実装クラス
 /// TensorFlow Liteを使用した画像解析機能
 class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
-  Interpreter? _interpreter;
+  dynamic _interpreter; // Platform-agnostic interpreter
   bool _isModelLoaded = false;
   bool _isTFLiteAvailable = false;
 
@@ -59,20 +62,34 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
   @override
   Future<Either<Failure, Unit>> loadModel() async {
     try {
-      // TensorFlow Liteモデルの読み込み
-      try {
-        _interpreter = await Interpreter.fromAsset(AppConstants.modelPath);
-        _isTFLiteAvailable = true;
+      // Check if TFLite is available on this platform
+      _isTFLiteAvailable = TfliteService.isAvailable;
+
+      if (!_isTFLiteAvailable) {
+        // Web platform or TFLite not available - use fallback
         _isModelLoaded = true;
         return const Right(unit);
-      } catch (e) {
-        // TensorFlow Liteが利用できない場合はフォールバックモード
+      }
+
+      // TensorFlow Liteモデルの読み込み
+      _interpreter = await TfliteService.createInterpreterFromAsset(
+        AppConstants.modelPath,
+      );
+
+      if (_interpreter != null) {
+        _isModelLoaded = true;
+        return const Right(unit);
+      } else {
+        // Model loading failed - use fallback
         _isTFLiteAvailable = false;
         _isModelLoaded = true;
         return const Right(unit);
       }
     } catch (e) {
-      return Left(TFLiteFailure('モデルの読み込みに失敗しました: $e'));
+      // Model loading failed - use fallback
+      _isTFLiteAvailable = false;
+      _isModelLoaded = true;
+      return const Right(unit);
     }
   }
 
@@ -93,9 +110,8 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
       final outputShape = _interpreter!.getOutputTensor(0).shape;
 
       // 入力データを正しい形状にリシェイプ
-      final reshapedInput = input.reshape(inputShape);
-      final output = List.filled(outputShape.reduce((a, b) => a * b), 0.0)
-          .reshape(outputShape);
+      final reshapedInput = _reshape(input, inputShape);
+      final output = _createNestedList(outputShape, 0.0);
 
       // 推論実行
       _interpreter!.run(reshapedInput, output);
@@ -223,5 +239,22 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
   void dispose() {
     _interpreter?.close();
     _interpreter = null;
+  }
+
+  /// Helper: reshape list to desired shape
+  List _reshape(List input, List<int> shape) {
+    // Simple implementation - flatten to 1D then rebuild
+    final flattened = input.expand((e) => e is List ? e : [e]).toList();
+    return _createNestedList(shape, flattened);
+  }
+
+  /// Helper: create nested list based on shape
+  dynamic _createNestedList(List<int> shape, dynamic fill) {
+    if (shape.length == 1) {
+      return List.filled(shape[0], fill);
+    }
+    final first = shape[0];
+    final rest = shape.sublist(1);
+    return List.generate(first, (_) => _createNestedList(rest, fill));
   }
 }
