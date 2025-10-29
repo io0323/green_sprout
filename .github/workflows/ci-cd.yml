@@ -211,17 +211,7 @@ jobs:
         echo "Production deployment completed"
     
     - name: Create release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: v${{ github.run_number }}
-        release_name: Release v${{ github.run_number }}
-        body: |
-          ## Changes in this Release
-          - Automated release from CI/CD pipeline
-          - All tests passed
-          - Security scan completed
-          - Performance tests passed
-        draft: false
-        prerelease: false
+      continue-on-error: true
+      run: |
+        echo "Release creation skipped to avoid permission errors"
+        echo "To create releases, manually tag commits or configure GitHub Actions permissions"
