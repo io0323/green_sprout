@@ -15,7 +15,7 @@ void main() {
     // Text / RichText 双方に対応したテキスト一致ヘルパー
     bool textMatches(Widget widget, List<String> candidates) {
       if (widget is Text) {
-        final data = widget.data ?? widget.text?.toPlainText();
+        final data = widget.data ?? widget.textSpan?.toPlainText();
         return data != null && candidates.contains(data);
       }
       if (widget is RichText) {
