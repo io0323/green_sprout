@@ -25,15 +25,27 @@ void main() {
       return false;
     }
 
-    // タイトル（日本語/英語どちらでも可）
-    final titleFinder = find.byWidgetPredicate(
-      (w) => textMatches(w, ['茶園管理AI', 'Tea Garden AI']),
+    // タイトル（日本語/英語どちらでも可） - AppBar 配下に限定
+    final titleFinder = find.descendant(
+      of: find.byType(AppBar),
+      matching: find.byWidgetPredicate(
+        (w) => textMatches(w, ['茶園管理AI', 'Tea Garden AI']),
+      ),
     );
     expect(titleFinder, findsOneWidget);
 
-    // カメラボタン（日本語/英語どちらでも可）
-    final cameraButtonFinder = find.byWidgetPredicate(
-      (w) => textMatches(w, ['茶葉を撮影・解析', 'Take photo / analyze']),
+    // カメラボタン（日本語/英語どちらでも可） - 一般的なボタン配下に限定
+    final cameraButtonFinder = find.descendant(
+      of: find.byWidgetPredicate(
+        (w) =>
+            w is ElevatedButton ||
+            w is TextButton ||
+            w is OutlinedButton ||
+            w is IconButton,
+      ),
+      matching: find.byWidgetPredicate(
+        (w) => textMatches(w, ['茶葉を撮影・解析', 'Take photo / analyze']),
+      ),
     );
     expect(cameraButtonFinder, findsOneWidget);
 
