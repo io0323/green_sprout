@@ -175,15 +175,15 @@ class CameraPreviewWidget extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
+                const Icon(
                   Icons.camera_alt_outlined,
                   size: 64,
                   color: Colors.white,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   LocalizationService.instance.translate('camera_initializing'),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                   ),
