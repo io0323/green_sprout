@@ -84,10 +84,10 @@ class _WebHomePageState extends State<WebHomePage> {
                     CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Text(
                       LocalizationService.instance.translate('data_loading'),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         color: Colors.grey,
                       ),
@@ -187,7 +187,7 @@ class _WebHomePageState extends State<WebHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            const Icon(
               Icons.photo_camera_outlined,
               size: 64,
               color: Colors.grey,
