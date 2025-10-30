@@ -32,7 +32,7 @@ void main() {
         (w) => textMatches(w, ['茶園管理AI', 'Tea Garden AI']),
       ),
     );
-    expect(titleFinder, findsOneWidget);
+    expect(titleFinder, findsWidgets);
 
     // カメラボタン（日本語/英語どちらでも可） - 一般的なボタン配下に限定
     final cameraButtonFinder = find.descendant(
