@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/camera_cubit.dart';
 import '../widgets/camera_preview_widget.dart';
 import '../widgets/capture_button_widget.dart';
+import '../../../../core/services/localization_service.dart';
 
 /// カメラページ
 /// 茶葉の撮影を行う画面
@@ -34,9 +35,9 @@ class _CameraPageState extends State<CameraPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          '茶葉撮影',
-          style: TextStyle(
+        title: Text(
+          LocalizationService.instance.translate('camera_title'),
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
@@ -62,7 +63,7 @@ class _CameraPageState extends State<CameraPage> {
         child: BlocBuilder<CameraCubit, CameraBlocState>(
           builder: (context, state) {
             if (state is CameraInitial) {
-              return const Center(
+              return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -71,7 +72,8 @@ class _CameraPageState extends State<CameraPage> {
                     ),
                     SizedBox(height: 16),
                     Text(
-                      'カメラを初期化中...',
+                      LocalizationService.instance
+                          .translate('camera_initializing'),
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey,
@@ -83,7 +85,7 @@ class _CameraPageState extends State<CameraPage> {
             }
 
             if (state is CameraInitializing) {
-              return const Center(
+              return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -92,7 +94,8 @@ class _CameraPageState extends State<CameraPage> {
                     ),
                     SizedBox(height: 16),
                     Text(
-                      'カメラを初期化中...',
+                      LocalizationService.instance
+                          .translate('camera_initializing'),
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey,
@@ -125,7 +128,7 @@ class _CameraPageState extends State<CameraPage> {
                       ),
                       const SizedBox(height: 24),
                       Text(
-                        'カメラエラー',
+                        LocalizationService.instance.translate('camera_error'),
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -147,7 +150,8 @@ class _CameraPageState extends State<CameraPage> {
                           context.read<CameraCubit>().initialize();
                         },
                         icon: const Icon(Icons.refresh),
-                        label: const Text('再試行'),
+                        label: Text(
+                            LocalizationService.instance.translate('retry')),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
@@ -189,7 +193,8 @@ class _CameraPageState extends State<CameraPage> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            '茶葉を中央に配置して撮影してください',
+                            LocalizationService.instance
+                                .translate('place_leaf_center'),
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.green[700],
@@ -232,7 +237,7 @@ class _CameraPageState extends State<CameraPage> {
             }
 
             if (state is CameraCapturing) {
-              return const Center(
+              return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -241,7 +246,7 @@ class _CameraPageState extends State<CameraPage> {
                     ),
                     SizedBox(height: 16),
                     Text(
-                      '撮影中...',
+                      LocalizationService.instance.translate('capturing'),
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey,
@@ -262,7 +267,7 @@ class _CameraPageState extends State<CameraPage> {
                 );
               });
 
-              return const Center(
+              return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -271,7 +276,8 @@ class _CameraPageState extends State<CameraPage> {
                     ),
                     SizedBox(height: 16),
                     Text(
-                      '解析画面に移動中...',
+                      LocalizationService.instance
+                          .translate('moving_to_analysis'),
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.grey,

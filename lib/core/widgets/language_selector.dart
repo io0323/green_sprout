@@ -23,7 +23,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
       icon: const Icon(Icons.language, color: Colors.white),
-      tooltip: '言語設定',
+      tooltip: LocalizationService.instance.translate('language_settings'),
       onSelected: (String languageCode) {
         setState(() {
           _selectedLanguage = languageCode;

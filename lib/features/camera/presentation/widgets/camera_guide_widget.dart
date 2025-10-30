@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/services/localization_service.dart';
 
 /// カメラガイドウィジェット
 /// 再利用可能なUIコンポーネント
@@ -17,9 +18,9 @@ class CameraGuideWidget extends StatelessWidget {
           color: Colors.black54,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: const Text(
-          '茶葉を中央に配置して撮影してください',
-          style: TextStyle(
+        child: Text(
+          LocalizationService.instance.translate('place_leaf_center'),
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 16,
             fontWeight: FontWeight.bold,
