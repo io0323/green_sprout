@@ -81,7 +81,7 @@ class _WebHomePageState extends State<WebHomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircularProgressIndicator(
+                    const CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
                     ),
                     const SizedBox(height: 16),
