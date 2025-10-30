@@ -40,7 +40,22 @@
     "medium_confidence": "Medium confidence",
     "low_confidence": "Low confidence",
     "analytics": "Analytics",
-    "language_settings": "Language Settings"
+    "language_settings": "Language Settings",
+    "align_leaf_in_frame": "Align the tea leaf in the center frame",
+    "data_loading": "Loading data...",
+    "logs_list": "Analysis Logs",
+    "today_analysis_results": "Today's Analysis Results",
+    "analysis_completed_count": "{count} analyses completed",
+    "no_results_yet": "No analysis results yet",
+    "take_photo_to_analyze": "Take a photo to analyze tea leaves",
+    "confidence_label": "Confidence:",
+    "camera_initializing": "Initializing camera...",
+    "place_leaf_center": "Place the tea leaf in the center and take a photo",
+    "capturing": "Capturing...",
+    "moving_to_analysis": "Moving to analysis screen...",
+    "analysis_history": "Analysis History",
+    "close": "Close",
+    "capture_tip": "Tip: Take a photo in a bright place with the entire tea leaf visible"
   },
   "ja": {
     "app_title": "茶園管理AI",
@@ -83,6 +98,21 @@
     "medium_confidence": "中程度の信頼度",
     "low_confidence": "低い信頼度",
     "analytics": "分析",
-    "language_settings": "言語設定"
+    "language_settings": "言語設定",
+    "align_leaf_in_frame": "茶葉を中央の枠に合わせてください",
+    "data_loading": "データを読み込み中...",
+    "logs_list": "日誌一覧",
+    "today_analysis_results": "今日の解析結果",
+    "analysis_completed_count": "{count}件の解析が完了しました",
+    "no_results_yet": "まだ解析結果がありません",
+    "take_photo_to_analyze": "写真を撮って茶葉を解析してみましょう",
+    "confidence_label": "信頼度:",
+    "camera_initializing": "カメラを初期化中...",
+    "place_leaf_center": "茶葉を中央に配置して撮影してください",
+    "capturing": "撮影中...",
+    "moving_to_analysis": "解析画面に移動中...",
+    "analysis_history": "解析履歴",
+    "close": "閉じる",
+    "capture_tip": "撮影のコツ: 明るい場所で、茶葉全体が映るように撮影してください"
   }
 }

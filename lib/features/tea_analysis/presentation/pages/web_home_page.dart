@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/services/localization_service.dart';
 
 /// Web用の簡素化されたホームページ
 /// 依存性注入を使わずに直接実装
@@ -45,9 +46,9 @@ class _WebHomePageState extends State<WebHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          '茶園管理AI',
-          style: TextStyle(
+        title: Text(
+          LocalizationService.instance.translate('app_title'),
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
@@ -60,7 +61,7 @@ class _WebHomePageState extends State<WebHomePage> {
             onPressed: () {
               _showLogsDialog();
             },
-            tooltip: '日誌一覧',
+            tooltip: LocalizationService.instance.translate('logs_list'),
           ),
         ],
       ),
@@ -76,17 +77,17 @@ class _WebHomePageState extends State<WebHomePage> {
           ),
         ),
         child: _isLoading
-            ? const Center(
+            ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircularProgressIndicator(
+                    const CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Text(
-                      'データを読み込み中...',
-                      style: TextStyle(
+                      LocalizationService.instance.translate('data_loading'),
+                      style: const TextStyle(
                         fontSize: 16,
                         color: Colors.grey,
                       ),
@@ -140,7 +141,7 @@ class _WebHomePageState extends State<WebHomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '今日の解析結果',
+            LocalizationService.instance.translate('today_analysis_results'),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -149,7 +150,8 @@ class _WebHomePageState extends State<WebHomePage> {
           ),
           const SizedBox(height: 8),
           Text(
-            '${todayResults.length}件の解析が完了しました',
+            LocalizationService.instance.translate('analysis_completed_count',
+                params: {'count': todayResults.length.toString()}),
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey[600],
@@ -166,7 +168,7 @@ class _WebHomePageState extends State<WebHomePage> {
       child: ElevatedButton.icon(
         onPressed: _isLoading ? null : _simulateAnalysis,
         icon: const Icon(Icons.camera_alt),
-        label: const Text('茶葉を撮影・解析'),
+        label: Text(LocalizationService.instance.translate('take_photo')),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.green,
           foregroundColor: Colors.white,
@@ -181,28 +183,28 @@ class _WebHomePageState extends State<WebHomePage> {
 
   Widget _buildRecentResults() {
     if (_mockResults.isEmpty) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            const Icon(
               Icons.photo_camera_outlined,
               size: 64,
               color: Colors.grey,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
-              'まだ解析結果がありません',
-              style: TextStyle(
+              LocalizationService.instance.translate('no_results_yet'),
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.grey,
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
-              '写真を撮って茶葉を解析してみましょう',
-              style: TextStyle(
+              LocalizationService.instance.translate('take_photo_to_analyze'),
+              style: const TextStyle(
                 fontSize: 14,
                 color: Colors.grey,
               ),
@@ -280,7 +282,7 @@ class _WebHomePageState extends State<WebHomePage> {
                       ),
                     ),
                     Text(
-                      '信頼度: ${(confidence * 100).toInt()}%',
+                      '${LocalizationService.instance.translate('confidence_label')} ${(confidence * 100).toInt()}%',
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey[600],
@@ -359,8 +361,10 @@ class _WebHomePageState extends State<WebHomePage> {
     // 成功メッセージを表示
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('解析が完了しました！'),
+        SnackBar(
+          content: Text(
+            LocalizationService.instance.translate('analysis_complete'),
+          ),
           backgroundColor: Colors.green,
         ),
       );
@@ -371,7 +375,7 @@ class _WebHomePageState extends State<WebHomePage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('解析履歴'),
+        title: Text(LocalizationService.instance.translate('analysis_history')),
         content: SizedBox(
           width: double.maxFinite,
           height: 400,
@@ -394,7 +398,7 @@ class _WebHomePageState extends State<WebHomePage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('閉じる'),
+            child: Text(LocalizationService.instance.translate('close')),
           ),
         ],
       ),

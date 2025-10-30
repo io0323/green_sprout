@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:camera/camera.dart';
 import '../bloc/camera_cubit.dart';
+import '../../../../core/services/localization_service.dart';
 
 /// カメラプレビューウィジェット
 /// カメラの映像を表示
@@ -125,12 +126,13 @@ class CameraPreviewWidget extends StatelessWidget {
                         ],
                       ),
                     ),
-                    child: const SafeArea(
+                    child: SafeArea(
                       child: Padding(
-                        padding: EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(16),
                         child: Text(
-                          '茶葉を中央の枠に合わせてください',
-                          style: TextStyle(
+                          LocalizationService.instance
+                              .translate('align_leaf_in_frame'),
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -169,19 +171,19 @@ class CameraPreviewWidget extends StatelessWidget {
         // カメラが初期化されていない場合
         return Container(
           color: Colors.black,
-          child: const Center(
+          child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
+                const Icon(
                   Icons.camera_alt_outlined,
                   size: 64,
                   color: Colors.white,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
-                  'カメラを初期化中...',
-                  style: TextStyle(
+                  LocalizationService.instance.translate('camera_initializing'),
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                   ),

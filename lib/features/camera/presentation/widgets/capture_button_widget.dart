@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/camera_cubit.dart';
+import '../../../../core/services/localization_service.dart';
 
 /// 撮影ボタンウィジェット
 /// カメラの撮影ボタン
@@ -70,10 +71,11 @@ class CaptureButtonWidget extends StatelessWidget {
             // 撮影説明
             Text(
               isCapturing
-                  ? '撮影中...'
+                  ? LocalizationService.instance.translate('capturing')
                   : isEnabled
-                      ? 'タップして撮影'
-                      : 'カメラを初期化中...',
+                      ? LocalizationService.instance.translate('take_photo')
+                      : LocalizationService.instance
+                          .translate('camera_initializing'),
               style: TextStyle(
                 fontSize: 16,
                 color: isEnabled ? Colors.green[700] : Colors.grey[600],
@@ -101,7 +103,7 @@ class CaptureButtonWidget extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    '撮影のコツ: 明るい場所で、茶葉全体が映るように撮影してください',
+                    LocalizationService.instance.translate('capture_tip'),
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.green[700],
