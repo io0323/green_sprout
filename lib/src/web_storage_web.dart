@@ -1,5 +1,5 @@
-/// WebストレージのWeb実装
-/// Webプラットフォームで使用
+// WebストレージのWeb実装
+// Webプラットフォームで使用
 import 'dart:html' as html;
 
 String? getLocalStorage(String key) {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'src/web_storage_stub.dart'
-    if (dart.library.html) 'src/web_storage_web.dart';
+import 'src/web_storage.dart';
 
 void main() {
   runApp(const EnhancedTeaGardenApp());
