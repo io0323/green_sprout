@@ -28,6 +28,8 @@ analyzer:
   errors:
     # 非推奨メンバーの使用は警告のみ（将来的に修正予定）
     deprecated_member_use: ignore
+    # 条件付きエクスポートで使用されるWeb専用ファイルでの警告を無効化
+    avoid_web_libraries_in_flutter: ignore
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
