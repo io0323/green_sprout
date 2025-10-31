@@ -1,5 +1,6 @@
 // WebストレージのWeb実装
 // Webプラットフォームで使用
+// ignore_for_file: avoid_web_libraries_in_flutter, deprecated_member_use
 import 'dart:html' as html;
 
 String? getLocalStorage(String key) {
