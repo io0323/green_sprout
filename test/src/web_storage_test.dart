@@ -33,6 +33,8 @@ void main() {
         // 非Webプラットフォームではnullを返す可能性があるため、
         // エラーが発生しないことを確認
         expect(() => setLocalStorage(key, value), returnsNormally);
+        // 結果はnullまたは保存された値であることを確認
+        expect(result, isA<String?>());
       });
 
       test('同じキーで値を上書きできる', () {
@@ -49,6 +51,8 @@ void main() {
         // Assert
         // エラーが発生しないことを確認
         expect(() => setLocalStorage(key, value2), returnsNormally);
+        // 結果はnullまたは保存された値であることを確認
+        expect(result, isA<String?>());
       });
 
       test('空の文字列を保存できる', () {
@@ -148,6 +152,8 @@ void main() {
         // エラーが発生しないことを確認
         // 非Webプラットフォームではnullが返る可能性がある
         expect(() => setLocalStorage(key, value), returnsNormally);
+        // 取得した値はnullまたは保存された値であることを確認
+        expect(retrievedValue, isA<String?>());
       });
 
       test('複数のキーを保存できる', () {
