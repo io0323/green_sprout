@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tea_garden_ai/enhanced_app.dart';
 
-/**
- * 拡張版茶園管理AIアプリのテスト
- */
+/// 拡張版茶園管理AIアプリのテスト
 void main() {
   group('EnhancedTeaGardenApp', () {
     testWidgets('アプリが正常に起動する', (WidgetTester tester) async {
