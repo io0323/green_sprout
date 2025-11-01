@@ -1,9 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tea_garden_ai/src/web_storage.dart';
 
-/**
- * Webストレージ機能のテスト
- */
+/// Webストレージ機能のテスト
 void main() {
   group('Webストレージ機能', () {
     group('getLocalStorage', () {
@@ -30,11 +29,15 @@ void main() {
         final result = getLocalStorage(key);
 
         // Assert
-        // 非Webプラットフォームではnullを返す可能性があるため、
         // エラーが発生しないことを確認
         expect(() => setLocalStorage(key, value), returnsNormally);
-        // 結果はnullまたは保存された値であることを確認
-        expect(result, isA<String?>());
+        // 結果を確認（Webプラットフォームでは値が保存される）
+        if (kIsWeb) {
+          expect(result, equals(value));
+        } else {
+          // 非Webプラットフォームではnullを返す可能性がある
+          expect(result, isA<String?>());
+        }
       });
 
       test('同じキーで値を上書きできる', () {
@@ -51,8 +54,13 @@ void main() {
         // Assert
         // エラーが発生しないことを確認
         expect(() => setLocalStorage(key, value2), returnsNormally);
-        // 結果はnullまたは保存された値であることを確認
-        expect(result, isA<String?>());
+        // 結果を確認（Webプラットフォームでは上書きされた値が保存される）
+        if (kIsWeb) {
+          expect(result, equals(value2));
+        } else {
+          // 非Webプラットフォームではnullを返す可能性がある
+          expect(result, isA<String?>());
+        }
       });
 
       test('空の文字列を保存できる', () {
@@ -150,10 +158,14 @@ void main() {
 
         // Assert
         // エラーが発生しないことを確認
-        // 非Webプラットフォームではnullが返る可能性がある
         expect(() => setLocalStorage(key, value), returnsNormally);
-        // 取得した値はnullまたは保存された値であることを確認
-        expect(retrievedValue, isA<String?>());
+        // 取得した値を確認（Webプラットフォームでは保存された値が取得できる）
+        if (kIsWeb) {
+          expect(retrievedValue, equals(value));
+        } else {
+          // 非Webプラットフォームではnullが返る可能性がある
+          expect(retrievedValue, isA<String?>());
+        }
       });
 
       test('複数のキーを保存できる', () {
