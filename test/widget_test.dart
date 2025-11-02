@@ -5,6 +5,9 @@ import 'package:tea_garden_ai/core/services/localization_service.dart';
 
 /// 茶園管理AIアプリのウィジェットテスト
 void main() {
+  // Ensure test binding is initialized before any async/platform calls
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('Tea Garden AI App', () {
     /// テキストマッチングヘルパー関数
     bool textMatches(Widget widget, List<String> candidates) {
@@ -20,12 +23,12 @@ void main() {
     }
 
     testWidgets('アプリが正常に起動する', (WidgetTester tester) async {
-      // Arrange: 翻訳をロード（main() と同等の前処理）
-      await LocalizationService.instance.loadTranslations();
+      // Arrange: テスト用の翻訳をロード（ファイルI/Oを回避）
+      await LocalizationService.instance.loadTranslationsForTest();
 
       // Act: アプリを構築し、非同期/描画完了まで待機
       await tester.pumpWidget(const TeaGardenApp());
-      await tester.pumpAndSettle(const Duration(seconds: 5));
+      await tester.pumpAndSettle();
 
       // Assert: AppBarが存在すること
       expect(find.byType(AppBar), findsOneWidget);
@@ -42,11 +45,11 @@ void main() {
 
     testWidgets('カメラボタンが表示される', (WidgetTester tester) async {
       // Arrange
-      await LocalizationService.instance.loadTranslations();
+      await LocalizationService.instance.loadTranslationsForTest();
 
       // Act
       await tester.pumpWidget(const TeaGardenApp());
-      await tester.pumpAndSettle(const Duration(seconds: 5));
+      await tester.pumpAndSettle();
 
       // Assert: カメラボタンが表示される（日本語/英語どちらでも可）
       final cameraButtonFinder = find.descendant(
@@ -68,11 +71,11 @@ void main() {
 
     testWidgets('ナビゲーションボタンが表示される', (WidgetTester tester) async {
       // Arrange
-      await LocalizationService.instance.loadTranslations();
+      await LocalizationService.instance.loadTranslationsForTest();
 
       // Act
       await tester.pumpWidget(const TeaGardenApp());
-      await tester.pumpAndSettle(const Duration(seconds: 5));
+      await tester.pumpAndSettle();
 
       // Assert: 履歴アイコンが表示される
       expect(find.byIcon(Icons.history), findsWidgets);
@@ -80,11 +83,11 @@ void main() {
 
     testWidgets('アプリのテーマが適用される', (WidgetTester tester) async {
       // Arrange
-      await LocalizationService.instance.loadTranslations();
+      await LocalizationService.instance.loadTranslationsForTest();
 
       // Act
       await tester.pumpWidget(const TeaGardenApp());
-      await tester.pumpAndSettle(const Duration(seconds: 5));
+      await tester.pumpAndSettle();
 
       // Assert: MaterialAppが存在すること
       expect(find.byType(MaterialApp), findsOneWidget);
@@ -96,13 +99,11 @@ void main() {
 
     testWidgets('ホーム画面の基本構造が表示される', (WidgetTester tester) async {
       // Arrange
-      await LocalizationService.instance.loadTranslations();
+      await LocalizationService.instance.loadTranslationsForTest();
 
       // Act
       await tester.pumpWidget(const TeaGardenApp());
-      // 数回pumpしてウィジェットツリーを構築
-      await tester.pump();
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       // Assert: Scaffoldが存在すること
       expect(find.byType(Scaffold), findsWidgets);
