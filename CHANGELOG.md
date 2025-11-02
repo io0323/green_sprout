@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2024-12-20
+
+### Added
+- 拡張版Webアプリ（enhanced_app.dart）の実装
+  - タブベースのナビゲーション（ダッシュボード、解析、チャート、エクスポート、設定）
+  - ローカルストレージによるデータ永続化
+  - チャート・グラフ機能（健康状態の推移、成長段階の分布）
+  - データエクスポート機能（CSV、JSON、PDF、画像）
+- Webストレージ機能の実装（条件付きインポート対応）
+  - Webプラットフォーム用の実装（dart:html）
+  - モバイルプラットフォーム用のスタブ実装
+  - プラットフォーム選択ファイルによる自動切り替え
+- HTMLベースの完全機能版Webアプリ（web/enhanced_index.html）
+- 包括的なテストスイート
+  - enhanced_app_test.dart: 拡張版アプリのテスト（21テスト）
+  - web_storage_test.dart: Webストレージ機能のテスト（12テスト）
+  - widget_test.dart: ウィジェットテストの改善・拡張
+
+### Fixed
+- Webプラットフォームでの白画面問題を解決
+- CIリンターエラーの修正
+  - unused_local_variable警告の解決
+  - slash_for_doc_comments警告の解決
+  - avoid_web_libraries_in_flutter警告の解決
+- 条件付きインポートによるプラットフォーム対応の改善
+
+### Changed
+- Webプラットフォーム対応の最適化
+- テストコードの改善と拡張
+- ドキュメントの更新
+
+### Technical Details
+- **Web Support**: 条件付きインポートとプラットフォーム選択ファイルの実装
+- **Testing**: 包括的なテストカバレッジの追加
+- **Code Quality**: すべてのCIリンターエラーの解決
+- **Architecture**: Web/モバイルプラットフォームの実装分離
+
 ## [1.1.0] - 2024-12-19
 
 ### Added

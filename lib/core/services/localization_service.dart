@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 /// 国際化サービスクラス
@@ -65,6 +66,57 @@ class LocalizationService {
         }
       };
     }
+  }
+
+  /// テスト用の翻訳データ読み込み
+  /// 実際のファイルI/Oを行わず、メモリ内の翻訳データを直接設定
+  @visibleForTesting
+  Future<void> loadTranslationsForTest(
+      [Map<String, dynamic>? translations]) async {
+    _translations = translations ??
+        {
+          'ja': {
+            'app_title': '茶園管理AI',
+            'home_title': '茶園管理',
+            'camera_title': '茶葉撮影',
+            'analysis_title': '解析結果',
+            'logs_title': '解析日誌',
+            'take_photo': '茶葉を撮影・解析',
+            'analyze': '解析開始',
+            'save': '保存',
+            'cancel': 'キャンセル',
+            'search': '検索',
+            'filter': 'フィルター',
+            'growth_stage': '成長状態',
+            'health_status': '健康状態',
+            'confidence': '信頼度',
+            'comment': 'コメント',
+            'loading': '読み込み中...',
+            'error': 'エラー',
+            'retry': '再試行',
+            'no_data': 'データがありません',
+            'bud': '芽',
+            'young_leaf': '若葉',
+            'mature_leaf': '成葉',
+            'old_leaf': '老葉',
+            'healthy': '健康',
+            'minor_damage': '軽微な損傷',
+            'damaged': '損傷',
+            'diseased': '病気',
+            'today_summary': '今日の解析結果',
+            'recent_results': '最近の解析結果',
+            'analysis_complete': '解析が完了しました！',
+            'save_success': '保存しました',
+            'save_failed': '保存に失敗しました',
+            'analysis_failed': '解析に失敗しました',
+            'camera_error': 'カメラエラー',
+            'model_loading': 'AIモデルを読み込み中...',
+            'image_processing': '画像を処理中...',
+            'high_confidence': '高い信頼度',
+            'medium_confidence': '中程度の信頼度',
+            'low_confidence': '低い信頼度'
+          }
+        };
   }
 
   /// 言語を設定
