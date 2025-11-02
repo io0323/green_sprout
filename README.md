@@ -29,6 +29,13 @@ Tea Garden AIは、茶葉や茶樹の芽の写真を撮影し、端末上でTens
 - 日付・成長状態でフィルター機能
 - 詳細情報の表示
 
+### 🌐 Web拡張版（enhanced_app.dart）
+- タブベースのナビゲーション（ダッシュボード、解析、チャート、エクスポート、設定）
+- ローカルストレージによるデータ永続化
+- チャート・グラフ機能（健康状態の推移、成長段階の分布）
+- データエクスポート機能（CSV、JSON、PDF、画像）
+- 設定機能（データ保持期間、通知設定など）
+
 ## 🏗️ アーキテクチャ
 
 このプロジェクトは**Clean Architecture**を採用しています：
@@ -139,8 +146,13 @@ dependencies:
 
 - ✅ **Android** (API 26以上)
 - ✅ **iOS** (11.0以上)
-- ✅ **Web** (Chrome, Safari, Firefox)
+- ✅ **Web** (Chrome, Safari, Firefox) - 条件付きインポート対応
 - ✅ **macOS** (10.14以上)
+
+### Webプラットフォーム対応
+- 条件付きインポートによるWeb/モバイル実装の分離
+- ローカルストレージによるデータ永続化
+- HTMLベースの完全機能版Webアプリも提供
 
 ## 🔧 開発
 
@@ -217,7 +229,18 @@ flutter test
 
 # 統合テスト
 flutter test integration_test/
+
+# 特定のテストファイル
+flutter test test/widget_test.dart
+flutter test test/enhanced_app_test.dart
+flutter test test/src/web_storage_test.dart
 ```
+
+### テストカバレッジ
+- ウィジェットテスト: アプリの基本機能とUIコンポーネント
+- 拡張版アプリテスト: タブナビゲーション、解析機能、チャート表示
+- Webストレージ機能テスト: ローカルストレージとファイルダウンロード
+- 統合テスト: エンドツーエンドのユーザーフロー
 
 ## 📄 ライセンス
 
