@@ -5,6 +5,8 @@ import '../../../tea_analysis/presentation/bloc/tea_analysis_cubit.dart';
 import '../../../tea_analysis/presentation/widgets/analysis_result_widget.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../domain/entities/tea_analysis_result.dart';
+import '../../../../core/widgets/modern_ui_components.dart';
+import '../../../../core/services/localization_service.dart';
 
 /// 解析結果ページ
 /// 撮影した画像の解析結果を表示
@@ -73,88 +75,21 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
         child: BlocBuilder<AnalysisCubit, AnalysisState>(
           builder: (context, state) {
             if (state is AnalysisAnalyzing) {
-              return const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                    ),
-                    SizedBox(height: 16),
-                    Text(
-                      '画像を解析中...',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
+              return BeautifulLoadingIndicator(
+                message:
+                    LocalizationService.instance.translate('analyzing_image'),
               );
             }
 
             if (state is AnalysisError) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.red[50],
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.red[200]!),
-                        ),
-                        child: const Icon(
-                          Icons.error_outline,
-                          size: 64,
-                          color: Colors.red,
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      Text(
-                        '解析エラー',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[800],
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        state.message,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 24),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          context
-                              .read<AnalysisCubit>()
-                              .analyzeImageFromPath(widget.imagePath);
-                        },
-                        icon: const Icon(Icons.refresh),
-                        label: const Text('再試行'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 12,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              return BeautifulErrorMessage(
+                message: state.message,
+                icon: Icons.analytics_outlined,
+                onRetry: () {
+                  context
+                      .read<AnalysisCubit>()
+                      .analyzeImageFromPath(widget.imagePath);
+                },
               );
             }
 
@@ -198,9 +133,10 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                           ),
                           const SizedBox(height: 8),
                           TextField(
-                            decoration: const InputDecoration(
-                              hintText: 'この茶葉についてのコメントを入力してください',
-                              border: OutlineInputBorder(),
+                            decoration: InputDecoration(
+                              hintText: LocalizationService.instance
+                                  .translate('comment_hint'),
+                              border: const OutlineInputBorder(),
                             ),
                             maxLines: 3,
                             onChanged: (value) {
@@ -218,23 +154,13 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                     // 保存ボタン
                     SizedBox(
                       width: double.infinity,
-                      child: ElevatedButton.icon(
+                      child: AnimatedButton(
+                        text: LocalizationService.instance
+                            .translate('save_result'),
+                        icon: Icons.save,
                         onPressed: () {
                           _saveResult(state.result);
                         },
-                        icon: const Icon(Icons.save),
-                        label: const Text('結果を保存'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 16,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
                       ),
                     ),
                   ],
@@ -242,7 +168,11 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
               );
             }
 
-            return const Center(child: Text('Unknown state'));
+            return Center(
+              child: Text(
+                LocalizationService.instance.translate('unknown_state'),
+              ),
+            );
           },
         ),
       ),
@@ -269,10 +199,12 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
       // 成功メッセージを表示
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('解析結果を保存しました'),
+          SnackBar(
+            content: Text(
+              LocalizationService.instance.translate('save_result_success'),
+            ),
             backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
+            duration: const Duration(seconds: 2),
           ),
         );
 
@@ -288,7 +220,9 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('保存に失敗しました: $e'),
+            content: Text(
+              '${LocalizationService.instance.translate('save_result_failed')}: $e',
+            ),
             backgroundColor: Colors.red,
             duration: const Duration(seconds: 3),
           ),

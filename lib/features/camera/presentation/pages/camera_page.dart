@@ -4,6 +4,7 @@ import '../bloc/camera_cubit.dart';
 import '../widgets/camera_preview_widget.dart';
 import '../widgets/capture_button_widget.dart';
 import '../../../../core/services/localization_service.dart';
+import '../../../../core/widgets/modern_ui_components.dart';
 
 /// カメラページ
 /// 茶葉の撮影を行う画面
@@ -62,111 +63,20 @@ class _CameraPageState extends State<CameraPage> {
         ),
         child: BlocBuilder<CameraCubit, CameraBlocState>(
           builder: (context, state) {
-            if (state is CameraInitial) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      LocalizationService.instance
-                          .translate('camera_initializing'),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
-
-            if (state is CameraInitializing) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      LocalizationService.instance
-                          .translate('camera_initializing'),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
+            if (state is CameraInitial || state is CameraInitializing) {
+              return BeautifulLoadingIndicator(
+                message: LocalizationService.instance
+                    .translate('camera_initializing'),
               );
             }
 
             if (state is CameraError) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.red[50],
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.red[200]!),
-                        ),
-                        child: const Icon(
-                          Icons.camera_alt_outlined,
-                          size: 64,
-                          color: Colors.red,
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      Text(
-                        LocalizationService.instance.translate('camera_error'),
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[800],
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        state.message,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 24),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          context.read<CameraCubit>().initialize();
-                        },
-                        icon: const Icon(Icons.refresh),
-                        label: Text(
-                            LocalizationService.instance.translate('retry')),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 12,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              return BeautifulErrorMessage(
+                message: state.message,
+                icon: Icons.camera_alt_outlined,
+                onRetry: () {
+                  context.read<CameraCubit>().initialize();
+                },
               );
             }
 
@@ -237,23 +147,8 @@ class _CameraPageState extends State<CameraPage> {
             }
 
             if (state is CameraCapturing) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      LocalizationService.instance.translate('capturing'),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
+              return BeautifulLoadingIndicator(
+                message: LocalizationService.instance.translate('capturing'),
               );
             }
 
@@ -267,28 +162,17 @@ class _CameraPageState extends State<CameraPage> {
                 );
               });
 
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      LocalizationService.instance
-                          .translate('moving_to_analysis'),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
+              return BeautifulLoadingIndicator(
+                message: LocalizationService.instance
+                    .translate('moving_to_analysis'),
               );
             }
 
-            return const Center(child: Text('Unknown state'));
+            return Center(
+              child: Text(
+                LocalizationService.instance.translate('unknown_state'),
+              ),
+            );
           },
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../tea_analysis/presentation/bloc/tea_analysis_cubit.dart';
 import '../../../tea_analysis/domain/entities/tea_analysis_result.dart';
 import '../../../../core/services/localization_service.dart';
+import '../../../../core/widgets/modern_ui_components.dart';
 
 /// 茶園分析ページ
 /// 茶葉解析結果の統計とグラフを表示
@@ -74,31 +75,17 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
         child: BlocBuilder<TeaAnalysisCubit, TeaAnalysisState>(
           builder: (context, state) {
             if (state is TeaAnalysisLoading) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                ),
+              return BeautifulLoadingIndicator(
+                message: t('data_loading'),
               );
             }
 
             if (state is TeaAnalysisError) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.error_outline,
-                        size: 64, color: Colors.red),
-                    const SizedBox(height: 16),
-                    Text(t('error')),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<TeaAnalysisCubit>().loadAllResults();
-                      },
-                      child: Text(t('retry')),
-                    ),
-                  ],
-                ),
+              return BeautifulErrorMessage(
+                message: state.message,
+                onRetry: () {
+                  context.read<TeaAnalysisCubit>().loadAllResults();
+                },
               );
             }
 

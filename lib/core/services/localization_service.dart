@@ -62,7 +62,20 @@ class LocalizationService {
           'image_processing': '画像を処理中...',
           'high_confidence': '高い信頼度',
           'medium_confidence': '中程度の信頼度',
-          'low_confidence': '低い信頼度'
+          'low_confidence': '低い信頼度',
+          'camera_initializing': 'カメラを初期化中...',
+          'capturing': '撮影中...',
+          'moving_to_analysis': '解析画面へ移動中...',
+          'place_leaf_center': '茶葉を画面の中央に配置してください',
+          'analyzing_image': '画像を解析中...',
+          'analysis_error': '解析エラー',
+          'error_occurred': 'エラーが発生しました',
+          'data_loading': 'データを読み込み中...',
+          'save_result': '結果を保存',
+          'comment_hint': 'この茶葉についてのコメントを入力してください',
+          'save_result_success': '解析結果を保存しました',
+          'save_result_failed': '保存に失敗しました',
+          'unknown_state': '不明な状態'
         }
       };
     }
@@ -114,7 +127,20 @@ class LocalizationService {
             'image_processing': '画像を処理中...',
             'high_confidence': '高い信頼度',
             'medium_confidence': '中程度の信頼度',
-            'low_confidence': '低い信頼度'
+            'low_confidence': '低い信頼度',
+            'camera_initializing': 'カメラを初期化中...',
+            'capturing': '撮影中...',
+            'moving_to_analysis': '解析画面へ移動中...',
+            'place_leaf_center': '茶葉を画面の中央に配置してください',
+            'analyzing_image': '画像を解析中...',
+            'analysis_error': '解析エラー',
+            'error_occurred': 'エラーが発生しました',
+            'data_loading': 'データを読み込み中...',
+            'save_result': '結果を保存',
+            'comment_hint': 'この茶葉についてのコメントを入力してください',
+            'save_result_success': '解析結果を保存しました',
+            'save_result_failed': '保存に失敗しました',
+            'unknown_state': '不明な状態'
           }
         };
   }

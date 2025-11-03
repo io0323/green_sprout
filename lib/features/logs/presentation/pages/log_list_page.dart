@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../tea_analysis/presentation/bloc/tea_analysis_cubit.dart';
 import '../../../tea_analysis/presentation/widgets/tea_analysis_card.dart';
+import '../../../../core/widgets/modern_ui_components.dart';
+import '../../../../core/services/localization_service.dart';
 
 /// 日誌一覧ページ
 /// 過去の茶葉解析結果を表示
@@ -69,86 +71,17 @@ class _LogListPageState extends State<LogListPage> {
         child: BlocBuilder<TeaAnalysisCubit, TeaAnalysisState>(
           builder: (context, state) {
             if (state is TeaAnalysisLoading) {
-              return const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                    ),
-                    SizedBox(height: 16),
-                    Text(
-                      'データを読み込み中...',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
+              return BeautifulLoadingIndicator(
+                message: LocalizationService.instance.translate('data_loading'),
               );
             }
 
             if (state is TeaAnalysisError) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.red[50],
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.red[200]!),
-                        ),
-                        child: const Icon(
-                          Icons.error_outline,
-                          size: 64,
-                          color: Colors.red,
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      Text(
-                        'エラーが発生しました',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[800],
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        state.message,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 24),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          context.read<TeaAnalysisCubit>().loadAllResults();
-                        },
-                        icon: const Icon(Icons.refresh),
-                        label: const Text('再試行'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 12,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              return BeautifulErrorMessage(
+                message: state.message,
+                onRetry: () {
+                  context.read<TeaAnalysisCubit>().loadAllResults();
+                },
               );
             }
 
