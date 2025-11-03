@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'src/web_storage.dart';
+import 'core/services/localization_service.dart';
 
 void main() {
   runApp(const EnhancedTeaGardenApp());
@@ -12,7 +13,7 @@ class EnhancedTeaGardenApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '茶園管理AI - 拡張版',
+      title: LocalizationService.instance.translate('enhanced_app_title'),
       theme: ThemeData(
         primarySwatch: Colors.green,
         useMaterial3: false,
@@ -79,7 +80,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     return Scaffold(
       backgroundColor: Colors.green[50],
       appBar: AppBar(
-        title: const Text('茶園管理AI - 拡張版'),
+        title:
+            Text(LocalizationService.instance.translate('enhanced_app_title')),
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
         elevation: 0,
@@ -91,12 +93,22 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
           onTap: (index) {
             // Tab selection handled by TabController
           },
-          tabs: const [
-            Tab(icon: Icon(Icons.dashboard), text: 'ダッシュボード'),
-            Tab(icon: Icon(Icons.camera_alt), text: '解析'),
-            Tab(icon: Icon(Icons.bar_chart), text: 'チャート'),
-            Tab(icon: Icon(Icons.download), text: 'エクスポート'),
-            Tab(icon: Icon(Icons.settings), text: '設定'),
+          tabs: [
+            Tab(
+                icon: const Icon(Icons.dashboard),
+                text: LocalizationService.instance.translate('dashboard')),
+            Tab(
+                icon: const Icon(Icons.camera_alt),
+                text: LocalizationService.instance.translate('analysis')),
+            Tab(
+                icon: const Icon(Icons.bar_chart),
+                text: LocalizationService.instance.translate('charts')),
+            Tab(
+                icon: const Icon(Icons.download),
+                text: LocalizationService.instance.translate('export')),
+            Tab(
+                icon: const Icon(Icons.settings),
+                text: LocalizationService.instance.translate('settings')),
           ],
         ),
       ),
@@ -188,22 +200,22 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
             colors: [Colors.green[400]!, Colors.green[600]!],
           ),
         ),
-        child: const Column(
+        child: Column(
           children: [
-            Icon(Icons.eco, size: 50, color: Colors.white),
-            SizedBox(height: 10),
+            const Icon(Icons.eco, size: 50, color: Colors.white),
+            const SizedBox(height: 10),
             Text(
-              '茶園管理AI - 拡張版',
-              style: TextStyle(
+              LocalizationService.instance.translate('enhanced_app_title'),
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Text(
-              'AI技術で茶葉の健康状態を分析・管理',
-              style: TextStyle(
+              LocalizationService.instance.translate('welcome_message'),
+              style: const TextStyle(
                 fontSize: 14,
                 color: Colors.white70,
               ),
@@ -239,12 +251,25 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     return Row(
       children: [
         Expanded(
-            child: _buildStatCard('総解析回数', '$_analysisCount', Icons.analytics)),
-        Expanded(child: _buildStatCard('健康率', '$healthRate%', Icons.favorite)),
-        Expanded(child: _buildStatCard('今日の解析', '$todayCount', Icons.today)),
+            child: _buildStatCard(
+                LocalizationService.instance.translate('total_analysis_count'),
+                '$_analysisCount',
+                Icons.analytics)),
         Expanded(
-            child:
-                _buildStatCard('平均信頼度', '$avgConfidence%', Icons.trending_up)),
+            child: _buildStatCard(
+                LocalizationService.instance.translate('health_rate'),
+                '$healthRate%',
+                Icons.favorite)),
+        Expanded(
+            child: _buildStatCard(
+                LocalizationService.instance.translate('today_analysis'),
+                '$todayCount',
+                Icons.today)),
+        Expanded(
+            child: _buildStatCard(
+                LocalizationService.instance.translate('avg_confidence'),
+                '$avgConfidence%',
+                Icons.trending_up)),
       ],
     );
   }
@@ -286,8 +311,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            const Text(
-              '茶葉解析',
+            Text(
+              LocalizationService.instance.translate('tea_analysis'),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -295,18 +320,19 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
             ),
             const SizedBox(height: 16),
             if (_isAnalyzing)
-              const Column(
+              Column(
                 children: [
-                  CircularProgressIndicator(color: Colors.green),
-                  SizedBox(height: 16),
-                  Text('AIが茶葉を解析中...'),
+                  const CircularProgressIndicator(color: Colors.green),
+                  const SizedBox(height: 16),
+                  Text(LocalizationService.instance.translate('ai_analyzing')),
                 ],
               )
             else
               ElevatedButton.icon(
                 onPressed: _startAnalysis,
                 icon: const Icon(Icons.camera_alt),
-                label: const Text('茶葉を撮影・解析'),
+                label:
+                    Text(LocalizationService.instance.translate('take_photo')),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   foregroundColor: Colors.white,
@@ -330,8 +356,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              '最近の解析結果',
+            Text(
+              LocalizationService.instance.translate('recent_results'),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -339,13 +365,14 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
             ),
             const SizedBox(height: 16),
             if (_results.isEmpty)
-              const Center(
+              Center(
                 child: Column(
                   children: [
-                    Icon(Icons.photo_camera_outlined,
+                    const Icon(Icons.photo_camera_outlined,
                         size: 50, color: Colors.grey),
-                    SizedBox(height: 10),
-                    Text('まだ解析結果がありません'),
+                    const SizedBox(height: 10),
+                    Text(LocalizationService.instance
+                        .translate('no_results_yet')),
                   ],
                 ),
               )
@@ -365,8 +392,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              '解析履歴',
+            Text(
+              LocalizationService.instance.translate('analysis_history'),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -374,13 +401,14 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
             ),
             const SizedBox(height: 16),
             if (_results.isEmpty)
-              const Center(
+              Center(
                 child: Column(
                   children: [
-                    Icon(Icons.photo_camera_outlined,
+                    const Icon(Icons.photo_camera_outlined,
                         size: 50, color: Colors.grey),
-                    SizedBox(height: 10),
-                    Text('まだ解析結果がありません'),
+                    const SizedBox(height: 10),
+                    Text(LocalizationService.instance
+                        .translate('no_results_yet')),
                   ],
                 ),
               )
@@ -401,8 +429,10 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         borderRadius: BorderRadius.circular(8),
         border: Border(
           left: BorderSide(
-            color:
-                result['healthStatus'] == '健康' ? Colors.green : Colors.orange,
+            color: result['healthStatus'] ==
+                    LocalizationService.instance.translate('healthy')
+                ? Colors.green
+                : Colors.orange,
             width: 4,
           ),
         ),
@@ -424,7 +454,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: result['healthStatus'] == '健康'
+                        color: result['healthStatus'] ==
+                                LocalizationService.instance
+                                    .translate('healthy')
                             ? Colors.green[100]
                             : Colors.orange[100],
                         borderRadius: BorderRadius.circular(12),
@@ -434,7 +466,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
-                          color: result['healthStatus'] == '健康'
+                          color: result['healthStatus'] ==
+                                  LocalizationService.instance
+                                      .translate('healthy')
                               ? Colors.green[700]
                               : Colors.orange[700],
                         ),
@@ -482,8 +516,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              '健康状態の推移',
+            Text(
+              LocalizationService.instance
+                  .translate('health_status_distribution'),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -508,8 +543,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              '成長段階の分布',
+            Text(
+              LocalizationService.instance
+                  .translate('growth_stage_distribution'),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -528,8 +564,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
 
   Widget _buildHealthChart() {
     if (_results.isEmpty) {
-      return const Center(
-        child: Text('データがありません'),
+      return Center(
+        child: Text(LocalizationService.instance.translate('no_data')),
       );
     }
 
@@ -542,8 +578,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
 
   Widget _buildGrowthChart() {
     if (_results.isEmpty) {
-      return const Center(
-        child: Text('データがありません'),
+      return Center(
+        child: Text(LocalizationService.instance.translate('no_data')),
       );
     }
 
@@ -567,15 +603,16 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'データエクスポート',
+            Text(
+              LocalizationService.instance.translate('export'),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 16),
-            const Text('解析結果を様々な形式でエクスポートできます'),
+            Text(LocalizationService.instance
+                .translate('export_data_description')),
             const SizedBox(height: 16),
             Wrap(
               spacing: 8,
@@ -584,7 +621,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                 ElevatedButton.icon(
                   onPressed: _exportToCSV,
                   icon: const Icon(Icons.table_chart),
-                  label: const Text('CSV'),
+                  label: Text(LocalizationService.instance.translate('csv')),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
                     foregroundColor: Colors.white,
@@ -593,7 +630,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                 ElevatedButton.icon(
                   onPressed: _exportToJSON,
                   icon: const Icon(Icons.code),
-                  label: const Text('JSON'),
+                  label: Text(LocalizationService.instance.translate('json')),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     foregroundColor: Colors.white,
@@ -602,7 +639,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                 ElevatedButton.icon(
                   onPressed: _exportToPDF,
                   icon: const Icon(Icons.picture_as_pdf),
-                  label: const Text('PDF'),
+                  label: Text(LocalizationService.instance.translate('pdf')),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     foregroundColor: Colors.white,
@@ -624,33 +661,34 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'アプリ設定',
+            Text(
+              LocalizationService.instance.translate('app_settings'),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 16),
-            const Text('解析結果の保存期間（日数）:'),
+            Text(LocalizationService.instance.translate('retention_period')),
             Slider(
               value: 30.0,
               min: 1,
               max: 365,
               divisions: 364,
-              label: '30日',
+              label: '30${LocalizationService.instance.translate('days')}',
               onChanged: (value) {
                 // 設定保存処理
               },
             ),
             const SizedBox(height: 16),
-            const Text('自動解析の間隔（分）:'),
+            Text(LocalizationService.instance
+                .translate('auto_analysis_interval')),
             Slider(
               value: 60.0,
               min: 5,
               max: 1440,
               divisions: 287,
-              label: '60分',
+              label: '60${LocalizationService.instance.translate('minutes')}',
               onChanged: (value) {
                 // 設定保存処理
               },
@@ -662,7 +700,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
               ),
-              child: const Text('設定を保存'),
+              child:
+                  Text(LocalizationService.instance.translate('save_settings')),
             ),
           ],
         ),
@@ -677,18 +716,21 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
 
     await Future.delayed(const Duration(seconds: 3));
 
+    final growthStages = [
+      LocalizationService.instance.translate('sprouting_period'),
+      LocalizationService.instance.translate('growth_period'),
+      LocalizationService.instance.translate('maturity_period'),
+      LocalizationService.instance.translate('harvest_period')
+    ];
     final result = {
-      'growthStage': [
-        '発芽期',
-        '成長期',
-        '成熟期',
-        '収穫期'
-      ][DateTime.now().millisecondsSinceEpoch % 4],
-      'healthStatus':
-          DateTime.now().millisecondsSinceEpoch % 10 < 2 ? '注意' : '健康',
+      'growthStage': growthStages[DateTime.now().millisecondsSinceEpoch % 4],
+      'healthStatus': DateTime.now().millisecondsSinceEpoch % 10 < 2
+          ? LocalizationService.instance.translate('attention')
+          : LocalizationService.instance.translate('healthy'),
       'confidence': (75 + (DateTime.now().millisecondsSinceEpoch % 25)) / 100.0,
       'timestamp': DateTime.now().toString().substring(0, 19),
-      'comment': '新しい解析が完了しました。茶葉の状態を確認しました。',
+      'comment':
+          LocalizationService.instance.translate('new_analysis_completed'),
     };
 
     if (!mounted) {
@@ -704,8 +746,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     _saveData();
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('解析が完了しました！'),
+      SnackBar(
+        content:
+            Text(LocalizationService.instance.translate('analysis_complete')),
         backgroundColor: Colors.green,
       ),
     );
@@ -716,12 +759,13 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('解析結果を編集'),
-        content: const Text('編集機能は準備中です'),
+        title: Text(LocalizationService.instance.translate('edit_result')),
+        content: Text(
+            LocalizationService.instance.translate('edit_feature_coming_soon')),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('閉じる'),
+            child: Text(LocalizationService.instance.translate('close')),
           ),
         ],
       ),
@@ -732,12 +776,14 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('削除確認'),
-        content: const Text('この解析結果を削除しますか？'),
+        title:
+            Text(LocalizationService.instance.translate('delete_confirmation')),
+        content: Text(LocalizationService.instance
+            .translate('delete_result_confirmation')),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('キャンセル'),
+            child: Text(LocalizationService.instance.translate('cancel')),
           ),
           TextButton(
             onPressed: () {
@@ -747,13 +793,14 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
               _saveData();
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('解析結果を削除しました'),
+                SnackBar(
+                  content: Text(LocalizationService.instance
+                      .translate('analysis_result_deleted')),
                   backgroundColor: Colors.red,
                 ),
               );
             },
-            child: const Text('削除'),
+            child: Text(LocalizationService.instance.translate('delete')),
           ),
         ],
       ),
@@ -763,8 +810,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
   void _exportToCSV() {
     if (_results.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('エクスポートするデータがありません'),
+        SnackBar(
+          content:
+              Text(LocalizationService.instance.translate('no_export_data')),
           backgroundColor: Colors.red,
         ),
       );
@@ -772,15 +820,15 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     }
 
     final csvContent = [
-      '日時,成長段階,健康状態,信頼度,コメント',
+      '${LocalizationService.instance.translate('date_time')},${LocalizationService.instance.translate('growth_stage')},${LocalizationService.instance.translate('health_status')},${LocalizationService.instance.translate('confidence')},${LocalizationService.instance.translate('comment')}',
       ..._results.map((r) =>
           '${r['timestamp']},${r['growthStage']},${r['healthStatus']},${((r['confidence'] as double) * 100).round()}%,${r['comment']}')
     ].join('\n');
 
     _downloadFile(csvContent, 'tea_analysis_results.csv', 'text/csv');
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('CSVファイルをエクスポートしました'),
+      SnackBar(
+        content: Text(LocalizationService.instance.translate('csv_exported')),
         backgroundColor: Colors.green,
       ),
     );
@@ -789,8 +837,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
   void _exportToJSON() {
     if (_results.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('エクスポートするデータがありません'),
+        SnackBar(
+          content:
+              Text(LocalizationService.instance.translate('no_export_data')),
           backgroundColor: Colors.red,
         ),
       );
@@ -800,8 +849,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     final jsonContent = jsonEncode(_results);
     _downloadFile(jsonContent, 'tea_analysis_results.json', 'application/json');
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('JSONファイルをエクスポートしました'),
+      SnackBar(
+        content: Text(LocalizationService.instance.translate('json_exported')),
         backgroundColor: Colors.green,
       ),
     );
@@ -809,8 +858,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
 
   void _exportToPDF() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('PDFレポート機能は準備中です'),
+      SnackBar(
+        content:
+            Text(LocalizationService.instance.translate('pdf_coming_soon')),
         backgroundColor: Colors.orange,
       ),
     );
@@ -818,8 +868,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
 
   void _saveSettings() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('設定を保存しました'),
+      SnackBar(
+        content: Text(LocalizationService.instance.translate('settings_saved')),
         backgroundColor: Colors.green,
       ),
     );
@@ -849,8 +899,9 @@ class HealthChartPainter extends CustomPainter {
     final stepX = size.width / (data.length - 1);
 
     for (int i = 0; i < data.length; i++) {
-      final y = size.height -
-          (data[i]['healthStatus'] == '健康' ? 20.0 : size.height - 20);
+      final isHealthy = data[i]['healthStatus'] ==
+          LocalizationService.instance.translate('healthy');
+      final y = size.height - (isHealthy ? 20.0 : size.height - 20);
       final x = i * stepX;
 
       if (i == 0) {
