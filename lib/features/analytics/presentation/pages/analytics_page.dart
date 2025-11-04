@@ -36,7 +36,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
         actions: [
           PopupMenuButton<String>(
             icon: const Icon(Icons.timeline, color: Colors.white),
-            tooltip: '期間選択',
+            tooltip: t('period_selection'),
             onSelected: (String period) {
               setState(() {
                 _selectedPeriod = period;
@@ -44,17 +44,17 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
             },
             itemBuilder: (BuildContext context) {
               return [
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'week',
-                  child: Text('過去1週間'),
+                  child: Text(t('past_week')),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'month',
-                  child: Text('過去1ヶ月'),
+                  child: Text(t('past_month')),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'year',
-                  child: Text('過去1年'),
+                  child: Text(t('past_year')),
                 ),
               ];
             },
@@ -123,7 +123,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
               );
             }
 
-            return const Center(child: Text('Unknown state'));
+            return Center(child: Text(t('unknown_state')));
           },
         ),
       ),
@@ -159,7 +159,8 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
 
   Widget _buildStatsSummary(List<TeaAnalysisResult> results) {
     final totalCount = results.length;
-    final healthyCount = results.where((r) => r.healthStatus == '健康').length;
+    final healthyCount =
+        results.where((r) => r.healthStatus == t('healthy')).length;
     final avgConfidence = results.isNotEmpty
         ? results.map((r) => r.confidence).reduce((a, b) => a + b) /
             results.length
@@ -182,7 +183,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '統計サマリー',
+            t('stats_summary'),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -194,7 +195,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
             children: [
               Expanded(
                 child: _buildStatCard(
-                  '総解析数',
+                  t('total_analysis_count'),
                   totalCount.toString(),
                   Icons.analytics_outlined,
                   Colors.blue,
@@ -203,7 +204,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
               const SizedBox(width: 12),
               Expanded(
                 child: _buildStatCard(
-                  '健康率',
+                  t('health_rate'),
                   totalCount > 0
                       ? '${((healthyCount / totalCount) * 100).toInt()}%'
                       : '0%',
@@ -214,7 +215,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
               const SizedBox(width: 12),
               Expanded(
                 child: _buildStatCard(
-                  '平均信頼度',
+                  t('avg_confidence'),
                   '${(avgConfidence * 100).toInt()}%',
                   Icons.trending_up_outlined,
                   Colors.orange,
@@ -262,13 +263,18 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
   }
 
   Widget _buildGrowthStageChart(List<TeaAnalysisResult> results) {
-    final growthStages = ['芽', '若葉', '成葉', '老葉'];
+    final growthStages = [
+      t('bud'),
+      t('young_leaf'),
+      t('mature_leaf'),
+      t('old_leaf')
+    ];
     final stageCounts = growthStages.map((stage) {
       return results.where((r) => r.growthStage == stage).length;
     }).toList();
 
     return _buildChartContainer(
-      '成長状態分布',
+      t('growth_stage_distribution'),
       PieChart(
         PieChartData(
           sections: growthStages.asMap().entries.map((entry) {
@@ -302,13 +308,18 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
   }
 
   Widget _buildHealthStatusChart(List<TeaAnalysisResult> results) {
-    final healthStatuses = ['健康', '軽微な損傷', '損傷', '病気'];
+    final healthStatuses = [
+      t('healthy'),
+      t('minor_damage'),
+      t('damaged'),
+      t('diseased')
+    ];
     final statusCounts = healthStatuses.map((status) {
       return results.where((r) => r.healthStatus == status).length;
     }).toList();
 
     return _buildChartContainer(
-      '健康状態分布',
+      t('health_status_distribution'),
       BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceAround,
@@ -380,7 +391,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
     }).toList();
 
     return _buildChartContainer(
-      '時系列解析数',
+      t('time_series_analysis_count'),
       LineChart(
         LineChartData(
           gridData: const FlGridData(show: true),
@@ -437,7 +448,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
     }).toList();
 
     return _buildChartContainer(
-      '信頼度分布',
+      t('confidence_distribution'),
       BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceAround,
@@ -550,13 +561,13 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
   String _getPeriodText() {
     switch (_selectedPeriod) {
       case 'week':
-        return '過去1週間';
+        return t('past_week');
       case 'month':
-        return '過去1ヶ月';
+        return t('past_month');
       case 'year':
-        return '過去1年';
+        return t('past_year');
       default:
-        return '過去1週間';
+        return t('past_week');
     }
   }
 }

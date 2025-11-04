@@ -31,9 +31,9 @@ class _LogListPageState extends State<LogListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          '日誌一覧',
-          style: TextStyle(
+        title: Text(
+          t('logs_list'),
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
@@ -46,14 +46,14 @@ class _LogListPageState extends State<LogListPage> {
             onPressed: () {
               _showSearchDialog();
             },
-            tooltip: '検索',
+            tooltip: t('search'),
           ),
           IconButton(
             icon: const Icon(Icons.filter_list, color: Colors.white),
             onPressed: () {
               _showFilterDialog();
             },
-            tooltip: 'フィルター',
+            tooltip: t('filter'),
           ),
         ],
       ),
@@ -93,11 +93,11 @@ class _LogListPageState extends State<LogListPage> {
                 if (_selectedFilter != 'all') {
                   switch (_selectedFilter) {
                     case 'growth_stage':
-                      filterMatch = result.growthStage == '芽' ||
-                          result.growthStage == '若葉';
+                      filterMatch = result.growthStage == t('bud') ||
+                          result.growthStage == t('young_leaf');
                       break;
                     case 'health_status':
-                      filterMatch = result.healthStatus == '健康';
+                      filterMatch = result.healthStatus == t('healthy');
                       break;
                     case 'recent':
                       final DateTime now = DateTime.now();
@@ -133,8 +133,8 @@ class _LogListPageState extends State<LogListPage> {
                         const SizedBox(height: 16),
                         Text(
                           _searchQuery.isNotEmpty || _selectedFilter != 'all'
-                              ? '条件に一致する記録がありません'
-                              : 'まだ記録がありません',
+                              ? t('no_matching_records')
+                              : t('no_records_yet'),
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.grey[600],
@@ -144,8 +144,8 @@ class _LogListPageState extends State<LogListPage> {
                         const SizedBox(height: 8),
                         Text(
                           _searchQuery.isNotEmpty || _selectedFilter != 'all'
-                              ? '検索条件を変更してみてください'
-                              : '写真を撮って茶葉を解析してみましょう',
+                              ? t('change_search_conditions')
+                              : t('take_photo_to_analyze'),
                           style: const TextStyle(
                             fontSize: 14,
                             color: Colors.grey,
@@ -165,7 +165,7 @@ class _LogListPageState extends State<LogListPage> {
                               backgroundColor: Colors.green,
                               foregroundColor: Colors.white,
                             ),
-                            child: const Text('フィルターをリセット'),
+                            child: Text(t('reset_filter')),
                           ),
                         ],
                       ],
@@ -195,19 +195,19 @@ class _LogListPageState extends State<LogListPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         _buildStatItem(
-                          '総記録数',
+                          t('total_records'),
                           state.results.length.toString(),
                           Icons.analytics_outlined,
                           Colors.blue,
                         ),
                         _buildStatItem(
-                          '表示中',
+                          t('displaying'),
                           filteredResults.length.toString(),
                           Icons.visibility_outlined,
                           Colors.green,
                         ),
                         _buildStatItem(
-                          '今週',
+                          t('this_week'),
                           state.results
                               .where((r) {
                                 final DateTime now = DateTime.now();
@@ -281,7 +281,7 @@ class _LogListPageState extends State<LogListPage> {
               );
             }
 
-            return const Center(child: Text('Unknown state'));
+            return Center(child: Text(t('unknown_state')));
           },
         ),
       ),
@@ -318,19 +318,19 @@ class _LogListPageState extends State<LogListPage> {
     if (_selectedFilter != 'all') {
       switch (_selectedFilter) {
         case 'growth_stage':
-          filterText = '成長期（芽・若葉）';
+          filterText = t('growth_stage_filter');
           break;
         case 'health_status':
-          filterText = '健康な茶葉';
+          filterText = t('healthy_tea_filter');
           break;
         case 'recent':
-          filterText = '最近1週間';
+          filterText = t('recent_week');
           break;
       }
     }
     if (_searchQuery.isNotEmpty) {
       filterText += filterText.isNotEmpty ? ' + ' : '';
-      filterText += '"$_searchQuery"で検索';
+      filterText += t('search_query', params: {'query': _searchQuery});
     }
     return filterText;
   }
@@ -339,11 +339,11 @@ class _LogListPageState extends State<LogListPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('検索'),
+        title: Text(t('search')),
         content: TextField(
-          decoration: const InputDecoration(
-            hintText: '成長状態、健康状態、コメントで検索',
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            hintText: t('search_hint'),
+            border: const OutlineInputBorder(),
           ),
           onChanged: (value) {
             setState(() {
@@ -354,11 +354,11 @@ class _LogListPageState extends State<LogListPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('キャンセル'),
+            child: Text(t('cancel')),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('検索'),
+            child: Text(t('search')),
           ),
         ],
       ),
@@ -369,12 +369,12 @@ class _LogListPageState extends State<LogListPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('フィルター'),
+        title: Text(t('filter')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             RadioListTile<String>(
-              title: const Text('すべて'),
+              title: Text(t('all')),
               value: 'all',
               groupValue: _selectedFilter,
               onChanged: (value) {
@@ -385,7 +385,7 @@ class _LogListPageState extends State<LogListPage> {
               },
             ),
             RadioListTile<String>(
-              title: const Text('成長期（芽・若葉）'),
+              title: Text(t('growth_stage_filter')),
               value: 'growth_stage',
               groupValue: _selectedFilter,
               onChanged: (value) {
@@ -396,7 +396,7 @@ class _LogListPageState extends State<LogListPage> {
               },
             ),
             RadioListTile<String>(
-              title: const Text('健康な茶葉'),
+              title: Text(t('healthy_tea_filter')),
               value: 'health_status',
               groupValue: _selectedFilter,
               onChanged: (value) {
@@ -407,7 +407,7 @@ class _LogListPageState extends State<LogListPage> {
               },
             ),
             RadioListTile<String>(
-              title: const Text('最近1週間'),
+              title: Text(t('recent_week')),
               value: 'recent',
               groupValue: _selectedFilter,
               onChanged: (value) {
