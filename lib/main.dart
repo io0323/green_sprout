@@ -40,17 +40,9 @@ class TeaGardenApp extends StatefulWidget {
 }
 
 class _TeaGardenAppState extends State<TeaGardenApp> {
-  String _currentLanguage = 'ja';
-
-  @override
-  void initState() {
-    super.initState();
-    _currentLanguage = LocalizationService.instance.currentLanguage;
-  }
-
   void _updateLanguage() {
     setState(() {
-      _currentLanguage = LocalizationService.instance.currentLanguage;
+      // 言語変更時にアプリを再構築
     });
   }
 
