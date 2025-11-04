@@ -4,7 +4,9 @@ import '../../core/services/localization_service.dart';
 /// 言語設定ウィジェット
 /// アプリケーションの言語を切り替えるためのウィジェット
 class LanguageSelector extends StatefulWidget {
-  const LanguageSelector({super.key});
+  final VoidCallback? onLanguageChanged;
+
+  const LanguageSelector({super.key, this.onLanguageChanged});
 
   @override
   State<LanguageSelector> createState() => _LanguageSelectorState();
@@ -21,6 +23,9 @@ class _LanguageSelectorState extends State<LanguageSelector> {
 
   @override
   Widget build(BuildContext context) {
+    // 現在の言語を最新の状態に更新
+    _selectedLanguage = LocalizationService.instance.currentLanguage;
+
     return PopupMenuButton<String>(
       icon: const Icon(Icons.language, color: Colors.white),
       tooltip: LocalizationService.instance.translate('language_settings'),
@@ -29,8 +34,8 @@ class _LanguageSelectorState extends State<LanguageSelector> {
           _selectedLanguage = languageCode;
         });
         LocalizationService.instance.setLanguage(languageCode);
-        // アプリ全体を再構築
-        Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+        // 親ウィジェットに変更を通知
+        widget.onLanguageChanged?.call();
       },
       itemBuilder: (BuildContext context) {
         return LocalizationService.instance.availableLanguages

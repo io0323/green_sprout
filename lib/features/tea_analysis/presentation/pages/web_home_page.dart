@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../../../core/services/localization_service.dart';
+import '../../../../core/widgets/language_selector.dart';
 
 /// Web用の簡素化されたホームページ
 /// 依存性注入を使わずに直接実装
 class WebHomePage extends StatefulWidget {
-  const WebHomePage({super.key});
+  final VoidCallback? onLanguageChanged;
+
+  const WebHomePage({super.key, this.onLanguageChanged});
 
   @override
   State<WebHomePage> createState() => _WebHomePageState();
@@ -56,6 +59,7 @@ class _WebHomePageState extends State<WebHomePage> {
         backgroundColor: Colors.green[700],
         elevation: 0,
         actions: [
+          LanguageSelector(onLanguageChanged: widget.onLanguageChanged),
           IconButton(
             icon: const Icon(Icons.history, color: Colors.white),
             onPressed: () {

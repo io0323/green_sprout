@@ -2,13 +2,25 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'src/web_storage.dart';
 import 'core/services/localization_service.dart';
+import 'core/widgets/language_selector.dart';
 
 void main() {
   runApp(const EnhancedTeaGardenApp());
 }
 
-class EnhancedTeaGardenApp extends StatelessWidget {
+class EnhancedTeaGardenApp extends StatefulWidget {
   const EnhancedTeaGardenApp({super.key});
+
+  @override
+  State<EnhancedTeaGardenApp> createState() => _EnhancedTeaGardenAppState();
+}
+
+class _EnhancedTeaGardenAppState extends State<EnhancedTeaGardenApp> {
+  void _updateLanguage() {
+    setState(() {
+      // 言語変更時にアプリを再構築
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +30,16 @@ class EnhancedTeaGardenApp extends StatelessWidget {
         primarySwatch: Colors.green,
         useMaterial3: false,
       ),
-      home: const EnhancedTeaGardenHomePage(),
+      home: EnhancedTeaGardenHomePage(onLanguageChanged: _updateLanguage),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
 class EnhancedTeaGardenHomePage extends StatefulWidget {
-  const EnhancedTeaGardenHomePage({super.key});
+  final VoidCallback? onLanguageChanged;
+
+  const EnhancedTeaGardenHomePage({super.key, this.onLanguageChanged});
 
   @override
   State<EnhancedTeaGardenHomePage> createState() =>
@@ -85,6 +99,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
         elevation: 0,
+        actions: [
+          LanguageSelector(onLanguageChanged: widget.onLanguageChanged),
+        ],
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: Colors.white,
@@ -182,6 +199,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
+          _buildLanguageSettingsCard(),
+          const SizedBox(height: 16),
           _buildSettingsCard(),
         ],
       ),
@@ -646,6 +665,54 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                   ),
                 ),
               ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLanguageSettingsCard() {
+    return Card(
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              LocalizationService.instance.translate('language_settings'),
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            ...LocalizationService.instance.availableLanguages.map(
+              (String languageCode) {
+                return RadioListTile<String>(
+                  title: Text(LocalizationService.instance
+                      .getLanguageName(languageCode)),
+                  value: languageCode,
+                  groupValue: LocalizationService.instance.currentLanguage,
+                  onChanged: (String? value) {
+                    if (value != null) {
+                      LocalizationService.instance.setLanguage(value);
+                      setState(() {});
+                      widget.onLanguageChanged?.call();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            LocalizationService.instance
+                                .translate('settings_saved'),
+                          ),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    }
+                  },
+                );
+              },
             ),
           ],
         ),

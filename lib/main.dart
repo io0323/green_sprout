@@ -32,8 +32,19 @@ Future<void> _initializeMobileApp() async {
   await di.init();
 }
 
-class TeaGardenApp extends StatelessWidget {
+class TeaGardenApp extends StatefulWidget {
   const TeaGardenApp({super.key});
+
+  @override
+  State<TeaGardenApp> createState() => _TeaGardenAppState();
+}
+
+class _TeaGardenAppState extends State<TeaGardenApp> {
+  void _updateLanguage() {
+    setState(() {
+      // 言語変更時にアプリを再構築
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +62,9 @@ class TeaGardenApp extends StatelessWidget {
         Locale('ja', 'JP'),
         Locale('en', 'US'),
       ],
-      home: kIsWeb ? const WebHomePage() : const WebHomePage(), // 現在はWeb用のみ
+      home: kIsWeb
+          ? WebHomePage(onLanguageChanged: _updateLanguage)
+          : WebHomePage(onLanguageChanged: _updateLanguage),
     );
   }
 }

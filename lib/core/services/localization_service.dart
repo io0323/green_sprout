@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import '../../src/web_storage.dart';
 
 /// 国際化サービスクラス
 /// アプリケーションの多言語対応を管理
@@ -13,6 +14,7 @@ class LocalizationService {
 
   Map<String, dynamic> _translations = {};
   String _currentLanguage = 'ja';
+  static const String _languageStorageKey = 'tea_garden_language';
 
   /// 翻訳データを読み込み
   Future<void> loadTranslations() async {
@@ -20,6 +22,12 @@ class LocalizationService {
       final String jsonString =
           await rootBundle.loadString('assets/translations/translations.json');
       _translations = json.decode(jsonString);
+
+      // 保存された言語設定を読み込み
+      final savedLanguage = getLocalStorage(_languageStorageKey);
+      if (savedLanguage != null && _translations.containsKey(savedLanguage)) {
+        _currentLanguage = savedLanguage;
+      }
     } catch (e) {
       // フォールバック: デフォルトの日本語翻訳
       _translations = {
@@ -147,7 +155,11 @@ class LocalizationService {
 
   /// 言語を設定
   void setLanguage(String languageCode) {
-    _currentLanguage = languageCode;
+    if (_translations.containsKey(languageCode)) {
+      _currentLanguage = languageCode;
+      // 言語設定をローカルストレージに保存
+      setLocalStorage(_languageStorageKey, languageCode);
+    }
   }
 
   /// 現在の言語を取得
