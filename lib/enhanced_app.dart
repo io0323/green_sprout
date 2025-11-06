@@ -822,20 +822,173 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
   }
 
   void _editResult(Map<String, dynamic> result) {
+    // 編集用のコントローラーを初期化
+    final commentController =
+        TextEditingController(text: result['comment'] ?? '');
+
+    // 成長状態の選択肢
+    final growthStages = [
+      LocalizationService.instance.translate('sprouting_period'),
+      LocalizationService.instance.translate('growth_period'),
+      LocalizationService.instance.translate('maturity_period'),
+      LocalizationService.instance.translate('harvest_period'),
+    ];
+
+    // 健康状態の選択肢
+    final healthStatuses = [
+      LocalizationService.instance.translate('healthy'),
+      LocalizationService.instance.translate('attention'),
+    ];
+
     // 編集ダイアログを表示
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(LocalizationService.instance.translate('edit_result')),
-        content: Text(
-            LocalizationService.instance.translate('edit_feature_coming_soon')),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(LocalizationService.instance.translate('close')),
-          ),
-        ],
-      ),
+      builder: (context) {
+        // StatefulBuilder内で状態を管理
+        String selectedGrowthStage = result['growthStage'] ?? '';
+        String selectedHealthStatus = result['healthStatus'] ?? '';
+
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title:
+                  Text(LocalizationService.instance.translate('edit_result')),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 成長状態の選択
+                    Text(
+                      LocalizationService.instance.translate('growth_stage'),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    DropdownButtonFormField<String>(
+                      value: selectedGrowthStage.isEmpty
+                          ? null
+                          : selectedGrowthStage,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      ),
+                      items: growthStages.map((String stage) {
+                        return DropdownMenuItem<String>(
+                          value: stage,
+                          child: Text(stage),
+                        );
+                      }).toList(),
+                      onChanged: (String? value) {
+                        if (value != null) {
+                          setDialogState(() {
+                            selectedGrowthStage = value;
+                          });
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    // 健康状態の選択
+                    Text(
+                      LocalizationService.instance.translate('health_status'),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    DropdownButtonFormField<String>(
+                      value: selectedHealthStatus.isEmpty
+                          ? null
+                          : selectedHealthStatus,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      ),
+                      items: healthStatuses.map((String status) {
+                        return DropdownMenuItem<String>(
+                          value: status,
+                          child: Text(status),
+                        );
+                      }).toList(),
+                      onChanged: (String? value) {
+                        if (value != null) {
+                          setDialogState(() {
+                            selectedHealthStatus = value;
+                          });
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    // コメント入力
+                    Text(
+                      LocalizationService.instance.translate('comment'),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: commentController,
+                      maxLines: 3,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        hintText:
+                            LocalizationService.instance.translate('comment'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    commentController.dispose();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(LocalizationService.instance.translate('cancel')),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    // 結果を更新
+                    final index = _results.indexOf(result);
+                    if (index != -1) {
+                      setState(() {
+                        _results[index] = {
+                          ...result,
+                          'growthStage': selectedGrowthStage,
+                          'healthStatus': selectedHealthStatus,
+                          'comment': commentController.text,
+                        };
+                      });
+                      _saveData();
+                      commentController.dispose();
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(LocalizationService.instance
+                              .translate('settings_saved')),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: Text(LocalizationService.instance.translate('save')),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 
