@@ -53,6 +53,10 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
   final List<Map<String, dynamic>> _results = [];
   late TabController _tabController;
 
+  // 設定値
+  double _retentionPeriod = 30.0; // データ保持期間（日数）
+  double _autoAnalysisInterval = 60.0; // 自動解析間隔（分）
+
   @override
   void initState() {
     super.initState();
@@ -76,6 +80,22 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         _results.clear();
         _results.addAll(
             (data['analysisResults'] as List).cast<Map<String, dynamic>>());
+      });
+    }
+
+    // 設定値を読み込み
+    _loadSettings();
+  }
+
+  /// 設定値を読み込み
+  void _loadSettings() {
+    final settingsData = getLocalStorage('teaGardenSettings');
+    if (settingsData != null) {
+      final settings = jsonDecode(settingsData);
+      setState(() {
+        _retentionPeriod = (settings['retentionPeriod'] ?? 30.0).toDouble();
+        _autoAnalysisInterval =
+            (settings['autoAnalysisInterval'] ?? 60.0).toDouble();
       });
     }
   }
@@ -738,27 +758,47 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
             const SizedBox(height: 16),
             Text(LocalizationService.instance.translate('retention_period')),
             Slider(
-              value: 30.0,
+              value: _retentionPeriod,
               min: 1,
               max: 365,
               divisions: 364,
-              label: '30${LocalizationService.instance.translate('days')}',
+              label:
+                  '${_retentionPeriod.toInt()}${LocalizationService.instance.translate('days')}',
               onChanged: (value) {
-                // 設定保存処理
+                setState(() {
+                  _retentionPeriod = value;
+                });
               },
+            ),
+            Text(
+              '${_retentionPeriod.toInt()}${LocalizationService.instance.translate('days')}',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[700],
+              ),
             ),
             const SizedBox(height: 16),
             Text(LocalizationService.instance
                 .translate('auto_analysis_interval')),
             Slider(
-              value: 60.0,
+              value: _autoAnalysisInterval,
               min: 5,
               max: 1440,
               divisions: 287,
-              label: '60${LocalizationService.instance.translate('minutes')}',
+              label:
+                  '${_autoAnalysisInterval.toInt()}${LocalizationService.instance.translate('minutes')}',
               onChanged: (value) {
-                // 設定保存処理
+                setState(() {
+                  _autoAnalysisInterval = value;
+                });
               },
+            ),
+            Text(
+              '${_autoAnalysisInterval.toInt()}${LocalizationService.instance.translate('minutes')}',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[700],
+              ),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
@@ -1273,12 +1313,45 @@ ${_results.map((r) {
   }
 
   void _saveSettings() {
+    // 設定値をローカルストレージに保存
+    final settings = {
+      'retentionPeriod': _retentionPeriod,
+      'autoAnalysisInterval': _autoAnalysisInterval,
+    };
+    setLocalStorage('teaGardenSettings', jsonEncode(settings));
+
+    // データ保持期間に基づいて古いデータを削除
+    _cleanupOldData();
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(LocalizationService.instance.translate('settings_saved')),
         backgroundColor: Colors.green,
       ),
     );
+  }
+
+  /// データ保持期間に基づいて古いデータを削除
+  void _cleanupOldData() {
+    final cutoffDate = DateTime.now().subtract(
+      Duration(days: _retentionPeriod.toInt()),
+    );
+
+    setState(() {
+      _results.removeWhere((result) {
+        final timestampStr = result['timestamp'] as String?;
+        if (timestampStr == null) return false;
+
+        try {
+          final timestamp = DateTime.parse(timestampStr);
+          return timestamp.isBefore(cutoffDate);
+        } catch (e) {
+          return false;
+        }
+      });
+    });
+
+    _saveData();
   }
 
   void _downloadFile(String content, String filename, String mimeType) {
