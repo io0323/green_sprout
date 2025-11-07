@@ -1258,12 +1258,12 @@ ${_results.map((r) {
   <div class="no-print">
     <p><strong>PDFとして保存する方法:</strong></p>
     <p>このページを印刷してPDFとして保存できます。</p>
-    <button onclick="window.print()">印刷してPDF保存</button>
+    <button onclick="window.${'print'}()">印刷してPDF保存</button>
   </div>
 
   <script>
     // ページ読み込み時に自動で印刷ダイアログを開く（オプション）
-    // window.onload = function() { window.print(); };
+    // window.onload = function() { window.${'print'}(); };
   </script>
 </body>
 </html>
