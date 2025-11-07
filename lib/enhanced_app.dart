@@ -1077,13 +1077,199 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
   }
 
   void _exportToPDF() {
+    if (_results.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text(LocalizationService.instance.translate('no_export_data')),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // HTMLテーブルを生成
+    final htmlContent = _generatePDFHTML();
+    _downloadFile(htmlContent, 'tea_analysis_report.html', 'text/html');
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content:
-            Text(LocalizationService.instance.translate('pdf_coming_soon')),
-        backgroundColor: Colors.orange,
+        content: Text(
+            '${LocalizationService.instance.translate('pdf')}レポートを生成しました。ブラウザで印刷してPDFとして保存できます。'),
+        backgroundColor: Colors.green,
+        duration: const Duration(seconds: 4),
       ),
     );
+  }
+
+  /// PDF用のHTMLテーブルを生成
+  String _generatePDFHTML() {
+    final appTitle =
+        LocalizationService.instance.translate('enhanced_app_title');
+    final dateTimeLabel = LocalizationService.instance.translate('date_time');
+    final growthStageLabel =
+        LocalizationService.instance.translate('growth_stage');
+    final healthStatusLabel =
+        LocalizationService.instance.translate('health_status');
+    final confidenceLabel =
+        LocalizationService.instance.translate('confidence');
+    final commentLabel = LocalizationService.instance.translate('comment');
+    final totalRecordsLabel =
+        LocalizationService.instance.translate('total_records');
+    final healthyStatus = LocalizationService.instance.translate('healthy');
+    final attentionStatus = LocalizationService.instance.translate('attention');
+
+    final now = DateTime.now();
+    final dateStr =
+        '${now.year}年${now.month}月${now.day}日 ${now.hour}:${now.minute.toString().padLeft(2, '0')}';
+
+    final healthyCount =
+        _results.where((r) => r['healthStatus'] == healthyStatus).length;
+    final attentionCount =
+        _results.where((r) => r['healthStatus'] == attentionStatus).length;
+
+    final html = '''
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>茶園管理AI - 解析結果レポート</title>
+  <style>
+    @media print {
+      body { margin: 0; }
+      .no-print { display: none; }
+    }
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      padding: 20px;
+      color: #333;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      border-bottom: 3px solid #4CAF50;
+      padding-bottom: 20px;
+    }
+    .header h1 {
+      color: #4CAF50;
+      margin: 0;
+      font-size: 28px;
+    }
+    .header p {
+      color: #666;
+      margin: 5px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    th {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px;
+      text-align: left;
+      font-weight: bold;
+    }
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+    .summary {
+      margin-top: 30px;
+      padding: 15px;
+      background-color: #f0f8f0;
+      border-left: 4px solid #4CAF50;
+    }
+    .summary h2 {
+      color: #4CAF50;
+      margin-top: 0;
+    }
+    .no-print {
+      text-align: center;
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 5px;
+    }
+    .no-print button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .no-print button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>$appTitle</h1>
+    <p>解析結果レポート</p>
+    <p>生成日時: $dateStr</p>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>$dateTimeLabel</th>
+        <th>$growthStageLabel</th>
+        <th>$healthStatusLabel</th>
+        <th>$confidenceLabel</th>
+        <th>$commentLabel</th>
+      </tr>
+    </thead>
+    <tbody>
+${_results.map((r) {
+      final timestamp = r['timestamp'] ?? '';
+      final growthStage = r['growthStage'] ?? '';
+      final healthStatus = r['healthStatus'] ?? '';
+      final confidence = ((r['confidence'] as double?) ?? 0.0) * 100;
+      final comment = (r['comment'] ?? '')
+          .toString()
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;');
+      return '      <tr>\n        <td>$timestamp</td>\n        <td>$growthStage</td>\n        <td>$healthStatus</td>\n        <td>${confidence.toStringAsFixed(1)}%</td>\n        <td>$comment</td>\n      </tr>';
+    }).join('\n')}
+    </tbody>
+  </table>
+
+  <div class="summary">
+    <h2>サマリー</h2>
+    <p><strong>$totalRecordsLabel:</strong> ${_results.length}件</p>
+    <p><strong>健康な茶葉:</strong> $healthyCount件</p>
+    <p><strong>注意が必要な茶葉:</strong> $attentionCount件</p>
+  </div>
+
+  <div class="no-print">
+    <p><strong>PDFとして保存する方法:</strong></p>
+    <p>このページを印刷してPDFとして保存できます。</p>
+    <button onclick="window.${'print'}()">印刷してPDF保存</button>
+  </div>
+
+  <script>
+    // ページ読み込み時に自動で印刷ダイアログを開く（オプション）
+    // window.onload = function() { window.${'print'}(); };
+  </script>
+</body>
+</html>
+''';
+
+    return html;
   }
 
   void _saveSettings() {
