@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:fl_chart/fl_chart.dart';
 import 'src/web_storage.dart';
 import 'core/services/localization_service.dart';
 import 'core/widgets/language_selector.dart';
@@ -568,6 +569,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
               height: 200,
               child: _buildHealthChart(),
             ),
+            const SizedBox(height: 16),
+            _buildHealthChartLegend(),
           ],
         ),
       ),
@@ -595,6 +598,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
               height: 200,
               child: _buildGrowthChart(),
             ),
+            const SizedBox(height: 16),
+            _buildGrowthChartLegend(),
           ],
         ),
       ),
@@ -608,10 +613,33 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
       );
     }
 
-    final last7Days = _results.take(7).toList().reversed.toList();
-    return CustomPaint(
-      painter: HealthChartPainter(last7Days),
-      size: const Size(double.infinity, 200),
+    final healthyStatus = LocalizationService.instance.translate('healthy');
+    final attentionStatus = LocalizationService.instance.translate('attention');
+
+    final healthyCount =
+        _results.where((r) => r['healthStatus'] == healthyStatus).length;
+    final attentionCount =
+        _results.where((r) => r['healthStatus'] == attentionStatus).length;
+
+    return PieChart(
+      PieChartData(
+        sections: [
+          PieChartSectionData(
+            value: healthyCount.toDouble(),
+            title: '$healthyCount',
+            color: Colors.green,
+            radius: 80,
+          ),
+          PieChartSectionData(
+            value: attentionCount.toDouble(),
+            title: '$attentionCount',
+            color: Colors.orange,
+            radius: 80,
+          ),
+        ],
+        sectionsSpace: 2,
+        centerSpaceRadius: 40,
+      ),
     );
   }
 
@@ -628,9 +656,99 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
       stageCounts[stage] = (stageCounts[stage] ?? 0) + 1;
     }
 
-    return CustomPaint(
-      painter: GrowthChartPainter(stageCounts),
-      size: const Size(double.infinity, 200),
+    final colors = [
+      Colors.blue,
+      Colors.green,
+      Colors.orange,
+      Colors.purple,
+    ];
+    int colorIndex = 0;
+
+    return PieChart(
+      PieChartData(
+        sections: stageCounts.entries.map((entry) {
+          final color = colors[colorIndex % colors.length];
+          colorIndex++;
+          return PieChartSectionData(
+            value: entry.value.toDouble(),
+            title: '${entry.value}',
+            color: color,
+            radius: 80,
+          );
+        }).toList(),
+        sectionsSpace: 2,
+        centerSpaceRadius: 40,
+      ),
+    );
+  }
+
+  /// 健康状態チャートの凡例
+  Widget _buildHealthChartLegend() {
+    final healthyStatus = LocalizationService.instance.translate('healthy');
+    final attentionStatus = LocalizationService.instance.translate('attention');
+
+    final healthyCount =
+        _results.where((r) => r['healthStatus'] == healthyStatus).length;
+    final attentionCount =
+        _results.where((r) => r['healthStatus'] == attentionStatus).length;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildLegendItem(Colors.green, healthyStatus, healthyCount),
+        const SizedBox(width: 20),
+        _buildLegendItem(Colors.orange, attentionStatus, attentionCount),
+      ],
+    );
+  }
+
+  /// 成長段階チャートの凡例
+  Widget _buildGrowthChartLegend() {
+    final stageCounts = <String, int>{};
+    for (final result in _results) {
+      final stage = result['growthStage'] as String;
+      stageCounts[stage] = (stageCounts[stage] ?? 0) + 1;
+    }
+
+    final colors = [
+      Colors.blue,
+      Colors.green,
+      Colors.orange,
+      Colors.purple,
+    ];
+    int colorIndex = 0;
+
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 16,
+      runSpacing: 8,
+      children: stageCounts.entries.map((entry) {
+        final color = colors[colorIndex % colors.length];
+        colorIndex++;
+        return _buildLegendItem(color, entry.key, entry.value);
+      }).toList(),
+    );
+  }
+
+  /// 凡例アイテム
+  Widget _buildLegendItem(Color color, String label, int count) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 16,
+          height: 16,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          '$label: $count',
+          style: const TextStyle(fontSize: 12),
+        ),
+      ],
     );
   }
 
@@ -1357,85 +1475,4 @@ ${_results.map((r) {
   void _downloadFile(String content, String filename, String mimeType) {
     downloadFile(content, filename, mimeType);
   }
-}
-
-// チャート描画用のカスタムペインター
-class HealthChartPainter extends CustomPainter {
-  final List<Map<String, dynamic>> data;
-
-  HealthChartPainter(this.data);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (data.isEmpty) return;
-
-    final paint = Paint()
-      ..color = Colors.green
-      ..strokeWidth = 2
-      ..style = PaintingStyle.stroke;
-
-    final path = Path();
-    final stepX = size.width / (data.length - 1);
-
-    for (int i = 0; i < data.length; i++) {
-      final isHealthy = data[i]['healthStatus'] ==
-          LocalizationService.instance.translate('healthy');
-      final y = size.height - (isHealthy ? 20.0 : size.height - 20);
-      final x = i * stepX;
-
-      if (i == 0) {
-        path.moveTo(x, y);
-      } else {
-        path.lineTo(x, y);
-      }
-    }
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
-}
-
-class GrowthChartPainter extends CustomPainter {
-  final Map<String, int> data;
-
-  GrowthChartPainter(this.data);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (data.isEmpty) return;
-
-    final total = data.values.reduce((a, b) => a + b);
-    final colors = [Colors.green, Colors.blue, Colors.orange, Colors.red];
-
-    double startAngle = 0;
-    int colorIndex = 0;
-
-    for (final entry in data.entries) {
-      final sweepAngle = (entry.value / total) * 2 * 3.14159;
-
-      final paint = Paint()
-        ..color = colors[colorIndex % colors.length]
-        ..style = PaintingStyle.fill;
-
-      canvas.drawArc(
-        Rect.fromCenter(
-          center: Offset(size.width / 2, size.height / 2),
-          width: size.width * 0.8,
-          height: size.height * 0.8,
-        ),
-        startAngle,
-        sweepAngle,
-        true,
-        paint,
-      );
-
-      startAngle += sweepAngle;
-      colorIndex++;
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
