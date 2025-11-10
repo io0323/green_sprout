@@ -58,6 +58,11 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
   double _retentionPeriod = 30.0; // データ保持期間（日数）
   double _autoAnalysisInterval = 60.0; // 自動解析間隔（分）
 
+  // 検索・フィルター
+  final TextEditingController _searchController = TextEditingController();
+  String? _selectedGrowthStageFilter;
+  String? _selectedHealthStatusFilter;
+
   @override
   void initState() {
     super.initState();
@@ -68,6 +73,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
   @override
   void dispose() {
     _tabController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -425,6 +431,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
   }
 
   Widget _buildAllResultsCard() {
+    final filteredResults = _getFilteredResults();
+
     return Card(
       elevation: 2,
       child: Padding(
@@ -432,12 +440,135 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              LocalizationService.instance.translate('analysis_history'),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  LocalizationService.instance.translate('analysis_history'),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                if (_hasActiveFilters())
+                  TextButton.icon(
+                    onPressed: _resetFilters,
+                    icon: const Icon(Icons.clear, size: 16),
+                    label: Text(
+                        LocalizationService.instance.translate('reset_filter')),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            // 検索バー
+            TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: LocalizationService.instance.translate('search_hint'),
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: _searchController.text.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() {});
+                        },
+                      )
+                    : null,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
+              onChanged: (value) {
+                setState(() {});
+              },
+            ),
+            const SizedBox(height: 16),
+            // フィルター
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    value: _selectedGrowthStageFilter,
+                    decoration: InputDecoration(
+                      labelText: LocalizationService.instance
+                          .translate('growth_stage'),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                    ),
+                    items: [
+                      DropdownMenuItem<String>(
+                        value: null,
+                        child:
+                            Text(LocalizationService.instance.translate('all')),
+                      ),
+                      ...[
+                        LocalizationService.instance
+                            .translate('sprouting_period'),
+                        LocalizationService.instance.translate('growth_period'),
+                        LocalizationService.instance
+                            .translate('maturity_period'),
+                        LocalizationService.instance
+                            .translate('harvest_period'),
+                      ].map((stage) => DropdownMenuItem<String>(
+                            value: stage,
+                            child: Text(stage),
+                          )),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedGrowthStageFilter = value;
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    value: _selectedHealthStatusFilter,
+                    decoration: InputDecoration(
+                      labelText: LocalizationService.instance
+                          .translate('health_status'),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                    ),
+                    items: [
+                      DropdownMenuItem<String>(
+                        value: null,
+                        child:
+                            Text(LocalizationService.instance.translate('all')),
+                      ),
+                      DropdownMenuItem<String>(
+                        value:
+                            LocalizationService.instance.translate('healthy'),
+                        child: Text(
+                            LocalizationService.instance.translate('healthy')),
+                      ),
+                      DropdownMenuItem<String>(
+                        value:
+                            LocalizationService.instance.translate('attention'),
+                        child: Text(LocalizationService.instance
+                            .translate('attention')),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedHealthStatusFilter = value;
+                      });
+                    },
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 16),
             if (_results.isEmpty)
@@ -449,15 +580,90 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                     const SizedBox(height: 10),
                     Text(LocalizationService.instance
                         .translate('no_results_yet')),
+                    const SizedBox(height: 5),
+                    Text(
+                      LocalizationService.instance
+                          .translate('take_photo_to_analyze'),
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    ),
+                  ],
+                ),
+              )
+            else if (filteredResults.isEmpty)
+              Center(
+                child: Column(
+                  children: [
+                    const Icon(Icons.search_off, size: 50, color: Colors.grey),
+                    const SizedBox(height: 10),
+                    Text(LocalizationService.instance
+                        .translate('no_matching_records')),
+                    const SizedBox(height: 5),
+                    Text(
+                      LocalizationService.instance
+                          .translate('change_search_conditions'),
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    ),
                   ],
                 ),
               )
             else
-              ...(_results.map((result) => _buildResultItem(result))),
+              ...filteredResults.map((result) => _buildResultItem(result)),
           ],
         ),
       ),
     );
+  }
+
+  /// フィルターされた結果を取得
+  List<Map<String, dynamic>> _getFilteredResults() {
+    var results = List<Map<String, dynamic>>.from(_results);
+
+    // 検索クエリでフィルター
+    final searchQuery = _searchController.text.toLowerCase();
+    if (searchQuery.isNotEmpty) {
+      results = results.where((result) {
+        final growthStage =
+            (result['growthStage'] ?? '').toString().toLowerCase();
+        final healthStatus =
+            (result['healthStatus'] ?? '').toString().toLowerCase();
+        final comment = (result['comment'] ?? '').toString().toLowerCase();
+        return growthStage.contains(searchQuery) ||
+            healthStatus.contains(searchQuery) ||
+            comment.contains(searchQuery);
+      }).toList();
+    }
+
+    // 成長状態でフィルター
+    if (_selectedGrowthStageFilter != null) {
+      results = results.where((result) {
+        return result['growthStage'] == _selectedGrowthStageFilter;
+      }).toList();
+    }
+
+    // 健康状態でフィルター
+    if (_selectedHealthStatusFilter != null) {
+      results = results.where((result) {
+        return result['healthStatus'] == _selectedHealthStatusFilter;
+      }).toList();
+    }
+
+    return results;
+  }
+
+  /// アクティブなフィルターがあるかチェック
+  bool _hasActiveFilters() {
+    return _searchController.text.isNotEmpty ||
+        _selectedGrowthStageFilter != null ||
+        _selectedHealthStatusFilter != null;
+  }
+
+  /// フィルターをリセット
+  void _resetFilters() {
+    setState(() {
+      _searchController.clear();
+      _selectedGrowthStageFilter = null;
+      _selectedHealthStatusFilter = null;
+    });
   }
 
   Widget _buildResultItem(Map<String, dynamic> result) {
