@@ -571,7 +571,25 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
               ],
             ),
             const SizedBox(height: 16),
-            if (filteredResults.isEmpty)
+            if (_results.isEmpty)
+              Center(
+                child: Column(
+                  children: [
+                    const Icon(Icons.photo_camera_outlined,
+                        size: 50, color: Colors.grey),
+                    const SizedBox(height: 10),
+                    Text(LocalizationService.instance
+                        .translate('no_results_yet')),
+                    const SizedBox(height: 5),
+                    Text(
+                      LocalizationService.instance
+                          .translate('take_photo_to_analyze'),
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    ),
+                  ],
+                ),
+              )
+            else if (filteredResults.isEmpty)
               Center(
                 child: Column(
                   children: [
