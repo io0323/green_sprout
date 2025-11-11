@@ -207,6 +207,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
           _buildHealthChartCard(),
           const SizedBox(height: 20),
           _buildGrowthChartCard(),
+          const SizedBox(height: 20),
+          _buildConfidenceChartCard(),
         ],
       ),
     );
@@ -275,21 +277,28 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
   }
 
   Widget _buildStatsGrid() {
+    final healthyStatus = LocalizationService.instance.translate('healthy');
     final healthyCount =
-        _results.where((r) => r['healthStatus'] == '健康').length;
+        _results.where((r) => r['healthStatus'] == healthyStatus).length;
     final healthRate = _results.isNotEmpty
         ? (healthyCount / _results.length * 100).round()
         : 0;
     final today = DateTime.now();
     final todayCount = _results.where((r) {
-      final timestamp = DateTime.parse(r['timestamp']);
-      return timestamp.year == today.year &&
-          timestamp.month == today.month &&
-          timestamp.day == today.day;
+      final timestampStr = r['timestamp'] as String?;
+      if (timestampStr == null) return false;
+      try {
+        final timestamp = DateTime.parse(timestampStr);
+        return timestamp.year == today.year &&
+            timestamp.month == today.month &&
+            timestamp.day == today.day;
+      } catch (e) {
+        return false;
+      }
     }).length;
     final avgConfidence = _results.isNotEmpty
         ? (_results
-                    .map((r) => r['confidence'] as double)
+                    .map((r) => (r['confidence'] as double?) ?? 0.0)
                     .reduce((a, b) => a + b) /
                 _results.length *
                 100)
@@ -923,6 +932,89 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     );
   }
 
+  Widget _buildConfidenceChartCard() {
+    return Card(
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              LocalizationService.instance.translate('confidence_distribution'),
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              height: 200,
+              child: _buildConfidenceChart(),
+            ),
+            const SizedBox(height: 16),
+            _buildConfidenceChartLegend(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildConfidenceChart() {
+    if (_results.isEmpty) {
+      return Center(
+        child: Text(LocalizationService.instance.translate('no_data')),
+      );
+    }
+
+    // 信頼度を範囲別に集計
+    final highLabel = LocalizationService.instance.translate('high_confidence');
+    final mediumLabel =
+        LocalizationService.instance.translate('medium_confidence');
+    final lowLabel = LocalizationService.instance.translate('low_confidence');
+
+    final ranges = <String, int>{
+      highLabel: 0, // 80-100%
+      mediumLabel: 0, // 60-79%
+      lowLabel: 0, // 0-59%
+    };
+
+    for (final result in _results) {
+      final confidence = ((result['confidence'] as double?) ?? 0.0) * 100;
+      if (confidence >= 80) {
+        ranges[highLabel] = (ranges[highLabel] ?? 0) + 1;
+      } else if (confidence >= 60) {
+        ranges[mediumLabel] = (ranges[mediumLabel] ?? 0) + 1;
+      } else {
+        ranges[lowLabel] = (ranges[lowLabel] ?? 0) + 1;
+      }
+    }
+
+    final colors = [
+      Colors.green,
+      Colors.orange,
+      Colors.red,
+    ];
+    int colorIndex = 0;
+
+    return PieChart(
+      PieChartData(
+        sections: ranges.entries.map((entry) {
+          final color = colors[colorIndex % colors.length];
+          colorIndex++;
+          return PieChartSectionData(
+            value: entry.value.toDouble(),
+            title: '${entry.value}',
+            color: color,
+            radius: 80,
+          );
+        }).toList(),
+        sectionsSpace: 2,
+        centerSpaceRadius: 40,
+      ),
+    );
+  }
+
   Widget _buildGrowthChartCard() {
     return Card(
       elevation: 2,
@@ -1073,6 +1165,36 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         colorIndex++;
         return _buildLegendItem(color, entry.key, entry.value);
       }).toList(),
+    );
+  }
+
+  /// 信頼度チャートの凡例
+  Widget _buildConfidenceChartLegend() {
+    final highLabel = LocalizationService.instance.translate('high_confidence');
+    final mediumLabel =
+        LocalizationService.instance.translate('medium_confidence');
+    final lowLabel = LocalizationService.instance.translate('low_confidence');
+
+    final highCount = _results
+        .where((r) => ((r['confidence'] as double?) ?? 0.0) * 100 >= 80)
+        .length;
+    final mediumCount = _results.where((r) {
+      final conf = ((r['confidence'] as double?) ?? 0.0) * 100;
+      return conf >= 60 && conf < 80;
+    }).length;
+    final lowCount = _results
+        .where((r) => ((r['confidence'] as double?) ?? 0.0) * 100 < 60)
+        .length;
+
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 16,
+      runSpacing: 8,
+      children: [
+        _buildLegendItem(Colors.green, highLabel, highCount),
+        _buildLegendItem(Colors.orange, mediumLabel, mediumCount),
+        _buildLegendItem(Colors.red, lowLabel, lowCount),
+      ],
     );
   }
 
