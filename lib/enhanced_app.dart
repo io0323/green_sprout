@@ -202,6 +202,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
+          _buildTimeSeriesChartCard(),
+          const SizedBox(height: 20),
           _buildHealthChartCard(),
           const SizedBox(height: 20),
           _buildGrowthChartCard(),
@@ -748,6 +750,144 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                 color: Colors.red,
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTimeSeriesChartCard() {
+    return Card(
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              LocalizationService.instance
+                  .translate('time_series_analysis_count'),
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              height: 200,
+              child: _buildTimeSeriesChart(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTimeSeriesChart() {
+    if (_results.isEmpty) {
+      return Center(
+        child: Text(LocalizationService.instance.translate('no_data')),
+      );
+    }
+
+    // 過去7日間のデータを集計
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final dailyCounts = <DateTime, int>{};
+
+    for (int i = 6; i >= 0; i--) {
+      final date = today.subtract(Duration(days: i));
+      dailyCounts[date] = 0;
+    }
+
+    for (final result in _results) {
+      final timestampStr = result['timestamp'] as String?;
+      if (timestampStr != null) {
+        try {
+          final timestamp = DateTime.parse(timestampStr);
+          final date = DateTime(timestamp.year, timestamp.month, timestamp.day);
+          if (dailyCounts.containsKey(date)) {
+            dailyCounts[date] = (dailyCounts[date] ?? 0) + 1;
+          }
+        } catch (e) {
+          // パースエラーは無視
+        }
+      }
+    }
+
+    final maxCount = dailyCounts.values.isEmpty
+        ? 1
+        : dailyCounts.values.reduce((a, b) => a > b ? a : b);
+
+    final sortedEntries = dailyCounts.entries.toList()
+      ..sort((a, b) => a.key.compareTo(b.key));
+
+    final spots = sortedEntries
+        .asMap()
+        .entries
+        .map((entry) =>
+            FlSpot(entry.key.toDouble(), entry.value.value.toDouble()))
+        .toList();
+
+    return LineChart(
+      LineChartData(
+        gridData: const FlGridData(show: true),
+        titlesData: FlTitlesData(
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 40,
+              getTitlesWidget: (value, meta) {
+                return Text(
+                  value.toInt().toString(),
+                  style: const TextStyle(fontSize: 10),
+                );
+              },
+            ),
+          ),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 30,
+              getTitlesWidget: (value, meta) {
+                final index = value.toInt();
+                if (index < 0 || index >= sortedEntries.length) {
+                  return const Text('');
+                }
+                final date = sortedEntries[index].key;
+                final daysDiff = date.difference(today).inDays;
+                if (daysDiff == 0) {
+                  return const Text('今日', style: TextStyle(fontSize: 10));
+                } else if (daysDiff == -1) {
+                  return const Text('昨日', style: TextStyle(fontSize: 10));
+                } else {
+                  return Text('${-daysDiff}日前',
+                      style: const TextStyle(fontSize: 10));
+                }
+              },
+            ),
+          ),
+          rightTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          topTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+        ),
+        borderData: FlBorderData(show: true),
+        minY: 0,
+        maxY: maxCount > 0 ? maxCount.toDouble() : 5.0, // const不可（計算値のため）
+        lineBarsData: [
+          LineChartBarData(
+            spots: spots,
+            isCurved: true,
+            color: Colors.green,
+            barWidth: 3,
+            dotData: const FlDotData(show: true),
+            belowBarData: BarAreaData(
+              show: true,
+              color: Colors.green.withOpacity(0.2),
+            ),
           ),
         ],
       ),
