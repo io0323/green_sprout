@@ -121,20 +121,28 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
       double confidence;
 
       if (brightness < 100) {
-        growthStage = '老葉';
-        healthStatus = greenness > 0.4 ? '健康' : '損傷';
+        growthStage = GrowthStageConstants.oldLeaf;
+        healthStatus = greenness > 0.4
+            ? HealthStatusConstants.healthy
+            : HealthStatusConstants.damaged;
         confidence = 0.75;
       } else if (brightness < 150) {
-        growthStage = '成葉';
-        healthStatus = greenness > 0.45 ? '健康' : '軽微な損傷';
+        growthStage = GrowthStageConstants.matureLeaf;
+        healthStatus = greenness > 0.45
+            ? HealthStatusConstants.healthy
+            : HealthStatusConstants.slightlyDamaged;
         confidence = 0.80;
       } else if (brightness < 200) {
-        growthStage = '若葉';
-        healthStatus = greenness > 0.5 ? '健康' : '軽微な損傷';
+        growthStage = GrowthStageConstants.youngLeaf;
+        healthStatus = greenness > 0.5
+            ? HealthStatusConstants.healthy
+            : HealthStatusConstants.slightlyDamaged;
         confidence = 0.85;
       } else {
-        growthStage = '芽';
-        healthStatus = greenness > 0.55 ? '健康' : '軽微な損傷';
+        growthStage = GrowthStageConstants.bud;
+        healthStatus = greenness > 0.55
+            ? HealthStatusConstants.healthy
+            : HealthStatusConstants.slightlyDamaged;
         confidence = 0.90;
       }
 
@@ -275,13 +283,13 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
 
     // 複合的な判定ロジック
     if (brightness > 200 && greenness > 0.6 && smoothness > 0.8) {
-      return '芽';
+      return GrowthStageConstants.bud;
     } else if (brightness > 150 && greenness > 0.5 && complexity < 0.1) {
-      return '若葉';
+      return GrowthStageConstants.youngLeaf;
     } else if (brightness > 100 && greenness > 0.4 && complexity < 0.2) {
-      return '成葉';
+      return GrowthStageConstants.matureLeaf;
     } else {
-      return '老葉';
+      return GrowthStageConstants.oldLeaf;
     }
   }
 
@@ -297,13 +305,13 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
         (greenness * 0.4) + (smoothness * 0.3) + ((brightness / 255.0) * 0.3);
 
     if (healthScore > 0.7) {
-      return '健康';
+      return HealthStatusConstants.healthy;
     } else if (healthScore > 0.5) {
-      return '軽微な損傷';
+      return HealthStatusConstants.slightlyDamaged;
     } else if (healthScore > 0.3) {
-      return '損傷';
+      return HealthStatusConstants.damaged;
     } else {
-      return '病気';
+      return HealthStatusConstants.diseased;
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/tea_garden_theme.dart';
+import '../services/localization_service.dart';
 
 /// モダンなカードウィジェット
 /// 美しいシャドウとアニメーション付き
@@ -396,7 +397,7 @@ class BeautifulErrorMessage extends StatelessWidget {
             if (onRetry != null) ...[
               const SizedBox(height: TeaGardenTheme.spacingL),
               AnimatedButton(
-                text: '再試行',
+                text: LocalizationService.instance.translate('retry'),
                 onPressed: onRetry,
                 icon: Icons.refresh,
               ),

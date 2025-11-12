@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/tea_garden_theme.dart';
+import '../services/localization_service.dart';
 
 /// アクセシビリティ機能の強化ユーティリティ
 /// 視覚障害、聴覚障害、運動障害に対応
@@ -444,14 +445,14 @@ class _AccessibilitySettingsDialogState
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('キャンセル'),
+          child: Text(LocalizationService.instance.translate('cancel')),
         ),
         ElevatedButton(
           onPressed: () {
             // 設定を保存
             Navigator.of(context).pop();
           },
-          child: const Text('保存'),
+          child: Text(LocalizationService.instance.translate('save')),
         ),
       ],
     );
