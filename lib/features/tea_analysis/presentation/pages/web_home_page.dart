@@ -15,35 +15,46 @@ class WebHomePage extends StatefulWidget {
 
 class _WebHomePageState extends State<WebHomePage> {
   bool _isLoading = false;
-  final List<Map<String, dynamic>> _mockResults = [
-    {
-      'id': '1',
-      'imagePath': '/assets/images/sample_tea_1.jpg',
-      'timestamp': DateTime.now().subtract(const Duration(days: 1)),
-      'healthStatus': '健康',
-      'growthStage': '成熟期',
-      'confidence': 0.85,
-      'comment': '健康な茶葉です。良好な成長状態を維持しています。',
-    },
-    {
-      'id': '2',
-      'imagePath': '/assets/images/sample_tea_2.jpg',
-      'timestamp': DateTime.now().subtract(const Duration(days: 3)),
-      'healthStatus': '注意',
-      'growthStage': '成長期',
-      'confidence': 0.72,
-      'comment': '軽度の葉枯れ病が検出されました。適切な対処が必要です。',
-    },
-    {
-      'id': '3',
-      'imagePath': '/assets/images/sample_tea_3.jpg',
-      'timestamp': DateTime.now().subtract(const Duration(days: 5)),
-      'healthStatus': '健康',
-      'growthStage': '成熟期',
-      'confidence': 0.90,
-      'comment': '非常に健康な茶葉です。理想的な成長状態です。',
-    },
-  ];
+  List<Map<String, dynamic>> _mockResults = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeMockResults();
+  }
+
+  void _initializeMockResults() {
+    final loc = LocalizationService.instance;
+    _mockResults = [
+      {
+        'id': '1',
+        'imagePath': '/assets/images/sample_tea_1.jpg',
+        'timestamp': DateTime.now().subtract(const Duration(days: 1)),
+        'healthStatus': loc.translate('healthy'),
+        'growthStage': loc.translate('maturity_period'),
+        'confidence': 0.85,
+        'comment': '健康な茶葉です。良好な成長状態を維持しています。',
+      },
+      {
+        'id': '2',
+        'imagePath': '/assets/images/sample_tea_2.jpg',
+        'timestamp': DateTime.now().subtract(const Duration(days: 3)),
+        'healthStatus': loc.translate('attention'),
+        'growthStage': loc.translate('growth_period'),
+        'confidence': 0.72,
+        'comment': '軽度の葉枯れ病が検出されました。適切な対処が必要です。',
+      },
+      {
+        'id': '3',
+        'imagePath': '/assets/images/sample_tea_3.jpg',
+        'timestamp': DateTime.now().subtract(const Duration(days: 5)),
+        'healthStatus': loc.translate('healthy'),
+        'growthStage': loc.translate('maturity_period'),
+        'confidence': 0.90,
+        'comment': '非常に健康な茶葉です。理想的な成長状態です。',
+      },
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -298,7 +309,8 @@ class _WebHomePageState extends State<WebHomePage> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: healthStatus == '健康'
+                  color: healthStatus ==
+                          LocalizationService.instance.translate('healthy')
                       ? Colors.green[100]
                       : Colors.orange[100],
                   borderRadius: BorderRadius.circular(12),
@@ -308,7 +320,8 @@ class _WebHomePageState extends State<WebHomePage> {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: healthStatus == '健康'
+                    color: healthStatus ==
+                            LocalizationService.instance.translate('healthy')
                         ? Colors.green[700]
                         : Colors.orange[700],
                   ),
@@ -340,21 +353,23 @@ class _WebHomePageState extends State<WebHomePage> {
     await Future.delayed(const Duration(seconds: 3));
 
     // 新しい結果を追加
+    final loc = LocalizationService.instance;
     final newResult = {
       'id': (_mockResults.length + 1).toString(),
       'imagePath':
           '/assets/images/sample_tea_${DateTime.now().millisecondsSinceEpoch % 3 + 1}.jpg',
       'timestamp': DateTime.now(),
-      'healthStatus':
-          DateTime.now().millisecondsSinceEpoch % 10 < 2 ? '注意' : '健康',
+      'healthStatus': DateTime.now().millisecondsSinceEpoch % 10 < 2
+          ? loc.translate('attention')
+          : loc.translate('healthy'),
       'growthStage': [
-        '発芽期',
-        '成長期',
-        '成熟期',
-        '収穫期'
+        loc.translate('sprouting_period'),
+        loc.translate('growth_period'),
+        loc.translate('maturity_period'),
+        loc.translate('harvest_period')
       ][DateTime.now().millisecondsSinceEpoch % 4],
       'confidence': 0.8 + (DateTime.now().millisecondsSinceEpoch % 20) / 100,
-      'comment': '新しい解析結果です。茶葉の状態を確認しました。',
+      'comment': loc.translate('new_analysis_completed'),
     };
 
     setState(() {

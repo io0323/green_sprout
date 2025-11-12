@@ -866,12 +866,21 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                 final date = sortedEntries[index].key;
                 final daysDiff = date.difference(today).inDays;
                 if (daysDiff == 0) {
-                  return const Text('今日', style: TextStyle(fontSize: 10));
+                  return Text(
+                    LocalizationService.instance.translate('today'),
+                    style: const TextStyle(fontSize: 10),
+                  );
                 } else if (daysDiff == -1) {
-                  return const Text('昨日', style: TextStyle(fontSize: 10));
+                  return Text(
+                    LocalizationService.instance.translate('yesterday'),
+                    style: const TextStyle(fontSize: 10),
+                  );
                 } else {
-                  return Text('${-daysDiff}日前',
-                      style: const TextStyle(fontSize: 10));
+                  return Text(
+                    LocalizationService.instance.translate('days_ago',
+                        params: {'days': (-daysDiff).toString()}),
+                    style: const TextStyle(fontSize: 10),
+                  );
                 }
               },
             ),

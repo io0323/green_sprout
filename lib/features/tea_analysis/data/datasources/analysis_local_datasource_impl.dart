@@ -156,20 +156,28 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
       double confidence;
 
       if (brightness < 100) {
-        growthStage = '老葉';
-        healthStatus = greenness > 0.4 ? '健康' : '損傷';
+        growthStage = GrowthStageConstants.oldLeaf;
+        healthStatus = greenness > 0.4
+            ? HealthStatusConstants.healthy
+            : HealthStatusConstants.damaged;
         confidence = 0.75;
       } else if (brightness < 150) {
-        growthStage = '成葉';
-        healthStatus = greenness > 0.45 ? '健康' : '軽微な損傷';
+        growthStage = GrowthStageConstants.matureLeaf;
+        healthStatus = greenness > 0.45
+            ? HealthStatusConstants.healthy
+            : HealthStatusConstants.slightlyDamaged;
         confidence = 0.80;
       } else if (brightness < 200) {
-        growthStage = '若葉';
-        healthStatus = greenness > 0.5 ? '健康' : '軽微な損傷';
+        growthStage = GrowthStageConstants.youngLeaf;
+        healthStatus = greenness > 0.5
+            ? HealthStatusConstants.healthy
+            : HealthStatusConstants.slightlyDamaged;
         confidence = 0.85;
       } else {
-        growthStage = '芽';
-        healthStatus = greenness > 0.55 ? '健康' : '軽微な損傷';
+        growthStage = GrowthStageConstants.bud;
+        healthStatus = greenness > 0.55
+            ? HealthStatusConstants.healthy
+            : HealthStatusConstants.slightlyDamaged;
         confidence = 0.90;
       }
 
@@ -210,8 +218,16 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
     final probabilities = output[0] as List<double>;
 
     // クラス名の定義
-    const growthStages = ['芽', '若葉', '成葉', '老葉'];
-    const healthStatuses = ['健康', '損傷'];
+    const growthStages = [
+      GrowthStageConstants.bud,
+      GrowthStageConstants.youngLeaf,
+      GrowthStageConstants.matureLeaf,
+      GrowthStageConstants.oldLeaf
+    ];
+    const healthStatuses = [
+      HealthStatusConstants.healthy,
+      HealthStatusConstants.damaged
+    ];
 
     // 最も高い確率のインデックスを取得
     int maxIndex = 0;

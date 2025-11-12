@@ -2,6 +2,7 @@ import 'package:image/image.dart' as img;
 import '../../src/tflite_interface.dart';
 import '../utils/advanced_image_processor.dart';
 import '../../features/tea_analysis/domain/entities/analysis_result.dart';
+import '../constants/app_constants.dart';
 
 /// 高度なAI解析エンジン
 /// 複数の解析手法を組み合わせた高精度な茶葉解析システム
@@ -273,26 +274,26 @@ class AdvancedAnalysisEngine {
   /// 成長状態の分類
   String _classifyGrowthStage(ImageFeatures features) {
     if (features.averageHue < 60 && features.averageSaturation > 0.6) {
-      return '芽';
+      return GrowthStageConstants.bud;
     } else if (features.averageHue < 120 && features.averageLightness > 0.5) {
-      return '若葉';
+      return GrowthStageConstants.youngLeaf;
     } else if (features.averageHue < 180) {
-      return '成葉';
+      return GrowthStageConstants.matureLeaf;
     } else {
-      return '老葉';
+      return GrowthStageConstants.oldLeaf;
     }
   }
 
   /// 健康状態の分類
   String _classifyHealthStatus(ImageFeatures features) {
     if (features.averageSaturation > 0.5 && features.averageLightness > 0.4) {
-      return '健康';
+      return HealthStatusConstants.healthy;
     } else if (features.averageSaturation > 0.3) {
-      return '軽微な損傷';
+      return HealthStatusConstants.slightlyDamaged;
     } else if (features.averageLightness < 0.3) {
-      return '病気';
+      return HealthStatusConstants.diseased;
     } else {
-      return '損傷';
+      return HealthStatusConstants.damaged;
     }
   }
 

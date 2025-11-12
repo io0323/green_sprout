@@ -47,9 +47,9 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          '解析結果',
-          style: TextStyle(
+        title: Text(
+          LocalizationService.instance.translate('analysis_title'),
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
@@ -124,7 +124,7 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'コメント',
+                            LocalizationService.instance.translate('comment'),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -186,8 +186,10 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
       final teaAnalysisResult = TeaAnalysisResult(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         imagePath: widget.imagePath,
-        growthStage: result.growthStage ?? '不明',
-        healthStatus: result.healthStatus ?? '不明',
+        growthStage: result.growthStage ??
+            LocalizationService.instance.translate('unknown'),
+        healthStatus: result.healthStatus ??
+            LocalizationService.instance.translate('unknown'),
         confidence: result.confidence ?? 0.0,
         comment: _comment.isNotEmpty ? _comment : null,
         timestamp: DateTime.now(),
