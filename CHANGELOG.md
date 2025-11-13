@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2024-12-20
+
+### Added
+- 完全なローカライゼーション対応の実装
+  - 英語と日本語の完全対応
+  - 言語切り替え機能の実装
+  - 翻訳ファイルの追加と管理
+- 統計・チャート機能の多言語対応
+  - 統計グリッドの多言語対応
+  - 信頼度分布チャートの追加
+  - 時系列チャート機能の追加
+- 解析履歴に検索・フィルター機能を追加
+- PDFエクスポート機能の実装
+- 設定保存機能の完全実装
+  - 言語設定の永続化
+
+### Changed
+- UIコンポーネントの統一化とエラーハンドリングの改善
+- テストをローカライゼーション対応に更新
+
+### Fixed
+- 空の状態の表示を修正（テストエラー対応）
+- ドキュメントコメント形式を修正
+- 未使用ローカル変数警告を修正
+
+### Technical Details
+- **Localization**: 完全な多言語対応システムの実装
+- **Testing**: ローカライゼーション対応のテスト追加
+- **Code Quality**: すべてのCIリンターエラーの解決
+
 ## [1.2.0] - 2024-12-20
 
 ### Added
