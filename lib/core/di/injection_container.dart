@@ -1,4 +1,6 @@
 import 'package:get_it/get_it.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/platform_utils.dart';
 import '../../features/tea_analysis/data/datasources/analysis_local_datasource.dart';
 import '../../features/tea_analysis/data/datasources/analysis_local_datasource_impl.dart';
@@ -21,6 +23,8 @@ import '../../features/camera/domain/usecases/camera_usecases.dart';
 import '../../features/tea_analysis/presentation/bloc/tea_analysis_cubit.dart';
 import '../../features/tea_analysis/presentation/bloc/analysis_cubit.dart';
 import '../../features/camera/presentation/bloc/camera_cubit.dart';
+import '../services/cloud_sync_service.dart';
+import '../../features/cloud_sync/presentation/bloc/cloud_sync_cubit.dart';
 
 /// 依存性注入コンテナ
 /// GetItを使用してDIを管理
@@ -116,5 +120,31 @@ Future<void> init() async {
         disposeCamera: sl(),
         checkCameraInitialized: sl(),
         cameraRepository: sl(),
+      ));
+
+  // クラウド同期サービス
+  sl.registerLazySingleton<http.Client>(() => http.Client());
+  sl.registerLazySingletonAsync<SharedPreferences>(
+    () => SharedPreferences.getInstance(),
+  );
+  sl.registerLazySingletonAsync<CloudSyncService>(
+    () async => CloudSyncServiceImpl(
+      httpClient: sl(),
+      prefs: await sl.getAsync<SharedPreferences>(),
+    ),
+  );
+  sl.registerLazySingletonAsync<OfflineSyncQueue>(
+    () async => OfflineSyncQueue(await sl.getAsync<SharedPreferences>()),
+  );
+  sl.registerLazySingleton<SyncStatusNotifier>(
+    () => SyncStatusNotifier(),
+  );
+
+  // クラウド同期BLoC
+  sl.registerFactoryAsync(() async => CloudSyncCubit(
+        cloudSyncService: await sl.getAsync<CloudSyncService>(),
+        offlineSyncQueue: await sl.getAsync<OfflineSyncQueue>(),
+        syncStatusNotifier: sl<SyncStatusNotifier>(),
+        teaAnalysisRepository: sl(),
       ));
 }
