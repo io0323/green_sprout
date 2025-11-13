@@ -233,6 +233,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
           _buildLanguageSettingsCard(),
           const SizedBox(height: 16),
           _buildSettingsCard(),
+          const SizedBox(height: 16),
+          _buildCloudSyncCard(),
         ],
       ),
     );
@@ -1404,6 +1406,111 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
               ),
               child:
                   Text(LocalizationService.instance.translate('save_settings')),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// クラウド同期カード
+  Widget _buildCloudSyncCard() {
+    return Card(
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Row(
+              children: [
+                Icon(Icons.cloud, color: Colors.blue),
+                SizedBox(width: 8),
+                Text(
+                  'クラウド同期',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'データをクラウドにバックアップして、複数のデバイス間で同期できます。',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[700],
+              ),
+            ),
+            const SizedBox(height: 16),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('クラウド同期機能は準備中です'),
+                        backgroundColor: Colors.orange,
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.cloud_upload),
+                  label: const Text('クラウドにアップロード'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('クラウド同期機能は準備中です'),
+                        backgroundColor: Colors.orange,
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.cloud_download),
+                  label: const Text('クラウドからダウンロード'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('クラウド同期機能は準備中です'),
+                        backgroundColor: Colors.orange,
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.sync),
+                  label: const Text('双方向同期'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.purple,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            SwitchListTile(
+              title: const Text('自動同期を有効にする'),
+              subtitle: const Text('定期的にクラウドと同期します'),
+              value: false,
+              onChanged: (value) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('自動同期機能は準備中です'),
+                    backgroundColor: Colors.orange,
+                  ),
+                );
+              },
             ),
           ],
         ),
