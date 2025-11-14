@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../tea_analysis/presentation/bloc/analysis_cubit.dart';
@@ -82,14 +83,78 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
             }
 
             if (state is AnalysisError) {
-              return BeautifulErrorMessage(
-                message: state.message,
-                icon: Icons.analytics_outlined,
-                onRetry: () {
-                  context
-                      .read<AnalysisCubit>()
-                      .analyzeImageFromPath(widget.imagePath);
-                },
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    BeautifulErrorMessage(
+                      message: state.message,
+                      icon: Icons.analytics_outlined,
+                      onRetry: () {
+                        context
+                            .read<AnalysisCubit>()
+                            .analyzeImageFromPath(widget.imagePath);
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    // 高度な分析オプション
+                    Card(
+                      elevation: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.auto_awesome,
+                                    color: Colors.purple[700]),
+                                const SizedBox(width: 8),
+                                Text(
+                                  '高度な分析',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.purple[700],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              '複数の解析手法を組み合わせた高精度な分析を実行します',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  final imageFile = File(widget.imagePath);
+                                  context
+                                      .read<AnalysisCubit>()
+                                      .advancedAnalyzeImageFile(imageFile);
+                                },
+                                icon: const Icon(Icons.auto_awesome),
+                                label: const Text('高度な分析を実行'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.purple[700],
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               );
             }
 
@@ -102,6 +167,67 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                     AnalysisResultWidget(
                       result: state.result,
                       imagePath: widget.imagePath,
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // 高度な分析オプション
+                    Card(
+                      elevation: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.auto_awesome,
+                                    color: Colors.purple[700]),
+                                const SizedBox(width: 8),
+                                Text(
+                                  '高度な分析',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.purple[700],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              '複数の解析手法を組み合わせた高精度な分析を実行します',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            SizedBox(
+                              width: double.infinity,
+                              child: OutlinedButton.icon(
+                                onPressed: () {
+                                  final imageFile = File(widget.imagePath);
+                                  context
+                                      .read<AnalysisCubit>()
+                                      .advancedAnalyzeImageFile(imageFile);
+                                },
+                                icon: const Icon(Icons.auto_awesome),
+                                label: const Text('高度な分析を再実行'),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: Colors.purple[700],
+                                  side: BorderSide(
+                                    color: Colors.purple[700]!,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
 
                     const SizedBox(height: 24),
