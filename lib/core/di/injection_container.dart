@@ -14,6 +14,8 @@ import '../../features/tea_analysis/domain/repositories/analysis_repository.dart
 import '../../features/tea_analysis/domain/repositories/tea_analysis_repository.dart';
 import '../../features/tea_analysis/domain/usecases/analysis_usecases.dart';
 import '../../features/tea_analysis/domain/usecases/tea_analysis_usecases.dart';
+import '../../features/tea_analysis/domain/usecases/advanced_analysis_usecases.dart';
+import '../../core/engines/advanced_analysis_engine.dart';
 import '../../features/camera/data/datasources/camera_local_datasource.dart';
 import '../../features/camera/data/datasources/camera_local_datasource_impl.dart';
 import '../../features/camera/data/datasources/web_mock_camera_datasource.dart';
@@ -93,6 +95,19 @@ Future<void> init() async {
   sl.registerLazySingleton(() => AnalyzeImage(sl()));
   sl.registerLazySingleton(() => CheckModelLoaded(sl()));
 
+  // 高度な解析エンジン
+  sl.registerLazySingleton<AdvancedAnalysisEngine>(
+    () => AdvancedAnalysisEngine(),
+  );
+
+  // ユースケース - Advanced Analysis
+  sl.registerLazySingleton(
+    () => AdvancedAnalyzeImage(sl<AdvancedAnalysisEngine>()),
+  );
+  sl.registerLazySingleton(
+    () => InitializeAdvancedAnalysisEngine(sl<AdvancedAnalysisEngine>()),
+  );
+
   // ユースケース - Camera
   sl.registerLazySingleton(() => InitializeCamera(sl()));
   sl.registerLazySingleton(() => CaptureImage(sl()));
@@ -112,6 +127,8 @@ Future<void> init() async {
         loadAnalysisModel: sl(),
         analyzeImage: sl(),
         checkModelLoaded: sl(),
+        advancedAnalyzeImage: sl(),
+        initializeAdvancedAnalysisEngine: sl(),
       ));
 
   sl.registerFactory(() => CameraCubit(

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/errors/failures.dart';
 import '../../domain/entities/analysis_result.dart';
 import '../../domain/usecases/analysis_usecases.dart';
+import '../../domain/usecases/advanced_analysis_usecases.dart';
 
 /// AI解析の状態
 abstract class AnalysisState {}
@@ -39,11 +40,15 @@ class AnalysisCubit extends Cubit<AnalysisState> {
   final LoadAnalysisModel loadAnalysisModel;
   final AnalyzeImage analyzeImage;
   final CheckModelLoaded checkModelLoaded;
+  final AdvancedAnalyzeImage advancedAnalyzeImage;
+  final InitializeAdvancedAnalysisEngine initializeAdvancedAnalysisEngine;
 
   AnalysisCubit({
     required this.loadAnalysisModel,
     required this.analyzeImage,
     required this.checkModelLoaded,
+    required this.advancedAnalyzeImage,
+    required this.initializeAdvancedAnalysisEngine,
   }) : super(AnalysisInitial());
 
   /// AIモデルを読み込み
@@ -88,6 +93,26 @@ class AnalysisCubit extends Cubit<AnalysisState> {
         } else {
           emit(AnalysisInitial());
         }
+      },
+    );
+  }
+
+  /// 高度な解析で画像を解析
+  Future<void> advancedAnalyzeImageFile(File imageFile) async {
+    emit(AnalysisAnalyzing());
+
+    // 高度な解析エンジンを初期化
+    final initResult = await initializeAdvancedAnalysisEngine();
+    initResult.fold(
+      (failure) => emit(AnalysisError(_mapFailureToMessage(failure))),
+      (_) async {
+        // 高度な解析を実行
+        final result = await advancedAnalyzeImage(imageFile);
+
+        result.fold(
+          (failure) => emit(AnalysisError(_mapFailureToMessage(failure))),
+          (analysisResult) => emit(AnalysisLoaded(analysisResult)),
+        );
       },
     );
   }
