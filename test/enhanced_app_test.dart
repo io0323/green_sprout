@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
@@ -6,6 +10,74 @@ import 'package:tea_garden_ai/core/services/localization_service.dart';
 import 'package:tea_garden_ai/core/di/injection_container.dart' as di;
 
 /// 拡張版茶園管理AIアプリのテスト
+
+/// テスト用のHTTPオーバーライド
+/// HTTPリクエストを即座に完了させてテスト環境でのタイムアウトを防止
+class _TestHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) => _FakeHttpClient();
+}
+
+/// テスト用のFake HttpClient
+class _FakeHttpClient implements HttpClient {
+  @override
+  Future<HttpClientRequest> getUrl(Uri url) async => _FakeRequest();
+
+  @override
+  Future<HttpClientRequest> openUrl(String method, Uri url) async =>
+      _FakeRequest();
+
+  @override
+  void close({bool force = false}) {}
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+/// テスト用のFake HttpClientRequest
+class _FakeRequest implements HttpClientRequest {
+  final _controller = StreamController<List<int>>();
+
+  _FakeRequest() {
+    // 空のJSONボディを提供
+    _controller.add(utf8.encode('{}'));
+    _controller.close();
+  }
+
+  @override
+  Future<HttpClientResponse> close() async => _FakeResponse(_controller.stream);
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+/// テスト用のFake HttpClientResponse
+class _FakeResponse extends Stream<List<int>> implements HttpClientResponse {
+  final Stream<List<int>> _stream;
+
+  _FakeResponse(this._stream);
+
+  @override
+  int get statusCode => 200;
+
+  @override
+  StreamSubscription<List<int>> listen(
+    void Function(List<int>)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
+    return _stream.listen(
+      onData,
+      onError: onError,
+      onDone: onDone,
+      cancelOnError: cancelOnError ?? false,
+    );
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
 
 /// 特定のウィジェットが表示されるまで待機するヘルパー関数
 Future<void> pumpUntilFound(
@@ -25,6 +97,12 @@ Future<void> pumpUntilFound(
 
 void main() {
   setUpAll(() async {
+    // テストバインディングを初期化
+    TestWidgetsFlutterBinding.ensureInitialized();
+
+    // HTTPオーバーライドを設定してテスト環境でのHTTPリクエストを即座に完了させる
+    HttpOverrides.global = _TestHttpOverrides();
+
     // GetItをリセットしてから初期化
     await GetIt.instance.reset();
 
