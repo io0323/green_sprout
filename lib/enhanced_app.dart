@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'src/web_storage.dart';
 import 'core/services/localization_service.dart';
 import 'core/widgets/language_selector.dart';
+import 'core/di/injection_container.dart' as di;
+import 'features/cloud_sync/presentation/bloc/cloud_sync_cubit.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // DIコンテナの初期化
+  try {
+    await di.init();
+  } catch (e) {
+    // エラーが発生した場合はフォールバック
+    debugPrint('DI初期化エラー: $e');
+  }
+
   runApp(const EnhancedTeaGardenApp());
 }
 
@@ -31,7 +44,23 @@ class _EnhancedTeaGardenAppState extends State<EnhancedTeaGardenApp> {
         primarySwatch: Colors.green,
         useMaterial3: false,
       ),
-      home: EnhancedTeaGardenHomePage(onLanguageChanged: _updateLanguage),
+      home: FutureBuilder(
+        future: di.sl.getAsync<CloudSyncCubit>(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return BlocProvider<CloudSyncCubit>.value(
+              value: snapshot.data!,
+              child: EnhancedTeaGardenHomePage(
+                onLanguageChanged: _updateLanguage,
+              ),
+            );
+          } else {
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          }
+        },
+      ),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -68,6 +97,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     super.initState();
     _tabController = TabController(length: 5, vsync: this);
     _loadData();
+    // CloudSyncCubitの初期化はBlocProvider経由で行われるため、
+    // ここでは何もしない（Cubitの初期化時に自動的に接続確認と自動同期状態の読み込みが行われる）
   }
 
   @override
@@ -1415,106 +1446,265 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
 
   /// クラウド同期カード
   Widget _buildCloudSyncCard() {
-    return Card(
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Row(
+    return BlocBuilder<CloudSyncCubit, CloudSyncState>(
+      builder: (context, state) {
+        final cubit = context.read<CloudSyncCubit>();
+        bool isAutoSyncEnabled = false;
+        bool isSyncing = false;
+        String statusMessage = '';
+        Color statusColor = Colors.grey;
+
+        // 自動同期状態を確認
+        if (state is CloudSyncAutoSyncState) {
+          isAutoSyncEnabled = state.enabled;
+        }
+
+        // 同期状態を確認
+        if (state is CloudSyncSyncing) {
+          isSyncing = true;
+          statusMessage = state.message;
+          statusColor = Colors.blue;
+        } else if (state is CloudSyncSuccess) {
+          statusMessage = state.message;
+          statusColor = Colors.green;
+        } else if (state is CloudSyncError) {
+          statusMessage = state.message;
+          statusColor = Colors.red;
+        } else if (state is CloudSyncConnected) {
+          statusMessage = 'クラウドに接続済み';
+          statusColor = Colors.green;
+        } else if (state is CloudSyncOffline) {
+          statusMessage = 'オフライン';
+          statusColor = Colors.orange;
+        } else if (state is CloudSyncCheckingConnection) {
+          statusMessage = '接続確認中...';
+          statusColor = Colors.blue;
+        } else if (state is CloudSyncInitial) {
+          statusMessage = '初期化中...';
+          statusColor = Colors.grey;
+        }
+
+        // 自動同期状態の取得
+        // CloudSyncAutoSyncStateは他の状態と同時に存在しないため、
+        // 初期化時以外は自動同期状態を別途取得する必要がある
+        // ただし、毎回呼び出すと無限ループになる可能性があるため、
+        // 初期化時にのみ呼び出されるようにCubit側で実装されている
+
+        return Card(
+          elevation: 2,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.cloud, color: Colors.blue),
-                SizedBox(width: 8),
+                Row(
+                  children: [
+                    Icon(Icons.cloud, color: statusColor),
+                    const SizedBox(width: 8),
+                    const Text(
+                      'クラウド同期',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                if (statusMessage.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: statusColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (isSyncing)
+                          const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
+                          )
+                        else
+                          Icon(
+                            state is CloudSyncSuccess
+                                ? Icons.check_circle
+                                : state is CloudSyncError
+                                    ? Icons.error
+                                    : state is CloudSyncOffline
+                                        ? Icons.cloud_off
+                                        : Icons.info,
+                            size: 16,
+                            color: statusColor,
+                          ),
+                        const SizedBox(width: 8),
+                        Text(
+                          statusMessage,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: statusColor,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 16),
                 Text(
-                  'クラウド同期',
+                  'データをクラウドにバックアップして、複数のデバイス間で同期できます。',
                   style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: Colors.grey[700],
                   ),
+                ),
+                const SizedBox(height: 16),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: isSyncing
+                          ? null
+                          : () async {
+                              await cubit.syncToCloud();
+                              if (context.mounted) {
+                                final currentState = cubit.state;
+                                if (currentState is CloudSyncSuccess) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(currentState.message),
+                                      backgroundColor: Colors.green,
+                                    ),
+                                  );
+                                } else if (currentState is CloudSyncError) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(currentState.message),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
+                              }
+                            },
+                      icon: const Icon(Icons.cloud_upload),
+                      label: const Text('クラウドにアップロード'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                      ),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: isSyncing
+                          ? null
+                          : () async {
+                              await cubit.syncFromCloud();
+                              if (context.mounted) {
+                                final currentState = cubit.state;
+                                if (currentState is CloudSyncSuccess) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(currentState.message),
+                                      backgroundColor: Colors.green,
+                                    ),
+                                  );
+                                } else if (currentState is CloudSyncError) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(currentState.message),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
+                              }
+                            },
+                      icon: const Icon(Icons.cloud_download),
+                      label: const Text('クラウドからダウンロード'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                      ),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: isSyncing
+                          ? null
+                          : () async {
+                              await cubit.syncBothWays();
+                              if (context.mounted) {
+                                final currentState = cubit.state;
+                                if (currentState is CloudSyncSuccess) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(currentState.message),
+                                      backgroundColor: Colors.green,
+                                    ),
+                                  );
+                                } else if (currentState is CloudSyncError) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(currentState.message),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
+                              }
+                            },
+                      icon: const Icon(Icons.sync),
+                      label: const Text('双方向同期'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.purple,
+                        foregroundColor: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                OutlinedButton.icon(
+                  onPressed: isSyncing
+                      ? null
+                      : () async {
+                          await cubit.checkConnection();
+                        },
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('接続状態を確認'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.blue,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SwitchListTile(
+                  title: const Text('自動同期を有効にする'),
+                  subtitle: const Text('定期的にクラウドと同期します'),
+                  value: isAutoSyncEnabled,
+                  onChanged: isSyncing
+                      ? null
+                      : (value) async {
+                          await cubit.toggleAutoSync(value);
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  value ? '自動同期を有効にしました' : '自動同期を無効にしました',
+                                ),
+                                backgroundColor: Colors.green,
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
+                          }
+                        },
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            Text(
-              'データをクラウドにバックアップして、複数のデバイス間で同期できます。',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[700],
-              ),
-            ),
-            const SizedBox(height: 16),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('クラウド同期機能は準備中です'),
-                        backgroundColor: Colors.orange,
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.cloud_upload),
-                  label: const Text('クラウドにアップロード'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white,
-                  ),
-                ),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('クラウド同期機能は準備中です'),
-                        backgroundColor: Colors.orange,
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.cloud_download),
-                  label: const Text('クラウドからダウンロード'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                  ),
-                ),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('クラウド同期機能は準備中です'),
-                        backgroundColor: Colors.orange,
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.sync),
-                  label: const Text('双方向同期'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple,
-                    foregroundColor: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            SwitchListTile(
-              title: const Text('自動同期を有効にする'),
-              subtitle: const Text('定期的にクラウドと同期します'),
-              value: false,
-              onChanged: (value) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('自動同期機能は準備中です'),
-                    backgroundColor: Colors.orange,
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 

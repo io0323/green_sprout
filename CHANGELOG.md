@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2024-12-22
+
+### Added
+- クラウド同期機能の完全実装
+  - enhanced_app.dartへのクラウド同期UI統合
+  - CloudSyncCubitとBlocProviderによる状態管理
+  - クラウドへのアップロード機能
+  - クラウドからのダウンロード機能
+  - 双方向同期機能
+  - 自動同期機能（有効/無効の切り替え）
+  - 接続状態の確認機能
+  - オフライン状態の検出と表示
+  - 同期状態のリアルタイム表示（同期中、成功、エラー）
+  - エラーハンドリングとユーザーフィードバックの改善
+
+### Changed
+- enhanced_app.dartにBlocProviderを追加してCloudSyncCubitを統合
+- クラウド同期カードのUIを改善し、実際の機能を実装
+- 同期状態の視覚的フィードバックを追加（アイコン、色、メッセージ）
+- 自動同期設定の切り替え時にユーザーフィードバックを追加
+
+### Technical Details
+- **Cloud Sync Integration**: CloudSyncCubitとBlocProviderによる状態管理の統合
+- **User Experience**: 同期状態のリアルタイム表示とエラーハンドリングの改善
+- **Architecture**: Clean Architectureに準拠したクラウド同期機能の実装
+
 ## [1.4.0] - 2024-12-21
 
 ### Added
