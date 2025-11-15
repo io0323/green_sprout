@@ -4,9 +4,7 @@ import 'package:tea_garden_ai/core/engines/advanced_analysis_engine.dart';
 import 'package:tea_garden_ai/features/tea_analysis/domain/entities/analysis_result.dart';
 import 'package:tea_garden_ai/core/constants/app_constants.dart';
 
-/**
- * 高度なAI解析エンジンのテスト
- */
+/// 高度なAI解析エンジンのテスト
 void main() {
   group('AdvancedAnalysisEngine', () {
     late AdvancedAnalysisEngine engine;
@@ -19,9 +17,7 @@ void main() {
       engine.dispose();
     });
 
-    /**
-     * テスト用の画像を作成
-     */
+    /// テスト用の画像を作成
     img.Image createTestImage({
       int width = 224,
       int height = 224,
