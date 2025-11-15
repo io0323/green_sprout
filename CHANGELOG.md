@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2024-12-21
+
+### Added
+- 高度な分析機能の実装
+  - 複数の解析手法を組み合わせた高精度な茶葉解析システム
+  - プライマリモデル、特徴抽出、アンサンブル手法による統合解析
+  - 画像品質評価機能（ぼやけ、明度、コントラスト）
+  - 高度な画像前処理（ノイズ除去、コントラスト調整、シャープネス向上）
+  - 色相・テクスチャ・形状ベースの解析手法
+  - 重み付き投票による結果統合
+- 高度な分析機能のユニットテスト
+  - AdvancedAnalysisEngineの包括的なテスト（18テスト）
+  - AdvancedImageProcessorの包括的なテスト（12テスト）
+
+### Changed
+- 解析結果画面に「高度な分析を実行」ボタンを追加
+- 解析エンジンの初期化処理を改善
+
+### Technical Details
+- **Advanced Analysis**: 複数の解析手法を組み合わせた高精度解析システム
+- **Image Processing**: 高度な画像前処理と特徴抽出機能
+- **Testing**: 高度な分析機能の包括的なテストカバレッジ
+
 ## [1.3.0] - 2024-12-20
 
 ### Added
