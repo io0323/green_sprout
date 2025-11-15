@@ -1,14 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:tea_garden_ai/enhanced_app.dart';
 import 'package:tea_garden_ai/core/services/localization_service.dart';
+import 'package:tea_garden_ai/core/di/injection_container.dart' as di;
 
 /// 拡張版茶園管理AIアプリのテスト
 void main() {
   setUpAll(() async {
+    // GetItをリセットしてから初期化
+    await GetIt.instance.reset();
+
+    // DIコンテナを初期化（アプリと同じ初期化処理）
+    await di.init();
+
     // テスト用にローカライゼーションサービスを初期化
     await LocalizationService.instance.loadTranslationsForTest();
     LocalizationService.instance.setLanguage('ja');
+  });
+
+  tearDownAll(() async {
+    // テスト終了後にGetItをリセット
+    await GetIt.instance.reset();
   });
 
   group('EnhancedTeaGardenApp', () {

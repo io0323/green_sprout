@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'dart:convert';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +17,9 @@ void main() async {
     await di.init();
   } catch (e) {
     // エラーが発生した場合はフォールバック
-    debugPrint('DI初期化エラー: $e');
+    if (kDebugMode) {
+      debugPrint('DI初期化エラー: $e');
+    }
   }
 
   runApp(const EnhancedTeaGardenApp());
