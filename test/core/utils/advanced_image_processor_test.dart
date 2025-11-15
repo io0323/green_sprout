@@ -2,14 +2,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
 import 'package:tea_garden_ai/core/utils/advanced_image_processor.dart';
 
-/**
- * 高度な画像処理ユーティリティのテスト
- */
+/// 高度な画像処理ユーティリティのテスト
 void main() {
   group('AdvancedImageProcessor', () {
-    /**
-     * テスト用の画像を作成
-     */
+    /// テスト用の画像を作成
     img.Image createTestImage({
       int width = 224,
       int height = 224,
