@@ -31,75 +31,67 @@ class AdvancedImageProcessor {
 
   /// アスペクト比を保持したリサイズ
   static img.Image _resizeWithAspectRatio(img.Image image, int targetSize) {
-    final originalWidth = image.width;
-    final originalHeight = image.height;
+    final int width = image.width;
+    final int height = image.height;
 
-    // アスペクト比を計算
-    final aspectRatio = originalWidth / originalHeight;
-
-    int newWidth, newHeight;
-    if (aspectRatio > 1) {
-      // 横長の場合
-      newWidth = targetSize;
-      newHeight = (targetSize / aspectRatio).round();
-    } else {
-      // 縦長または正方形の場合
-      newHeight = targetSize;
-      newWidth = (targetSize * aspectRatio).round();
-    }
-
-    // リサイズ
-    var resized = img.copyResize(image, width: newWidth, height: newHeight);
-
-    // パディングを追加して正方形にする
-    return _addPadding(resized, targetSize);
-  }
-
-  /// パディングを追加して正方形にする
-  static img.Image _addPadding(img.Image image, int targetSize) {
-    if (image.width == targetSize && image.height == targetSize) {
+    // 既に目標サイズの場合はそのまま返す
+    if (width == targetSize && height == targetSize) {
       return image;
     }
 
-    // 中央に配置するためのオフセットを計算
-    final offsetX = (targetSize - image.width) ~/ 2;
-    final offsetY = (targetSize - image.height) ~/ 2;
+    // 長辺を目標サイズに合わせてリサイズ（アスペクト比を保持）
+    int newWidth, newHeight;
+    if (width >= height) {
+      // 横長の場合：幅を目標サイズに、高さを比例的に縮小
+      newWidth = targetSize;
+      newHeight = (height * targetSize / width).round();
+    } else {
+      // 縦長の場合：高さを目標サイズに、幅を比例的に縮小
+      newHeight = targetSize;
+      newWidth = (width * targetSize / height).round();
+    }
 
-    // 新しい画像を作成
-    final padded = img.Image(width: targetSize, height: targetSize);
-
-    // 背景を白で塗りつぶし
-    img.fill(padded, color: img.ColorRgb8(255, 255, 255));
-
-    // 元の画像を中央に配置
-    img.compositeImage(padded, image, dstX: offsetX, dstY: offsetY);
-
-    return padded;
+    // リサイズ
+    return img.copyResize(image, width: newWidth, height: newHeight);
   }
 
   /// 画像をTensorFlow Lite用のFloat32Listに変換
   /// 正規化とチャンネル順序の調整を含む
   static Float32List imageToFloat32List(img.Image image) {
+    final int width = image.width;
+    final int height = image.height;
+    final int size = width * height * _channels;
+    final Float32List floatList = Float32List(size);
+
     final pixels = image.getBytes();
-    final floatList = Float32List(_targetSize * _targetSize * _channels);
+    final int actualPixelCount = pixels.length ~/ 4; // RGBA形式
 
+    // 実際のピクセル数を使用（画像処理後のサイズに基づく）
     int index = 0;
-    for (int y = 0; y < _targetSize; y++) {
-      for (int x = 0; x < _targetSize; x++) {
-        final pixelIndex = (y * _targetSize + x) * 4; // RGBA
+    final int pixelCountToProcess =
+        actualPixelCount < width * height ? actualPixelCount : width * height;
 
-        // RGB値を取得（0-255から0-1に正規化）
-        final r = pixels[pixelIndex] / 255.0;
-        final g = pixels[pixelIndex + 1] / 255.0;
-        final b = pixels[pixelIndex + 2] / 255.0;
+    for (int i = 0; i < pixelCountToProcess; i++) {
+      final pixelIndex = i * 4;
 
-        // ImageNetの平均と標準偏差で正規化
-        floatList[index] = (r - 0.485) / 0.229; // R
-        floatList[index + 1] = (g - 0.456) / 0.224; // G
-        floatList[index + 2] = (b - 0.406) / 0.225; // B
+      // RGB値を取得（0-255から0-1に正規化）
+      final double r = pixels[pixelIndex] / 255.0;
+      final double g = pixels[pixelIndex + 1] / 255.0;
+      final double b = pixels[pixelIndex + 2] / 255.0;
 
-        index += 3;
-      }
+      // ImageNetの平均と標準偏差で正規化
+      floatList[index] = (r - 0.485) / 0.229; // R
+      floatList[index + 1] = (g - 0.456) / 0.224; // G
+      floatList[index + 2] = (b - 0.406) / 0.225; // B
+
+      index += 3;
+    }
+
+    // 残りのピクセルを0で埋める（画像が小さい場合）
+    while (index < size) {
+      floatList[index++] = 0.0;
+      floatList[index++] = 0.0;
+      floatList[index++] = 0.0;
     }
 
     return floatList;

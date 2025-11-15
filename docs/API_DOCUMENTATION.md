@@ -199,6 +199,113 @@ class ModernTextField extends StatelessWidget {
 }
 ```
 
+### Advanced Analysis Engine
+
+#### AdvancedAnalysisEngine
+
+高度なAI解析エンジン。複数の解析手法を組み合わせた高精度な茶葉解析システム。
+
+```dart
+class AdvancedAnalysisEngine {
+  Future<void> initialize();
+  Future<AnalysisResult> analyzeImage(img.Image image);
+  void dispose();
+}
+```
+
+**メソッド:**
+- `initialize()`: 解析エンジンを初期化（プライマリモデルとセカンダリモデルの読み込み）
+- `analyzeImage(img.Image image)`: 高度な画像解析を実行
+  - 画像品質の評価
+  - 画像の前処理
+  - 複数の解析手法の実行（プライマリモデル、特徴抽出、アンサンブル手法）
+  - 結果の統合と信頼度の計算
+- `dispose()`: リソースの解放
+
+**解析手法:**
+1. **プライマリモデル**: TensorFlow Liteモデルによる解析
+2. **特徴抽出**: 色相、彩度、明度の統計情報に基づく分類
+3. **アンサンブル手法**: 色相、テクスチャ、形状ベースの解析を組み合わせ
+
+#### AdvancedImageProcessor
+
+高度な画像前処理と特徴抽出ユーティリティ。
+
+```dart
+class AdvancedImageProcessor {
+  static img.Image preprocessImage(img.Image image);
+  static Float32List imageToFloat32List(img.Image image);
+  static ImageQuality assessImageQuality(img.Image image);
+  static ImageFeatures extractFeatures(img.Image image);
+}
+```
+
+**メソッド:**
+- `preprocessImage(img.Image image)`: 画像の高度な前処理
+  - ノイズ除去（ガウシアンフィルタ）
+  - コントラスト調整
+  - 明度調整
+  - シャープネス向上
+  - リサイズ（アスペクト比を保持）
+- `imageToFloat32List(img.Image image)`: 画像をTensorFlow Lite用のFloat32Listに変換
+  - 正規化とチャンネル順序の調整
+  - ImageNetの平均と標準偏差で正規化
+- `assessImageQuality(img.Image image)`: 画像の品質を評価
+  - ぼやけスコア（ラプラシアン分散）
+  - 明度スコア
+  - コントラストスコア
+  - 総合スコア
+- `extractFeatures(img.Image image)`: 画像の特徴量を抽出
+  - 平均色相、彩度、明度
+  - RGBからHSLへの変換
+
+**データクラス:**
+- `ImageQuality`: 画像品質の評価結果
+  - `blurScore`: ぼやけスコア（0.0-1.0）
+  - `brightnessScore`: 明度スコア（0.0-1.0）
+  - `contrastScore`: コントラストスコア（0.0-1.0）
+  - `overallScore`: 総合スコア（0.0-1.0）
+- `ImageFeatures`: 画像の特徴量
+  - `averageHue`: 平均色相（0-360）
+  - `averageSaturation`: 平均彩度（0-1）
+  - `averageLightness`: 平均明度（0-1）
+  - `pixelCount`: ピクセル数
+
+#### AdvancedAnalyzeImage
+
+高度な画像解析を実行するユースケース。
+
+```dart
+class AdvancedAnalyzeImage implements UseCase<AnalysisResult, File> {
+  final AdvancedAnalysisEngine advancedAnalysisEngine;
+  
+  @override
+  Future<Either<Failure, AnalysisResult>> call(File imageFile);
+}
+```
+
+**メソッド:**
+- `call(File imageFile)`: 画像ファイルを解析
+  - 画像ファイルの読み込み
+  - 高度な解析エンジンで解析
+  - 結果を返す
+
+#### InitializeAdvancedAnalysisEngine
+
+高度な解析エンジンを初期化するユースケース。
+
+```dart
+class InitializeAdvancedAnalysisEngine implements UseCaseNoParams<Unit> {
+  final AdvancedAnalysisEngine advancedAnalysisEngine;
+  
+  @override
+  Future<Either<Failure, Unit>> call();
+}
+```
+
+**メソッド:**
+- `call()`: 解析エンジンを初期化
+
 ### Theme System
 
 #### TeaGardenTheme
