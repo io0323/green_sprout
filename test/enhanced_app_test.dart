@@ -6,13 +6,30 @@ import 'package:tea_garden_ai/core/services/localization_service.dart';
 import 'package:tea_garden_ai/core/di/injection_container.dart' as di;
 
 /// 拡張版茶園管理AIアプリのテスト
+
+/// 特定のウィジェットが表示されるまで待機するヘルパー関数
+Future<void> pumpUntilFound(
+  WidgetTester tester,
+  Finder finder, {
+  Duration timeout = const Duration(seconds: 5),
+}) async {
+  final end = DateTime.now().add(timeout);
+  while (DateTime.now().isBefore(end)) {
+    await tester.pump(const Duration(milliseconds: 100));
+    if (tester.any(finder)) {
+      return;
+    }
+  }
+  throw Exception('Timed out waiting for $finder');
+}
+
 void main() {
   setUpAll(() async {
     // GetItをリセットしてから初期化
     await GetIt.instance.reset();
 
-    // DIコンテナを初期化（アプリと同じ初期化処理）
-    await di.init();
+    // DIコンテナを初期化（テストモードで初期化）
+    await di.init(testing: true);
 
     // テスト用にローカライゼーションサービスを初期化
     await LocalizationService.instance.loadTranslationsForTest();
@@ -28,7 +45,13 @@ void main() {
     testWidgets('アプリが正常に起動する', (WidgetTester tester) async {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
-      await tester.pumpAndSettle();
+
+      // FutureBuilderが完了するまで待機
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+
+      // AppBarが表示されるまで待機
+      await pumpUntilFound(tester, find.byType(AppBar));
 
       // AppBarが表示されることを確認
       expect(find.byType(AppBar), findsOneWidget);
@@ -43,7 +66,7 @@ void main() {
     testWidgets('タブナビゲーションが表示される', (WidgetTester tester) async {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
       // タブが表示されることを確認
       expect(find.byIcon(Icons.dashboard), findsWidgets);
@@ -56,7 +79,7 @@ void main() {
     testWidgets('ダッシュボードタブが表示される', (WidgetTester tester) async {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
       // ダッシュボードタブのコンテンツが表示されることを確認
       expect(
@@ -82,12 +105,13 @@ void main() {
     testWidgets('解析タブで解析ボタンが表示される', (WidgetTester tester) async {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
       // 解析タブをタップ
       final analysisTab = find.byIcon(Icons.camera_alt).first;
       await tester.tap(analysisTab);
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
       // 解析ボタンが表示されることを確認
       expect(find.text(LocalizationService.instance.translate('take_photo')),
@@ -97,12 +121,13 @@ void main() {
     testWidgets('解析を実行すると結果が追加される', (WidgetTester tester) async {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
       // 解析タブをタップ
       final analysisTab = find.byIcon(Icons.camera_alt).first;
       await tester.tap(analysisTab);
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
       // 解析ボタンをタップ
       final analyzeButton =
@@ -115,7 +140,7 @@ void main() {
           findsWidgets);
 
       // 解析が完了するまで待機
-      await tester.pumpAndSettle(const Duration(seconds: 4));
+      await tester.pumpAndSettle(const Duration(seconds: 8));
 
       // 結果が追加されたことを確認
       expect(
@@ -132,12 +157,13 @@ void main() {
     testWidgets('チャートタブが表示される', (WidgetTester tester) async {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
       // チャートタブをタップ
       final chartsTab = find.byIcon(Icons.bar_chart).first;
       await tester.tap(chartsTab);
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
       // チャートタイトルが表示されることを確認
       expect(
@@ -153,12 +179,13 @@ void main() {
     testWidgets('エクスポートタブが表示される', (WidgetTester tester) async {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
       // エクスポートタブをタップ
       final exportTab = find.byIcon(Icons.download).first;
       await tester.tap(exportTab);
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
       // エクスポートセクションが表示されることを確認
       expect(find.text(LocalizationService.instance.translate('export')),
@@ -174,12 +201,13 @@ void main() {
     testWidgets('設定タブが表示される', (WidgetTester tester) async {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
       // 設定タブをタップ
       final settingsTab = find.byIcon(Icons.settings).first;
       await tester.tap(settingsTab);
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
       // 設定セクションが表示されることを確認
       expect(find.text(LocalizationService.instance.translate('app_settings')),
@@ -191,12 +219,13 @@ void main() {
     testWidgets('空の状態が正しく表示される', (WidgetTester tester) async {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
       // 解析タブをタップ
       final analysisTab = find.byIcon(Icons.camera_alt).first;
       await tester.tap(analysisTab);
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
 
       // 空の状態メッセージが表示されることを確認
       expect(

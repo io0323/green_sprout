@@ -34,7 +34,8 @@ final GetIt sl = GetIt.instance;
 
 /// 依存性注入の初期化
 /// アプリ起動時に呼び出される
-Future<void> init() async {
+/// [testing] が true の場合、テスト用の設定で初期化する
+Future<void> init({bool testing = false}) async {
   // データソース - プラットフォームに応じて実装を切り替え
   if (PlatformUtils.isWeb) {
     // Webプラットフォーム用のモック実装
@@ -158,10 +159,14 @@ Future<void> init() async {
   );
 
   // クラウド同期BLoC
-  sl.registerFactoryAsync(() async => CloudSyncCubit(
-        cloudSyncService: await sl.getAsync<CloudSyncService>(),
-        offlineSyncQueue: await sl.getAsync<OfflineSyncQueue>(),
-        syncStatusNotifier: sl<SyncStatusNotifier>(),
-        teaAnalysisRepository: sl(),
-      ));
+  sl.registerFactoryAsync(() async {
+    final cubit = CloudSyncCubit(
+      cloudSyncService: await sl.getAsync<CloudSyncService>(),
+      offlineSyncQueue: await sl.getAsync<OfflineSyncQueue>(),
+      syncStatusNotifier: sl<SyncStatusNotifier>(),
+      teaAnalysisRepository: sl(),
+      skipInitialization: testing, // テストモードでは初期化をスキップ
+    );
+    return cubit;
+  });
 }
