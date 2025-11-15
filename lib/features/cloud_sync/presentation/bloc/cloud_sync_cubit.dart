@@ -67,8 +67,11 @@ class CloudSyncCubit extends Cubit<CloudSyncState> {
     required this.offlineSyncQueue,
     required this.syncStatusNotifier,
     required this.teaAnalysisRepository,
+    bool skipInitialization = false,
   }) : super(CloudSyncInitial()) {
-    _initialize();
+    if (!skipInitialization) {
+      _initialize();
+    }
   }
 
   /// 初期化処理

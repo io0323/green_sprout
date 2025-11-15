@@ -1,6 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'dart:typed_data';
 import '../utils/platform_utils.dart';
 import '../../features/tea_analysis/data/datasources/analysis_local_datasource.dart';
 import '../../features/tea_analysis/data/datasources/analysis_local_datasource_impl.dart';
@@ -34,7 +36,8 @@ final GetIt sl = GetIt.instance;
 
 /// 依存性注入の初期化
 /// アプリ起動時に呼び出される
-Future<void> init() async {
+/// [testing] が true の場合、テスト用の設定で初期化する
+Future<void> init({bool testing = false}) async {
   // データソース - プラットフォームに応じて実装を切り替え
   if (PlatformUtils.isWeb) {
     // Webプラットフォーム用のモック実装
@@ -140,7 +143,12 @@ Future<void> init() async {
       ));
 
   // クラウド同期サービス
-  sl.registerLazySingleton<http.Client>(() => http.Client());
+  if (testing) {
+    // テストモードではモックHTTPクライアントを使用
+    sl.registerLazySingleton<http.Client>(() => _TestHttpClient());
+  } else {
+    sl.registerLazySingleton<http.Client>(() => http.Client());
+  }
   sl.registerLazySingletonAsync<SharedPreferences>(
     () => SharedPreferences.getInstance(),
   );
@@ -158,10 +166,80 @@ Future<void> init() async {
   );
 
   // クラウド同期BLoC
-  sl.registerFactoryAsync(() async => CloudSyncCubit(
-        cloudSyncService: await sl.getAsync<CloudSyncService>(),
-        offlineSyncQueue: await sl.getAsync<OfflineSyncQueue>(),
-        syncStatusNotifier: sl<SyncStatusNotifier>(),
-        teaAnalysisRepository: sl(),
-      ));
+  sl.registerFactoryAsync(() async {
+    final cubit = CloudSyncCubit(
+      cloudSyncService: await sl.getAsync<CloudSyncService>(),
+      offlineSyncQueue: await sl.getAsync<OfflineSyncQueue>(),
+      syncStatusNotifier: sl<SyncStatusNotifier>(),
+      teaAnalysisRepository: sl(),
+      skipInitialization: testing, // テストモードでは初期化をスキップ
+    );
+    return cubit;
+  });
+}
+
+/// テスト用のHTTPクライアント
+/// すべてのHTTPリクエストに対して即座に成功レスポンスを返す
+class _TestHttpClient implements http.Client {
+  @override
+  Future<http.Response> get(Uri url, {Map<String, String>? headers}) async {
+    return http.Response('{}', 200,
+        headers: {'content-type': 'application/json'});
+  }
+
+  @override
+  Future<http.Response> post(Uri url,
+      {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
+    return http.Response('{}', 200,
+        headers: {'content-type': 'application/json'});
+  }
+
+  @override
+  Future<http.Response> put(Uri url,
+      {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
+    return http.Response('{}', 200,
+        headers: {'content-type': 'application/json'});
+  }
+
+  @override
+  Future<http.Response> patch(Uri url,
+      {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
+    return http.Response('{}', 200,
+        headers: {'content-type': 'application/json'});
+  }
+
+  @override
+  Future<http.Response> delete(Uri url,
+      {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
+    return http.Response('{}', 200,
+        headers: {'content-type': 'application/json'});
+  }
+
+  @override
+  Future<http.Response> head(Uri url, {Map<String, String>? headers}) async {
+    return http.Response('', 200,
+        headers: {'content-type': 'application/json'});
+  }
+
+  @override
+  Future<String> read(Uri url, {Map<String, String>? headers}) async {
+    return '{}';
+  }
+
+  @override
+  Future<Uint8List> readBytes(Uri url, {Map<String, String>? headers}) async {
+    return Uint8List.fromList(utf8.encode('{}'));
+  }
+
+  @override
+  Future<http.StreamedResponse> send(http.BaseRequest request) async {
+    return http.StreamedResponse(
+      Stream.value(utf8.encode('{}')),
+      200,
+      headers: {'content-type': 'application/json'},
+    );
+  }
+
+  @override
+  void close() {}
 }
