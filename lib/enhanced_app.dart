@@ -17,9 +17,7 @@ void main() async {
     await di.init();
   } catch (e) {
     // エラーが発生した場合はフォールバック
-    if (kDebugMode) {
-      debugPrint('DI初期化エラー: $e');
-    }
+    if (kDebugMode) debugPrint('DI初期化エラー: $e');
   }
 
   runApp(const EnhancedTeaGardenApp());
