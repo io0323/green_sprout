@@ -150,6 +150,18 @@ Future<void> pumpUntilFound(
   throw Exception('Timed out waiting for $finder');
 }
 
+/// ウィジェットが存在することを確認してから最初のマッチをタップするヘルパー関数
+/// Finder.firstを呼び出す前にウィジェットの存在を確認することで、StateErrorを防止
+Future<void> safeTapFirst(
+  WidgetTester tester,
+  Finder finder, {
+  Duration timeout = const Duration(seconds: 15),
+}) async {
+  await pumpUntilFound(tester, finder, timeout: timeout);
+  await tester.tap(finder.first);
+  await tester.pump();
+}
+
 void main() {
   setUpAll(() async {
     // テストバインディングを初期化
@@ -252,11 +264,11 @@ void main() {
         await tester.pumpAndSettle(const Duration(seconds: 12));
       });
 
-      // 解析タブをタップ
-      final analysisTab = find.byIcon(Icons.camera_alt).first;
-      await tester.tap(analysisTab);
+      // 解析タブをタップ（ウィジェットが存在することを確認してからタップ）
+      await safeTapFirst(tester, find.byIcon(Icons.camera_alt),
+          timeout: const Duration(seconds: 15));
+      // UIが安定するまで待機
       await tester.runAsync(() async {
-        await tester.pump();
         await tester.pumpAndSettle(const Duration(seconds: 12));
       });
 
@@ -273,18 +285,20 @@ void main() {
         await tester.pumpAndSettle(const Duration(seconds: 12));
       });
 
-      // 解析タブをタップ
-      final analysisTab = find.byIcon(Icons.camera_alt).first;
-      await tester.tap(analysisTab);
+      // 解析タブをタップ（ウィジェットが存在することを確認してからタップ）
+      await safeTapFirst(tester, find.byIcon(Icons.camera_alt),
+          timeout: const Duration(seconds: 15));
+      // UIが安定するまで待機
       await tester.runAsync(() async {
-        await tester.pump();
         await tester.pumpAndSettle(const Duration(seconds: 12));
       });
 
-      // 解析ボタンをタップ
-      final analyzeButton =
-          find.text(LocalizationService.instance.translate('take_photo'));
-      await tester.tap(analyzeButton);
+      // 解析ボタンをタップ（ウィジェットが存在することを確認してからタップ）
+      await pumpUntilFound(tester,
+          find.text(LocalizationService.instance.translate('take_photo')),
+          timeout: const Duration(seconds: 15));
+      await tester
+          .tap(find.text(LocalizationService.instance.translate('take_photo')));
 
       // ローディング表示を確認
       await tester.pump();
@@ -316,11 +330,11 @@ void main() {
         await tester.pumpAndSettle(const Duration(seconds: 12));
       });
 
-      // チャートタブをタップ
-      final chartsTab = find.byIcon(Icons.bar_chart).first;
-      await tester.tap(chartsTab);
+      // チャートタブをタップ（ウィジェットが存在することを確認してからタップ）
+      await safeTapFirst(tester, find.byIcon(Icons.bar_chart),
+          timeout: const Duration(seconds: 15));
+      // UIが安定するまで待機
       await tester.runAsync(() async {
-        await tester.pump();
         await tester.pumpAndSettle(const Duration(seconds: 12));
       });
 
@@ -343,11 +357,11 @@ void main() {
         await tester.pumpAndSettle(const Duration(seconds: 12));
       });
 
-      // エクスポートタブをタップ
-      final exportTab = find.byIcon(Icons.download).first;
-      await tester.tap(exportTab);
+      // エクスポートタブをタップ（ウィジェットが存在することを確認してからタップ）
+      await safeTapFirst(tester, find.byIcon(Icons.download),
+          timeout: const Duration(seconds: 15));
+      // UIが安定するまで待機
       await tester.runAsync(() async {
-        await tester.pump();
         await tester.pumpAndSettle(const Duration(seconds: 12));
       });
 
@@ -370,11 +384,11 @@ void main() {
         await tester.pumpAndSettle(const Duration(seconds: 12));
       });
 
-      // 設定タブをタップ
-      final settingsTab = find.byIcon(Icons.settings).first;
-      await tester.tap(settingsTab);
+      // 設定タブをタップ（ウィジェットが存在することを確認してからタップ）
+      await safeTapFirst(tester, find.byIcon(Icons.settings),
+          timeout: const Duration(seconds: 15));
+      // UIが安定するまで待機
       await tester.runAsync(() async {
-        await tester.pump();
         await tester.pumpAndSettle(const Duration(seconds: 12));
       });
 
@@ -393,11 +407,11 @@ void main() {
         await tester.pumpAndSettle(const Duration(seconds: 12));
       });
 
-      // 解析タブをタップ
-      final analysisTab = find.byIcon(Icons.camera_alt).first;
-      await tester.tap(analysisTab);
+      // 解析タブをタップ（ウィジェットが存在することを確認してからタップ）
+      await safeTapFirst(tester, find.byIcon(Icons.camera_alt),
+          timeout: const Duration(seconds: 15));
+      // UIが安定するまで待機
       await tester.runAsync(() async {
-        await tester.pump();
         await tester.pumpAndSettle(const Duration(seconds: 12));
       });
 
