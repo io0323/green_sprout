@@ -180,8 +180,11 @@ Future<void> safeTapFirst(
   await pumpUntilFound(tester, finder, timeout: timeout);
   await tester.tap(finder.first);
   // UI遷移が完了するまで待機 (pump every 100ms, timeout 15s)
-  await tester.pumpAndSettle(const Duration(milliseconds: 100),
-      EnginePhase.flushSemantics, const Duration(seconds: 15));
+  await tester.pumpAndSettle(
+    const Duration(milliseconds: 100),
+    EnginePhase.sendSemanticsUpdate,
+    const Duration(seconds: 15),
+  );
 }
 
 void main() {
@@ -215,8 +218,11 @@ void main() {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
       // アプリの初期化が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(const Duration(milliseconds: 100),
-          EnginePhase.flushSemantics, const Duration(seconds: 30));
+      await tester.pumpAndSettle(
+        const Duration(milliseconds: 100),
+        EnginePhase.sendSemanticsUpdate,
+        const Duration(seconds: 30),
+      );
 
       // AppBarが表示されることを確認
       expect(find.byType(AppBar), findsOneWidget);
@@ -232,8 +238,11 @@ void main() {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
       // アプリの初期化が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(const Duration(milliseconds: 100),
-          EnginePhase.flushSemantics, const Duration(seconds: 30));
+      await tester.pumpAndSettle(
+        const Duration(milliseconds: 100),
+        EnginePhase.sendSemanticsUpdate,
+        const Duration(seconds: 30),
+      );
 
       // タブが表示されることを確認（Keyを使用）
       expect(find.byKey(const Key('tab_dashboard_icon')), findsWidgets);
@@ -247,8 +256,11 @@ void main() {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
       // アプリの初期化が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(const Duration(milliseconds: 100),
-          EnginePhase.flushSemantics, const Duration(seconds: 30));
+      await tester.pumpAndSettle(
+        const Duration(milliseconds: 100),
+        EnginePhase.sendSemanticsUpdate,
+        const Duration(seconds: 30),
+      );
 
       // ダッシュボードタブのコンテンツが表示されることを確認
       expect(
@@ -275,8 +287,11 @@ void main() {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
       // アプリの初期化が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(const Duration(milliseconds: 100),
-          EnginePhase.flushSemantics, const Duration(seconds: 30));
+      await tester.pumpAndSettle(
+        const Duration(milliseconds: 100),
+        EnginePhase.sendSemanticsUpdate,
+        const Duration(seconds: 30),
+      );
 
       // 解析タブをタップ（Keyを使用）
       await safeTapFirst(tester, find.byKey(const Key('tab_camera_icon')),
@@ -290,8 +305,11 @@ void main() {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
       // アプリの初期化が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(const Duration(milliseconds: 100),
-          EnginePhase.flushSemantics, const Duration(seconds: 30));
+      await tester.pumpAndSettle(
+        const Duration(milliseconds: 100),
+        EnginePhase.sendSemanticsUpdate,
+        const Duration(seconds: 30),
+      );
 
       // 解析タブをタップ（Keyを使用）
       await safeTapFirst(tester, find.byKey(const Key('tab_camera_icon')),
@@ -308,8 +326,11 @@ void main() {
           findsWidgets);
 
       // 解析が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(const Duration(milliseconds: 100),
-          EnginePhase.flushSemantics, const Duration(seconds: 30));
+      await tester.pumpAndSettle(
+        const Duration(milliseconds: 100),
+        EnginePhase.sendSemanticsUpdate,
+        const Duration(seconds: 30),
+      );
 
       // 結果が追加されたことを確認
       expect(
@@ -327,8 +348,11 @@ void main() {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
       // アプリの初期化が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(const Duration(milliseconds: 100),
-          EnginePhase.flushSemantics, const Duration(seconds: 30));
+      await tester.pumpAndSettle(
+        const Duration(milliseconds: 100),
+        EnginePhase.sendSemanticsUpdate,
+        const Duration(seconds: 30),
+      );
 
       // チャートタブをタップ（Keyを使用）
       await safeTapFirst(tester, find.byKey(const Key('tab_charts_icon')),
@@ -349,8 +373,11 @@ void main() {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
       // アプリの初期化が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(const Duration(milliseconds: 100),
-          EnginePhase.flushSemantics, const Duration(seconds: 30));
+      await tester.pumpAndSettle(
+        const Duration(milliseconds: 100),
+        EnginePhase.sendSemanticsUpdate,
+        const Duration(seconds: 30),
+      );
 
       // エクスポートタブをタップ（Keyを使用）
       await safeTapFirst(tester, find.byKey(const Key('tab_export_icon')),
@@ -371,8 +398,11 @@ void main() {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
       // アプリの初期化が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(const Duration(milliseconds: 100),
-          EnginePhase.flushSemantics, const Duration(seconds: 30));
+      await tester.pumpAndSettle(
+        const Duration(milliseconds: 100),
+        EnginePhase.sendSemanticsUpdate,
+        const Duration(seconds: 30),
+      );
 
       // 設定タブをタップ（Keyを使用）
       await safeTapFirst(tester, find.byKey(const Key('tab_settings_icon')),
@@ -389,8 +419,11 @@ void main() {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
       // アプリの初期化が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(const Duration(milliseconds: 100),
-          EnginePhase.flushSemantics, const Duration(seconds: 30));
+      await tester.pumpAndSettle(
+        const Duration(milliseconds: 100),
+        EnginePhase.sendSemanticsUpdate,
+        const Duration(seconds: 30),
+      );
 
       // 解析タブをタップ（Keyを使用）
       await safeTapFirst(tester, find.byKey(const Key('tab_camera_icon')),
