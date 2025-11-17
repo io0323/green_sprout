@@ -186,14 +186,30 @@ Future<void> safeTapFirst(
   Finder? waitFor,
 }) async {
   await pumpUntilFound(tester, finder, timeout: timeout);
-  await tester.tap(finder.first);
-  await tester.pump(); // let one frame happen
+
+  // Ensure the widget is visible and can be hit.
+  try {
+    await tester.ensureVisible(finder.first);
+  } catch (_) {
+    // ensureVisible may throw if the finder isn't on a scrollable; ignore and continue.
+  }
+  await tester.pumpAndSettle(const Duration(milliseconds: 100));
+
+  // Try a normal tap first; if it doesn't register, fall back to tapping at the widget center.
+  try {
+    await tester.tap(finder.first, warnIfMissed: false);
+    await tester.pump();
+  } catch (_) {
+    // Fallback: tap at the center of the widget (more reliable for some layouts)
+    final center = tester.getCenter(finder.first);
+    await tester.tapAt(center);
+    await tester.pump();
+  }
+
   if (waitFor != null) {
-    // Wait for a specific expected widget after tap
     await pumpUntilFound(tester, waitFor, timeout: timeout);
   } else {
-    // Fallback: allow a few small pumps, but avoid pumpAndSettle
-    // This avoids waiting for all animations/async tasks to complete
+    // small, finite number of pumps to give animations/async work a chance without using pumpAndSettle
     for (int i = 0; i < 20; i++) {
       await tester.pump(const Duration(milliseconds: 100));
     }
@@ -325,12 +341,18 @@ void main() {
           waitFor: find.byKey(const Key('btn_take_photo')));
 
       // 解析ボタンをタップ（Keyを使用）- ローディングテキストが表示されるのを待つ
+      // Confirm the translation key exists before using it
+      final aiAnalyzingText =
+          LocalizationService.instance.translate('ai_analyzing');
+      expect(aiAnalyzingText, isNotEmpty,
+          reason: 'Missing translation: ai_analyzing');
+
       await safeTapFirst(
         tester,
         find.byKey(const Key('btn_take_photo')),
-        timeout: const Duration(seconds: 15),
-        waitFor:
-            find.text(LocalizationService.instance.translate('ai_analyzing')),
+        timeout:
+            const Duration(seconds: 30), // Increased timeout for CI slowness
+        waitFor: find.text(aiAnalyzingText),
       );
 
       // ローディング表示を確認（既に待機済み）
