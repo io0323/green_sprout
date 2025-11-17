@@ -171,19 +171,20 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
           },
           tabs: [
             Tab(
-                icon: const Icon(Icons.dashboard),
+                icon:
+                    const Icon(Icons.dashboard, key: Key('tab_dashboard_icon')),
                 text: LocalizationService.instance.translate('dashboard')),
             Tab(
-                icon: const Icon(Icons.camera_alt),
+                icon: const Icon(Icons.camera_alt, key: Key('tab_camera_icon')),
                 text: LocalizationService.instance.translate('analysis')),
             Tab(
-                icon: const Icon(Icons.bar_chart),
+                icon: const Icon(Icons.bar_chart, key: Key('tab_charts_icon')),
                 text: LocalizationService.instance.translate('charts')),
             Tab(
-                icon: const Icon(Icons.download),
+                icon: const Icon(Icons.download, key: Key('tab_export_icon')),
                 text: LocalizationService.instance.translate('export')),
             Tab(
-                icon: const Icon(Icons.settings),
+                icon: const Icon(Icons.settings, key: Key('tab_settings_icon')),
                 text: LocalizationService.instance.translate('settings')),
           ],
         ),
@@ -420,6 +421,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
               )
             else
               ElevatedButton.icon(
+                key: const Key('btn_take_photo'),
                 onPressed: _startAnalysis,
                 icon: const Icon(Icons.camera_alt),
                 label:
@@ -1710,48 +1712,74 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
   }
 
   void _startAnalysis() async {
+    // Prevent multiple concurrent analyses
+    if (_isAnalyzing) return;
+
     setState(() {
       _isAnalyzing = true;
     });
 
-    await Future.delayed(const Duration(seconds: 3));
+    try {
+      // Simulate a short network delay (CI-friendly)
+      await Future.delayed(const Duration(milliseconds: 200));
 
-    final growthStages = [
-      LocalizationService.instance.translate('sprouting_period'),
-      LocalizationService.instance.translate('growth_period'),
-      LocalizationService.instance.translate('maturity_period'),
-      LocalizationService.instance.translate('harvest_period')
-    ];
-    final result = {
-      'growthStage': growthStages[DateTime.now().millisecondsSinceEpoch % 4],
-      'healthStatus': DateTime.now().millisecondsSinceEpoch % 10 < 2
-          ? LocalizationService.instance.translate('attention')
-          : LocalizationService.instance.translate('healthy'),
-      'confidence': (75 + (DateTime.now().millisecondsSinceEpoch % 25)) / 100.0,
-      'timestamp': DateTime.now().toString().substring(0, 19),
-      'comment':
-          LocalizationService.instance.translate('new_analysis_completed'),
-    };
+      final now = DateTime.now().toIso8601String();
+      final growthStages = [
+        LocalizationService.instance.translate('sprouting_period'),
+        LocalizationService.instance.translate('growth_period'),
+        LocalizationService.instance.translate('maturity_period'),
+        LocalizationService.instance.translate('harvest_period')
+      ];
 
-    if (!mounted) {
-      return; // <- important: avoid using context if widget disposed
+      final Map<String, dynamic> resultMap = {
+        'timestamp': now,
+        'growthStage': growthStages[DateTime.now().millisecondsSinceEpoch % 4],
+        'healthStatus': DateTime.now().millisecondsSinceEpoch % 10 < 2
+            ? LocalizationService.instance.translate('attention')
+            : LocalizationService.instance.translate('healthy'),
+        'confidence':
+            (75 + (DateTime.now().millisecondsSinceEpoch % 25)) / 100.0,
+        'comment':
+            LocalizationService.instance.translate('new_analysis_completed'),
+      };
+
+      // Update results and counters
+      if (mounted) {
+        setState(() {
+          _results.insert(0, resultMap);
+          _analysisCount++;
+          _isAnalyzing = false;
+        });
+
+        // Persist data
+        _saveData();
+
+        // Show localized SnackBar confirming completion
+        final text =
+            LocalizationService.instance.translate('analysis_complete');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(text),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      // End analyzing state on error and optionally show an error SnackBar
+      if (mounted) {
+        setState(() {
+          _isAnalyzing = false;
+        });
+        final errText =
+            LocalizationService.instance.translate('analysis_failed');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errText),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
-
-    setState(() {
-      _results.insert(0, result);
-      _analysisCount++;
-      _isAnalyzing = false;
-    });
-
-    _saveData();
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content:
-            Text(LocalizationService.instance.translate('analysis_complete')),
-        backgroundColor: Colors.green,
-      ),
-    );
   }
 
   void _editResult(Map<String, dynamic> result) {
