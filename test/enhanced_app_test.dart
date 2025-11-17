@@ -159,7 +159,8 @@ Future<void> safeTapFirst(
 }) async {
   await pumpUntilFound(tester, finder, timeout: timeout);
   await tester.tap(finder.first);
-  await tester.pump();
+  // UI遷移が完了するまで待機
+  await tester.pumpAndSettle(const Duration(seconds: 5));
 }
 
 void main() {
@@ -188,18 +189,10 @@ void main() {
 
   group('EnhancedTeaGardenApp', () {
     testWidgets('アプリが正常に起動する', (WidgetTester tester) async {
-      // アプリを構築（非同期初期化を許可）
-      await tester.runAsync(() async {
-        await tester.pumpWidget(const EnhancedTeaGardenApp());
-
-        // FutureBuilderが完了するまで待機
-        await tester.pump();
-        await tester.pump(const Duration(milliseconds: 500));
-      });
-
-      // AppBarが表示されるまで待機（タイムアウトを増やす）
-      await pumpUntilFound(tester, find.byType(AppBar),
-          timeout: const Duration(seconds: 15));
+      // アプリを構築
+      await tester.pumpWidget(const EnhancedTeaGardenApp());
+      // アプリの初期化が完了するまで待機
+      await tester.pumpAndSettle(const Duration(seconds: 10));
 
       // AppBarが表示されることを確認
       expect(find.byType(AppBar), findsOneWidget);
@@ -212,28 +205,24 @@ void main() {
     });
 
     testWidgets('タブナビゲーションが表示される', (WidgetTester tester) async {
-      // アプリを構築（非同期初期化を許可）
-      await tester.runAsync(() async {
-        await tester.pumpWidget(const EnhancedTeaGardenApp());
-        // CI環境での遅い初期化を完了させるためにタイムアウトを増やす
-        await tester.pumpAndSettle(const Duration(seconds: 12));
-      });
+      // アプリを構築
+      await tester.pumpWidget(const EnhancedTeaGardenApp());
+      // アプリの初期化が完了するまで待機
+      await tester.pumpAndSettle(const Duration(seconds: 10));
 
-      // タブが表示されることを確認
-      expect(find.byIcon(Icons.dashboard), findsWidgets);
-      expect(find.byIcon(Icons.camera_alt), findsWidgets);
-      expect(find.byIcon(Icons.bar_chart), findsWidgets);
-      expect(find.byIcon(Icons.download), findsWidgets);
-      expect(find.byIcon(Icons.settings), findsWidgets);
+      // タブが表示されることを確認（Keyを使用）
+      expect(find.byKey(const Key('tab_dashboard_icon')), findsWidgets);
+      expect(find.byKey(const Key('tab_camera_icon')), findsWidgets);
+      expect(find.byKey(const Key('tab_charts_icon')), findsWidgets);
+      expect(find.byKey(const Key('tab_export_icon')), findsWidgets);
+      expect(find.byKey(const Key('tab_settings_icon')), findsWidgets);
     });
 
     testWidgets('ダッシュボードタブが表示される', (WidgetTester tester) async {
-      // アプリを構築（非同期初期化を許可）
-      await tester.runAsync(() async {
-        await tester.pumpWidget(const EnhancedTeaGardenApp());
-        // CI環境での遅い初期化を完了させるためにタイムアウトを増やす
-        await tester.pumpAndSettle(const Duration(seconds: 12));
-      });
+      // アプリを構築
+      await tester.pumpWidget(const EnhancedTeaGardenApp());
+      // アプリの初期化が完了するまで待機
+      await tester.pumpAndSettle(const Duration(seconds: 10));
 
       // ダッシュボードタブのコンテンツが表示されることを確認
       expect(
@@ -257,48 +246,33 @@ void main() {
     });
 
     testWidgets('解析タブで解析ボタンが表示される', (WidgetTester tester) async {
-      // アプリを構築（非同期初期化を許可）
-      await tester.runAsync(() async {
-        await tester.pumpWidget(const EnhancedTeaGardenApp());
-        // CI環境での遅い初期化を完了させるためにタイムアウトを増やす
-        await tester.pumpAndSettle(const Duration(seconds: 12));
-      });
+      // アプリを構築
+      await tester.pumpWidget(const EnhancedTeaGardenApp());
+      // アプリの初期化が完了するまで待機
+      await tester.pumpAndSettle(const Duration(seconds: 10));
 
-      // 解析タブをタップ（ウィジェットが存在することを確認してからタップ）
-      await safeTapFirst(tester, find.byIcon(Icons.camera_alt),
+      // 解析タブをタップ（Keyを使用）
+      await safeTapFirst(tester, find.byKey(const Key('tab_camera_icon')),
           timeout: const Duration(seconds: 15));
-      // UIが安定するまで待機
-      await tester.runAsync(() async {
-        await tester.pumpAndSettle(const Duration(seconds: 12));
-      });
 
-      // 解析ボタンが表示されることを確認
-      expect(find.text(LocalizationService.instance.translate('take_photo')),
-          findsWidgets);
+      // 解析ボタンが表示されることを確認（Keyを使用）
+      expect(find.byKey(const Key('btn_take_photo')), findsWidgets);
     });
 
     testWidgets('解析を実行すると結果が追加される', (WidgetTester tester) async {
-      // アプリを構築（非同期初期化を許可）
-      await tester.runAsync(() async {
-        await tester.pumpWidget(const EnhancedTeaGardenApp());
-        // CI環境での遅い初期化を完了させるためにタイムアウトを増やす
-        await tester.pumpAndSettle(const Duration(seconds: 12));
-      });
+      // アプリを構築
+      await tester.pumpWidget(const EnhancedTeaGardenApp());
+      // アプリの初期化が完了するまで待機
+      await tester.pumpAndSettle(const Duration(seconds: 10));
 
-      // 解析タブをタップ（ウィジェットが存在することを確認してからタップ）
-      await safeTapFirst(tester, find.byIcon(Icons.camera_alt),
+      // 解析タブをタップ（Keyを使用）
+      await safeTapFirst(tester, find.byKey(const Key('tab_camera_icon')),
           timeout: const Duration(seconds: 15));
-      // UIが安定するまで待機
-      await tester.runAsync(() async {
-        await tester.pumpAndSettle(const Duration(seconds: 12));
-      });
 
-      // 解析ボタンをタップ（ウィジェットが存在することを確認してからタップ）
-      await pumpUntilFound(tester,
-          find.text(LocalizationService.instance.translate('take_photo')),
+      // 解析ボタンをタップ（Keyを使用）
+      await pumpUntilFound(tester, find.byKey(const Key('btn_take_photo')),
           timeout: const Duration(seconds: 15));
-      await tester
-          .tap(find.text(LocalizationService.instance.translate('take_photo')));
+      await tester.tap(find.byKey(const Key('btn_take_photo')));
 
       // ローディング表示を確認
       await tester.pump();
@@ -306,9 +280,7 @@ void main() {
           findsWidgets);
 
       // 解析が完了するまで待機
-      await tester.runAsync(() async {
-        await tester.pumpAndSettle(const Duration(seconds: 12));
-      });
+      await tester.pumpAndSettle(const Duration(seconds: 10));
 
       // 結果が追加されたことを確認
       expect(
@@ -323,20 +295,14 @@ void main() {
     });
 
     testWidgets('チャートタブが表示される', (WidgetTester tester) async {
-      // アプリを構築（非同期初期化を許可）
-      await tester.runAsync(() async {
-        await tester.pumpWidget(const EnhancedTeaGardenApp());
-        // CI環境での遅い初期化を完了させるためにタイムアウトを増やす
-        await tester.pumpAndSettle(const Duration(seconds: 12));
-      });
+      // アプリを構築
+      await tester.pumpWidget(const EnhancedTeaGardenApp());
+      // アプリの初期化が完了するまで待機
+      await tester.pumpAndSettle(const Duration(seconds: 10));
 
-      // チャートタブをタップ（ウィジェットが存在することを確認してからタップ）
-      await safeTapFirst(tester, find.byIcon(Icons.bar_chart),
+      // チャートタブをタップ（Keyを使用）
+      await safeTapFirst(tester, find.byKey(const Key('tab_charts_icon')),
           timeout: const Duration(seconds: 15));
-      // UIが安定するまで待機
-      await tester.runAsync(() async {
-        await tester.pumpAndSettle(const Duration(seconds: 12));
-      });
 
       // チャートタイトルが表示されることを確認
       expect(
@@ -350,20 +316,14 @@ void main() {
     });
 
     testWidgets('エクスポートタブが表示される', (WidgetTester tester) async {
-      // アプリを構築（非同期初期化を許可）
-      await tester.runAsync(() async {
-        await tester.pumpWidget(const EnhancedTeaGardenApp());
-        // CI環境での遅い初期化を完了させるためにタイムアウトを増やす
-        await tester.pumpAndSettle(const Duration(seconds: 12));
-      });
+      // アプリを構築
+      await tester.pumpWidget(const EnhancedTeaGardenApp());
+      // アプリの初期化が完了するまで待機
+      await tester.pumpAndSettle(const Duration(seconds: 10));
 
-      // エクスポートタブをタップ（ウィジェットが存在することを確認してからタップ）
-      await safeTapFirst(tester, find.byIcon(Icons.download),
+      // エクスポートタブをタップ（Keyを使用）
+      await safeTapFirst(tester, find.byKey(const Key('tab_export_icon')),
           timeout: const Duration(seconds: 15));
-      // UIが安定するまで待機
-      await tester.runAsync(() async {
-        await tester.pumpAndSettle(const Duration(seconds: 12));
-      });
 
       // エクスポートセクションが表示されることを確認
       expect(find.text(LocalizationService.instance.translate('export')),
@@ -377,20 +337,14 @@ void main() {
     });
 
     testWidgets('設定タブが表示される', (WidgetTester tester) async {
-      // アプリを構築（非同期初期化を許可）
-      await tester.runAsync(() async {
-        await tester.pumpWidget(const EnhancedTeaGardenApp());
-        // CI環境での遅い初期化を完了させるためにタイムアウトを増やす
-        await tester.pumpAndSettle(const Duration(seconds: 12));
-      });
+      // アプリを構築
+      await tester.pumpWidget(const EnhancedTeaGardenApp());
+      // アプリの初期化が完了するまで待機
+      await tester.pumpAndSettle(const Duration(seconds: 10));
 
-      // 設定タブをタップ（ウィジェットが存在することを確認してからタップ）
-      await safeTapFirst(tester, find.byIcon(Icons.settings),
+      // 設定タブをタップ（Keyを使用）
+      await safeTapFirst(tester, find.byKey(const Key('tab_settings_icon')),
           timeout: const Duration(seconds: 15));
-      // UIが安定するまで待機
-      await tester.runAsync(() async {
-        await tester.pumpAndSettle(const Duration(seconds: 12));
-      });
 
       // 設定セクションが表示されることを確認
       expect(find.text(LocalizationService.instance.translate('app_settings')),
@@ -400,20 +354,14 @@ void main() {
     });
 
     testWidgets('空の状態が正しく表示される', (WidgetTester tester) async {
-      // アプリを構築（非同期初期化を許可）
-      await tester.runAsync(() async {
-        await tester.pumpWidget(const EnhancedTeaGardenApp());
-        // CI環境での遅い初期化を完了させるためにタイムアウトを増やす
-        await tester.pumpAndSettle(const Duration(seconds: 12));
-      });
+      // アプリを構築
+      await tester.pumpWidget(const EnhancedTeaGardenApp());
+      // アプリの初期化が完了するまで待機
+      await tester.pumpAndSettle(const Duration(seconds: 10));
 
-      // 解析タブをタップ（ウィジェットが存在することを確認してからタップ）
-      await safeTapFirst(tester, find.byIcon(Icons.camera_alt),
+      // 解析タブをタップ（Keyを使用）
+      await safeTapFirst(tester, find.byKey(const Key('tab_camera_icon')),
           timeout: const Duration(seconds: 15));
-      // UIが安定するまで待機
-      await tester.runAsync(() async {
-        await tester.pumpAndSettle(const Duration(seconds: 12));
-      });
 
       // 空の状態メッセージが表示されることを確認
       expect(

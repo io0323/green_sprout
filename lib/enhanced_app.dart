@@ -171,19 +171,20 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
           },
           tabs: [
             Tab(
-                icon: const Icon(Icons.dashboard),
+                icon:
+                    const Icon(Icons.dashboard, key: Key('tab_dashboard_icon')),
                 text: LocalizationService.instance.translate('dashboard')),
             Tab(
-                icon: const Icon(Icons.camera_alt),
+                icon: const Icon(Icons.camera_alt, key: Key('tab_camera_icon')),
                 text: LocalizationService.instance.translate('analysis')),
             Tab(
-                icon: const Icon(Icons.bar_chart),
+                icon: const Icon(Icons.bar_chart, key: Key('tab_charts_icon')),
                 text: LocalizationService.instance.translate('charts')),
             Tab(
-                icon: const Icon(Icons.download),
+                icon: const Icon(Icons.download, key: Key('tab_export_icon')),
                 text: LocalizationService.instance.translate('export')),
             Tab(
-                icon: const Icon(Icons.settings),
+                icon: const Icon(Icons.settings, key: Key('tab_settings_icon')),
                 text: LocalizationService.instance.translate('settings')),
           ],
         ),
@@ -420,6 +421,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
               )
             else
               ElevatedButton.icon(
+                key: const Key('btn_take_photo'),
                 onPressed: _startAnalysis,
                 icon: const Icon(Icons.camera_alt),
                 label:
