@@ -176,15 +176,21 @@ Future<void> safeTapFirst(
   WidgetTester tester,
   Finder finder, {
   Duration timeout = const Duration(seconds: 15),
+  Finder? waitFor,
 }) async {
   await pumpUntilFound(tester, finder, timeout: timeout);
   await tester.tap(finder.first);
-  // UI遷移が完了するまで待機 (pump every 100ms, timeout 15s)
-  await tester.pumpAndSettle(
-    const Duration(milliseconds: 100),
-    EnginePhase.sendSemanticsUpdate,
-    const Duration(seconds: 15),
-  );
+  await tester.pump(); // let one frame happen
+  if (waitFor != null) {
+    // Wait for a specific expected widget after tap
+    await pumpUntilFound(tester, waitFor, timeout: timeout);
+  } else {
+    // Fallback: allow a few small pumps, but avoid pumpAndSettle
+    // This avoids waiting for all animations/async tasks to complete
+    for (int i = 0; i < 20; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+  }
 }
 
 void main() {
@@ -217,12 +223,10 @@ void main() {
     testWidgets('アプリが正常に起動する', (WidgetTester tester) async {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
-      // アプリの初期化が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(
-        const Duration(milliseconds: 100),
-        EnginePhase.sendSemanticsUpdate,
-        const Duration(seconds: 30),
-      );
+      // Allow one frame, then wait for AppBar (indicator that app finished initial build)
+      await tester.pump();
+      await pumpUntilFound(tester, find.byType(AppBar),
+          timeout: const Duration(seconds: 30));
 
       // AppBarが表示されることを確認
       expect(find.byType(AppBar), findsOneWidget);
@@ -237,12 +241,10 @@ void main() {
     testWidgets('タブナビゲーションが表示される', (WidgetTester tester) async {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
-      // アプリの初期化が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(
-        const Duration(milliseconds: 100),
-        EnginePhase.sendSemanticsUpdate,
-        const Duration(seconds: 30),
-      );
+      // Allow one frame, then wait for AppBar (indicator that app finished initial build)
+      await tester.pump();
+      await pumpUntilFound(tester, find.byType(AppBar),
+          timeout: const Duration(seconds: 30));
 
       // タブが表示されることを確認（Keyを使用）
       expect(find.byKey(const Key('tab_dashboard_icon')), findsWidgets);
@@ -255,12 +257,10 @@ void main() {
     testWidgets('ダッシュボードタブが表示される', (WidgetTester tester) async {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
-      // アプリの初期化が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(
-        const Duration(milliseconds: 100),
-        EnginePhase.sendSemanticsUpdate,
-        const Duration(seconds: 30),
-      );
+      // Allow one frame, then wait for AppBar (indicator that app finished initial build)
+      await tester.pump();
+      await pumpUntilFound(tester, find.byType(AppBar),
+          timeout: const Duration(seconds: 30));
 
       // ダッシュボードタブのコンテンツが表示されることを確認
       expect(
@@ -286,16 +286,15 @@ void main() {
     testWidgets('解析タブで解析ボタンが表示される', (WidgetTester tester) async {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
-      // アプリの初期化が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(
-        const Duration(milliseconds: 100),
-        EnginePhase.sendSemanticsUpdate,
-        const Duration(seconds: 30),
-      );
+      // Allow one frame, then wait for AppBar (indicator that app finished initial build)
+      await tester.pump();
+      await pumpUntilFound(tester, find.byType(AppBar),
+          timeout: const Duration(seconds: 30));
 
-      // 解析タブをタップ（Keyを使用）
+      // 解析タブをタップ（Keyを使用）- 解析ボタンが表示されるのを待つ
       await safeTapFirst(tester, find.byKey(const Key('tab_camera_icon')),
-          timeout: const Duration(seconds: 15));
+          timeout: const Duration(seconds: 15),
+          waitFor: find.byKey(const Key('btn_take_photo')));
 
       // 解析ボタンが表示されることを確認（Keyを使用）
       expect(find.byKey(const Key('btn_take_photo')), findsWidgets);
@@ -304,16 +303,15 @@ void main() {
     testWidgets('解析を実行すると結果が追加される', (WidgetTester tester) async {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
-      // アプリの初期化が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(
-        const Duration(milliseconds: 100),
-        EnginePhase.sendSemanticsUpdate,
-        const Duration(seconds: 30),
-      );
+      // Allow one frame, then wait for AppBar (indicator that app finished initial build)
+      await tester.pump();
+      await pumpUntilFound(tester, find.byType(AppBar),
+          timeout: const Duration(seconds: 30));
 
-      // 解析タブをタップ（Keyを使用）
+      // 解析タブをタップ（Keyを使用）- 解析ボタンが表示されるのを待つ
       await safeTapFirst(tester, find.byKey(const Key('tab_camera_icon')),
-          timeout: const Duration(seconds: 15));
+          timeout: const Duration(seconds: 15),
+          waitFor: find.byKey(const Key('btn_take_photo')));
 
       // 解析ボタンをタップ（Keyを使用）
       await pumpUntilFound(tester, find.byKey(const Key('btn_take_photo')),
@@ -325,12 +323,10 @@ void main() {
       expect(find.text(LocalizationService.instance.translate('ai_analyzing')),
           findsWidgets);
 
-      // 解析が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(
-        const Duration(milliseconds: 100),
-        EnginePhase.sendSemanticsUpdate,
-        const Duration(seconds: 30),
-      );
+      // 解析が完了するまで待機 - 結果が表示されるのを待つ
+      await pumpUntilFound(tester,
+          find.text(LocalizationService.instance.translate('analysis_history')),
+          timeout: const Duration(seconds: 30));
 
       // 結果が追加されたことを確認
       expect(
@@ -347,16 +343,16 @@ void main() {
     testWidgets('チャートタブが表示される', (WidgetTester tester) async {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
-      // アプリの初期化が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(
-        const Duration(milliseconds: 100),
-        EnginePhase.sendSemanticsUpdate,
-        const Duration(seconds: 30),
-      );
+      // Allow one frame, then wait for AppBar (indicator that app finished initial build)
+      await tester.pump();
+      await pumpUntilFound(tester, find.byType(AppBar),
+          timeout: const Duration(seconds: 30));
 
-      // チャートタブをタップ（Keyを使用）
+      // チャートタブをタップ（Keyを使用）- チャートタイトルが表示されるのを待つ
       await safeTapFirst(tester, find.byKey(const Key('tab_charts_icon')),
-          timeout: const Duration(seconds: 15));
+          timeout: const Duration(seconds: 15),
+          waitFor: find.text(LocalizationService.instance
+              .translate('health_status_distribution')));
 
       // チャートタイトルが表示されることを確認
       expect(
@@ -372,16 +368,15 @@ void main() {
     testWidgets('エクスポートタブが表示される', (WidgetTester tester) async {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
-      // アプリの初期化が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(
-        const Duration(milliseconds: 100),
-        EnginePhase.sendSemanticsUpdate,
-        const Duration(seconds: 30),
-      );
+      // Allow one frame, then wait for AppBar (indicator that app finished initial build)
+      await tester.pump();
+      await pumpUntilFound(tester, find.byType(AppBar),
+          timeout: const Duration(seconds: 30));
 
-      // エクスポートタブをタップ（Keyを使用）
+      // エクスポートタブをタップ（Keyを使用）- エクスポートセクションが表示されるのを待つ
       await safeTapFirst(tester, find.byKey(const Key('tab_export_icon')),
-          timeout: const Duration(seconds: 15));
+          timeout: const Duration(seconds: 15),
+          waitFor: find.text(LocalizationService.instance.translate('export')));
 
       // エクスポートセクションが表示されることを確認
       expect(find.text(LocalizationService.instance.translate('export')),
@@ -397,16 +392,16 @@ void main() {
     testWidgets('設定タブが表示される', (WidgetTester tester) async {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
-      // アプリの初期化が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(
-        const Duration(milliseconds: 100),
-        EnginePhase.sendSemanticsUpdate,
-        const Duration(seconds: 30),
-      );
+      // Allow one frame, then wait for AppBar (indicator that app finished initial build)
+      await tester.pump();
+      await pumpUntilFound(tester, find.byType(AppBar),
+          timeout: const Duration(seconds: 30));
 
-      // 設定タブをタップ（Keyを使用）
+      // 設定タブをタップ（Keyを使用）- 設定セクションが表示されるのを待つ
       await safeTapFirst(tester, find.byKey(const Key('tab_settings_icon')),
-          timeout: const Duration(seconds: 15));
+          timeout: const Duration(seconds: 15),
+          waitFor: find
+              .text(LocalizationService.instance.translate('app_settings')));
 
       // 設定セクションが表示されることを確認
       expect(find.text(LocalizationService.instance.translate('app_settings')),
@@ -418,16 +413,16 @@ void main() {
     testWidgets('空の状態が正しく表示される', (WidgetTester tester) async {
       // アプリを構築
       await tester.pumpWidget(const EnhancedTeaGardenApp());
-      // アプリの初期化が完了するまで待機 (pump every 100ms, timeout 30s)
-      await tester.pumpAndSettle(
-        const Duration(milliseconds: 100),
-        EnginePhase.sendSemanticsUpdate,
-        const Duration(seconds: 30),
-      );
+      // Allow one frame, then wait for AppBar (indicator that app finished initial build)
+      await tester.pump();
+      await pumpUntilFound(tester, find.byType(AppBar),
+          timeout: const Duration(seconds: 30));
 
-      // 解析タブをタップ（Keyを使用）
+      // 解析タブをタップ（Keyを使用）- 空の状態メッセージが表示されるのを待つ
       await safeTapFirst(tester, find.byKey(const Key('tab_camera_icon')),
-          timeout: const Duration(seconds: 15));
+          timeout: const Duration(seconds: 15),
+          waitFor: find
+              .text(LocalizationService.instance.translate('no_results_yet')));
 
       // 空の状態メッセージが表示されることを確認
       expect(
