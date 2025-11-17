@@ -324,15 +324,17 @@ void main() {
           timeout: const Duration(seconds: 15),
           waitFor: find.byKey(const Key('btn_take_photo')));
 
-      // 解析ボタンをタップ（Keyを使用）
-      await pumpUntilFound(tester, find.byKey(const Key('btn_take_photo')),
-          timeout: const Duration(seconds: 15));
-      await tester.tap(find.byKey(const Key('btn_take_photo')));
+      // 解析ボタンをタップ（Keyを使用）- ローディングテキストが表示されるのを待つ
+      await safeTapFirst(
+        tester,
+        find.byKey(const Key('btn_take_photo')),
+        timeout: const Duration(seconds: 15),
+        waitFor:
+            find.text(LocalizationService.instance.translate('ai_analyzing')),
+      );
 
-      // ローディング表示を確認
-      await tester.pump();
-      expect(find.text(LocalizationService.instance.translate('ai_analyzing')),
-          findsWidgets);
+      // ローディング表示を確認（既に待機済み）
+      await tester.pump(); // extra frame if needed
 
       // 解析が完了するまで待機 - 結果が表示されるのを待つ
       await pumpUntilFound(tester,
