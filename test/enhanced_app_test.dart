@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tea_garden_ai/enhanced_app.dart';
 import 'package:tea_garden_ai/core/services/localization_service.dart';
 import 'package:tea_garden_ai/core/di/injection_container.dart' as di;
@@ -163,6 +164,12 @@ Future<void> pumpUntilFound(
   final end = DateTime.now().add(timeout);
   while (DateTime.now().isBefore(end)) {
     await tester.pump(const Duration(milliseconds: 100));
+    // If any exception occurred during widget build/async, surface it immediately:
+    final dynamic testException = tester.takeException();
+    if (testException != null) {
+      // rethrow so test log shows the underlying error
+      throw testException;
+    }
     if (tester.any(finder)) {
       return;
     }
@@ -197,6 +204,10 @@ void main() {
   setUpAll(() async {
     // テストバインディングを初期化
     TestWidgetsFlutterBinding.ensureInitialized();
+
+    // Mock platform-backed storage (SharedPreferences) before DI initializes
+    // This prevents SharedPreferences platform channel calls from blocking during widget tests
+    SharedPreferences.setMockInitialValues(<String, Object>{});
 
     // HTTPオーバーライドを設定してテスト環境でのHTTPリクエストを即座に完了させる
     HttpOverrides.global = _TestHttpOverrides();
