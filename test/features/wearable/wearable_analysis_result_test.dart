@@ -1,9 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tea_garden_ai/features/wearable/domain/entities/wearable_analysis_result.dart';
 
-/**
- * WearableAnalysisResultのテスト
- */
+/// WearableAnalysisResultのテスト
 void main() {
   group('WearableAnalysisResult', () {
     test('fromJsonで正しく作成される', () {

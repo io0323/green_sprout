@@ -1,9 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tea_garden_ai/core/utils/platform_utils.dart';
 
-/**
- * PlatformUtilsのテスト
- */
+/// PlatformUtilsのテスト
 void main() {
   group('PlatformUtils', () {
     test('isWebはfalseを返す（テスト環境ではWebではない）', () {
