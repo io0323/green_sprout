@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import '../../../domain/entities/wearable_analysis_result.dart';
-import '../../widgets/wearable_result_card.dart';
-import '../../widgets/wearable_camera_button.dart';
-import '../../../../tea_analysis/presentation/pages/camera_page.dart';
-import '../../../../tea_analysis/presentation/pages/analysis_result_page.dart';
-import '../../../../../core/services/localization_service.dart';
-import '../../../../../core/utils/platform_utils.dart';
+import '../../domain/entities/wearable_analysis_result.dart';
+import '../widgets/wearable_result_card.dart';
+import '../widgets/wearable_camera_button.dart';
+import '../../../camera/presentation/pages/camera_page.dart';
+import '../../../tea_analysis/presentation/pages/analysis_result_page.dart';
+import '../../../../core/services/localization_service.dart';
+import '../../../../core/utils/platform_utils.dart';
 
-/**
- * ウェアラブルデバイス用のホームページ
- * 簡潔なUIで茶葉解析結果を表示
- */
+/// ウェアラブルデバイス用のホームページ
+/// 簡潔なUIで茶葉解析結果を表示
 class WearableHomePage extends StatefulWidget {
   const WearableHomePage({super.key});
 
@@ -29,9 +27,7 @@ class _WearableHomePageState extends State<WearableHomePage> {
     _loadRecentResults();
   }
 
-  /**
-   * 最近の解析結果を読み込む
-   */
+  /// 最近の解析結果を読み込む
   Future<void> _loadRecentResults() async {
     setState(() {
       _isLoading = true;
@@ -54,9 +50,7 @@ class _WearableHomePageState extends State<WearableHomePage> {
     }
   }
 
-  /**
-   * カメラ画面に遷移
-   */
+  /// カメラ画面に遷移
   Future<void> _navigateToCamera() async {
     final result = await Navigator.push(
       context,
@@ -67,16 +61,18 @@ class _WearableHomePageState extends State<WearableHomePage> {
 
     if (result != null && mounted) {
       // 解析結果画面に遷移
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AnalysisResultPage(
-            imagePath: result['imagePath'] as String,
-            analysisResult: result['analysisResult'],
+      final imagePath = result['imagePath'] as String?;
+      if (imagePath != null) {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AnalysisResultPage(
+              imagePath: imagePath,
+            ),
           ),
-        ),
-      );
-      _loadRecentResults();
+        );
+        _loadRecentResults();
+      }
     }
   }
 

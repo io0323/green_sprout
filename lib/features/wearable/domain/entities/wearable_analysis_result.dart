@@ -1,7 +1,5 @@
-/**
- * ウェアラブルデバイス用の解析結果エンティティ
- * 簡潔な情報のみを含む
- */
+/// ウェアラブルデバイス用の解析結果エンティティ
+/// 簡潔な情報のみを含む
 class WearableAnalysisResult {
   /// 成長段階
   final String growthStage;
@@ -15,9 +13,7 @@ class WearableAnalysisResult {
   /// タイムスタンプ
   final DateTime timestamp;
 
-  /**
-   * コンストラクタ
-   */
+  /// コンストラクタ
   const WearableAnalysisResult({
     required this.growthStage,
     required this.healthStatus,
@@ -25,9 +21,7 @@ class WearableAnalysisResult {
     required this.timestamp,
   });
 
-  /**
-   * JSONから作成
-   */
+  /// JSONから作成
   factory WearableAnalysisResult.fromJson(Map<String, dynamic> json) {
     return WearableAnalysisResult(
       growthStage: json['growthStage'] as String,
@@ -37,9 +31,7 @@ class WearableAnalysisResult {
     );
   }
 
-  /**
-   * JSONに変換
-   */
+  /// JSONに変換
   Map<String, dynamic> toJson() {
     return {
       'growthStage': growthStage,

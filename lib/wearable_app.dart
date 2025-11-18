@@ -5,9 +5,7 @@ import 'core/di/injection_container.dart' as di;
 import 'core/utils/platform_utils.dart';
 import 'features/wearable/presentation/pages/wearable_home_page.dart';
 
-/**
- * ウェアラブルデバイス用のアプリエントリーポイント
- */
+/// ウェアラブルデバイス用のアプリエントリーポイント
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -23,9 +21,7 @@ void main() async {
   runApp(const WearableTeaGardenApp());
 }
 
-/**
- * ウェアラブルデバイス用のアプリ
- */
+/// ウェアラブルデバイス用のアプリ
 class WearableTeaGardenApp extends StatelessWidget {
   const WearableTeaGardenApp({super.key});
 

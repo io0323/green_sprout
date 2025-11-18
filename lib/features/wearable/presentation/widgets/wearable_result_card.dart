@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../domain/entities/wearable_analysis_result.dart';
-import '../../../../../core/utils/platform_utils.dart';
+import '../../domain/entities/wearable_analysis_result.dart';
+import '../../../../core/utils/platform_utils.dart';
 
-/**
- * ウェアラブルデバイス用の解析結果カード
- * コンパクトな表示で重要な情報のみを表示
- */
+/// ウェアラブルデバイス用の解析結果カード
+/// コンパクトな表示で重要な情報のみを表示
 class WearableResultCard extends StatelessWidget {
   final WearableAnalysisResult result;
 
@@ -14,9 +12,7 @@ class WearableResultCard extends StatelessWidget {
     required this.result,
   });
 
-  /**
-   * 健康状態の色を取得
-   */
+  /// 健康状態の色を取得
   Color _getHealthStatusColor(String status) {
     switch (status) {
       case '健康':
@@ -32,15 +28,13 @@ class WearableResultCard extends StatelessWidget {
     }
   }
 
-  /**
-   * 成長段階のアイコンを取得
-   */
+  /// 成長段階のアイコンを取得
   IconData _getGrowthStageIcon(String stage) {
     switch (stage) {
       case '芽':
         return Icons.eco;
       case '若葉':
-        return Icons.leaf;
+        return Icons.nature;
       case '成葉':
         return Icons.park;
       case '老葉':

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/services/localization_service.dart';
-import '../../../../../core/utils/platform_utils.dart';
+import '../../../../core/services/localization_service.dart';
+import '../../../../core/utils/platform_utils.dart';
 
-/**
- * ウェアラブルデバイス用のカメラボタン
- * 大きなタッチターゲットとシンプルなデザイン
- */
+/// ウェアラブルデバイス用のカメラボタン
+/// 大きなタッチターゲットとシンプルなデザイン
 class WearableCameraButton extends StatelessWidget {
   final VoidCallback onPressed;
 
