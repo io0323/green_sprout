@@ -130,7 +130,8 @@
     "save_result_success": "Analysis result saved",
     "save_result_failed": "Failed to save",
     "error_occurred": "An error occurred",
-    "analysis_error": "Analysis Error"
+    "analysis_error": "Analysis Error",
+    "no_results": "No results yet"
   },
   "ja": {
     "app_title": "茶園管理AI",
@@ -263,6 +264,7 @@
     "save_result_success": "解析結果を保存しました",
     "save_result_failed": "保存に失敗しました",
     "error_occurred": "エラーが発生しました",
-    "analysis_error": "解析エラー"
+    "analysis_error": "解析エラー",
+    "no_results": "まだ結果がありません"
   }
 }

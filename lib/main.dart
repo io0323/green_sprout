@@ -4,13 +4,21 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/services/localization_service.dart';
 import 'core/theme/tea_garden_theme.dart';
+import 'core/utils/platform_utils.dart';
 import 'features/tea_analysis/presentation/pages/web_home_page.dart';
+import 'wearable_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // 国際化サービスの初期化
   await LocalizationService.instance.loadTranslations();
+
+  // ウェアラブルデバイスの場合は専用アプリを起動
+  if (PlatformUtils.isWearable) {
+    runApp(const WearableTeaGardenApp());
+    return;
+  }
 
   // Webプラットフォームの場合は簡素化された初期化
   if (kIsWeb) {

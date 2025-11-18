@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
+import 'dart:io' show Platform;
 
 /// プラットフォーム検出ユーティリティ
-/// Web、モバイル、デスクトップの判定を行う
+/// Web、モバイル、デスクトップ、ウェアラブルの判定を行う
 class PlatformUtils {
   /// Webプラットフォームかどうかを判定
   static bool get isWeb => kIsWeb;
@@ -14,4 +15,34 @@ class PlatformUtils {
 
   /// リリースモードかどうかを判定
   static bool get isRelease => kReleaseMode;
+
+  /// Wear OS（Android Wear）かどうかを判定
+  static bool get isWearOS {
+    if (kIsWeb) return false;
+    try {
+      return Platform.isAndroid &&
+          (Platform.environment['WEAR_OS'] == 'true' ||
+              Platform.environment.containsKey('WEAR_OS'));
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// watchOS（Apple Watch）かどうかを判定
+  static bool get isWatchOS {
+    if (kIsWeb) return false;
+    try {
+      return Platform.isIOS &&
+          (Platform.environment['WATCH_OS'] == 'true' ||
+              Platform.environment.containsKey('WATCH_OS'));
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// ウェアラブルデバイスかどうかを判定
+  static bool get isWearable => isWearOS || isWatchOS;
+
+  /// 通常のモバイルデバイスかどうかを判定（ウェアラブルを除く）
+  static bool get isStandardMobile => isMobile && !isWearable;
 }

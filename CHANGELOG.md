@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2024-12-23
+
+### Added
+- ウェアラブルデバイス対応の完全実装
+  - Wear OS（Android Wear）とwatchOS（Apple Watch）のサポート
+  - プラットフォーム検出ユーティリティの拡張（PlatformUtils）
+  - ウェアラブル専用アプリ（wearable_app.dart）の実装
+  - ウェアラブル用の簡潔なUIコンポーネント
+    - WearableHomePage: コンパクトなホーム画面
+    - WearableCameraButton: 大きなタッチターゲットのカメラボタン
+    - WearableResultCard: 重要な情報のみを表示する結果カード
+  - ウェアラブル用のエンティティ（WearableAnalysisResult）
+  - プラットフォーム自動検出による適切なアプリ起動
+  - AndroidManifest.xmlにWear OS対応設定を追加
+
+### Changed
+- main.dartを更新してウェアラブルデバイス検出時に専用アプリを起動
+- PlatformUtilsにウェアラブル検出機能を追加
+- 翻訳ファイルに「no_results」キーを追加
+
+### Technical Details
+- **Wearable Support**: Wear OSとwatchOSの両方に対応
+- **Platform Detection**: 環境変数によるウェアラブルデバイスの検出
+- **UI Optimization**: 小さな画面向けのコンパクトなUI設計
+- **Architecture**: Clean Architectureに準拠したウェアラブル機能の実装
+
 ## [1.5.0] - 2024-12-22
 
 ### Added
