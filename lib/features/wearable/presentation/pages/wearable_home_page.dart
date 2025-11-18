@@ -41,9 +41,7 @@ class _WearableHomePageState extends State<WearableHomePage> {
         _isLoading = false;
       });
     } catch (e) {
-      if (kDebugMode) {
-        debugPrint('解析結果の読み込みエラー: $e');
-      }
+      if (kDebugMode) debugPrint('解析結果の読み込みエラー: $e');
       setState(() {
         _isLoading = false;
       });
