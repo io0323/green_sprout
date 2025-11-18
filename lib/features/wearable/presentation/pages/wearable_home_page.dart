@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:dartz/dartz.dart';
 import '../../domain/entities/wearable_analysis_result.dart';
 import '../widgets/wearable_result_card.dart';
 import '../widgets/wearable_camera_button.dart';
 import '../../../camera/presentation/pages/camera_page.dart';
 import '../../../tea_analysis/presentation/pages/analysis_result_page.dart';
+import '../../../tea_analysis/domain/usecases/tea_analysis_usecases.dart';
 import '../../../../core/services/localization_service.dart';
 import '../../../../core/utils/platform_utils.dart';
+import '../../../../core/di/injection_container.dart' as di;
 
 /// ウェアラブルデバイス用のホームページ
 /// 簡潔なUIで茶葉解析結果を表示
@@ -20,30 +23,59 @@ class WearableHomePage extends StatefulWidget {
 class _WearableHomePageState extends State<WearableHomePage> {
   final List<WearableAnalysisResult> _recentResults = [];
   bool _isLoading = false;
+  late final GetAllTeaAnalysisResults _getAllTeaAnalysisResults;
 
   @override
   void initState() {
     super.initState();
+    _getAllTeaAnalysisResults = di.sl<GetAllTeaAnalysisResults>();
     _loadRecentResults();
   }
 
   /// 最近の解析結果を読み込む
+  /// 実際のデータソースから最新の解析結果を取得し、
+  /// ウェアラブル用の形式に変換して表示する
   Future<void> _loadRecentResults() async {
     setState(() {
       _isLoading = true;
     });
 
     try {
-      // TODO: 実際のデータソースから読み込む
-      // 現在はモックデータを使用
-      await Future.delayed(const Duration(milliseconds: 500));
-      setState(() {
-        _isLoading = false;
-      });
+      final result = await _getAllTeaAnalysisResults();
+
+      result.fold(
+        (failure) {
+          if (kDebugMode) {
+            debugPrint('解析結果の読み込みエラー: $failure');
+          }
+          setState(() {
+            _isLoading = false;
+            _recentResults.clear();
+          });
+        },
+        (teaResults) {
+          // 最新の10件を取得（タイムスタンプでソート）
+          final sortedResults = teaResults.toList()
+            ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
+          final recentTeaResults = sortedResults.take(10).toList();
+
+          // TeaAnalysisResultをWearableAnalysisResultに変換
+          final wearableResults = recentTeaResults
+              .map((result) =>
+                  WearableAnalysisResult.fromTeaAnalysisResult(result))
+              .toList();
+
+          setState(() {
+            _recentResults = wearableResults;
+            _isLoading = false;
+          });
+        },
+      );
     } catch (e) {
       if (kDebugMode) debugPrint('解析結果の読み込みエラー: $e');
       setState(() {
         _isLoading = false;
+        _recentResults.clear();
       });
     }
   }
