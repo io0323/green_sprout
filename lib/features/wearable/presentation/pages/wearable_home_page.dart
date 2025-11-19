@@ -53,8 +53,9 @@ class _WearableHomePageState extends State<WearableHomePage> {
           if (kDebugMode) debugPrint('解析結果の読み込みエラー: $failure');
           if (kDebugMode) debugPrint('エラータイプ: ${failure.runtimeType}');
           if (kDebugMode) debugPrint('エラーメッセージ: ${failure.message}');
-          if (kDebugMode && failure.code != null)
+          if (kDebugMode && failure.code != null) {
             debugPrint('エラーコード: ${failure.code}');
+          }
 
           final errorMessage = _mapFailureToMessage(failure);
 
