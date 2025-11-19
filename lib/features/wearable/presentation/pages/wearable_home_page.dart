@@ -44,9 +44,7 @@ class _WearableHomePageState extends State<WearableHomePage> {
 
       result.fold(
         (failure) {
-          if (kDebugMode) {
-            debugPrint('解析結果の読み込みエラー: $failure');
-          }
+          if (kDebugMode) debugPrint('解析結果の読み込みエラー: $failure');
           setState(() {
             _isLoading = false;
             _recentResults.clear();
