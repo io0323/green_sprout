@@ -1,4 +1,4 @@
-import '../../tea_analysis/domain/entities/tea_analysis_result.dart';
+import 'package:tea_garden_ai/features/tea_analysis/domain/entities/tea_analysis_result.dart';
 
 /// ウェアラブルデバイス用の解析結果エンティティ
 /// 簡潔な情報のみを含む

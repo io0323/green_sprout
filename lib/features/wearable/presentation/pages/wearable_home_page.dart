@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:dartz/dartz.dart';
+import 'package:dartz/dartz.dart' hide State;
 import '../../domain/entities/wearable_analysis_result.dart';
 import '../widgets/wearable_result_card.dart';
 import '../widgets/wearable_camera_button.dart';
@@ -21,7 +21,7 @@ class WearableHomePage extends StatefulWidget {
 }
 
 class _WearableHomePageState extends State<WearableHomePage> {
-  final List<WearableAnalysisResult> _recentResults = [];
+  List<WearableAnalysisResult> _recentResults = [];
   bool _isLoading = false;
   late final GetAllTeaAnalysisResults _getAllTeaAnalysisResults;
 
