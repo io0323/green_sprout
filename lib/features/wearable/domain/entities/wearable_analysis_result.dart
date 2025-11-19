@@ -1,3 +1,5 @@
+import 'package:tea_garden_ai/features/tea_analysis/domain/entities/tea_analysis_result.dart';
+
 /// ウェアラブルデバイス用の解析結果エンティティ
 /// 簡潔な情報のみを含む
 class WearableAnalysisResult {
@@ -20,6 +22,19 @@ class WearableAnalysisResult {
     required this.confidence,
     required this.timestamp,
   });
+
+  /// TeaAnalysisResultから作成
+  /// 茶葉解析結果をウェアラブル用の簡潔な形式に変換
+  factory WearableAnalysisResult.fromTeaAnalysisResult(
+    TeaAnalysisResult result,
+  ) {
+    return WearableAnalysisResult(
+      growthStage: result.growthStage,
+      healthStatus: result.healthStatus,
+      confidence: result.confidence,
+      timestamp: result.timestamp,
+    );
+  }
 
   /// JSONから作成
   factory WearableAnalysisResult.fromJson(Map<String, dynamic> json) {
