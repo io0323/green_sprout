@@ -3,12 +3,14 @@ import 'package:flutter/foundation.dart';
 import '../../domain/entities/wearable_analysis_result.dart';
 import '../widgets/wearable_result_card.dart';
 import '../widgets/wearable_camera_button.dart';
+import '../widgets/wearable_error_widget.dart';
 import '../../../camera/presentation/pages/camera_page.dart';
 import '../../../tea_analysis/presentation/pages/analysis_result_page.dart';
 import '../../../tea_analysis/domain/usecases/tea_analysis_usecases.dart';
 import '../../../../core/services/localization_service.dart';
 import '../../../../core/utils/platform_utils.dart';
 import '../../../../core/di/injection_container.dart' as di;
+import '../../../../core/errors/failures.dart';
 
 /// ウェアラブルデバイス用のホームページ
 /// 簡潔なUIで茶葉解析結果を表示
@@ -22,6 +24,8 @@ class WearableHomePage extends StatefulWidget {
 class _WearableHomePageState extends State<WearableHomePage> {
   List<WearableAnalysisResult> _recentResults = [];
   bool _isLoading = false;
+  String? _errorMessage;
+  Failure? _failure;
   late final GetAllTeaAnalysisResults _getAllTeaAnalysisResults;
 
   @override
@@ -37,6 +41,8 @@ class _WearableHomePageState extends State<WearableHomePage> {
   Future<void> _loadRecentResults() async {
     setState(() {
       _isLoading = true;
+      _errorMessage = null;
+      _failure = null;
     });
 
     try {
@@ -44,10 +50,22 @@ class _WearableHomePageState extends State<WearableHomePage> {
 
       result.fold(
         (failure) {
-          if (kDebugMode) debugPrint('解析結果の読み込みエラー: $failure');
+          if (kDebugMode) {
+            debugPrint('解析結果の読み込みエラー: $failure');
+            debugPrint('エラータイプ: ${failure.runtimeType}');
+            debugPrint('エラーメッセージ: ${failure.message}');
+            if (failure.code != null) {
+              debugPrint('エラーコード: ${failure.code}');
+            }
+          }
+
+          final errorMessage = _mapFailureToMessage(failure);
+
           setState(() {
             _isLoading = false;
             _recentResults.clear();
+            _errorMessage = errorMessage;
+            _failure = failure;
           });
         },
         (teaResults) {
@@ -65,40 +83,129 @@ class _WearableHomePageState extends State<WearableHomePage> {
           setState(() {
             _recentResults = wearableResults;
             _isLoading = false;
+            _errorMessage = null;
+            _failure = null;
           });
         },
       );
-    } catch (e) {
-      if (kDebugMode) debugPrint('解析結果の読み込みエラー: $e');
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        debugPrint('解析結果の読み込みエラー: $e');
+        debugPrint('スタックトレース: $stackTrace');
+      }
+
+      final localization = LocalizationService.instance;
+      final errorMessage = localization.translate('error_loading_data');
+
       setState(() {
         _isLoading = false;
         _recentResults.clear();
+        _errorMessage = '$errorMessage: ${e.toString()}';
+        _failure = GenericFailure(e.toString());
       });
+    }
+  }
+
+  /// エラーをユーザーフレンドリーなメッセージに変換
+  String _mapFailureToMessage(Failure failure) {
+    final localization = LocalizationService.instance;
+
+    if (failure is ServerFailure) {
+      return localization.translate('error_server_detail',
+          params: {'message': failure.message});
+    } else if (failure is CacheFailure) {
+      return localization.translate('error_cache_detail',
+          params: {'message': failure.message});
+    } else if (failure is NetworkFailure) {
+      return localization.translate('error_network_detail',
+          params: {'message': failure.message});
+    } else if (failure is CameraFailure) {
+      return localization.translate('error_camera_detail',
+          params: {'message': failure.message});
+    } else if (failure is TFLiteFailure) {
+      return localization
+          .translate('error_ai_detail', params: {'message': failure.message});
+    } else {
+      return localization.translate('error_unknown_detail',
+          params: {'message': failure.message});
     }
   }
 
   /// カメラ画面に遷移
   Future<void> _navigateToCamera() async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const CameraPage(),
-      ),
-    );
+    try {
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const CameraPage(),
+        ),
+      );
 
-    if (result != null && mounted) {
-      // 解析結果画面に遷移
-      final imagePath = result['imagePath'] as String?;
-      if (imagePath != null) {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AnalysisResultPage(
-              imagePath: imagePath,
+      if (result != null && mounted) {
+        // 解析結果画面に遷移
+        final imagePath = result['imagePath'] as String?;
+        if (imagePath != null) {
+          try {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AnalysisResultPage(
+                  imagePath: imagePath,
+                ),
+              ),
+            );
+            // 解析結果画面から戻ったら、結果を再読み込み
+            _loadRecentResults();
+          } catch (e) {
+            if (kDebugMode) {
+              debugPrint('解析結果画面への遷移エラー: $e');
+            }
+            if (mounted) {
+              final localization = LocalizationService.instance;
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    localization.translate('error_navigation'),
+                  ),
+                  backgroundColor: Colors.red,
+                  duration: const Duration(seconds: 3),
+                ),
+              );
+            }
+          }
+        } else if (result['error'] != null && mounted) {
+          // カメラ画面からエラーが返された場合
+          final errorMessage = result['error'] as String;
+          if (kDebugMode) {
+            debugPrint('カメラ画面からのエラー: $errorMessage');
+          }
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(errorMessage),
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 3),
+              ),
+            );
+          }
+        }
+      }
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        debugPrint('カメラ画面への遷移エラー: $e');
+        debugPrint('スタックトレース: $stackTrace');
+      }
+      if (mounted) {
+        final localization = LocalizationService.instance;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              localization.translate('error_camera_navigation'),
             ),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
           ),
         );
-        _loadRecentResults();
       }
     }
   }
@@ -140,32 +247,38 @@ class _WearableHomePageState extends State<WearableHomePage> {
             Expanded(
               child: _isLoading
                   ? const Center(child: CircularProgressIndicator())
-                  : _recentResults.isEmpty
-                      ? Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text(
-                              localization.translate('no_results'),
-                              style: TextStyle(
-                                fontSize: isWearable ? 12 : 14,
-                                color: Colors.grey[600],
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
+                  : _errorMessage != null
+                      ? WearableErrorWidget(
+                          message: _errorMessage!,
+                          failure: _failure,
+                          onRetry: _loadRecentResults,
                         )
-                      : ListView.builder(
-                          padding: const EdgeInsets.all(8.0),
-                          itemCount: _recentResults.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: WearableResultCard(
-                                result: _recentResults[index],
+                      : _recentResults.isEmpty
+                          ? Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  localization.translate('no_results'),
+                                  style: TextStyle(
+                                    fontSize: isWearable ? 12 : 14,
+                                    color: Colors.grey[600],
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
-                            );
-                          },
-                        ),
+                            )
+                          : ListView.builder(
+                              padding: const EdgeInsets.all(8.0),
+                              itemCount: _recentResults.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: WearableResultCard(
+                                    result: _recentResults[index],
+                                  ),
+                                );
+                              },
+                            ),
             ),
           ],
         ),
