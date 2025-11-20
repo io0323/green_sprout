@@ -12,8 +12,12 @@ void main() async {
   // DIコンテナの初期化
   try {
     await di.init();
-  } catch (e) {
+  } catch (e, stackTrace) {
     if (kDebugMode) debugPrint('DI初期化エラー: $e');
+    if (kDebugMode) debugPrint('スタックトレース: $stackTrace');
+    if (kDebugMode) debugPrint('エラータイプ: ${e.runtimeType}');
+    // エラーが発生してもアプリは起動を続行
+    // ただし、DIに依存する機能は使用できない可能性がある
   }
 
   runApp(const WearableTeaGardenApp());
