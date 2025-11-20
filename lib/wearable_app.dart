@@ -9,6 +9,17 @@ import 'features/wearable/presentation/pages/wearable_home_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // 国際化サービスの初期化
+  try {
+    await LocalizationService.instance.loadTranslations();
+  } catch (e, stackTrace) {
+    if (kDebugMode) debugPrint('翻訳データ読み込みエラー: $e');
+    if (kDebugMode) debugPrint('スタックトレース: $stackTrace');
+    if (kDebugMode) debugPrint('エラータイプ: ${e.runtimeType}');
+    // エラーが発生してもアプリは起動を続行
+    // デフォルトの日本語翻訳が使用される
+  }
+
   // DIコンテナの初期化
   try {
     await di.init();
