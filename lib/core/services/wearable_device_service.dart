@@ -408,8 +408,3 @@ class WearableNotification extends StatelessWidget {
     );
   }
 }
-
-/// ウェアラブル失敗エラー
-class WearableFailure extends Failure {
-  const WearableFailure(super.message);
-}
