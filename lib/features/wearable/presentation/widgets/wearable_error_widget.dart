@@ -41,6 +41,8 @@ class WearableErrorWidget extends StatelessWidget {
         return Icons.smart_toy;
       } else if (failure is ServerFailure) {
         return Icons.cloud_off;
+      } else if (failure is WearableFailure) {
+        return Icons.watch;
       }
     }
 
@@ -60,6 +62,8 @@ class WearableErrorWidget extends StatelessWidget {
         return Colors.red;
       } else if (failure is ServerFailure) {
         return Colors.deepOrange;
+      } else if (failure is WearableFailure) {
+        return Colors.teal;
       }
     }
 
@@ -90,6 +94,9 @@ class WearableErrorWidget extends StatelessWidget {
       } else if (failure is ServerFailure) {
         errorType = localization.translate('error_server');
         suggestion = localization.translate('error_server_suggestion');
+      } else if (failure is WearableFailure) {
+        errorType = localization.translate('error_wearable');
+        suggestion = localization.translate('error_wearable_suggestion');
       } else {
         errorType = localization.translate('error_unknown');
         suggestion = localization.translate('error_unknown_suggestion');

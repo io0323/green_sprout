@@ -150,6 +150,9 @@
     "error_unknown": "Unknown Error",
     "error_unknown_detail": "An unknown error occurred: {message}",
     "error_unknown_suggestion": "An unexpected error occurred. Please try again or contact support.",
+    "error_wearable": "Wearable Device Error",
+    "error_wearable_detail": "Wearable device error occurred: {message}",
+    "error_wearable_suggestion": "Please check the wearable device connection and try again.",
     "error_loading_data": "Failed to load data",
     "error_navigation": "Navigation error occurred",
     "error_camera_navigation": "Failed to open camera"
@@ -305,6 +308,9 @@
     "error_unknown": "不明なエラー",
     "error_unknown_detail": "不明なエラーが発生しました: {message}",
     "error_unknown_suggestion": "予期しないエラーが発生しました。もう一度お試しいただくか、サポートにお問い合わせください。",
+    "error_wearable": "ウェアラブルデバイスエラー",
+    "error_wearable_detail": "ウェアラブルデバイスエラーが発生しました: {message}",
+    "error_wearable_suggestion": "ウェアラブルデバイスの接続を確認して、もう一度お試しください。",
     "error_loading_data": "データの読み込みに失敗しました",
     "error_navigation": "画面遷移エラーが発生しました",
     "error_camera_navigation": "カメラを開くことができませんでした"

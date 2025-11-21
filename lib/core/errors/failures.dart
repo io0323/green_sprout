@@ -39,3 +39,8 @@ class TFLiteFailure extends Failure {
 class GenericFailure extends Failure {
   const GenericFailure(super.message, [super.code]);
 }
+
+/// ウェアラブルデバイス関連のエラー
+class WearableFailure extends Failure {
+  const WearableFailure(super.message, [super.code]);
+}
