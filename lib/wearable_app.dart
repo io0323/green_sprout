@@ -11,10 +11,8 @@ import 'features/wearable/presentation/pages/wearable_home_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  /**
-   * グローバルエラーハンドラーの設定
-   * Flutterフレームワークレベルのエラーをキャッチ
-   */
+  /// グローバルエラーハンドラーの設定
+  /// Flutterフレームワークレベルのエラーをキャッチ
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.presentError(details);
     AppLogger.debugError(
@@ -23,10 +21,8 @@ void main() async {
     );
   };
 
-  /**
-   * 非同期エラーハンドラーの設定
-   * runZonedGuardedを使用して未処理の非同期エラーをキャッチ
-   */
+  /// 非同期エラーハンドラーの設定
+  /// runZonedGuardedを使用して未処理の非同期エラーをキャッチ
   runZonedGuarded(() async {
     // 国際化サービスの初期化
     try {
@@ -54,10 +50,8 @@ void main() async {
 
     runApp(const WearableTeaGardenApp());
   }, (error, stack) {
-    /**
-     * 未処理の非同期エラーをキャッチ
-     * アプリがクラッシュしないようにエラーをログに記録
-     */
+    /// 未処理の非同期エラーをキャッチ
+    /// アプリがクラッシュしないようにエラーをログに記録
     AppLogger.debugError('未処理の非同期エラー', error);
     AppLogger.debugError('スタックトレース', stack);
   });
@@ -67,10 +61,8 @@ void main() async {
 class WearableTeaGardenApp extends StatelessWidget {
   const WearableTeaGardenApp({super.key});
 
-  /**
-   * エラーバウンダリーの設定
-   * ウィジェットツリーでエラーが発生した場合に表示されるカスタムエラー画面
-   */
+  /// エラーバウンダリーの設定
+  /// ウィジェットツリーでエラーが発生した場合に表示されるカスタムエラー画面
   static void _setupErrorBuilder() {
     ErrorWidget.builder = (FlutterErrorDetails details) {
       AppLogger.debugError('ウィジェットエラー', details.exception);
@@ -121,9 +113,7 @@ class WearableTeaGardenApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final isWearable = PlatformUtils.isWearable;
 
-    /**
-     * エラーバウンダリーを設定
-     */
+    /// エラーバウンダリーを設定
     _setupErrorBuilder();
 
     return MaterialApp(
