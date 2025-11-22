@@ -1,46 +1,120 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'dart:async';
 import 'core/services/localization_service.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/utils/platform_utils.dart';
+import 'core/utils/app_logger.dart';
 import 'features/wearable/presentation/pages/wearable_home_page.dart';
 
 /// ウェアラブルデバイス用のアプリエントリーポイント
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 国際化サービスの初期化
-  try {
-    await LocalizationService.instance.loadTranslations();
-  } catch (e, stackTrace) {
-    if (kDebugMode) debugPrint('翻訳データ読み込みエラー: $e');
-    if (kDebugMode) debugPrint('スタックトレース: $stackTrace');
-    if (kDebugMode) debugPrint('エラータイプ: ${e.runtimeType}');
-    // エラーが発生してもアプリは起動を続行
-    // デフォルトの日本語翻訳が使用される
-  }
+  /// グローバルエラーハンドラーの設定
+  /// Flutterフレームワークレベルのエラーをキャッチ
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    AppLogger.debugError(
+      'Flutterエラー',
+      '${details.exception}\n${details.stack}',
+    );
+  };
 
-  // DIコンテナの初期化
-  try {
-    await di.init();
-  } catch (e, stackTrace) {
-    if (kDebugMode) debugPrint('DI初期化エラー: $e');
-    if (kDebugMode) debugPrint('スタックトレース: $stackTrace');
-    if (kDebugMode) debugPrint('エラータイプ: ${e.runtimeType}');
-    // エラーが発生してもアプリは起動を続行
-    // ただし、DIに依存する機能は使用できない可能性がある
-  }
+  /// 非同期エラーハンドラーの設定
+  /// runZonedGuardedを使用して未処理の非同期エラーをキャッチ
+  runZonedGuarded(() async {
+    // 国際化サービスの初期化
+    try {
+      await LocalizationService.instance.loadTranslations();
+      AppLogger.debugInfo('国際化サービスの初期化が完了しました');
+    } catch (e, stackTrace) {
+      AppLogger.debugError('翻訳データ読み込みエラー', e);
+      AppLogger.debugError('スタックトレース', stackTrace);
+      AppLogger.debugError('エラータイプ', e.runtimeType);
+      // エラーが発生してもアプリは起動を続行
+      // デフォルトの日本語翻訳が使用される
+    }
 
-  runApp(const WearableTeaGardenApp());
+    // DIコンテナの初期化
+    try {
+      await di.init();
+      AppLogger.debugInfo('DIコンテナの初期化が完了しました');
+    } catch (e, stackTrace) {
+      AppLogger.debugError('DI初期化エラー', e);
+      AppLogger.debugError('スタックトレース', stackTrace);
+      AppLogger.debugError('エラータイプ', e.runtimeType);
+      // エラーが発生してもアプリは起動を続行
+      // ただし、DIに依存する機能は使用できない可能性がある
+    }
+
+    runApp(const WearableTeaGardenApp());
+  }, (error, stack) {
+    /// 未処理の非同期エラーをキャッチ
+    /// アプリがクラッシュしないようにエラーをログに記録
+    AppLogger.debugError('未処理の非同期エラー', error);
+    AppLogger.debugError('スタックトレース', stack);
+  });
 }
 
 /// ウェアラブルデバイス用のアプリ
 class WearableTeaGardenApp extends StatelessWidget {
   const WearableTeaGardenApp({super.key});
 
+  /// エラーバウンダリーの設定
+  /// ウィジェットツリーでエラーが発生した場合に表示されるカスタムエラー画面
+  static void _setupErrorBuilder() {
+    ErrorWidget.builder = (FlutterErrorDetails details) {
+      AppLogger.debugError('ウィジェットエラー', details.exception);
+      AppLogger.debugError('スタックトレース', details.stack);
+
+      return Material(
+        child: Container(
+          color: Colors.red[50],
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.error_outline,
+                size: 48,
+                color: Colors.red[700],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'エラーが発生しました',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red[900],
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              if (kDebugMode)
+                Text(
+                  details.exception.toString(),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.red[700],
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 5,
+                  overflow: TextOverflow.ellipsis,
+                ),
+            ],
+          ),
+        ),
+      );
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final isWearable = PlatformUtils.isWearable;
+
+    /// エラーバウンダリーを設定
+    _setupErrorBuilder();
 
     return MaterialApp(
       title: LocalizationService.instance.translate('app_title'),
