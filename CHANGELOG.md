@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+- ウェアラブルアプリのエラーハンドリングを強化
+  - グローバルエラーハンドラー（FlutterError.onError）を追加
+  - 非同期エラーハンドラー（runZonedGuarded）を追加
+  - エラーバウンダリー（ErrorWidget.builder）を追加
+  - AppLoggerを使用したロギングに改善
+  - カスタムエラー画面を実装
+
 ## [1.6.0] - 2024-12-23
 
 ### Added
