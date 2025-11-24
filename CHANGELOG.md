@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2024-12-24
+
 ### Changed
 - ウェアラブルアプリのエラーハンドリングを強化
   - グローバルエラーハンドラー（FlutterError.onError）を追加
@@ -14,6 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - エラーバウンダリー（ErrorWidget.builder）を追加
   - AppLoggerを使用したロギングに改善
   - カスタムエラー画面を実装
+
+### Technical Details
+- **Error Handling**: 包括的なエラーハンドリングシステムの実装
+- **Logging**: AppLoggerによる統一されたロギング
+- **User Experience**: ユーザーフレンドリーなエラー表示の改善
 
 ## [1.6.0] - 2024-12-23
 
