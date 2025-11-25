@@ -1,6 +1,6 @@
 name: tea_garden_ai
 description: 茶園管理AIアプリ - 茶葉の成長状態と健康状態を解析
-version: 1.7.0+1
+version: 1.7.1+1
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
