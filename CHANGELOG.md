@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.1] - 2024-12-25
+
 ### Fixed
 - ウェアラブルデバイスサービスの接続状態管理を修正
   - `connect()`メソッドで接続成功時に`_isConnected`を正しく更新するように修正
