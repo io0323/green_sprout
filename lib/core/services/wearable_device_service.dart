@@ -69,8 +69,10 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
   Future<void> connect() async {
     try {
       await _channel.invokeMethod('connectWearable');
+      _isConnected = true;
       _startHeartbeat();
     } catch (e) {
+      _isConnected = false;
       throw WearableFailure('ウェアラブルデバイスの接続に失敗しました: $e');
     }
   }
@@ -134,6 +136,8 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
 
   /// ハートビートを開始
   void _startHeartbeat() {
+    // 既存のタイマーがある場合は停止
+    _stopHeartbeat();
     _heartbeatTimer =
         Timer.periodic(const Duration(seconds: 30), (timer) async {
       if (_isConnected) {
@@ -142,7 +146,11 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
         } catch (e) {
           _isConnected = false;
           _eventController.add(WearableEvent.disconnected());
+          _stopHeartbeat();
         }
+      } else {
+        // 接続が切れている場合はタイマーを停止
+        _stopHeartbeat();
       }
     });
   }
