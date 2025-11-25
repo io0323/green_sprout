@@ -48,7 +48,7 @@ void main() async {
       // ただし、DIに依存する機能は使用できない可能性がある
     }
 
-    runApp(const WearableTeaGardenApp());
+    runApp(WearableTeaGardenApp());
   }, (error, stack) {
     /// 未処理の非同期エラーをキャッチ
     /// アプリがクラッシュしないようにエラーをログに記録
@@ -59,7 +59,11 @@ void main() async {
 
 /// ウェアラブルデバイス用のアプリ
 class WearableTeaGardenApp extends StatelessWidget {
-  const WearableTeaGardenApp({super.key});
+  WearableTeaGardenApp({super.key}) {
+    /// エラーバウンダリーを一度だけ設定
+    /// ウィジェットツリーでエラーが発生した場合に表示されるカスタムエラー画面
+    _setupErrorBuilder();
+  }
 
   /// エラーバウンダリーの設定
   /// ウィジェットツリーでエラーが発生した場合に表示されるカスタムエラー画面
@@ -67,6 +71,15 @@ class WearableTeaGardenApp extends StatelessWidget {
     ErrorWidget.builder = (FlutterErrorDetails details) {
       AppLogger.debugError('ウィジェットエラー', details.exception);
       AppLogger.debugError('スタックトレース', details.stack);
+
+      /// 国際化サービスを使用してエラーメッセージを取得
+      /// 初期化前の場合はデフォルトメッセージを使用
+      String errorMessage;
+      try {
+        errorMessage = LocalizationService.instance.translate('error_occurred');
+      } catch (e) {
+        errorMessage = 'エラーが発生しました';
+      }
 
       return Material(
         child: Container(
@@ -82,7 +95,7 @@ class WearableTeaGardenApp extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'エラーが発生しました',
+                errorMessage,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -112,9 +125,6 @@ class WearableTeaGardenApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isWearable = PlatformUtils.isWearable;
-
-    /// エラーバウンダリーを設定
-    _setupErrorBuilder();
 
     return MaterialApp(
       title: LocalizationService.instance.translate('app_title'),
