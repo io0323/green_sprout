@@ -16,7 +16,7 @@ void main() async {
 
   // ウェアラブルデバイスの場合は専用アプリを起動
   if (PlatformUtils.isWearable) {
-    runApp(const WearableTeaGardenApp());
+    runApp(WearableTeaGardenApp());
     return;
   }
 
