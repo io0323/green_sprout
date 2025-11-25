@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- ウェアラブルデバイスサービスの接続状態管理を修正
+  - `connect()`メソッドで接続成功時に`_isConnected`を正しく更新するように修正
+  - `_startHeartbeat()`メソッドで既存のタイマーを停止してから新しいタイマーを開始するように修正
+  - ハートビートタイマーで接続が切れた場合に自動的にタイマーを停止するように修正
+
 ## [1.7.0] - 2024-12-24
 
 ### Changed
