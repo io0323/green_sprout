@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dart:async';
 import 'core/services/localization_service.dart';
+import 'core/services/wearable_device_service.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/utils/platform_utils.dart';
 import 'core/utils/app_logger.dart';
@@ -47,6 +48,28 @@ void main() async {
       AppLogger.debugError('エラータイプ', e.runtimeType);
       // エラーが発生してもアプリは起動を続行
       // ただし、DIに依存する機能は使用できない可能性がある
+    }
+
+    // ウェアラブルデバイスサービスの初期化
+    try {
+      final wearableService = WearableDeviceServiceImpl();
+      // 接続状態を確認（非ブロッキング）
+      wearableService.isConnected().then((isConnected) {
+        if (isConnected) {
+          AppLogger.debugInfo('ウェアラブルデバイスが接続されています');
+        } else {
+          AppLogger.debugInfo('ウェアラブルデバイスは接続されていません');
+        }
+      }).catchError((error) {
+        AppLogger.debugError('ウェアラブルデバイス接続確認エラー', error);
+      });
+      AppLogger.debugInfo('ウェアラブルデバイスサービスの初期化が完了しました');
+    } catch (e, stackTrace) {
+      AppLogger.debugError('ウェアラブルデバイスサービス初期化エラー', e);
+      AppLogger.debugError('スタックトレース', stackTrace);
+      AppLogger.debugError('エラータイプ', e.runtimeType);
+      // エラーが発生してもアプリは起動を続行
+      // ウェアラブルデバイス機能は使用できない可能性がある
     }
 
     runApp(WearableTeaGardenApp());
