@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dart:async';
 import 'core/services/localization_service.dart';
 import 'core/di/injection_container.dart' as di;
@@ -140,6 +141,15 @@ class WearableTeaGardenApp extends StatelessWidget {
               )
             : null,
       ),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('ja', 'JP'),
+        Locale('en', 'US'),
+      ],
       home: const WearableHomePage(),
       debugShowCheckedModeBanner: false,
     );
