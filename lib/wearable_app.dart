@@ -53,6 +53,36 @@ void main() async {
     // ウェアラブルデバイスサービスの初期化
     try {
       final wearableService = WearableDeviceServiceImpl();
+
+      // イベントストリームを監視して接続状態の変化を処理
+      wearableService.eventStream.listen(
+        (event) {
+          switch (event.type) {
+            case WearableEventType.connected:
+              AppLogger.debugInfo('ウェアラブルデバイスが接続されました');
+              break;
+            case WearableEventType.disconnected:
+              AppLogger.debugInfo('ウェアラブルデバイスが切断されました');
+              break;
+            case WearableEventType.dataReceived:
+              AppLogger.debugInfo('ウェアラブルデバイスからデータを受信しました');
+              if (event.data != null) {
+                AppLogger.debugInfo('受信データ', event.data.toString());
+              }
+              break;
+            case WearableEventType.error:
+              AppLogger.debugError(
+                'ウェアラブルデバイスエラー',
+                event.error ?? '不明なエラー',
+              );
+              break;
+          }
+        },
+        onError: (error) {
+          AppLogger.debugError('ウェアラブルデバイスイベントストリームエラー', error);
+        },
+      );
+
       // 接続状態を確認（非ブロッキング）
       wearableService.isConnected().then((isConnected) {
         if (isConnected) {
@@ -63,6 +93,7 @@ void main() async {
       }).catchError((error) {
         AppLogger.debugError('ウェアラブルデバイス接続確認エラー', error);
       });
+
       AppLogger.debugInfo('ウェアラブルデバイスサービスの初期化が完了しました');
     } catch (e, stackTrace) {
       AppLogger.debugError('ウェアラブルデバイスサービス初期化エラー', e);
