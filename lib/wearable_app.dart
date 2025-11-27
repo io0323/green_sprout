@@ -16,6 +16,26 @@ WearableDeviceServiceImpl? _globalWearableService;
 /// イベントストリームの購読を管理するためのサブスクリプション
 StreamSubscription<WearableEvent>? _wearableEventSubscription;
 
+/// グローバルなウェアラブルデバイスサービスインスタンスを取得
+/// サービスが初期化されていない場合はnullを返す
+WearableDeviceService? getWearableDeviceService() {
+  return _globalWearableService;
+}
+
+/// ウェアラブルデバイスが接続されているかどうかを確認
+/// サービスが初期化されていない場合はfalseを返す
+Future<bool> isWearableDeviceConnected() async {
+  if (_globalWearableService == null) {
+    return false;
+  }
+  try {
+    return await _globalWearableService!.isConnected();
+  } catch (e) {
+    AppLogger.debugError('ウェアラブルデバイス接続確認エラー', e);
+    return false;
+  }
+}
+
 /// ウェアラブルデバイス用のアプリエントリーポイント
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
