@@ -9,6 +9,13 @@ import 'core/utils/platform_utils.dart';
 import 'core/utils/app_logger.dart';
 import 'features/wearable/presentation/pages/wearable_home_page.dart';
 
+/// グローバルなウェアラブルデバイスサービスインスタンス
+/// アプリ全体でアクセス可能にするため
+WearableDeviceServiceImpl? _globalWearableService;
+
+/// イベントストリームの購読を管理するためのサブスクリプション
+StreamSubscription<WearableEvent>? _wearableEventSubscription;
+
 /// ウェアラブルデバイス用のアプリエントリーポイント
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,10 +59,10 @@ void main() async {
 
     // ウェアラブルデバイスサービスの初期化
     try {
-      final wearableService = WearableDeviceServiceImpl();
+      _globalWearableService = WearableDeviceServiceImpl();
 
       // イベントストリームを監視して接続状態の変化を処理
-      wearableService.eventStream.listen(
+      _wearableEventSubscription = _globalWearableService!.eventStream.listen(
         (event) {
           switch (event.type) {
             case WearableEventType.connected:
@@ -84,7 +91,7 @@ void main() async {
       );
 
       // 接続状態を確認（非ブロッキング）
-      wearableService.isConnected().then((isConnected) {
+      _globalWearableService!.isConnected().then((isConnected) {
         if (isConnected) {
           AppLogger.debugInfo('ウェアラブルデバイスが接続されています');
         } else {
@@ -113,13 +120,18 @@ void main() async {
 }
 
 /// ウェアラブルデバイス用のアプリ
-class WearableTeaGardenApp extends StatelessWidget {
+class WearableTeaGardenApp extends StatefulWidget {
   WearableTeaGardenApp({super.key}) {
     /// エラーバウンダリーを一度だけ設定
     /// ウィジェットツリーでエラーが発生した場合に表示されるカスタムエラー画面
-    _setupErrorBuilder();
+    _WearableTeaGardenAppState._setupErrorBuilder();
   }
 
+  @override
+  State<WearableTeaGardenApp> createState() => _WearableTeaGardenAppState();
+}
+
+class _WearableTeaGardenAppState extends State<WearableTeaGardenApp> {
   /// エラーバウンダリーの設定
   /// ウィジェットツリーでエラーが発生した場合に表示されるカスタムエラー画面
   static void _setupErrorBuilder() {
@@ -175,6 +187,20 @@ class WearableTeaGardenApp extends StatelessWidget {
         ),
       );
     };
+  }
+
+  @override
+  void dispose() {
+    /// アプリ終了時にリソースをクリーンアップ
+    /// イベントストリームの購読をキャンセル
+    _wearableEventSubscription?.cancel();
+    _wearableEventSubscription = null;
+
+    /// ウェアラブルデバイスサービスのリソースをクリーンアップ
+    _globalWearableService?.dispose();
+    _globalWearableService = null;
+
+    super.dispose();
   }
 
   @override
