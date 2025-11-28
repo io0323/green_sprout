@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../errors/failures.dart';
 import '../../features/tea_analysis/domain/entities/tea_analysis_result.dart';
+import '../theme/tea_garden_theme.dart';
 
 /// ウェアラブルデバイスサービスのインターフェース
 abstract class WearableDeviceService {
@@ -255,9 +256,9 @@ class WearableAnalysisCard extends StatelessWidget {
               // 信頼度
               LinearProgressIndicator(
                 value: result.confidence,
-                backgroundColor: Colors.grey[300],
+                backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  _getConfidenceColor(result.confidence),
+                  _getConfidenceColor(context, result.confidence),
                 ),
               ),
               const SizedBox(height: 2),
@@ -290,11 +291,11 @@ class WearableAnalysisCard extends StatelessWidget {
   Color _getHealthColor(String healthStatus) {
     switch (healthStatus) {
       case '健康':
-        return Colors.green;
+        return TeaGardenTheme.successColor;
       case '軽微な損傷':
-        return Colors.orange;
+        return TeaGardenTheme.warningColor;
       case '損傷':
-        return Colors.red;
+        return TeaGardenTheme.errorColor;
       case '病気':
         return Colors.purple;
       default:
@@ -302,10 +303,11 @@ class WearableAnalysisCard extends StatelessWidget {
     }
   }
 
-  Color _getConfidenceColor(double confidence) {
-    if (confidence >= 0.8) return Colors.green;
-    if (confidence >= 0.6) return Colors.orange;
-    return Colors.red;
+  Color _getConfidenceColor(BuildContext context, double confidence) {
+    final theme = Theme.of(context);
+    if (confidence >= 0.8) return TeaGardenTheme.successColor;
+    if (confidence >= 0.6) return TeaGardenTheme.warningColor;
+    return theme.colorScheme.error;
   }
 }
 
@@ -322,12 +324,17 @@ class WearableCameraControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final buttonColor = isCapturing ? colorScheme.error : colorScheme.primary;
+    final iconColor = colorScheme.onPrimary;
+
     return Container(
       width: 60,
       height: 60,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: isCapturing ? Colors.red : Colors.green,
+        color: buttonColor,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.3),
@@ -341,10 +348,10 @@ class WearableCameraControl extends StatelessWidget {
         child: InkWell(
           onTap: isCapturing ? null : onCapture,
           borderRadius: BorderRadius.circular(30),
-          child: const Center(
+          child: Center(
             child: Icon(
               Icons.camera_alt,
-              color: Colors.white,
+              color: iconColor,
               size: 24,
             ),
           ),
@@ -369,25 +376,38 @@ class WearableNotification extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final backgroundColor = colorScheme.surface;
+    final textColor = colorScheme.onSurface;
+    final secondaryTextColor = colorScheme.onSurface.withOpacity(0.7);
+
     return Container(
       margin: const EdgeInsets.all(4),
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.black87,
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: colorScheme.outline.withOpacity(0.2),
+        ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             children: [
-              const Icon(Icons.notifications, color: Colors.white, size: 16),
+              Icon(
+                Icons.notifications,
+                color: colorScheme.primary,
+                size: 16,
+              ),
               const SizedBox(width: 4),
               Expanded(
                 child: Text(
                   title,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: textColor,
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),
@@ -397,15 +417,19 @@ class WearableNotification extends StatelessWidget {
               if (onDismiss != null)
                 GestureDetector(
                   onTap: onDismiss,
-                  child: const Icon(Icons.close, color: Colors.white, size: 14),
+                  child: Icon(
+                    Icons.close,
+                    color: textColor,
+                    size: 14,
+                  ),
                 ),
             ],
           ),
           const SizedBox(height: 4),
           Text(
             message,
-            style: const TextStyle(
-              color: Colors.white70,
+            style: TextStyle(
+              color: secondaryTextColor,
               fontSize: 10,
             ),
             maxLines: 2,

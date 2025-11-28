@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/wearable_analysis_result.dart';
 import '../../../../core/utils/platform_utils.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// ウェアラブルデバイス用の解析結果カード
 /// コンパクトな表示で重要な情報のみを表示
@@ -13,16 +14,17 @@ class WearableResultCard extends StatelessWidget {
   });
 
   /// 健康状態の色を取得
+  /// テーマの色を使用して意味的な色を返す
   Color _getHealthStatusColor(String status) {
     switch (status) {
       case '健康':
-        return Colors.green;
+        return TeaGardenTheme.successColor;
       case '軽微な損傷':
-        return Colors.yellow[700]!;
+        return TeaGardenTheme.warningColor;
       case '損傷':
-        return Colors.orange;
+        return TeaGardenTheme.warningColor;
       case '病気':
-        return Colors.red;
+        return TeaGardenTheme.errorColor;
       default:
         return Colors.grey;
     }
