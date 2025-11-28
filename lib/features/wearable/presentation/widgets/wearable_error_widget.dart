@@ -68,7 +68,7 @@ class WearableErrorWidget extends StatelessWidget {
       } else if (failure is ServerFailure) {
         return TeaGardenTheme.warningColor;
       } else if (failure is WearableFailure) {
-        return Colors.teal;
+        return TeaGardenTheme.infoColor;
       }
     }
 
