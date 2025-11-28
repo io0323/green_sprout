@@ -11,6 +11,7 @@ import '../../../../core/services/localization_service.dart';
 import '../../../../core/utils/platform_utils.dart';
 import '../../../../core/di/injection_container.dart' as di;
 import '../../../../core/errors/failures.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// ウェアラブルデバイス用のホームページ
 /// 簡潔なUIで茶葉解析結果を表示
@@ -161,7 +162,7 @@ class _WearableHomePageState extends State<WearableHomePage> {
                   content: Text(
                     localization.translate('error_navigation'),
                   ),
-                  backgroundColor: Colors.red,
+                  backgroundColor: TeaGardenTheme.errorColor,
                   duration: const Duration(seconds: 3),
                 ),
               );
@@ -175,7 +176,7 @@ class _WearableHomePageState extends State<WearableHomePage> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(errorMessage),
-                backgroundColor: Colors.red,
+                backgroundColor: TeaGardenTheme.errorColor,
                 duration: const Duration(seconds: 3),
               ),
             );
@@ -192,7 +193,7 @@ class _WearableHomePageState extends State<WearableHomePage> {
             content: Text(
               localization.translate('error_camera_navigation'),
             ),
-            backgroundColor: Colors.red,
+            backgroundColor: TeaGardenTheme.errorColor,
             duration: const Duration(seconds: 3),
           ),
         );
@@ -204,9 +205,11 @@ class _WearableHomePageState extends State<WearableHomePage> {
   Widget build(BuildContext context) {
     final localization = LocalizationService.instance;
     final isWearable = PlatformUtils.isWearable;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: Colors.green[50],
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -218,7 +221,7 @@ class _WearableHomePageState extends State<WearableHomePage> {
                 style: TextStyle(
                   fontSize: isWearable ? 16 : 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.green[800],
+                  color: colorScheme.primary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -251,7 +254,8 @@ class _WearableHomePageState extends State<WearableHomePage> {
                                   localization.translate('no_results'),
                                   style: TextStyle(
                                     fontSize: isWearable ? 12 : 14,
-                                    color: Colors.grey[600],
+                                    color: theme.colorScheme.onSurface
+                                        .withOpacity(0.6),
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
