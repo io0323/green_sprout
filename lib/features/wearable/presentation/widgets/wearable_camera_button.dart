@@ -16,6 +16,8 @@ class WearableCameraButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = LocalizationService.instance;
     final isWearable = PlatformUtils.isWearable;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return SizedBox(
       width: double.infinity,
@@ -34,8 +36,8 @@ class WearableCameraButton extends StatelessWidget {
           ),
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.green[600],
-          foregroundColor: Colors.white,
+          backgroundColor: colorScheme.primary,
+          foregroundColor: colorScheme.onPrimary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

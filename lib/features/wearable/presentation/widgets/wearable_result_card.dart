@@ -47,6 +47,8 @@ class WearableResultCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isWearable = PlatformUtils.isWearable;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final healthColor = _getHealthStatusColor(result.healthStatus);
     final growthIcon = _getGrowthStageIcon(result.growthStage);
 
@@ -63,13 +65,13 @@ class WearableResultCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.green[100],
+                color: colorScheme.primary.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 growthIcon,
                 size: isWearable ? 20 : 24,
-                color: Colors.green[800],
+                color: colorScheme.primary,
               ),
             ),
 
@@ -122,14 +124,14 @@ class WearableResultCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: isWearable ? 12 : 14,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green[800],
+                    color: colorScheme.primary,
                   ),
                 ),
                 Text(
                   '信頼度',
                   style: TextStyle(
                     fontSize: isWearable ? 8 : 10,
-                    color: Colors.grey[600],
+                    color: colorScheme.onSurface.withOpacity(0.6),
                   ),
                 ),
               ],
