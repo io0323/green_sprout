@@ -7,6 +7,7 @@ import 'core/services/wearable_device_service.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/utils/platform_utils.dart';
 import 'core/utils/app_logger.dart';
+import 'core/theme/tea_garden_theme.dart';
 import 'features/wearable/presentation/pages/wearable_home_page.dart';
 
 /// グローバルなウェアラブルデバイスサービスインスタンス
@@ -227,20 +228,33 @@ class _WearableTeaGardenAppState extends State<WearableTeaGardenApp> {
   Widget build(BuildContext context) {
     final isWearable = PlatformUtils.isWearable;
 
+    /// ウェアラブル用のテーマを作成
+    /// TeaGardenThemeをベースに、小さなフォントサイズを適用
+    final wearableLightTheme = TeaGardenTheme.lightTheme.copyWith(
+      textTheme: isWearable
+          ? TeaGardenTheme.lightTheme.textTheme.copyWith(
+              bodyLarge: const TextStyle(fontSize: 12),
+              bodyMedium: const TextStyle(fontSize: 11),
+              bodySmall: const TextStyle(fontSize: 10),
+            )
+          : TeaGardenTheme.lightTheme.textTheme,
+    );
+
+    final wearableDarkTheme = TeaGardenTheme.darkTheme.copyWith(
+      textTheme: isWearable
+          ? TeaGardenTheme.darkTheme.textTheme.copyWith(
+              bodyLarge: const TextStyle(fontSize: 12),
+              bodyMedium: const TextStyle(fontSize: 11),
+              bodySmall: const TextStyle(fontSize: 10),
+            )
+          : TeaGardenTheme.darkTheme.textTheme,
+    );
+
     return MaterialApp(
       title: LocalizationService.instance.translate('app_title'),
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        useMaterial3: false,
-        // ウェアラブル用の小さなフォントサイズ
-        textTheme: isWearable
-            ? const TextTheme(
-                bodyLarge: TextStyle(fontSize: 12),
-                bodyMedium: TextStyle(fontSize: 11),
-                bodySmall: TextStyle(fontSize: 10),
-              )
-            : null,
-      ),
+      theme: wearableLightTheme,
+      darkTheme: wearableDarkTheme,
+      themeMode: ThemeMode.system,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
