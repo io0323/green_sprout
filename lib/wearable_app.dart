@@ -169,35 +169,42 @@ class _WearableTeaGardenAppState extends State<WearableTeaGardenApp> {
         errorMessage = 'エラーが発生しました';
       }
 
+      /// テーマのエラー色を使用
+      /// ErrorWidget.builderはBuildContextを持たないため、
+      /// TeaGardenThemeの色を使用してテーマに合わせたエラー画面を表示
+      const errorColor = TeaGardenTheme.errorColor;
+      final isWearable = PlatformUtils.isWearable;
+
       return Material(
+        color: TeaGardenTheme.backgroundLight,
         child: Container(
-          color: Colors.red[50],
-          padding: const EdgeInsets.all(16.0),
+          color: errorColor.withOpacity(0.1),
+          padding: EdgeInsets.all(isWearable ? 12.0 : 16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 Icons.error_outline,
-                size: 48,
-                color: Colors.red[700],
+                size: isWearable ? 40 : 48,
+                color: errorColor,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: isWearable ? 12 : 16),
               Text(
                 errorMessage,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: isWearable ? 14 : 16,
                   fontWeight: FontWeight.bold,
-                  color: Colors.red[900],
+                  color: errorColor,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: isWearable ? 6 : 8),
               if (kDebugMode)
                 Text(
                   details.exception.toString(),
                   style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.red[700],
+                    fontSize: isWearable ? 10 : 12,
+                    color: errorColor.withOpacity(0.8),
                   ),
                   textAlign: TextAlign.center,
                   maxLines: 5,
