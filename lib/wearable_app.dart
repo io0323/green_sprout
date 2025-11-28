@@ -172,11 +172,24 @@ class _WearableTeaGardenAppState extends State<WearableTeaGardenApp> {
       /// テーマのエラー色を使用
       /// ErrorWidget.builderはBuildContextを持たないため、
       /// TeaGardenThemeの色を使用してテーマに合わせたエラー画面を表示
+      /// システムのダークモード設定を確認して適切な背景色を使用
       const errorColor = TeaGardenTheme.errorColor;
       final isWearable = PlatformUtils.isWearable;
 
+      /// システムのダークモード設定を確認
+      /// ErrorWidget.builderはBuildContextを持たないため、
+      /// WidgetsBindingを使用してシステムの設定を取得
+      final brightness =
+          WidgetsBinding.instance.platformDispatcher.platformBrightness;
+      final isDarkMode = brightness == Brightness.dark;
+      final backgroundColor = isDarkMode
+          ? TeaGardenTheme.backgroundDark
+          : TeaGardenTheme.backgroundLight;
+      final textColor =
+          isDarkMode ? TeaGardenTheme.textLight : TeaGardenTheme.textPrimary;
+
       return Material(
-        color: TeaGardenTheme.backgroundLight,
+        color: backgroundColor,
         child: Container(
           color: errorColor.withOpacity(0.1),
           padding: EdgeInsets.all(isWearable ? 12.0 : 16.0),
@@ -204,7 +217,7 @@ class _WearableTeaGardenAppState extends State<WearableTeaGardenApp> {
                   details.exception.toString(),
                   style: TextStyle(
                     fontSize: isWearable ? 10 : 12,
-                    color: errorColor.withOpacity(0.8),
+                    color: textColor.withOpacity(0.7),
                   ),
                   textAlign: TextAlign.center,
                   maxLines: 5,

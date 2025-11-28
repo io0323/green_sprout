@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/services/localization_service.dart';
 import '../../../../core/utils/platform_utils.dart';
 import '../../../../core/errors/failures.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// ウェアラブルデバイス用のエラー表示ウィジェット
 /// コンパクトなUIでエラーメッセージを表示し、リトライ機能を提供
@@ -50,24 +51,28 @@ class WearableErrorWidget extends StatelessWidget {
   }
 
   /// エラーの種類に応じた色を取得
-  Color _getErrorColor() {
+  /// テーマのエラー色をベースに、エラーの種類に応じた色を返す
+  Color _getErrorColor(BuildContext context) {
+    final theme = Theme.of(context);
+    final baseErrorColor = theme.colorScheme.error;
+
     if (failure != null) {
       if (failure is NetworkFailure) {
-        return Colors.orange;
+        return TeaGardenTheme.warningColor;
       } else if (failure is CacheFailure) {
-        return Colors.blue;
+        return TeaGardenTheme.infoColor;
       } else if (failure is CameraFailure) {
         return Colors.purple;
       } else if (failure is TFLiteFailure) {
-        return Colors.red;
+        return baseErrorColor;
       } else if (failure is ServerFailure) {
-        return Colors.deepOrange;
+        return TeaGardenTheme.warningColor;
       } else if (failure is WearableFailure) {
         return Colors.teal;
       }
     }
 
-    return Colors.red;
+    return baseErrorColor;
   }
 
   /// エラーの種類に応じた詳細メッセージを取得
@@ -112,7 +117,9 @@ class WearableErrorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = LocalizationService.instance;
     final isWearable = PlatformUtils.isWearable;
-    final errorColor = _getErrorColor();
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final errorColor = _getErrorColor(context);
     final errorIcon = _getErrorIcon();
     final detailedMessage = _getDetailedMessage();
 
@@ -160,7 +167,7 @@ class WearableErrorWidget extends StatelessWidget {
               detailedMessage,
               style: TextStyle(
                 fontSize: isWearable ? 10 : 12,
-                color: Colors.grey[700],
+                color: colorScheme.onSurface.withOpacity(0.7),
               ),
               textAlign: TextAlign.center,
               maxLines: isWearable ? 4 : 6,
@@ -188,7 +195,7 @@ class WearableErrorWidget extends StatelessWidget {
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: errorColor,
-                    foregroundColor: Colors.white,
+                    foregroundColor: colorScheme.onError,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
