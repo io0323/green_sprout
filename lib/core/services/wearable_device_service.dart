@@ -297,9 +297,9 @@ class WearableAnalysisCard extends StatelessWidget {
       case '損傷':
         return TeaGardenTheme.errorColor;
       case '病気':
-        return Colors.purple;
+        return TeaGardenTheme.errorColor;
       default:
-        return Colors.grey;
+        return TeaGardenTheme.infoColor;
     }
   }
 
@@ -337,7 +337,7 @@ class WearableCameraControl extends StatelessWidget {
         color: buttonColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: colorScheme.shadow.withOpacity(0.3),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
