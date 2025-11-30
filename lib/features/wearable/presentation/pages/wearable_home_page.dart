@@ -9,6 +9,7 @@ import '../../../tea_analysis/presentation/pages/analysis_result_page.dart';
 import '../../../tea_analysis/domain/usecases/tea_analysis_usecases.dart';
 import '../../../../core/services/localization_service.dart';
 import '../../../../core/utils/platform_utils.dart';
+import '../../../../core/utils/app_logger.dart';
 import '../../../../core/di/injection_container.dart' as di;
 import '../../../../core/errors/failures.dart';
 import '../../../../core/theme/tea_garden_theme.dart';
@@ -51,11 +52,11 @@ class _WearableHomePageState extends State<WearableHomePage> {
 
       result.fold(
         (failure) {
-          if (kDebugMode) debugPrint('解析結果の読み込みエラー: $failure');
-          if (kDebugMode) debugPrint('エラータイプ: ${failure.runtimeType}');
-          if (kDebugMode) debugPrint('エラーメッセージ: ${failure.message}');
-          if (kDebugMode && failure.code != null) {
-            if (kDebugMode) debugPrint('エラーコード: ${failure.code}');
+          AppLogger.debugError('解析結果の読み込みエラー', failure);
+          AppLogger.debugInfo('エラータイプ', failure.runtimeType);
+          AppLogger.debugInfo('エラーメッセージ', failure.message);
+          if (failure.code != null) {
+            AppLogger.debugInfo('エラーコード', failure.code);
           }
 
           final errorMessage = _mapFailureToMessage(failure);
@@ -88,8 +89,8 @@ class _WearableHomePageState extends State<WearableHomePage> {
         },
       );
     } catch (e, stackTrace) {
-      if (kDebugMode) debugPrint('解析結果の読み込みエラー: $e');
-      if (kDebugMode) debugPrint('スタックトレース: $stackTrace');
+      AppLogger.debugError('解析結果の読み込みエラー', e);
+      AppLogger.debugError('スタックトレース', stackTrace);
 
       final localization = LocalizationService.instance;
       final errorMessage = localization.translate('error_loading_data');
@@ -154,7 +155,7 @@ class _WearableHomePageState extends State<WearableHomePage> {
             // 解析結果画面から戻ったら、結果を再読み込み
             _loadRecentResults();
           } catch (e) {
-            if (kDebugMode) debugPrint('解析結果画面への遷移エラー: $e');
+            AppLogger.debugError('解析結果画面への遷移エラー', e);
             if (mounted) {
               final localization = LocalizationService.instance;
               ScaffoldMessenger.of(context).showSnackBar(
@@ -171,7 +172,7 @@ class _WearableHomePageState extends State<WearableHomePage> {
         } else if (result['error'] != null && mounted) {
           // カメラ画面からエラーが返された場合
           final errorMessage = result['error'] as String;
-          if (kDebugMode) debugPrint('カメラ画面からのエラー: $errorMessage');
+          AppLogger.debugError('カメラ画面からのエラー', errorMessage);
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -184,8 +185,8 @@ class _WearableHomePageState extends State<WearableHomePage> {
         }
       }
     } catch (e, stackTrace) {
-      if (kDebugMode) debugPrint('カメラ画面への遷移エラー: $e');
-      if (kDebugMode) debugPrint('スタックトレース: $stackTrace');
+      AppLogger.debugError('カメラ画面への遷移エラー', e);
+      AppLogger.debugError('スタックトレース', stackTrace);
       if (mounted) {
         final localization = LocalizationService.instance;
         ScaffoldMessenger.of(context).showSnackBar(

@@ -62,7 +62,7 @@ class WearableErrorWidget extends StatelessWidget {
       } else if (failure is CacheFailure) {
         return TeaGardenTheme.infoColor;
       } else if (failure is CameraFailure) {
-        return Colors.purple;
+        return TeaGardenTheme.infoColor;
       } else if (failure is TFLiteFailure) {
         return baseErrorColor;
       } else if (failure is ServerFailure) {
