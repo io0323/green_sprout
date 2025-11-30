@@ -79,7 +79,7 @@ class SimpleHomePage extends StatelessWidget {
                       const SizedBox(height: 16),
                       const Text(
                         'アプリが正常に起動しました！',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
