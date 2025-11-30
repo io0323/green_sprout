@@ -26,7 +26,7 @@ class WearableResultCard extends StatelessWidget {
       case '病気':
         return TeaGardenTheme.errorColor;
       default:
-        return Colors.grey;
+        return TeaGardenTheme.infoColor;
     }
   }
 
