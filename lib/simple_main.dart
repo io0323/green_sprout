@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'core/theme/tea_garden_theme.dart';
 
 void main() {
   runApp(const SimpleTeaApp());
@@ -11,10 +12,9 @@ class SimpleTeaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: '茶園管理AI',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        useMaterial3: true,
-      ),
+      theme: TeaGardenTheme.lightTheme,
+      darkTheme: TeaGardenTheme.darkTheme,
+      themeMode: ThemeMode.system,
       home: const SimpleHomePage(),
       debugShowCheckedModeBanner: false,
     );
@@ -26,75 +26,70 @@ class SimpleHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Scaffold(
       appBar: AppBar(
         title: const Text('茶園管理AI'),
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
       ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.green[50]!,
-              Colors.white,
-            ],
-          ),
+        decoration: const BoxDecoration(
+          gradient: TeaGardenTheme.backgroundGradient,
         ),
-        child: const Center(
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 Icons.eco,
                 size: 100,
-                color: Colors.green,
+                color: colorScheme.primary,
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               Text(
                 '茶園管理AI',
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  color: Colors.green,
+                  color: colorScheme.primary,
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Text(
                 '茶葉の成長状態と健康状態を解析',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.grey,
+                  color: colorScheme.onSurface.withOpacity(0.6),
                 ),
               ),
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
               Card(
-                margin: EdgeInsets.all(16),
+                margin: const EdgeInsets.all(16),
                 child: Padding(
-                  padding: EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(24),
                   child: Column(
                     children: [
                       Icon(
                         Icons.check_circle,
                         size: 48,
-                        color: Colors.green,
+                        color: colorScheme.primary,
                       ),
-                      SizedBox(height: 16),
-                      Text(
+                      const SizedBox(height: 16),
+                      const Text(
                         'アプリが正常に起動しました！',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         'Webプラットフォームで動作しています',
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey,
+                          color: colorScheme.onSurface.withOpacity(0.6),
                         ),
                       ),
                     ],
@@ -108,14 +103,14 @@ class SimpleHomePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('茶園管理AIが動作しています！'),
-              backgroundColor: Colors.green,
+            SnackBar(
+              content: const Text('茶園管理AIが動作しています！'),
+              backgroundColor: colorScheme.primary,
             ),
           );
         },
-        backgroundColor: Colors.green,
-        child: const Icon(Icons.camera_alt, color: Colors.white),
+        backgroundColor: colorScheme.primary,
+        child: Icon(Icons.camera_alt, color: colorScheme.onPrimary),
       ),
     );
   }
