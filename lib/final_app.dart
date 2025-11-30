@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'core/theme/tea_garden_theme.dart';
 
 void main() {
   runApp(const TeaGardenApp());
@@ -11,10 +12,9 @@ class TeaGardenApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: '茶園管理AI',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        useMaterial3: false,
-      ),
+      theme: TeaGardenTheme.lightTheme,
+      darkTheme: TeaGardenTheme.darkTheme,
+      themeMode: ThemeMode.system,
       home: const TeaGardenHomePage(),
       debugShowCheckedModeBanner: false,
     );
@@ -35,12 +35,14 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Scaffold(
-      backgroundColor: Colors.green[50],
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('茶園管理AI'),
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -68,9 +70,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          gradient: LinearGradient(
-            colors: [Colors.green[400]!, Colors.green[600]!],
-          ),
+          gradient: TeaGardenTheme.primaryGradient,
         ),
         child: const Column(
           children: [
@@ -119,23 +119,25 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
   }
 
   Widget _buildStatItem(String label, String value, IconData icon) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Column(
       children: [
-        Icon(icon, color: Colors.green, size: 30),
+        Icon(icon, color: colorScheme.primary, size: 30),
         const SizedBox(height: 8),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.green,
+            color: colorScheme.primary,
           ),
         ),
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 12,
-            color: Colors.grey,
+            color: colorScheme.onSurface.withOpacity(0.6),
           ),
         ),
       ],
@@ -158,11 +160,12 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
             ),
             const SizedBox(height: 16),
             if (_isAnalyzing)
-              const Column(
+              Column(
                 children: [
-                  CircularProgressIndicator(color: Colors.green),
-                  SizedBox(height: 16),
-                  Text('AIが茶葉を解析中...'),
+                  CircularProgressIndicator(
+                      color: Theme.of(context).colorScheme.primary),
+                  const SizedBox(height: 16),
+                  const Text('AIが茶葉を解析中...'),
                 ],
               )
             else
@@ -171,8 +174,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                 icon: const Icon(Icons.camera_alt),
                 label: const Text('茶葉を撮影・解析'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 12,
@@ -221,16 +224,20 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
   }
 
   Widget _buildResultItem(Map<String, dynamic> result) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isHealthy = result['healthStatus'] == '健康';
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.grey[100],
+        color: colorScheme.surfaceVariant,
         borderRadius: BorderRadius.circular(8),
         border: Border(
           left: BorderSide(
-            color:
-                result['healthStatus'] == '健康' ? Colors.green : Colors.orange,
+            color: isHealthy
+                ? TeaGardenTheme.successColor
+                : TeaGardenTheme.warningColor,
             width: 4,
           ),
         ),
@@ -248,9 +255,9 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: result['healthStatus'] == '健康'
-                      ? Colors.green[100]
-                      : Colors.orange[100],
+                  color: isHealthy
+                      ? TeaGardenTheme.successColor.withOpacity(0.1)
+                      : TeaGardenTheme.warningColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -258,9 +265,9 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: result['healthStatus'] == '健康'
-                        ? Colors.green[700]
-                        : Colors.orange[700],
+                    color: isHealthy
+                        ? TeaGardenTheme.successColor
+                        : TeaGardenTheme.warningColor,
                   ),
                 ),
               ),
@@ -269,7 +276,10 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
           const SizedBox(height: 4),
           Text(
             '${result['timestamp']} | 信頼度: ${result['confidence']}%',
-            style: const TextStyle(fontSize: 12, color: Colors.grey),
+            style: TextStyle(
+              fontSize: 12,
+              color: colorScheme.onSurface.withOpacity(0.6),
+            ),
           ),
           const SizedBox(height: 4),
           Text(
@@ -318,9 +328,9 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('解析が完了しました！'),
-          backgroundColor: Colors.green,
+        SnackBar(
+          content: const Text('解析が完了しました！'),
+          backgroundColor: Theme.of(context).colorScheme.primary,
         ),
       );
     }
