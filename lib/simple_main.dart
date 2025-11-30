@@ -64,11 +64,11 @@ class SimpleHomePage extends StatelessWidget {
                   color: colorScheme.onSurface.withOpacity(0.6),
                 ),
               ),
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
               Card(
-                margin: EdgeInsets.all(16),
+                margin: const EdgeInsets.all(16),
                 child: Padding(
-                  padding: EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(24),
                   child: Column(
                     children: [
                       Icon(
@@ -76,15 +76,15 @@ class SimpleHomePage extends StatelessWidget {
                         size: 48,
                         color: colorScheme.primary,
                       ),
-                      SizedBox(height: 16),
-                      Text(
+                      const SizedBox(height: 16),
+                      const Text(
                         'アプリが正常に起動しました！',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         'Webプラットフォームで動作しています',
                         style: TextStyle(
