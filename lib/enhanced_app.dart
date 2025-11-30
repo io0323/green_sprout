@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'dart:convert';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'src/web_storage.dart';
 import 'core/services/localization_service.dart';
 import 'core/widgets/language_selector.dart';
+import 'core/utils/app_logger.dart';
 import 'core/di/injection_container.dart' as di;
 import 'features/cloud_sync/presentation/bloc/cloud_sync_cubit.dart';
 
@@ -17,7 +17,7 @@ void main() async {
     await di.init();
   } catch (e) {
     // エラーが発生した場合はフォールバック
-    if (kDebugMode) debugPrint('DI初期化エラー: $e');
+    AppLogger.debugError('DI初期化エラー', e);
   }
 
   runApp(const EnhancedTeaGardenApp());
