@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import '../../domain/entities/wearable_analysis_result.dart';
 import '../widgets/wearable_result_card.dart';
 import '../widgets/wearable_camera_button.dart';
