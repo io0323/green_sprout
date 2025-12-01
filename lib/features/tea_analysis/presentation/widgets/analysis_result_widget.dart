@@ -59,11 +59,14 @@ class AnalysisResultWidget extends StatelessWidget {
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
-                          color: Colors.grey[200],
-                          child: const Icon(
+                          color: Theme.of(context).colorScheme.surfaceVariant,
+                          child: Icon(
                             Icons.image_not_supported,
                             size: 64,
-                            color: Colors.grey,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withOpacity(0.5),
                           ),
                         );
                       },
@@ -81,7 +84,7 @@ class AnalysisResultWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.grey[800],
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
 
@@ -89,6 +92,7 @@ class AnalysisResultWidget extends StatelessWidget {
 
             // 成長状態
             _buildResultItem(
+              context,
               '成長状態',
               result.growthStage,
               _getGrowthStageIcon(result.growthStage),
@@ -99,6 +103,7 @@ class AnalysisResultWidget extends StatelessWidget {
 
             // 健康状態
             _buildResultItem(
+              context,
               '健康状態',
               result.healthStatus,
               _getHealthStatusIcon(result.healthStatus),
@@ -109,6 +114,7 @@ class AnalysisResultWidget extends StatelessWidget {
 
             // 信頼度
             _buildResultItem(
+              context,
               '信頼度',
               '${(result.confidence * 100).toStringAsFixed(1)}%',
               Icons.analytics_outlined,
@@ -126,7 +132,10 @@ class AnalysisResultWidget extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: Colors.grey[700],
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withOpacity(0.7),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -134,7 +143,8 @@ class AnalysisResultWidget extends StatelessWidget {
                   label: '信頼度 ${(result.confidence * 100).toStringAsFixed(1)}%',
                   child: LinearProgressIndicator(
                     value: result.confidence,
-                    backgroundColor: Colors.grey[200],
+                    backgroundColor:
+                        Theme.of(context).colorScheme.surfaceVariant,
                     valueColor: AlwaysStoppedAnimation<Color>(
                       _getConfidenceColor(result.confidence),
                     ),
@@ -145,7 +155,10 @@ class AnalysisResultWidget extends StatelessWidget {
                   _getConfidenceDescription(result.confidence),
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.grey[600],
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withOpacity(0.6),
                     fontStyle: FontStyle.italic,
                   ),
                 ),
@@ -157,8 +170,8 @@ class AnalysisResultWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildResultItem(
-      String label, String value, IconData icon, Color color) {
+  Widget _buildResultItem(BuildContext context, String label, String value,
+      IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -178,7 +191,10 @@ class AnalysisResultWidget extends StatelessWidget {
                   label,
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.grey[600],
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withOpacity(0.6),
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -216,15 +232,15 @@ class AnalysisResultWidget extends StatelessWidget {
   Color _getGrowthStageColor(String stage) {
     switch (stage) {
       case '芽':
-        return Colors.lightGreen;
+        return TeaGardenTheme.lightGreen;
       case '若葉':
-        return Colors.green;
+        return TeaGardenTheme.successColor;
       case '成葉':
-        return Colors.teal;
+        return TeaGardenTheme.primaryGreen;
       case '老葉':
-        return Colors.brown;
+        return TeaGardenTheme.darkGreen;
       default:
-        return Colors.grey;
+        return TeaGardenTheme.infoColor;
     }
   }
 
