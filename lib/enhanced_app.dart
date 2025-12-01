@@ -8,6 +8,7 @@ import 'core/widgets/language_selector.dart';
 import 'core/utils/app_logger.dart';
 import 'core/di/injection_container.dart' as di;
 import 'features/cloud_sync/presentation/bloc/cloud_sync_cubit.dart';
+import 'core/theme/tea_garden_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -1110,13 +1111,13 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
           PieChartSectionData(
             value: healthyCount.toDouble(),
             title: '$healthyCount',
-            color: Colors.green,
+            color: TeaGardenTheme.successColor,
             radius: 80,
           ),
           PieChartSectionData(
             value: attentionCount.toDouble(),
             title: '$attentionCount',
-            color: Colors.orange,
+            color: TeaGardenTheme.warningColor,
             radius: 80,
           ),
         ],
@@ -1140,10 +1141,10 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     }
 
     final colors = [
-      Colors.blue,
-      Colors.green,
-      Colors.orange,
-      Colors.purple,
+      TeaGardenTheme.infoColor,
+      TeaGardenTheme.successColor,
+      TeaGardenTheme.warningColor,
+      TeaGardenTheme.primaryGreen,
     ];
     int colorIndex = 0;
 
@@ -1178,9 +1179,11 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildLegendItem(Colors.green, healthyStatus, healthyCount),
+        _buildLegendItem(
+            TeaGardenTheme.successColor, healthyStatus, healthyCount),
         const SizedBox(width: 20),
-        _buildLegendItem(Colors.orange, attentionStatus, attentionCount),
+        _buildLegendItem(
+            TeaGardenTheme.warningColor, attentionStatus, attentionCount),
       ],
     );
   }
@@ -1236,9 +1239,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
       spacing: 16,
       runSpacing: 8,
       children: [
-        _buildLegendItem(Colors.green, highLabel, highCount),
-        _buildLegendItem(Colors.orange, mediumLabel, mediumCount),
-        _buildLegendItem(Colors.red, lowLabel, lowCount),
+        _buildLegendItem(TeaGardenTheme.successColor, highLabel, highCount),
+        _buildLegendItem(TeaGardenTheme.warningColor, mediumLabel, mediumCount),
+        _buildLegendItem(TeaGardenTheme.errorColor, lowLabel, lowCount),
       ],
     );
   }

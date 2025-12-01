@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import '../../domain/entities/analysis_result.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// 解析結果ウィジェット
 /// 解析結果を表示するウィジェット
@@ -111,7 +112,7 @@ class AnalysisResultWidget extends StatelessWidget {
               '信頼度',
               '${(result.confidence * 100).toStringAsFixed(1)}%',
               Icons.analytics_outlined,
-              Colors.blue,
+              TeaGardenTheme.infoColor,
             ),
 
             const SizedBox(height: 24),
@@ -245,25 +246,25 @@ class AnalysisResultWidget extends StatelessWidget {
   Color _getHealthStatusColor(String status) {
     switch (status) {
       case '健康':
-        return Colors.green;
+        return TeaGardenTheme.successColor;
       case '軽微な損傷':
-        return Colors.orange;
+        return TeaGardenTheme.warningColor;
       case '損傷':
-        return Colors.red;
+        return TeaGardenTheme.warningColor;
       case '病気':
-        return Colors.red[800]!;
+        return TeaGardenTheme.errorColor;
       default:
-        return Colors.grey;
+        return TeaGardenTheme.infoColor;
     }
   }
 
   Color _getConfidenceColor(double confidence) {
     if (confidence >= 0.8) {
-      return Colors.green;
+      return TeaGardenTheme.successColor;
     } else if (confidence >= 0.6) {
-      return Colors.orange;
+      return TeaGardenTheme.warningColor;
     } else {
-      return Colors.red;
+      return TeaGardenTheme.errorColor;
     }
   }
 

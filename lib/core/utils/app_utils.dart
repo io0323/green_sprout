@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/app_constants.dart';
+import '../theme/tea_garden_theme.dart';
 
 /// ユーティリティクラス
 /// アプリケーション全体で使用する共通機能
@@ -28,13 +29,13 @@ class AppUtils {
   /// 信頼度に応じた色を取得
   static Color getConfidenceColor(double confidence) {
     if (confidence >= AppConstants.highConfidenceThreshold) {
-      return Colors.green;
+      return TeaGardenTheme.successColor;
     } else if (confidence >= AppConstants.mediumConfidenceThreshold) {
-      return Colors.yellow;
+      return TeaGardenTheme.warningColor;
     } else if (confidence >= AppConstants.lowConfidenceThreshold) {
-      return Colors.orange;
+      return TeaGardenTheme.warningColor;
     } else {
-      return Colors.red;
+      return TeaGardenTheme.errorColor;
     }
   }
 
@@ -42,15 +43,15 @@ class AppUtils {
   static Color getHealthStatusColor(String status) {
     switch (status) {
       case HealthStatusConstants.healthy:
-        return Colors.green;
+        return TeaGardenTheme.successColor;
       case HealthStatusConstants.slightlyDamaged:
-        return Colors.yellow;
+        return TeaGardenTheme.warningColor;
       case HealthStatusConstants.damaged:
-        return Colors.orange;
+        return TeaGardenTheme.warningColor;
       case HealthStatusConstants.diseased:
-        return Colors.red;
+        return TeaGardenTheme.errorColor;
       default:
-        return Colors.grey;
+        return TeaGardenTheme.infoColor;
     }
   }
 
