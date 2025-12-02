@@ -42,10 +42,9 @@ class _EnhancedTeaGardenAppState extends State<EnhancedTeaGardenApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: LocalizationService.instance.translate('enhanced_app_title'),
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        useMaterial3: false,
-      ),
+      theme: TeaGardenTheme.lightTheme,
+      darkTheme: TeaGardenTheme.darkTheme,
+      themeMode: ThemeMode.system,
       home: FutureBuilder(
         future: di.sl.getAsync<CloudSyncCubit>(),
         builder: (context, snapshot) {
@@ -151,22 +150,24 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Scaffold(
-      backgroundColor: Colors.green[50],
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title:
             Text(LocalizationService.instance.translate('enhanced_app_title')),
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
         elevation: 0,
         actions: [
           LanguageSelector(onLanguageChanged: widget.onLanguageChanged),
         ],
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: Colors.white,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white70,
+          indicatorColor: colorScheme.onPrimary,
+          labelColor: colorScheme.onPrimary,
+          unselectedLabelColor: colorScheme.onPrimary.withOpacity(0.7),
           onTap: (index) {
             // Tab selection handled by TabController
           },
@@ -282,28 +283,30 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          gradient: LinearGradient(
-            colors: [Colors.green[400]!, Colors.green[600]!],
-          ),
+          gradient: TeaGardenTheme.primaryGradient,
         ),
         child: Column(
           children: [
-            const Icon(Icons.eco, size: 50, color: Colors.white),
+            Icon(
+              Icons.eco,
+              size: 50,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
             const SizedBox(height: 10),
             Text(
               LocalizationService.instance.translate('enhanced_app_title'),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
             ),
             const SizedBox(height: 5),
             Text(
               LocalizationService.instance.translate('welcome_message'),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
-                color: Colors.white70,
+                color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
               ),
             ),
           ],
@@ -374,21 +377,25 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            Icon(icon, color: Colors.green, size: 30),
+            Icon(
+              icon,
+              color: Theme.of(context).colorScheme.primary,
+              size: 30,
+            ),
             const SizedBox(height: 8),
             Text(
               value,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.green,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
-                color: Colors.grey,
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               ),
             ),
           ],
@@ -415,7 +422,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
             if (_isAnalyzing)
               Column(
                 children: [
-                  const CircularProgressIndicator(color: Colors.green),
+                  CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                   const SizedBox(height: 16),
                   Text(LocalizationService.instance.translate('ai_analyzing')),
                 ],
@@ -428,8 +437,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                 label:
                     Text(LocalizationService.instance.translate('take_photo')),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 12,
@@ -462,8 +471,14 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
               Center(
                 child: Column(
                   children: [
-                    const Icon(Icons.photo_camera_outlined,
-                        size: 50, color: Colors.grey),
+                    Icon(
+                      Icons.photo_camera_outlined,
+                      size: 50,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.6),
+                    ),
                     const SizedBox(height: 10),
                     Text(LocalizationService.instance
                         .translate('no_results_yet')),
@@ -623,8 +638,14 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
               Center(
                 child: Column(
                   children: [
-                    const Icon(Icons.photo_camera_outlined,
-                        size: 50, color: Colors.grey),
+                    Icon(
+                      Icons.photo_camera_outlined,
+                      size: 50,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.6),
+                    ),
                     const SizedBox(height: 10),
                     Text(LocalizationService.instance
                         .translate('no_results_yet')),
@@ -632,7 +653,13 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                     Text(
                       LocalizationService.instance
                           .translate('take_photo_to_analyze'),
-                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(0.6),
+                      ),
                     ),
                   ],
                 ),
@@ -641,7 +668,14 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
               Center(
                 child: Column(
                   children: [
-                    const Icon(Icons.search_off, size: 50, color: Colors.grey),
+                    Icon(
+                      Icons.search_off,
+                      size: 50,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.6),
+                    ),
                     const SizedBox(height: 10),
                     Text(LocalizationService.instance
                         .translate('no_matching_records')),
@@ -649,7 +683,13 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                     Text(
                       LocalizationService.instance
                           .translate('change_search_conditions'),
-                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(0.6),
+                      ),
                     ),
                   ],
                 ),
@@ -719,14 +759,14 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.grey[100],
+        color: Theme.of(context).colorScheme.surfaceVariant,
         borderRadius: BorderRadius.circular(8),
         border: Border(
           left: BorderSide(
             color: result['healthStatus'] ==
                     LocalizationService.instance.translate('healthy')
-                ? Colors.green
-                : Colors.orange,
+                ? TeaGardenTheme.successColor
+                : TeaGardenTheme.warningColor,
             width: 4,
           ),
         ),
@@ -751,8 +791,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                         color: result['healthStatus'] ==
                                 LocalizationService.instance
                                     .translate('healthy')
-                            ? Colors.green[100]
-                            : Colors.orange[100],
+                            ? TeaGardenTheme.successColor.withOpacity(0.1)
+                            : TeaGardenTheme.warningColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
@@ -763,8 +803,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                           color: result['healthStatus'] ==
                                   LocalizationService.instance
                                       .translate('healthy')
-                              ? Colors.green[700]
-                              : Colors.orange[700],
+                              ? TeaGardenTheme.successColor
+                              : TeaGardenTheme.warningColor,
                         ),
                       ),
                     ),
@@ -773,7 +813,13 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                 const SizedBox(height: 4),
                 Text(
                   '${result['timestamp']} | 信頼度: ${((result['confidence'] as double) * 100).round()}%',
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withOpacity(0.6),
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -788,12 +834,12 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
               IconButton(
                 icon: const Icon(Icons.edit, size: 20),
                 onPressed: () => _editResult(result),
-                color: Colors.blue,
+                color: TeaGardenTheme.infoColor,
               ),
               IconButton(
                 icon: const Icon(Icons.delete, size: 20),
                 onPressed: () => _deleteResult(result),
-                color: Colors.red,
+                color: TeaGardenTheme.errorColor,
               ),
             ],
           ),
@@ -936,12 +982,12 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
           LineChartBarData(
             spots: spots,
             isCurved: true,
-            color: Colors.green,
+            color: Theme.of(context).colorScheme.primary,
             barWidth: 3,
             dotData: const FlDotData(show: true),
             belowBarData: BarAreaData(
               show: true,
-              color: Colors.green.withOpacity(0.2),
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
             ),
           ),
         ],
@@ -1037,9 +1083,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     }
 
     final colors = [
-      Colors.green,
-      Colors.orange,
-      Colors.red,
+      TeaGardenTheme.successColor,
+      TeaGardenTheme.warningColor,
+      TeaGardenTheme.errorColor,
     ];
     int colorIndex = 0;
 
@@ -1197,10 +1243,10 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     }
 
     final colors = [
-      Colors.blue,
-      Colors.green,
-      Colors.orange,
-      Colors.purple,
+      TeaGardenTheme.infoColor,
+      TeaGardenTheme.successColor,
+      TeaGardenTheme.warningColor,
+      TeaGardenTheme.primaryGreen,
     ];
     int colorIndex = 0;
 
@@ -1296,8 +1342,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                   icon: const Icon(Icons.table_chart),
                   label: Text(LocalizationService.instance.translate('csv')),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    foregroundColor: Colors.white,
+                    backgroundColor: TeaGardenTheme.warningColor,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
                 ElevatedButton.icon(
@@ -1305,8 +1351,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                   icon: const Icon(Icons.code),
                   label: Text(LocalizationService.instance.translate('json')),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white,
+                    backgroundColor: TeaGardenTheme.infoColor,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
                 ElevatedButton.icon(
@@ -1314,8 +1360,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                   icon: const Icon(Icons.picture_as_pdf),
                   label: Text(LocalizationService.instance.translate('pdf')),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
+                    backgroundColor: TeaGardenTheme.errorColor,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
               ],
@@ -1360,7 +1406,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                             LocalizationService.instance
                                 .translate('settings_saved'),
                           ),
-                          backgroundColor: Colors.green,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
                         ),
                       );
                     }
@@ -1408,7 +1455,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
               '${_retentionPeriod.toInt()}${LocalizationService.instance.translate('days')}',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey[700],
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
               ),
             ),
             const SizedBox(height: 16),
@@ -1431,15 +1478,15 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
               '${_autoAnalysisInterval.toInt()}${LocalizationService.instance.translate('minutes')}',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey[700],
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
               ),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _saveSettings,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
               ),
               child:
                   Text(LocalizationService.instance.translate('save_settings')),
@@ -1458,7 +1505,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         bool isAutoSyncEnabled = false;
         bool isSyncing = false;
         String statusMessage = '';
-        Color statusColor = Colors.grey;
+        Color statusColor = TeaGardenTheme.infoColor;
 
         // 自動同期状態を確認
         if (state is CloudSyncAutoSyncState) {
@@ -1469,25 +1516,25 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         if (state is CloudSyncSyncing) {
           isSyncing = true;
           statusMessage = state.message;
-          statusColor = Colors.blue;
+          statusColor = TeaGardenTheme.infoColor;
         } else if (state is CloudSyncSuccess) {
           statusMessage = state.message;
-          statusColor = Colors.green;
+          statusColor = TeaGardenTheme.successColor;
         } else if (state is CloudSyncError) {
           statusMessage = state.message;
-          statusColor = Colors.red;
+          statusColor = TeaGardenTheme.errorColor;
         } else if (state is CloudSyncConnected) {
           statusMessage = 'クラウドに接続済み';
-          statusColor = Colors.green;
+          statusColor = TeaGardenTheme.successColor;
         } else if (state is CloudSyncOffline) {
           statusMessage = 'オフライン';
-          statusColor = Colors.orange;
+          statusColor = TeaGardenTheme.warningColor;
         } else if (state is CloudSyncCheckingConnection) {
           statusMessage = '接続確認中...';
-          statusColor = Colors.blue;
+          statusColor = TeaGardenTheme.infoColor;
         } else if (state is CloudSyncInitial) {
           statusMessage = '初期化中...';
-          statusColor = Colors.grey;
+          statusColor = TeaGardenTheme.infoColor;
         }
 
         // 自動同期状態の取得
@@ -1568,7 +1615,10 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                   'データをクラウドにバックアップして、複数のデバイス間で同期できます。',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.grey[700],
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withOpacity(0.7),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -1587,14 +1637,16 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(currentState.message),
-                                      backgroundColor: Colors.green,
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                                   );
                                 } else if (currentState is CloudSyncError) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(currentState.message),
-                                      backgroundColor: Colors.red,
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.error,
                                     ),
                                   );
                                 }
@@ -1603,8 +1655,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                       icon: const Icon(Icons.cloud_upload),
                       label: const Text('クラウドにアップロード'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        foregroundColor: Colors.white,
+                        backgroundColor: TeaGardenTheme.infoColor,
+                        foregroundColor:
+                            Theme.of(context).colorScheme.onPrimary,
                       ),
                     ),
                     ElevatedButton.icon(
@@ -1618,14 +1671,16 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(currentState.message),
-                                      backgroundColor: Colors.green,
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                                   );
                                 } else if (currentState is CloudSyncError) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(currentState.message),
-                                      backgroundColor: Colors.red,
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.error,
                                     ),
                                   );
                                 }
@@ -1634,8 +1689,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                       icon: const Icon(Icons.cloud_download),
                       label: const Text('クラウドからダウンロード'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor:
+                            Theme.of(context).colorScheme.onPrimary,
                       ),
                     ),
                     ElevatedButton.icon(
@@ -1649,14 +1705,16 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(currentState.message),
-                                      backgroundColor: Colors.green,
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                                   );
                                 } else if (currentState is CloudSyncError) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(currentState.message),
-                                      backgroundColor: Colors.red,
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.error,
                                     ),
                                   );
                                 }
@@ -1665,8 +1723,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                       icon: const Icon(Icons.sync),
                       label: const Text('双方向同期'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.purple,
-                        foregroundColor: Colors.white,
+                        backgroundColor: TeaGardenTheme.primaryGreen,
+                        foregroundColor:
+                            Theme.of(context).colorScheme.onPrimary,
                       ),
                     ),
                   ],
@@ -1681,7 +1740,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                   icon: const Icon(Icons.refresh),
                   label: const Text('接続状態を確認'),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.blue,
+                    foregroundColor: TeaGardenTheme.infoColor,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -1699,7 +1758,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                                 content: Text(
                                   value ? '自動同期を有効にしました' : '自動同期を無効にしました',
                                 ),
-                                backgroundColor: Colors.green,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.primary,
                                 duration: const Duration(seconds: 2),
                               ),
                             );
@@ -1763,7 +1823,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(text),
-            backgroundColor: Colors.green,
+            backgroundColor: Theme.of(context).colorScheme.primary,
           ),
         );
       }
@@ -1778,7 +1838,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(errText),
-            backgroundColor: Colors.red,
+            backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
       }
@@ -1937,14 +1997,15 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                         SnackBar(
                           content: Text(LocalizationService.instance
                               .translate('settings_saved')),
-                          backgroundColor: Colors.green,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
                         ),
                       );
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   ),
                   child: Text(LocalizationService.instance.translate('save')),
                 ),
@@ -1980,7 +2041,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                 SnackBar(
                   content: Text(LocalizationService.instance
                       .translate('analysis_result_deleted')),
-                  backgroundColor: Colors.red,
+                  backgroundColor: Theme.of(context).colorScheme.error,
                 ),
               );
             },
@@ -1997,7 +2058,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         SnackBar(
           content:
               Text(LocalizationService.instance.translate('no_export_data')),
-          backgroundColor: Colors.red,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
@@ -2013,7 +2074,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(LocalizationService.instance.translate('csv_exported')),
-        backgroundColor: Colors.green,
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
     );
   }
@@ -2024,7 +2085,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         SnackBar(
           content:
               Text(LocalizationService.instance.translate('no_export_data')),
-          backgroundColor: Colors.red,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
@@ -2035,7 +2096,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(LocalizationService.instance.translate('json_exported')),
-        backgroundColor: Colors.green,
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
     );
   }
@@ -2046,7 +2107,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         SnackBar(
           content:
               Text(LocalizationService.instance.translate('no_export_data')),
-          backgroundColor: Colors.red,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
@@ -2060,7 +2121,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
       SnackBar(
         content: Text(
             '${LocalizationService.instance.translate('pdf')}レポートを生成しました。ブラウザで印刷してPDFとして保存できます。'),
-        backgroundColor: Colors.green,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         duration: const Duration(seconds: 4),
       ),
     );
@@ -2250,7 +2311,7 @@ ${_results.map((r) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(LocalizationService.instance.translate('settings_saved')),
-        backgroundColor: Colors.green,
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
     );
   }
