@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'core/theme/tea_garden_theme.dart';
+import 'core/widgets/common_cards.dart';
+import 'core/widgets/snackbar_helper.dart';
 
 void main() {
   runApp(const TeaGardenApp());
@@ -63,43 +65,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
   }
 
   Widget _buildWelcomeCard() {
-    return Card(
-      elevation: 4,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          gradient: TeaGardenTheme.primaryGradient,
-        ),
-        child: Column(
-          children: [
-            Icon(
-              Icons.eco,
-              size: 50,
-              color: Theme.of(context).colorScheme.onPrimary,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              '茶園管理AI',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-            ),
-            const SizedBox(height: 5),
-            Text(
-              'AI技術で茶葉の健康状態を分析',
-              style: TextStyle(
-                fontSize: 14,
-                color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    return const WelcomeCard();
   }
 
   Widget _buildStatsCard() {
@@ -110,85 +76,31 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
         child: Row(
           children: [
             Expanded(
-              child: _buildStatItem('解析回数', '$_analysisCount', Icons.analytics),
+              child: StatItem(
+                label: '解析回数',
+                value: '$_analysisCount',
+                icon: Icons.analytics,
+              ),
             ),
             Expanded(
-              child:
-                  _buildStatItem('健康率', '${_getHealthRate()}%', Icons.favorite),
+              child: StatItem(
+                label: '健康率',
+                value: '${_getHealthRate()}%',
+                icon: Icons.favorite,
+              ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildStatItem(String label, String value, IconData icon) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    return Column(
-      children: [
-        Icon(icon, color: colorScheme.primary, size: 30),
-        const SizedBox(height: 8),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: colorScheme.primary,
-          ),
-        ),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            color: colorScheme.onSurface.withOpacity(0.6),
-          ),
-        ),
-      ],
     );
   }
 
   Widget _buildAnalysisCard() {
-    return Card(
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            const Text(
-              '茶葉解析',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            if (_isAnalyzing)
-              Column(
-                children: [
-                  CircularProgressIndicator(
-                      color: Theme.of(context).colorScheme.primary),
-                  const SizedBox(height: 16),
-                  const Text('AIが茶葉を解析中...'),
-                ],
-              )
-            else
-              ElevatedButton.icon(
-                onPressed: _startAnalysis,
-                icon: const Icon(Icons.camera_alt),
-                label: const Text('茶葉を撮影・解析'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 12,
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
+    return AnalysisCard(
+      isAnalyzing: _isAnalyzing,
+      onAnalyze: _startAnalysis,
+      analyzingText: 'AIが茶葉を解析中...',
+      buttonText: '茶葉を撮影・解析',
     );
   }
 
@@ -209,22 +121,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
             ),
             const SizedBox(height: 16),
             if (_results.isEmpty)
-              Center(
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.photo_camera_outlined,
-                      size: 50,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withOpacity(0.6),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text('まだ解析結果がありません'),
-                  ],
-                ),
-              )
+              const EmptyStateWidget()
             else
               ...(_results.map((result) => _buildResultItem(result))),
           ],
@@ -337,12 +234,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
     });
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('解析が完了しました！'),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-        ),
-      );
+      SnackBarHelper.showSuccess(context, '解析が完了しました！');
     }
   }
 }

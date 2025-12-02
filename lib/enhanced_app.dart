@@ -9,6 +9,8 @@ import 'core/utils/app_logger.dart';
 import 'core/di/injection_container.dart' as di;
 import 'features/cloud_sync/presentation/bloc/cloud_sync_cubit.dart';
 import 'core/theme/tea_garden_theme.dart';
+import 'core/widgets/common_cards.dart';
+import 'core/widgets/snackbar_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -276,42 +278,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
   }
 
   Widget _buildWelcomeCard() {
-    return Card(
-      elevation: 4,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          gradient: TeaGardenTheme.primaryGradient,
-        ),
-        child: Column(
-          children: [
-            Icon(
-              Icons.eco,
-              size: 50,
-              color: Theme.of(context).colorScheme.onPrimary,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              LocalizationService.instance.translate('enhanced_app_title'),
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-            ),
-            const SizedBox(height: 5),
-            Text(
-              LocalizationService.instance.translate('welcome_message'),
-              style: TextStyle(
-                fontSize: 14,
-                color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
-              ),
-            ),
-          ],
-        ),
-      ),
+    return WelcomeCard(
+      title: LocalizationService.instance.translate('enhanced_app_title'),
+      subtitle: LocalizationService.instance.translate('welcome_message'),
     );
   }
 
@@ -371,83 +340,17 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
   }
 
   Widget _buildStatCard(String label, String value, IconData icon) {
-    return Card(
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Icon(
-              icon,
-              color: Theme.of(context).colorScheme.primary,
-              size: 30,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-              ),
-            ),
-          ],
-        ),
-      ),
+    return StatCard(
+      label: label,
+      value: value,
+      icon: icon,
     );
   }
 
   Widget _buildAnalysisCard() {
-    return Card(
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Text(
-              LocalizationService.instance.translate('tea_analysis'),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            if (_isAnalyzing)
-              Column(
-                children: [
-                  CircularProgressIndicator(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(LocalizationService.instance.translate('ai_analyzing')),
-                ],
-              )
-            else
-              ElevatedButton.icon(
-                key: const Key('btn_take_photo'),
-                onPressed: _startAnalysis,
-                icon: const Icon(Icons.camera_alt),
-                label:
-                    Text(LocalizationService.instance.translate('take_photo')),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 12,
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
+    return AnalysisCard(
+      isAnalyzing: _isAnalyzing,
+      onAnalyze: _startAnalysis,
     );
   }
 
@@ -468,23 +371,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
             ),
             const SizedBox(height: 16),
             if (_results.isEmpty)
-              Center(
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.photo_camera_outlined,
-                      size: 50,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withOpacity(0.6),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(LocalizationService.instance
-                        .translate('no_results_yet')),
-                  ],
-                ),
-              )
+              const EmptyStateWidget()
             else
               ...(_results.take(5).map((result) => _buildResultItem(result))),
           ],
@@ -1400,15 +1287,10 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                       LocalizationService.instance.setLanguage(value);
                       setState(() {});
                       widget.onLanguageChanged?.call();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            LocalizationService.instance
-                                .translate('settings_saved'),
-                          ),
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                        ),
+                      SnackBarHelper.showSuccess(
+                        context,
+                        LocalizationService.instance
+                            .translate('settings_saved'),
                       );
                     }
                   },
@@ -1634,20 +1516,14 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                               if (context.mounted) {
                                 final currentState = cubit.state;
                                 if (currentState is CloudSyncSuccess) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(currentState.message),
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
+                                  SnackBarHelper.showSuccess(
+                                    context,
+                                    currentState.message,
                                   );
                                 } else if (currentState is CloudSyncError) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(currentState.message),
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.error,
-                                    ),
+                                  SnackBarHelper.showError(
+                                    context,
+                                    currentState.message,
                                   );
                                 }
                               }
@@ -1668,20 +1544,14 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                               if (context.mounted) {
                                 final currentState = cubit.state;
                                 if (currentState is CloudSyncSuccess) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(currentState.message),
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
+                                  SnackBarHelper.showSuccess(
+                                    context,
+                                    currentState.message,
                                   );
                                 } else if (currentState is CloudSyncError) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(currentState.message),
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.error,
-                                    ),
+                                  SnackBarHelper.showError(
+                                    context,
+                                    currentState.message,
                                   );
                                 }
                               }
@@ -1702,20 +1572,14 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                               if (context.mounted) {
                                 final currentState = cubit.state;
                                 if (currentState is CloudSyncSuccess) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(currentState.message),
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
+                                  SnackBarHelper.showSuccess(
+                                    context,
+                                    currentState.message,
                                   );
                                 } else if (currentState is CloudSyncError) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(currentState.message),
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.error,
-                                    ),
+                                  SnackBarHelper.showError(
+                                    context,
+                                    currentState.message,
                                   );
                                 }
                               }
@@ -1753,15 +1617,12 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                       : (value) async {
                           await cubit.toggleAutoSync(value);
                           if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  value ? '自動同期を有効にしました' : '自動同期を無効にしました',
-                                ),
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.primary,
-                                duration: const Duration(seconds: 2),
-                              ),
+                            SnackBarHelper.showCustom(
+                              context,
+                              value ? '自動同期を有効にしました' : '自動同期を無効にしました',
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                              duration: const Duration(seconds: 2),
                             );
                           }
                         },
@@ -1820,12 +1681,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         // Show localized SnackBar confirming completion
         final text =
             LocalizationService.instance.translate('analysis_complete');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(text),
-            backgroundColor: Theme.of(context).colorScheme.primary,
-          ),
-        );
+        SnackBarHelper.showSuccess(context, text);
       }
     } catch (e) {
       // End analyzing state on error and optionally show an error SnackBar
@@ -1835,12 +1691,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         });
         final errText =
             LocalizationService.instance.translate('analysis_failed');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(errText),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
+        SnackBarHelper.showError(context, errText);
       }
     }
   }
@@ -1993,13 +1844,10 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                       _saveData();
                       commentController.dispose();
                       Navigator.of(context).pop();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(LocalizationService.instance
-                              .translate('settings_saved')),
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                        ),
+                      SnackBarHelper.showSuccess(
+                        context,
+                        LocalizationService.instance
+                            .translate('settings_saved'),
                       );
                     }
                   },
@@ -2037,12 +1885,10 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
               });
               _saveData();
               Navigator.of(context).pop();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(LocalizationService.instance
-                      .translate('analysis_result_deleted')),
-                  backgroundColor: Theme.of(context).colorScheme.error,
-                ),
+              SnackBarHelper.showError(
+                context,
+                LocalizationService.instance
+                    .translate('analysis_result_deleted'),
               );
             },
             child: Text(LocalizationService.instance.translate('delete')),
@@ -2054,12 +1900,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
 
   void _exportToCSV() {
     if (_results.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content:
-              Text(LocalizationService.instance.translate('no_export_data')),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        ),
+      SnackBarHelper.showError(
+        context,
+        LocalizationService.instance.translate('no_export_data'),
       );
       return;
     }
@@ -2071,44 +1914,34 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     ].join('\n');
 
     _downloadFile(csvContent, 'tea_analysis_results.csv', 'text/csv');
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(LocalizationService.instance.translate('csv_exported')),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      ),
+    SnackBarHelper.showSuccess(
+      context,
+      LocalizationService.instance.translate('csv_exported'),
     );
   }
 
   void _exportToJSON() {
     if (_results.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content:
-              Text(LocalizationService.instance.translate('no_export_data')),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        ),
+      SnackBarHelper.showError(
+        context,
+        LocalizationService.instance.translate('no_export_data'),
       );
       return;
     }
 
     final jsonContent = jsonEncode(_results);
     _downloadFile(jsonContent, 'tea_analysis_results.json', 'application/json');
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(LocalizationService.instance.translate('json_exported')),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      ),
+    SnackBarHelper.showSuccess(
+      context,
+      LocalizationService.instance.translate('json_exported'),
     );
   }
 
   void _exportToPDF() {
     if (_results.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content:
-              Text(LocalizationService.instance.translate('no_export_data')),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        ),
+      SnackBarHelper.showError(
+        context,
+        LocalizationService.instance.translate('no_export_data'),
       );
       return;
     }
@@ -2117,13 +1950,11 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     final htmlContent = _generatePDFHTML();
     _downloadFile(htmlContent, 'tea_analysis_report.html', 'text/html');
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-            '${LocalizationService.instance.translate('pdf')}レポートを生成しました。ブラウザで印刷してPDFとして保存できます。'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        duration: const Duration(seconds: 4),
-      ),
+    SnackBarHelper.showCustom(
+      context,
+      '${LocalizationService.instance.translate('pdf')}レポートを生成しました。ブラウザで印刷してPDFとして保存できます。',
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      duration: const Duration(seconds: 4),
     );
   }
 
@@ -2308,11 +2139,9 @@ ${_results.map((r) {
     // データ保持期間に基づいて古いデータを削除
     _cleanupOldData();
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(LocalizationService.instance.translate('settings_saved')),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      ),
+    SnackBarHelper.showSuccess(
+      context,
+      LocalizationService.instance.translate('settings_saved'),
     );
   }
 

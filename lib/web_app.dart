@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'core/theme/tea_garden_theme.dart';
+import 'core/widgets/common_cards.dart';
+import 'core/widgets/snackbar_helper.dart';
 
 void main() {
   runApp(const TeaGardenWebApp());
@@ -271,26 +273,11 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
 
   Widget _buildSummaryItem(
       String label, String value, IconData icon, Color color) {
-    return Column(
-      children: [
-        Icon(icon, color: color, size: 32),
-        const SizedBox(height: 8),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
-        ),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-          ),
-        ),
-      ],
+    return StatItem(
+      label: label,
+      value: value,
+      icon: icon,
+      color: color,
     );
   }
 
@@ -315,38 +302,17 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
   }
 
   Widget _buildEmptyState() {
-    return Card(
+    return const Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          children: [
-            Icon(
-              Icons.photo_camera_outlined,
-              size: 64,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'まだ解析結果がありません',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              '茶葉を撮影してAI解析を開始しましょう',
-              style: TextStyle(
-                fontSize: 14,
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-              ),
-            ),
-          ],
+        padding: EdgeInsets.all(32),
+        child: EmptyStateWidget(
+          icon: Icons.photo_camera_outlined,
+          iconSize: 64,
+          subtitle: '茶葉を撮影してAI解析を開始しましょう',
         ),
       ),
     );
@@ -475,16 +441,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
 
     // 成功メッセージを表示
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('解析が完了しました！'),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-      );
+      SnackBarHelper.showSuccess(context, '解析が完了しました！');
     }
   }
 
