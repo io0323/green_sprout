@@ -33,7 +33,10 @@ class CameraPreviewWidget extends StatelessWidget {
                     height: 200,
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.8),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(0.8),
                         width: 2,
                       ),
                       borderRadius: BorderRadius.circular(12),
@@ -130,7 +133,10 @@ class CameraPreviewWidget extends StatelessWidget {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          Colors.black.withOpacity(0.3),
+                          Theme.of(context)
+                              .colorScheme
+                              .surface
+                              .withOpacity(0.3),
                           Colors.transparent,
                         ],
                       ),
@@ -141,8 +147,8 @@ class CameraPreviewWidget extends StatelessWidget {
                         child: Text(
                           LocalizationService.instance
                               .translate('align_leaf_in_frame'),
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
@@ -165,7 +171,10 @@ class CameraPreviewWidget extends StatelessWidget {
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
                         colors: [
-                          Colors.black.withOpacity(0.3),
+                          Theme.of(context)
+                              .colorScheme
+                              .surface
+                              .withOpacity(0.3),
                           Colors.transparent,
                         ],
                       ),

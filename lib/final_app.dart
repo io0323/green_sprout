@@ -72,24 +72,28 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
           borderRadius: BorderRadius.circular(12),
           gradient: TeaGardenTheme.primaryGradient,
         ),
-        child: const Column(
+        child: Column(
           children: [
-            Icon(Icons.eco, size: 50, color: Colors.white),
-            SizedBox(height: 10),
+            Icon(
+              Icons.eco,
+              size: 50,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+            const SizedBox(height: 10),
             Text(
               '茶園管理AI',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Text(
               'AI技術で茶葉の健康状態を分析',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.white70,
+                color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
               ),
             ),
           ],
@@ -205,13 +209,19 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
             ),
             const SizedBox(height: 16),
             if (_results.isEmpty)
-              const Center(
+              Center(
                 child: Column(
                   children: [
-                    Icon(Icons.photo_camera_outlined,
-                        size: 50, color: Colors.grey),
-                    SizedBox(height: 10),
-                    Text('まだ解析結果がありません'),
+                    Icon(
+                      Icons.photo_camera_outlined,
+                      size: 50,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.6),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text('まだ解析結果がありません'),
                   ],
                 ),
               )

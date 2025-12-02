@@ -65,15 +65,16 @@ class _WebHomePageState extends State<WebHomePage> {
           LocalizationService.instance.translate('app_title'),
           style: const TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.white,
           ),
         ),
-        backgroundColor: TeaGardenTheme.primaryGreen,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         elevation: 0,
         actions: [
           LanguageSelector(onLanguageChanged: widget.onLanguageChanged),
           IconButton(
-            icon: const Icon(Icons.history, color: Colors.white),
+            icon: Icon(Icons.history,
+                color: Theme.of(context).colorScheme.onPrimary),
             onPressed: () {
               _showLogsDialog();
             },
@@ -82,30 +83,28 @@ class _WebHomePageState extends State<WebHomePage> {
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.green[50]!,
-              Colors.white,
-            ],
-          ),
+        decoration: const BoxDecoration(
+          gradient: TeaGardenTheme.backgroundGradient,
         ),
         child: _isLoading
             ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                     const SizedBox(height: 16),
                     Text(
                       LocalizationService.instance.translate('data_loading'),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
-                        color: Colors.grey,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(0.6),
                       ),
                     ),
                   ],
@@ -142,11 +141,11 @@ class _WebHomePageState extends State<WebHomePage> {
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
             spreadRadius: 1,
             blurRadius: 4,
             offset: const Offset(0, 2),
@@ -161,7 +160,7 @@ class _WebHomePageState extends State<WebHomePage> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.grey[800],
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 8),
@@ -170,7 +169,7 @@ class _WebHomePageState extends State<WebHomePage> {
                 params: {'count': todayResults.length.toString()}),
             style: TextStyle(
               fontSize: 14,
-              color: Colors.grey[600],
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
             ),
           ),
         ],
@@ -203,26 +202,26 @@ class _WebHomePageState extends State<WebHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
+            Icon(
               Icons.photo_camera_outlined,
               size: 64,
-              color: Colors.grey,
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
             ),
             const SizedBox(height: 16),
             Text(
               LocalizationService.instance.translate('no_results_yet'),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.grey,
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               ),
             ),
             const SizedBox(height: 8),
             Text(
               LocalizationService.instance.translate('take_photo_to_analyze'),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey,
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               ),
             ),
           ],
@@ -249,11 +248,11 @@ class _WebHomePageState extends State<WebHomePage> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
             spreadRadius: 1,
             blurRadius: 4,
             offset: const Offset(0, 2),
@@ -269,12 +268,12 @@ class _WebHomePageState extends State<WebHomePage> {
                 width: 60,
                 height: 60,
                 decoration: BoxDecoration(
-                  color: Colors.green[100],
+                  color: TeaGardenTheme.successColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
                   Icons.eco,
-                  color: Colors.green,
+                  color: TeaGardenTheme.successColor,
                   size: 30,
                 ),
               ),
@@ -294,14 +293,20 @@ class _WebHomePageState extends State<WebHomePage> {
                       '${timestamp.month}/${timestamp.day} ${timestamp.hour}:${timestamp.minute.toString().padLeft(2, '0')}',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey[600],
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(0.6),
                       ),
                     ),
                     Text(
                       '${LocalizationService.instance.translate('confidence_label')} ${(confidence * 100).toInt()}%',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey[600],
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(0.6),
                       ),
                     ),
                   ],
@@ -312,8 +317,8 @@ class _WebHomePageState extends State<WebHomePage> {
                 decoration: BoxDecoration(
                   color: healthStatus ==
                           LocalizationService.instance.translate('healthy')
-                      ? Colors.green[100]
-                      : Colors.orange[100],
+                      ? TeaGardenTheme.successColor.withOpacity(0.1)
+                      : TeaGardenTheme.warningColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -323,8 +328,8 @@ class _WebHomePageState extends State<WebHomePage> {
                     fontWeight: FontWeight.bold,
                     color: healthStatus ==
                             LocalizationService.instance.translate('healthy')
-                        ? Colors.green[700]
-                        : Colors.orange[700],
+                        ? TeaGardenTheme.successColor
+                        : TeaGardenTheme.warningColor,
                   ),
                 ),
               ),
@@ -336,7 +341,7 @@ class _WebHomePageState extends State<WebHomePage> {
               result['comment'],
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey[700],
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
               ),
             ),
           ],
