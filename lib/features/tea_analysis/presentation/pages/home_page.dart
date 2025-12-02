@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildRecentResults(List<dynamic> results) {
     if (results.isEmpty) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
               size: 64,
               color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               'まだ解析結果がありません',
               style: TextStyle(
@@ -121,7 +121,7 @@ class _HomePageState extends State<HomePage> {
                 color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               '写真を撮って茶葉を解析してみましょう',
               style: TextStyle(
