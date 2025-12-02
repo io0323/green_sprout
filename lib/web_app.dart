@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'core/theme/tea_garden_theme.dart';
 
 void main() {
   runApp(const TeaGardenWebApp());
@@ -13,11 +14,9 @@ class TeaGardenWebApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: '茶園管理AI',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        useMaterial3: true,
-        fontFamily: 'Roboto',
-      ),
+      theme: TeaGardenTheme.lightTheme,
+      darkTheme: TeaGardenTheme.darkTheme,
+      themeMode: ThemeMode.system,
       home: const TeaGardenHomePage(),
       debugShowCheckedModeBanner: false,
     );
@@ -67,20 +66,22 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           '茶園管理AI',
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.green[700],
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
         elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.history, color: Colors.white),
+            icon: Icon(Icons.history, color: colorScheme.onPrimary),
             onPressed: _showAnalysisHistory,
             tooltip: '解析履歴',
           ),
@@ -88,21 +89,14 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.green[50]!,
-              Colors.white,
-            ],
-          ),
+          gradient: TeaGardenTheme.backgroundGradient,
         ),
         child: _isAnalyzing ? _buildAnalyzingView() : _buildMainContent(),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _isAnalyzing ? null : _startAnalysis,
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
         icon: const Icon(Icons.camera_alt),
         label: const Text('茶葉を解析'),
       ),
@@ -110,29 +104,31 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
   }
 
   Widget _buildAnalyzingView() {
-    return const Center(
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+            valueColor: AlwaysStoppedAnimation<Color>(colorScheme.primary),
             strokeWidth: 3,
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           Text(
             '茶葉を解析中...',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.green,
+              color: colorScheme.primary,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             'AIが茶葉の状態を分析しています',
             style: TextStyle(
               fontSize: 14,
-              color: Colors.grey,
+              color: colorScheme.onSurface.withOpacity(0.6),
             ),
           ),
         ],
@@ -166,30 +162,26 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          gradient: LinearGradient(
-            colors: [Colors.green[400]!, Colors.green[600]!],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          gradient: TeaGardenTheme.primaryGradient,
         ),
         child: Row(
           children: [
-            const Icon(
+            Icon(
               Icons.eco,
               size: 48,
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     '茶園管理AIへようこそ',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -197,7 +189,10 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                     'AI技術で茶葉の健康状態を分析',
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.white.withOpacity(0.9),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onPrimary
+                          .withOpacity(0.9),
                     ),
                   ),
                 ],
@@ -231,7 +226,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
               children: [
                 Icon(
                   Icons.today,
-                  color: Colors.green[600],
+                  color: Theme.of(context).colorScheme.primary,
                   size: 24,
                 ),
                 const SizedBox(width: 8),
@@ -240,7 +235,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey[800],
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
               ],
@@ -253,7 +248,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                     '解析回数',
                     '${todayResults.length}回',
                     Icons.analytics,
-                    Colors.blue,
+                    TeaGardenTheme.infoColor,
                   ),
                 ),
                 Expanded(
@@ -263,7 +258,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                         ? '${((todayResults.where((r) => r.healthStatus == '健康').length / todayResults.length) * 100).toInt()}%'
                         : '0%',
                     Icons.favorite,
-                    Colors.red,
+                    TeaGardenTheme.successColor,
                   ),
                 ),
               ],
@@ -292,7 +287,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
           label,
           style: TextStyle(
             fontSize: 12,
-            color: Colors.grey[600],
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
           ),
         ),
       ],
@@ -308,7 +303,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.grey[800],
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
         const SizedBox(height: 16),
@@ -332,7 +327,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
             Icon(
               Icons.photo_camera_outlined,
               size: 64,
-              color: Colors.grey[400],
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
             ),
             const SizedBox(height: 16),
             Text(
@@ -340,7 +335,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.grey[600],
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               ),
             ),
             const SizedBox(height: 8),
@@ -348,7 +343,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
               '茶葉を撮影してAI解析を開始しましょう',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey[500],
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
               ),
             ),
           ],
@@ -373,15 +368,15 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
               height: 60,
               decoration: BoxDecoration(
                 color: result.healthStatus == '健康'
-                    ? Colors.green[100]
-                    : Colors.orange[100],
+                    ? TeaGardenTheme.successColor.withOpacity(0.1)
+                    : TeaGardenTheme.warningColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
                 Icons.eco,
                 color: result.healthStatus == '健康'
-                    ? Colors.green[600]
-                    : Colors.orange[600],
+                    ? TeaGardenTheme.successColor
+                    : TeaGardenTheme.warningColor,
                 size: 30,
               ),
             ),
@@ -402,7 +397,10 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                     '${result.timestamp.month}/${result.timestamp.day} ${result.timestamp.hour}:${result.timestamp.minute.toString().padLeft(2, '0')}',
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.grey[600],
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.6),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -410,7 +408,10 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                     '信頼度: ${(result.confidence * 100).toInt()}%',
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.grey[600],
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(0.6),
                     ),
                   ),
                 ],
@@ -420,8 +421,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: result.healthStatus == '健康'
-                    ? Colors.green[100]
-                    : Colors.orange[100],
+                    ? TeaGardenTheme.successColor.withOpacity(0.1)
+                    : TeaGardenTheme.warningColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Text(
@@ -430,8 +431,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                   color: result.healthStatus == '健康'
-                      ? Colors.green[700]
-                      : Colors.orange[700],
+                      ? TeaGardenTheme.successColor
+                      : TeaGardenTheme.warningColor,
                 ),
               ),
             ),
@@ -477,7 +478,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text('解析が完了しました！'),
-          backgroundColor: Colors.green[600],
+          backgroundColor: Theme.of(context).colorScheme.primary,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
@@ -503,8 +504,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                 leading: Icon(
                   Icons.eco,
                   color: result.healthStatus == '健康'
-                      ? Colors.green
-                      : Colors.orange,
+                      ? TeaGardenTheme.successColor
+                      : TeaGardenTheme.warningColor,
                 ),
                 title: Text('${result.growthStage} - ${result.healthStatus}'),
                 subtitle: Text(

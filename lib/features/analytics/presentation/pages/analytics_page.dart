@@ -5,6 +5,7 @@ import '../../../tea_analysis/presentation/bloc/tea_analysis_cubit.dart';
 import '../../../tea_analysis/domain/entities/tea_analysis_result.dart';
 import '../../../../core/services/localization_service.dart';
 import '../../../../core/widgets/modern_ui_components.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// 茶園分析ページ
 /// 茶葉解析結果の統計とグラフを表示
@@ -28,14 +29,17 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Scaffold(
       appBar: AppBar(
         title: Text(t('analytics')),
-        backgroundColor: Colors.green[700],
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
         elevation: 0,
         actions: [
           PopupMenuButton<String>(
-            icon: const Icon(Icons.timeline, color: Colors.white),
+            icon: Icon(Icons.timeline, color: colorScheme.onPrimary),
             tooltip: t('period_selection'),
             onSelected: (String period) {
               setState(() {
@@ -63,14 +67,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.green[50]!,
-              Colors.white,
-            ],
-          ),
+          gradient: TeaGardenTheme.backgroundGradient,
         ),
         child: BlocBuilder<TeaAnalysisCubit, TeaAnalysisState>(
           builder: (context, state) {
@@ -146,7 +143,8 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
       ),
       child: Row(
         children: [
-          const Icon(Icons.calendar_today, color: Colors.green),
+          Icon(Icons.calendar_today,
+              color: Theme.of(context).colorScheme.primary),
           const SizedBox(width: 8),
           Text(
             _getPeriodText(),
@@ -187,7 +185,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.grey[800],
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 16),
@@ -198,7 +196,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                   t('total_analysis_count'),
                   totalCount.toString(),
                   Icons.analytics_outlined,
-                  Colors.blue,
+                  TeaGardenTheme.infoColor,
                 ),
               ),
               const SizedBox(width: 12),
@@ -209,7 +207,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                       ? '${((healthyCount / totalCount) * 100).toInt()}%'
                       : '0%',
                   Icons.health_and_safety_outlined,
-                  Colors.green,
+                  TeaGardenTheme.successColor,
                 ),
               ),
               const SizedBox(width: 12),
@@ -218,7 +216,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                   t('avg_confidence'),
                   '${(avgConfidence * 100).toInt()}%',
                   Icons.trending_up_outlined,
-                  Colors.orange,
+                  TeaGardenTheme.warningColor,
                 ),
               ),
             ],
@@ -253,7 +251,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
             title,
             style: TextStyle(
               fontSize: 12,
-              color: Colors.grey[600],
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
             ),
             textAlign: TextAlign.center,
           ),
@@ -282,10 +280,10 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
             final stage = entry.value;
             final count = stageCounts[index];
             final colors = [
-              Colors.lightGreen,
-              Colors.green,
-              Colors.teal,
-              Colors.brown
+              TeaGardenTheme.lightGreen,
+              TeaGardenTheme.successColor,
+              TeaGardenTheme.primaryGreen,
+              TeaGardenTheme.darkGreen
             ];
 
             return PieChartSectionData(
@@ -330,10 +328,10 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
             final index = entry.key;
             final count = statusCounts[index];
             final colors = [
-              Colors.green,
-              Colors.orange,
-              Colors.red,
-              Colors.red[800]!
+              TeaGardenTheme.successColor,
+              TeaGardenTheme.warningColor,
+              TeaGardenTheme.errorColor,
+              TeaGardenTheme.errorColor
             ];
 
             return BarChartGroupData(
@@ -426,7 +424,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
             LineChartBarData(
               spots: spots,
               isCurved: true,
-              color: Colors.green,
+              color: Theme.of(context).colorScheme.primary,
               barWidth: 3,
               dotData: const FlDotData(show: true),
             ),
@@ -464,7 +462,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
               barRods: [
                 BarChartRodData(
                   toY: count.toDouble(),
-                  color: Colors.blue,
+                  color: TeaGardenTheme.infoColor,
                   width: 20,
                   borderRadius:
                       const BorderRadius.vertical(top: Radius.circular(4)),
@@ -521,7 +519,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.grey[800],
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 16),

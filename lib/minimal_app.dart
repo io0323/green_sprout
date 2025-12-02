@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'core/theme/tea_garden_theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,9 +11,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: '茶園管理AI',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
+      theme: TeaGardenTheme.lightTheme,
+      darkTheme: TeaGardenTheme.darkTheme,
+      themeMode: ThemeMode.system,
       home: const MyHomePage(),
       debugShowCheckedModeBanner: false,
     );
@@ -31,28 +32,30 @@ class MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Scaffold(
       appBar: AppBar(
         title: const Text('茶園管理AI'),
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Icon(
+            Icon(
               Icons.eco,
               size: 100,
-              color: Colors.green,
+              color: colorScheme.primary,
             ),
             const SizedBox(height: 20),
-            const Text(
+            Text(
               '茶園管理AIが正常に動作しています！',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.green,
+                color: colorScheme.primary,
               ),
             ),
             const SizedBox(height: 20),
@@ -64,8 +67,8 @@ class MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: _analyzeTea,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
+                backgroundColor: colorScheme.primary,
+                foregroundColor: colorScheme.onPrimary,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               ),
@@ -90,7 +93,7 @@ class MyHomePageState extends State<MyHomePage> {
                     return Card(
                       margin: const EdgeInsets.all(5),
                       child: ListTile(
-                        leading: const Icon(Icons.eco, color: Colors.green),
+                        leading: Icon(Icons.eco, color: colorScheme.primary),
                         title: Text(_analysisResults[index]),
                         subtitle: const Text('解析完了'),
                       ),
@@ -104,8 +107,8 @@ class MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _analyzeTea,
-        backgroundColor: Colors.green,
-        child: const Icon(Icons.add, color: Colors.white),
+        backgroundColor: colorScheme.primary,
+        child: Icon(Icons.add, color: colorScheme.onPrimary),
       ),
     );
   }
@@ -121,9 +124,9 @@ class MyHomePageState extends State<MyHomePage> {
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('茶葉の解析が完了しました！'),
-        backgroundColor: Colors.green,
+      SnackBar(
+        content: const Text('茶葉の解析が完了しました！'),
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
     );
   }

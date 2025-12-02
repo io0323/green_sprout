@@ -7,6 +7,7 @@ import '../widgets/camera_button.dart';
 import '../widgets/today_summary_card.dart';
 import '../../../../core/widgets/modern_ui_components.dart';
 import '../../../../core/services/localization_service.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// ホームページ
 /// クリーンアーキテクチャに基づいたホーム画面
@@ -30,20 +31,22 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           '茶園管理AI',
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.green[700],
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
         elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.history, color: Colors.white),
+            icon: Icon(Icons.history, color: colorScheme.onPrimary),
             onPressed: () {
               Navigator.pushNamed(context, '/logs');
             },
@@ -53,14 +56,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.green[50]!,
-              Colors.white,
-            ],
-          ),
+          gradient: TeaGardenTheme.backgroundGradient,
         ),
         child: BlocBuilder<TeaAnalysisCubit, TeaAnalysisState>(
           builder: (context, state) {
@@ -114,7 +110,7 @@ class _HomePageState extends State<HomePage> {
             Icon(
               Icons.photo_camera_outlined,
               size: 64,
-              color: Colors.grey,
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
             ),
             SizedBox(height: 16),
             Text(
@@ -122,7 +118,7 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.grey,
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               ),
             ),
             SizedBox(height: 8),
@@ -130,7 +126,7 @@ class _HomePageState extends State<HomePage> {
               '写真を撮って茶葉を解析してみましょう',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey,
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               ),
             ),
           ],

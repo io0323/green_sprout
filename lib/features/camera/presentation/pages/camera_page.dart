@@ -5,6 +5,7 @@ import '../widgets/camera_preview_widget.dart';
 import '../widgets/capture_button_widget.dart';
 import '../../../../core/services/localization_service.dart';
 import '../../../../core/widgets/modern_ui_components.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// カメラページ
 /// 茶葉の撮影を行う画面
@@ -34,32 +35,27 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Scaffold(
       appBar: AppBar(
         title: Text(
           LocalizationService.instance.translate('camera_title'),
           style: const TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.green[700],
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: colorScheme.onPrimary),
           onPressed: () => Navigator.pop(context),
         ),
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.green[50]!,
-              Colors.white,
-            ],
-          ),
+          gradient: TeaGardenTheme.backgroundGradient,
         ),
         child: BlocBuilder<CameraCubit, CameraBlocState>(
           builder: (context, state) {
@@ -89,15 +85,22 @@ class _CameraPageState extends State<CameraPage> {
                     padding: const EdgeInsets.all(16),
                     margin: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.green[50],
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.green[200]!),
+                      border: Border.all(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.3)),
                     ),
                     child: Row(
                       children: [
                         Icon(
                           Icons.info_outline,
-                          color: Colors.green[700],
+                          color: Theme.of(context).colorScheme.primary,
                           size: 24,
                         ),
                         const SizedBox(width: 12),
@@ -107,7 +110,7 @@ class _CameraPageState extends State<CameraPage> {
                                 .translate('place_leaf_center'),
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.green[700],
+                              color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -124,7 +127,10 @@ class _CameraPageState extends State<CameraPage> {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .shadow
+                                .withOpacity(0.1),
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           ),

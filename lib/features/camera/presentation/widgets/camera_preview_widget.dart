@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:camera/camera.dart';
 import '../bloc/camera_cubit.dart';
 import '../../../../core/services/localization_service.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// カメラプレビューウィジェット
 /// カメラの映像を表示
@@ -49,9 +50,11 @@ class CameraPreviewWidget extends StatelessWidget {
                             decoration: BoxDecoration(
                               border: Border(
                                 top: BorderSide(
-                                    color: Colors.green[400]!, width: 3),
+                                    color: TeaGardenTheme.successColor,
+                                    width: 3),
                                 left: BorderSide(
-                                    color: Colors.green[400]!, width: 3),
+                                    color: TeaGardenTheme.successColor,
+                                    width: 3),
                               ),
                             ),
                           ),
@@ -65,9 +68,11 @@ class CameraPreviewWidget extends StatelessWidget {
                             decoration: BoxDecoration(
                               border: Border(
                                 top: BorderSide(
-                                    color: Colors.green[400]!, width: 3),
+                                    color: TeaGardenTheme.successColor,
+                                    width: 3),
                                 right: BorderSide(
-                                    color: Colors.green[400]!, width: 3),
+                                    color: TeaGardenTheme.successColor,
+                                    width: 3),
                               ),
                             ),
                           ),
@@ -81,9 +86,11 @@ class CameraPreviewWidget extends StatelessWidget {
                             decoration: BoxDecoration(
                               border: Border(
                                 bottom: BorderSide(
-                                    color: Colors.green[400]!, width: 3),
+                                    color: TeaGardenTheme.successColor,
+                                    width: 3),
                                 left: BorderSide(
-                                    color: Colors.green[400]!, width: 3),
+                                    color: TeaGardenTheme.successColor,
+                                    width: 3),
                               ),
                             ),
                           ),
@@ -97,9 +104,11 @@ class CameraPreviewWidget extends StatelessWidget {
                             decoration: BoxDecoration(
                               border: Border(
                                 bottom: BorderSide(
-                                    color: Colors.green[400]!, width: 3),
+                                    color: TeaGardenTheme.successColor,
+                                    width: 3),
                                 right: BorderSide(
-                                    color: Colors.green[400]!, width: 3),
+                                    color: TeaGardenTheme.successColor,
+                                    width: 3),
                               ),
                             ),
                           ),
@@ -170,21 +179,21 @@ class CameraPreviewWidget extends StatelessWidget {
 
         // カメラが初期化されていない場合
         return Container(
-          color: Colors.black,
+          color: Theme.of(context).colorScheme.surface,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
+                Icon(
                   Icons.camera_alt_outlined,
                   size: 64,
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
                 const SizedBox(height: 16),
                 Text(
                   LocalizationService.instance.translate('camera_initializing'),
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
                     fontSize: 16,
                   ),
                 ),
