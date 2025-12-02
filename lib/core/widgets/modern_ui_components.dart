@@ -198,13 +198,14 @@ class _AnimatedButtonState extends State<AnimatedButton>
                   if (widget.isLoading) ...[
                     Transform.rotate(
                       angle: _rotationAnimation.value * 2 * 3.14159,
-                      child: const SizedBox(
+                      child: SizedBox(
                         width: 20,
                         height: 20,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           valueColor: AlwaysStoppedAnimation<Color>(
-                              widget.textColor ?? TeaGardenTheme.textLight),
+                            widget.textColor ?? TeaGardenTheme.textLight,
+                          ),
                         ),
                       ),
                     ),
