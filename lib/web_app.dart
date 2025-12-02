@@ -88,7 +88,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: TeaGardenTheme.backgroundGradient,
         ),
         child: _isAnalyzing ? _buildAnalyzingView() : _buildMainContent(),

@@ -66,7 +66,7 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: TeaGardenTheme.backgroundGradient,
         ),
         child: BlocBuilder<AnalysisCubit, AnalysisState>(
@@ -101,11 +101,11 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
+                            const Row(
                               children: [
                                 Icon(Icons.auto_awesome,
                                     color: TeaGardenTheme.infoColor),
-                                const SizedBox(width: 8),
+                                SizedBox(width: 8),
                                 Text(
                                   '高度な分析',
                                   style: TextStyle(
@@ -179,11 +179,11 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
+                            const Row(
                               children: [
                                 Icon(Icons.auto_awesome,
                                     color: TeaGardenTheme.infoColor),
-                                const SizedBox(width: 8),
+                                SizedBox(width: 8),
                                 Text(
                                   '高度な分析',
                                   style: TextStyle(
@@ -219,7 +219,7 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                                 label: const Text('高度な分析を再実行'),
                                 style: OutlinedButton.styleFrom(
                                   foregroundColor: TeaGardenTheme.infoColor,
-                                  side: BorderSide(
+                                  side: const BorderSide(
                                     color: TeaGardenTheme.infoColor,
                                   ),
                                   padding: const EdgeInsets.symmetric(

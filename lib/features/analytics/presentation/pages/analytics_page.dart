@@ -66,7 +66,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: TeaGardenTheme.backgroundGradient,
         ),
         child: BlocBuilder<TeaAnalysisCubit, TeaAnalysisState>(

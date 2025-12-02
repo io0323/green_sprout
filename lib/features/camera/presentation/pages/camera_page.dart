@@ -54,7 +54,7 @@ class _CameraPageState extends State<CameraPage> {
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: TeaGardenTheme.backgroundGradient,
         ),
         child: BlocBuilder<CameraCubit, CameraBlocState>(

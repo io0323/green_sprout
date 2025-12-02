@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: TeaGardenTheme.backgroundGradient,
         ),
         child: BlocBuilder<TeaAnalysisCubit, TeaAnalysisState>(
