@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/camera_cubit.dart';
 import '../../../../core/services/localization_service.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// 撮影ボタンウィジェット
 /// カメラの撮影ボタン
@@ -28,17 +29,21 @@ class CaptureButtonWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: isEnabled && !isCapturing
-                      ? Colors.white
-                      : Colors.grey[300],
+                      ? TeaGardenTheme.textLight
+                      : Theme.of(context).colorScheme.surfaceVariant,
                   border: Border.all(
                     color: isEnabled && !isCapturing
-                        ? Colors.green[400]!
-                        : Colors.grey[400]!,
+                        ? TeaGardenTheme.successColor
+                        : Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(0.4),
                     width: 4,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color:
+                          Theme.of(context).colorScheme.shadow.withOpacity(0.2),
                       blurRadius: 8,
                       offset: const Offset(0, 4),
                     ),
@@ -52,15 +57,19 @@ class CaptureButtonWidget extends StatelessWidget {
                           child: CircularProgressIndicator(
                             strokeWidth: 3,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.green[400]!,
+                              TeaGardenTheme.successColor,
                             ),
                           ),
                         )
                       : Icon(
                           Icons.camera_alt,
                           size: 40,
-                          color:
-                              isEnabled ? Colors.green[400] : Colors.grey[400],
+                          color: isEnabled
+                              ? TeaGardenTheme.successColor
+                              : Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.4),
                         ),
                 ),
               ),
@@ -78,7 +87,9 @@ class CaptureButtonWidget extends StatelessWidget {
                           .translate('camera_initializing'),
               style: TextStyle(
                 fontSize: 16,
-                color: isEnabled ? Colors.green[700] : Colors.grey[600],
+                color: isEnabled
+                    ? TeaGardenTheme.primaryGreen
+                    : Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -89,9 +100,11 @@ class CaptureButtonWidget extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: Colors.green[50],
+                color: TeaGardenTheme.successColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.green[200]!),
+                border: Border.all(
+                  color: TeaGardenTheme.successColor.withOpacity(0.3),
+                ),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -99,14 +112,14 @@ class CaptureButtonWidget extends StatelessWidget {
                   Icon(
                     Icons.lightbulb_outline,
                     size: 20,
-                    color: Colors.green[700],
+                    color: TeaGardenTheme.primaryGreen,
                   ),
                   const SizedBox(width: 8),
                   Text(
                     LocalizationService.instance.translate('capture_tip'),
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.green[700],
+                      color: TeaGardenTheme.primaryGreen,
                     ),
                   ),
                 ],

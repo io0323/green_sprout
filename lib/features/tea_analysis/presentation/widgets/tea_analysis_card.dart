@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/utils/app_utils.dart';
 import '../../domain/entities/tea_analysis_result.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// 茶葉解析結果カードウィジェット
 /// 再利用可能なUIコンポーネント
@@ -21,7 +22,7 @@ class TeaAnalysisCard extends StatelessWidget {
           backgroundColor: AppUtils.getHealthStatusColor(result.healthStatus),
           child: Icon(
             AppUtils.getHealthStatusIcon(result.healthStatus),
-            color: Colors.white,
+            color: TeaGardenTheme.textLight,
           ),
         ),
         title: Text(result.growthStage),
