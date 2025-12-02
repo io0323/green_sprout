@@ -51,7 +51,7 @@ class CaptureButtonWidget extends StatelessWidget {
                 ),
                 child: Center(
                   child: isCapturing
-                      ? SizedBox(
+                      ? const SizedBox(
                           width: 30,
                           height: 30,
                           child: CircularProgressIndicator(
@@ -109,7 +109,7 @@ class CaptureButtonWidget extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.lightbulb_outline,
                     size: 20,
                     color: TeaGardenTheme.primaryGreen,
@@ -117,7 +117,7 @@ class CaptureButtonWidget extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     LocalizationService.instance.translate('capture_tip'),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                       color: TeaGardenTheme.primaryGreen,
                     ),
