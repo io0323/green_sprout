@@ -52,8 +52,8 @@ class AccessibilityHelper {
     Color? lightColor,
     Color? darkColor,
   }) {
-    final light = lightColor ?? Colors.white;
-    final dark = darkColor ?? Colors.black;
+    final light = lightColor ?? TeaGardenTheme.textLight;
+    final dark = darkColor ?? TeaGardenTheme.textPrimary;
 
     final lightContrast = calculateContrastRatio(backgroundColor, light);
     final darkContrast = calculateContrastRatio(backgroundColor, dark);
@@ -192,19 +192,21 @@ class AccessibleButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (isLoading) ...[
-              const SizedBox(
+              SizedBox(
                 width: 20,
                 height: 20,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    textColor ?? TeaGardenTheme.textLight,
+                  ),
                 ),
               ),
               const SizedBox(width: TeaGardenTheme.spacingS),
             ] else if (icon != null) ...[
               Icon(
                 icon,
-                color: textColor ?? Colors.white,
+                color: textColor ?? TeaGardenTheme.textLight,
                 size: 20,
               ),
               const SizedBox(width: TeaGardenTheme.spacingS),
@@ -212,7 +214,7 @@ class AccessibleButton extends StatelessWidget {
             Text(
               text,
               style: TextStyle(
-                color: textColor ?? Colors.white,
+                color: textColor ?? TeaGardenTheme.textLight,
                 fontSize: AccessibilityHelper.getScaledFontSize(context, 16),
                 fontWeight: FontWeight.w600,
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/services/localization_service.dart';
+import '../../core/theme/tea_garden_theme.dart';
 
 /// 言語設定ウィジェット
 /// アプリケーションの言語を切り替えるためのウィジェット
@@ -27,7 +28,8 @@ class _LanguageSelectorState extends State<LanguageSelector> {
     _selectedLanguage = LocalizationService.instance.currentLanguage;
 
     return PopupMenuButton<String>(
-      icon: const Icon(Icons.language, color: Colors.white),
+      icon:
+          Icon(Icons.language, color: Theme.of(context).colorScheme.onPrimary),
       tooltip: LocalizationService.instance.translate('language_settings'),
       onSelected: (String languageCode) {
         setState(() {
@@ -46,7 +48,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
               children: [
                 Icon(
                   _selectedLanguage == languageCode ? Icons.check : null,
-                  color: Colors.green,
+                  color: TeaGardenTheme.successColor,
                 ),
                 const SizedBox(width: 8),
                 Text(

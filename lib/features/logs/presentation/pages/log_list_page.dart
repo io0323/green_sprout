@@ -4,6 +4,7 @@ import '../../../tea_analysis/presentation/bloc/tea_analysis_cubit.dart';
 import '../../../tea_analysis/presentation/widgets/tea_analysis_card.dart';
 import '../../../../core/widgets/modern_ui_components.dart';
 import '../../../../core/services/localization_service.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// 日誌一覧ページ
 /// 過去の茶葉解析結果を表示
@@ -29,27 +30,29 @@ class _LogListPageState extends State<LogListPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Scaffold(
       appBar: AppBar(
         title: Text(
           t('logs_list'),
           style: const TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.green[700],
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
         elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.search, color: Colors.white),
+            icon: Icon(Icons.search, color: colorScheme.onPrimary),
             onPressed: () {
               _showSearchDialog();
             },
             tooltip: t('search'),
           ),
           IconButton(
-            icon: const Icon(Icons.filter_list, color: Colors.white),
+            icon: Icon(Icons.filter_list, color: colorScheme.onPrimary),
             onPressed: () {
               _showFilterDialog();
             },
@@ -58,15 +61,8 @@ class _LogListPageState extends State<LogListPage> {
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.green[50]!,
-              Colors.white,
-            ],
-          ),
+        decoration: const BoxDecoration(
+          gradient: TeaGardenTheme.backgroundGradient,
         ),
         child: BlocBuilder<TeaAnalysisCubit, TeaAnalysisState>(
           builder: (context, state) {
@@ -128,7 +124,10 @@ class _LogListPageState extends State<LogListPage> {
                         Icon(
                           Icons.book_outlined,
                           size: 80,
-                          color: Colors.green[200],
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.3),
                         ),
                         const SizedBox(height: 16),
                         Text(
@@ -137,7 +136,10 @@ class _LogListPageState extends State<LogListPage> {
                               : t('no_records_yet'),
                           style: TextStyle(
                             fontSize: 18,
-                            color: Colors.grey[600],
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withOpacity(0.6),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -146,9 +148,12 @@ class _LogListPageState extends State<LogListPage> {
                           _searchQuery.isNotEmpty || _selectedFilter != 'all'
                               ? t('change_search_conditions')
                               : t('take_photo_to_analyze'),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
-                            color: Colors.grey,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withOpacity(0.6),
                           ),
                         ),
                         if (_searchQuery.isNotEmpty ||
@@ -162,8 +167,10 @@ class _LogListPageState extends State<LogListPage> {
                               });
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
-                              foregroundColor: Colors.white,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                              foregroundColor:
+                                  Theme.of(context).colorScheme.onPrimary,
                             ),
                             child: Text(t('reset_filter')),
                           ),
@@ -181,11 +188,14 @@ class _LogListPageState extends State<LogListPage> {
                     margin: const EdgeInsets.all(16),
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .shadow
+                              .withOpacity(0.05),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -198,13 +208,13 @@ class _LogListPageState extends State<LogListPage> {
                           t('total_records'),
                           state.results.length.toString(),
                           Icons.analytics_outlined,
-                          Colors.blue,
+                          TeaGardenTheme.infoColor,
                         ),
                         _buildStatItem(
                           t('displaying'),
                           filteredResults.length.toString(),
                           Icons.visibility_outlined,
-                          Colors.green,
+                          TeaGardenTheme.successColor,
                         ),
                         _buildStatItem(
                           t('this_week'),
@@ -216,7 +226,7 @@ class _LogListPageState extends State<LogListPage> {
                               .length
                               .toString(),
                           Icons.calendar_today_outlined,
-                          Colors.orange,
+                          TeaGardenTheme.warningColor,
                         ),
                       ],
                     ),
@@ -229,21 +239,29 @@ class _LogListPageState extends State<LogListPage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
-                        color: Colors.green[50],
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.green[200]!),
+                        border: Border.all(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.3)),
                       ),
                       child: Row(
                         children: [
                           Icon(Icons.filter_alt,
-                              size: 16, color: Colors.green[700]),
+                              size: 16,
+                              color: Theme.of(context).colorScheme.primary),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
                               _buildFilterText(),
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.green[700],
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
                           ),
@@ -255,7 +273,8 @@ class _LogListPageState extends State<LogListPage> {
                               });
                             },
                             child: Icon(Icons.close,
-                                size: 16, color: Colors.green[700]),
+                                size: 16,
+                                color: Theme.of(context).colorScheme.primary),
                           ),
                         ],
                       ),
@@ -306,7 +325,7 @@ class _LogListPageState extends State<LogListPage> {
           label,
           style: TextStyle(
             fontSize: 12,
-            color: Colors.grey[600],
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
           ),
         ),
       ],

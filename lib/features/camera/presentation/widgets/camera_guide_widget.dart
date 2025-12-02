@@ -15,13 +15,13 @@ class CameraGuideWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.black54,
+          color: Theme.of(context).colorScheme.surface.withOpacity(0.8),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
           LocalizationService.instance.translate('place_leaf_center'),
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),

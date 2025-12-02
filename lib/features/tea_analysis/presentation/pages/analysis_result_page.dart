@@ -8,6 +8,7 @@ import '../../../../core/di/injection_container.dart';
 import '../../domain/entities/tea_analysis_result.dart';
 import '../../../../core/widgets/modern_ui_components.dart';
 import '../../../../core/services/localization_service.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// 解析結果ページ
 /// 撮影した画像の解析結果を表示
@@ -46,32 +47,27 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Scaffold(
       appBar: AppBar(
         title: Text(
           LocalizationService.instance.translate('analysis_title'),
           style: const TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.green[700],
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: colorScheme.onPrimary),
           onPressed: () => Navigator.pop(context),
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.green[50]!,
-              Colors.white,
-            ],
-          ),
+        decoration: const BoxDecoration(
+          gradient: TeaGardenTheme.backgroundGradient,
         ),
         child: BlocBuilder<AnalysisCubit, AnalysisState>(
           builder: (context, state) {
@@ -105,17 +101,17 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
+                            const Row(
                               children: [
                                 Icon(Icons.auto_awesome,
-                                    color: Colors.purple[700]),
-                                const SizedBox(width: 8),
+                                    color: TeaGardenTheme.infoColor),
+                                SizedBox(width: 8),
                                 Text(
                                   '高度な分析',
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.purple[700],
+                                    color: TeaGardenTheme.infoColor,
                                   ),
                                 ),
                               ],
@@ -125,7 +121,10 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                               '複数の解析手法を組み合わせた高精度な分析を実行します',
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.grey[700],
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withOpacity(0.7),
                               ),
                             ),
                             const SizedBox(height: 16),
@@ -141,8 +140,9 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                                 icon: const Icon(Icons.auto_awesome),
                                 label: const Text('高度な分析を実行'),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.purple[700],
-                                  foregroundColor: Colors.white,
+                                  backgroundColor: TeaGardenTheme.infoColor,
+                                  foregroundColor:
+                                      Theme.of(context).colorScheme.onPrimary,
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 12,
                                   ),
@@ -179,17 +179,17 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
+                            const Row(
                               children: [
                                 Icon(Icons.auto_awesome,
-                                    color: Colors.purple[700]),
-                                const SizedBox(width: 8),
+                                    color: TeaGardenTheme.infoColor),
+                                SizedBox(width: 8),
                                 Text(
                                   '高度な分析',
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.purple[700],
+                                    color: TeaGardenTheme.infoColor,
                                   ),
                                 ),
                               ],
@@ -199,7 +199,10 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                               '複数の解析手法を組み合わせた高精度な分析を実行します',
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.grey[700],
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withOpacity(0.7),
                               ),
                             ),
                             const SizedBox(height: 16),
@@ -215,9 +218,9 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                                 icon: const Icon(Icons.auto_awesome),
                                 label: const Text('高度な分析を再実行'),
                                 style: OutlinedButton.styleFrom(
-                                  foregroundColor: Colors.purple[700],
-                                  side: BorderSide(
-                                    color: Colors.purple[700]!,
+                                  foregroundColor: TeaGardenTheme.infoColor,
+                                  side: const BorderSide(
+                                    color: TeaGardenTheme.infoColor,
                                   ),
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 12,
@@ -236,11 +239,14 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.surface,
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .shadow
+                                .withOpacity(0.05),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -254,7 +260,7 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Colors.grey[800],
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -331,7 +337,7 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
             content: Text(
               LocalizationService.instance.translate('save_result_success'),
             ),
-            backgroundColor: Colors.green,
+            backgroundColor: Theme.of(context).colorScheme.primary,
             duration: const Duration(seconds: 2),
           ),
         );
@@ -351,7 +357,7 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
             content: Text(
               '${LocalizationService.instance.translate('save_result_failed')}: $e',
             ),
-            backgroundColor: Colors.red,
+            backgroundColor: Theme.of(context).colorScheme.error,
             duration: const Duration(seconds: 3),
           ),
         );
