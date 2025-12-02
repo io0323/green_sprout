@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/services/localization_service.dart';
 import '../../../../core/widgets/language_selector.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// Web用の簡素化されたホームページ
 /// 依存性注入を使わずに直接実装
@@ -67,7 +68,7 @@ class _WebHomePageState extends State<WebHomePage> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.green[700],
+        backgroundColor: TeaGardenTheme.primaryGreen,
         elevation: 0,
         actions: [
           LanguageSelector(onLanguageChanged: widget.onLanguageChanged),
@@ -185,8 +186,8 @@ class _WebHomePageState extends State<WebHomePage> {
         icon: const Icon(Icons.camera_alt),
         label: Text(LocalizationService.instance.translate('take_photo')),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.green,
-          foregroundColor: Colors.white,
+          backgroundColor: TeaGardenTheme.successColor,
+          foregroundColor: TeaGardenTheme.textLight,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
@@ -384,7 +385,7 @@ class _WebHomePageState extends State<WebHomePage> {
           content: Text(
             LocalizationService.instance.translate('analysis_complete'),
           ),
-          backgroundColor: Colors.green,
+          backgroundColor: TeaGardenTheme.successColor,
         ),
       );
     }
@@ -404,7 +405,8 @@ class _WebHomePageState extends State<WebHomePage> {
               final result = _mockResults[index];
               final timestamp = result['timestamp'] as DateTime;
               return ListTile(
-                leading: const Icon(Icons.eco, color: Colors.green),
+                leading:
+                    const Icon(Icons.eco, color: TeaGardenTheme.successColor),
                 title: Text(
                     '${result['growthStage']} - ${result['healthStatus']}'),
                 subtitle: Text(
