@@ -198,13 +198,14 @@ class _AnimatedButtonState extends State<AnimatedButton>
                   if (widget.isLoading) ...[
                     Transform.rotate(
                       angle: _rotationAnimation.value * 2 * 3.14159,
-                      child: const SizedBox(
+                      child: SizedBox(
                         width: 20,
                         height: 20,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            widget.textColor ?? TeaGardenTheme.textLight,
+                          ),
                         ),
                       ),
                     ),
@@ -212,7 +213,7 @@ class _AnimatedButtonState extends State<AnimatedButton>
                   ] else if (widget.icon != null) ...[
                     Icon(
                       widget.icon,
-                      color: widget.textColor ?? Colors.white,
+                      color: widget.textColor ?? TeaGardenTheme.textLight,
                       size: 20,
                     ),
                     const SizedBox(width: TeaGardenTheme.spacingS),
@@ -220,7 +221,7 @@ class _AnimatedButtonState extends State<AnimatedButton>
                   Text(
                     widget.text,
                     style: TextStyle(
-                      color: widget.textColor ?? Colors.white,
+                      color: widget.textColor ?? TeaGardenTheme.textLight,
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
@@ -317,7 +318,7 @@ class _BeautifulLoadingIndicatorState extends State<BeautifulLoadingIndicator>
                     ),
                     child: const Icon(
                       Icons.eco,
-                      color: Colors.white,
+                      color: TeaGardenTheme.textLight,
                       size: 30,
                     ),
                   ),

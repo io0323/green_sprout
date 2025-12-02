@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// 写真撮影ボタンウィジェット
 /// 再利用可能なUIコンポーネント
@@ -22,8 +23,8 @@ class CameraButton extends StatelessWidget {
             style: TextStyle(fontSize: 18),
           ),
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green,
-            foregroundColor: Colors.white,
+            backgroundColor: TeaGardenTheme.successColor,
+            foregroundColor: TeaGardenTheme.textLight,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
