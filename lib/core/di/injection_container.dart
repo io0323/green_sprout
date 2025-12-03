@@ -21,6 +21,7 @@ import '../../core/engines/advanced_analysis_engine.dart';
 import '../../features/camera/data/datasources/camera_local_datasource.dart';
 import '../../features/camera/data/datasources/camera_local_datasource_impl.dart';
 import '../../features/camera/data/datasources/web_mock_camera_datasource.dart';
+import '../../features/camera/data/datasources/fake_camera_datasource.dart';
 import '../../features/camera/data/repositories/camera_repository_impl.dart';
 import '../../features/camera/domain/repositories/camera_repository.dart';
 import '../../features/camera/domain/usecases/camera_usecases.dart';
@@ -39,7 +40,20 @@ final GetIt sl = GetIt.instance;
 /// [testing] が true の場合、テスト用の設定で初期化する
 Future<void> init({bool testing = false}) async {
   // データソース - プラットフォームに応じて実装を切り替え
-  if (PlatformUtils.isWeb) {
+  if (testing) {
+    // テストモードではFake実装を使用
+    sl.registerLazySingleton<TeaAnalysisLocalDataSource>(
+      () => WebMockTeaAnalysisDataSource(),
+    );
+
+    sl.registerLazySingleton<AnalysisLocalDataSource>(
+      () => WebMockAnalysisDataSource(),
+    );
+
+    sl.registerLazySingleton<CameraLocalDataSource>(
+      () => FakeCameraDataSource(),
+    );
+  } else if (PlatformUtils.isWeb) {
     // Webプラットフォーム用のモック実装
     sl.registerLazySingleton<TeaAnalysisLocalDataSource>(
       () => WebMockTeaAnalysisDataSource(),
