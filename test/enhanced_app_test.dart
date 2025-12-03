@@ -346,12 +346,23 @@ void main() {
       await tester.tap(find.byKey(const Key('tab_camera_icon')));
       await tester.pump();
 
-      // タブ切り替えアニメーションが完了するまで待機
-      await tester.pumpAndSettle(const Duration(seconds: 2));
+      // タブ切り替えアニメーションが完了するまで待機（TabBarViewのアニメーションは通常300ms）
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
 
-      // 解析ボタンが表示されるのを待つ
+      // 解析ボタンが表示されるのを待つ（SingleChildScrollView内にあるため、スクロールが必要な場合がある）
       await pumpUntilFound(tester, find.byKey(const Key('btn_take_photo')),
           timeout: const Duration(seconds: 30));
+
+      // ボタンが画面内に表示されるようにスクロール
+      try {
+        final buttonFinder = find.byKey(const Key('btn_take_photo'));
+        if (tester.any(buttonFinder)) {
+          await tester.ensureVisible(buttonFinder.first);
+          await tester.pumpAndSettle();
+        }
+      } catch (_) {
+        // スクロールできない場合は無視（既に表示されている可能性がある）
+      }
 
       // 解析ボタンが表示されることを確認（Keyを使用）
       expect(find.byKey(const Key('btn_take_photo')), findsWidgets);
@@ -369,12 +380,23 @@ void main() {
       await tester.tap(find.byKey(const Key('tab_camera_icon')));
       await tester.pump();
 
-      // タブ切り替えアニメーションが完了するまで待機
-      await tester.pumpAndSettle(const Duration(seconds: 2));
+      // タブ切り替えアニメーションが完了するまで待機（TabBarViewのアニメーションは通常300ms）
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
 
-      // 解析ボタンが表示されるのを待つ
+      // 解析ボタンが表示されるのを待つ（SingleChildScrollView内にあるため、スクロールが必要な場合がある）
       await pumpUntilFound(tester, find.byKey(const Key('btn_take_photo')),
           timeout: const Duration(seconds: 30));
+
+      // ボタンが画面内に表示されるようにスクロール
+      try {
+        final buttonFinder = find.byKey(const Key('btn_take_photo'));
+        if (tester.any(buttonFinder)) {
+          await tester.ensureVisible(buttonFinder.first);
+          await tester.pumpAndSettle();
+        }
+      } catch (_) {
+        // スクロールできない場合は無視（既に表示されている可能性がある）
+      }
 
       // 解析ボタンをタップ（Keyを使用）- ローディングテキストが表示されるのを待つ
       // Confirm the translation key exists before using it
