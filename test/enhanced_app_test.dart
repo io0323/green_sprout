@@ -189,17 +189,21 @@ Future<void> pumpUntilFound(
     debugDumpApp();
     // Also print all widgets with keys to help debug
     final allWidgets = find.byType(Widget);
+    // ignore: avoid_print
     print('Total widgets found: ${tester.widgetList(allWidgets).length}');
     // Try to find AnalysisCard
     try {
       final analysisCardFinder = find.byType(AnalysisCard);
       if (tester.any(analysisCardFinder)) {
+        // ignore: avoid_print
         print(
             'AnalysisCard found: ${tester.widgetList(analysisCardFinder).length}');
       } else {
+        // ignore: avoid_print
         print('AnalysisCard NOT found');
       }
     } catch (_) {
+      // ignore: avoid_print
       print('Could not check for AnalysisCard');
     }
   } catch (_) {
