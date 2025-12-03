@@ -342,10 +342,16 @@ void main() {
       await pumpUntilFound(tester, find.byType(AppBar),
           timeout: const Duration(seconds: 30));
 
-      // 解析タブをタップ（Keyを使用）- 解析ボタンが表示されるのを待つ
-      await safeTapFirst(tester, find.byKey(const Key('tab_camera_icon')),
-          timeout: const Duration(seconds: 30),
-          waitFor: find.byKey(const Key('btn_take_photo')));
+      // 解析タブをタップ（Keyを使用）
+      await tester.tap(find.byKey(const Key('tab_camera_icon')));
+      await tester.pump();
+
+      // タブ切り替えアニメーションが完了するまで待機
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // 解析ボタンが表示されるのを待つ
+      await pumpUntilFound(tester, find.byKey(const Key('btn_take_photo')),
+          timeout: const Duration(seconds: 30));
 
       // 解析ボタンが表示されることを確認（Keyを使用）
       expect(find.byKey(const Key('btn_take_photo')), findsWidgets);
@@ -359,10 +365,16 @@ void main() {
       await pumpUntilFound(tester, find.byType(AppBar),
           timeout: const Duration(seconds: 30));
 
-      // 解析タブをタップ（Keyを使用）- 解析ボタンが表示されるのを待つ
-      await safeTapFirst(tester, find.byKey(const Key('tab_camera_icon')),
-          timeout: const Duration(seconds: 30),
-          waitFor: find.byKey(const Key('btn_take_photo')));
+      // 解析タブをタップ（Keyを使用）
+      await tester.tap(find.byKey(const Key('tab_camera_icon')));
+      await tester.pump();
+
+      // タブ切り替えアニメーションが完了するまで待機
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // 解析ボタンが表示されるのを待つ
+      await pumpUntilFound(tester, find.byKey(const Key('btn_take_photo')),
+          timeout: const Duration(seconds: 30));
 
       // 解析ボタンをタップ（Keyを使用）- ローディングテキストが表示されるのを待つ
       // Confirm the translation key exists before using it
@@ -371,16 +383,12 @@ void main() {
       expect(aiAnalyzingText, isNotEmpty,
           reason: 'Missing translation: ai_analyzing');
 
-      await safeTapFirst(
-        tester,
-        find.byKey(const Key('btn_take_photo')),
-        timeout:
-            const Duration(seconds: 30), // Increased timeout for CI slowness
-        waitFor: find.text(aiAnalyzingText),
-      );
+      await tester.tap(find.byKey(const Key('btn_take_photo')));
+      await tester.pump();
 
-      // ローディング表示を確認（既に待機済み）
-      await tester.pump(); // extra frame if needed
+      // ローディング表示を確認
+      await pumpUntilFound(tester, find.text(aiAnalyzingText),
+          timeout: const Duration(seconds: 30));
 
       // 解析が完了するまで待機 - 結果が表示されるのを待つ
       await pumpUntilFound(tester,
