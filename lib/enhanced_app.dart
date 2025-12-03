@@ -351,6 +351,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     return AnalysisCard(
       isAnalyzing: _isAnalyzing,
       onAnalyze: _startAnalysis,
+      buttonKey: const Key('btn_take_photo'),
     );
   }
 

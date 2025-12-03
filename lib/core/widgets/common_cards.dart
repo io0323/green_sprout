@@ -155,6 +155,7 @@ class AnalysisCard extends StatelessWidget {
   final String? analyzingText;
   final String? buttonText;
   final IconData buttonIcon;
+  final Key? buttonKey;
 
   const AnalysisCard({
     super.key,
@@ -163,6 +164,7 @@ class AnalysisCard extends StatelessWidget {
     this.analyzingText,
     this.buttonText,
     this.buttonIcon = Icons.camera_alt,
+    this.buttonKey,
   });
 
   @override
@@ -199,6 +201,7 @@ class AnalysisCard extends StatelessWidget {
               )
             else
               ElevatedButton.icon(
+                key: buttonKey,
                 onPressed: onAnalyze,
                 icon: Icon(buttonIcon),
                 label: Text(finalButtonText),

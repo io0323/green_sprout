@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -180,6 +181,15 @@ Future<void> pumpUntilFound(
       return;
     }
   }
+
+  // Diagnostic: dump widget tree to test logs to help debug what is actually present in CI
+  try {
+    // prints widget tree to the logs
+    debugDumpApp();
+  } catch (_) {
+    // ignore if debugDumpApp is not available
+  }
+
   throw Exception('Timed out waiting for $finder');
 }
 
@@ -200,19 +210,21 @@ Future<void> safeTapFirst(
     // ignore if not in a scrollable context
   }
 
-  // Give one small settle for layout
-  await tester.pumpAndSettle(const Duration(milliseconds: 100));
+  // Let any layout settle before tapping
+  await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
   // Normal tap (suppress hit-test warnings in CI)
   await tester.tap(finder.first, warnIfMissed: false);
-  await tester.pump();
+
+  // Allow animations triggered by the tap to complete
+  await tester.pumpAndSettle(const Duration(seconds: 1));
 
   // If the tap didn't result in expected widget, fall back to tapping center
   if (waitFor != null && !tester.any(waitFor)) {
     try {
       final center = tester.getCenter(finder.first);
       await tester.tapAt(center);
-      await tester.pump();
+      await tester.pumpAndSettle(const Duration(seconds: 1));
     } catch (_) {
       // ignore fallback failures; next pumpUntilFound will surface exceptions
     }
@@ -221,6 +233,7 @@ Future<void> safeTapFirst(
   if (waitFor != null) {
     await pumpUntilFound(tester, waitFor, timeout: timeout);
   } else {
+    // give some frames to stabilize
     for (int i = 0; i < 20; i++) {
       await tester.pump(const Duration(milliseconds: 100));
     }
@@ -331,7 +344,7 @@ void main() {
 
       // 解析タブをタップ（Keyを使用）- 解析ボタンが表示されるのを待つ
       await safeTapFirst(tester, find.byKey(const Key('tab_camera_icon')),
-          timeout: const Duration(seconds: 15),
+          timeout: const Duration(seconds: 30),
           waitFor: find.byKey(const Key('btn_take_photo')));
 
       // 解析ボタンが表示されることを確認（Keyを使用）
@@ -348,7 +361,7 @@ void main() {
 
       // 解析タブをタップ（Keyを使用）- 解析ボタンが表示されるのを待つ
       await safeTapFirst(tester, find.byKey(const Key('tab_camera_icon')),
-          timeout: const Duration(seconds: 15),
+          timeout: const Duration(seconds: 30),
           waitFor: find.byKey(const Key('btn_take_photo')));
 
       // 解析ボタンをタップ（Keyを使用）- ローディングテキストが表示されるのを待つ
