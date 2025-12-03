@@ -11,7 +11,7 @@ import '../../../../core/utils/platform_utils.dart';
 import '../../../../core/utils/app_logger.dart';
 import '../../../../core/di/injection_container.dart' as di;
 import '../../../../core/errors/failures.dart';
-import '../../../../core/theme/tea_garden_theme.dart';
+import '../../../../core/widgets/snackbar_helper.dart';
 
 /// ウェアラブルデバイス用のホームページ
 /// 簡潔なUIで茶葉解析結果を表示
@@ -156,15 +156,9 @@ class _WearableHomePageState extends State<WearableHomePage> {
           } catch (e) {
             AppLogger.debugError('解析結果画面への遷移エラー', e);
             if (mounted) {
-              final localization = LocalizationService.instance;
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    localization.translate('error_navigation'),
-                  ),
-                  backgroundColor: TeaGardenTheme.errorColor,
-                  duration: const Duration(seconds: 3),
-                ),
+              SnackBarHelper.showError(
+                context,
+                LocalizationService.instance.translate('error_navigation'),
               );
             }
           }
@@ -173,13 +167,7 @@ class _WearableHomePageState extends State<WearableHomePage> {
           final errorMessage = result['error'] as String;
           AppLogger.debugError('カメラ画面からのエラー', errorMessage);
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(errorMessage),
-                backgroundColor: TeaGardenTheme.errorColor,
-                duration: const Duration(seconds: 3),
-              ),
-            );
+            SnackBarHelper.showError(context, errorMessage);
           }
         }
       }
@@ -187,15 +175,9 @@ class _WearableHomePageState extends State<WearableHomePage> {
       AppLogger.debugError('カメラ画面への遷移エラー', e);
       AppLogger.debugError('スタックトレース', stackTrace);
       if (mounted) {
-        final localization = LocalizationService.instance;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              localization.translate('error_camera_navigation'),
-            ),
-            backgroundColor: TeaGardenTheme.errorColor,
-            duration: const Duration(seconds: 3),
-          ),
+        SnackBarHelper.showError(
+          context,
+          LocalizationService.instance.translate('error_camera_navigation'),
         );
       }
     }
