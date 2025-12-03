@@ -430,8 +430,16 @@ void main() {
       await tester.pumpAndSettle(const Duration(milliseconds: 1000));
 
       // AnalysisCardが表示されるのを待つ（ボタンの親ウィジェット）
+      // これは重要：AnalysisCardが表示されないと、その中のボタンも表示されない
       await pumpUntilFound(tester, find.byType(AnalysisCard),
           timeout: const Duration(seconds: 30));
+
+      // AnalysisCardが表示されたことを確認
+      expect(find.byType(AnalysisCard), findsWidgets);
+
+      // 追加のフレームをポンプして、AnalysisCard内のボタンが確実に構築されるようにする
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pumpAndSettle();
 
       // 解析ボタンが表示されるのを待つ（複数のファインダーで検索して堅牢性を向上）
       final takePhotoFinderCandidates = [
@@ -477,8 +485,16 @@ void main() {
       await tester.pumpAndSettle(const Duration(milliseconds: 1000));
 
       // AnalysisCardが表示されるのを待つ（ボタンの親ウィジェット）
+      // これは重要：AnalysisCardが表示されないと、その中のボタンも表示されない
       await pumpUntilFound(tester, find.byType(AnalysisCard),
           timeout: const Duration(seconds: 30));
+
+      // AnalysisCardが表示されたことを確認
+      expect(find.byType(AnalysisCard), findsWidgets);
+
+      // 追加のフレームをポンプして、AnalysisCard内のボタンが確実に構築されるようにする
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pumpAndSettle();
 
       // 解析ボタンが表示されるのを待つ（複数のファインダーで検索して堅牢性を向上）
       final takePhotoFinderCandidates = [
