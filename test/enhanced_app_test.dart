@@ -237,6 +237,35 @@ Future<Finder> pumpUntilFoundAny(
   // Diagnostic: dump widget tree on timeout
   try {
     debugDumpApp();
+    // Also print diagnostic information
+    // ignore: avoid_print
+    print('Timed out waiting for any of: ${finders.map((f) => f.toString())}');
+    // Try to find AnalysisCard
+    try {
+      final analysisCardFinder = find.byType(AnalysisCard);
+      if (tester.any(analysisCardFinder)) {
+        // ignore: avoid_print
+        print(
+            'AnalysisCard found: ${tester.widgetList(analysisCardFinder).length}');
+      } else {
+        // ignore: avoid_print
+        print('AnalysisCard NOT found');
+      }
+    } catch (_) {
+      // ignore: avoid_print
+      print('Could not check for AnalysisCard');
+    }
+    // Check each finder individually
+    for (int i = 0; i < finders.length; i++) {
+      try {
+        final found = tester.any(finders[i]);
+        // ignore: avoid_print
+        print('Finder $i (${finders[i]}): ${found ? "FOUND" : "NOT FOUND"}');
+      } catch (_) {
+        // ignore: avoid_print
+        print('Finder $i (${finders[i]}): ERROR checking');
+      }
+    }
   } catch (_) {}
 
   throw Exception(
