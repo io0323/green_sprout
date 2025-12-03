@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tea_garden_ai/enhanced_app.dart';
 import 'package:tea_garden_ai/core/services/localization_service.dart';
 import 'package:tea_garden_ai/core/di/injection_container.dart' as di;
+import 'package:tea_garden_ai/core/widgets/common_cards.dart';
 
 /// 拡張版茶園管理AIアプリのテスト
 
@@ -346,8 +347,13 @@ void main() {
       await tester.tap(find.byKey(const Key('tab_camera_icon')));
       await tester.pump();
 
-      // タブ切り替えアニメーションが完了するまで待機（TabBarViewのアニメーションは通常300ms）
-      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      // タブ切り替えアニメーションが完了するまで待機
+      // TabBarViewのアニメーションは通常300msだが、CI環境では遅延する可能性がある
+      await tester.pumpAndSettle(const Duration(milliseconds: 1000));
+
+      // AnalysisCardが表示されるのを待つ（ボタンの親ウィジェット）
+      await pumpUntilFound(tester, find.byType(AnalysisCard),
+          timeout: const Duration(seconds: 30));
 
       // 解析ボタンが表示されるのを待つ（SingleChildScrollView内にあるため、スクロールが必要な場合がある）
       await pumpUntilFound(tester, find.byKey(const Key('btn_take_photo')),
@@ -380,8 +386,13 @@ void main() {
       await tester.tap(find.byKey(const Key('tab_camera_icon')));
       await tester.pump();
 
-      // タブ切り替えアニメーションが完了するまで待機（TabBarViewのアニメーションは通常300ms）
-      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      // タブ切り替えアニメーションが完了するまで待機
+      // TabBarViewのアニメーションは通常300msだが、CI環境では遅延する可能性がある
+      await tester.pumpAndSettle(const Duration(milliseconds: 1000));
+
+      // AnalysisCardが表示されるのを待つ（ボタンの親ウィジェット）
+      await pumpUntilFound(tester, find.byType(AnalysisCard),
+          timeout: const Duration(seconds: 30));
 
       // 解析ボタンが表示されるのを待つ（SingleChildScrollView内にあるため、スクロールが必要な場合がある）
       await pumpUntilFound(tester, find.byKey(const Key('btn_take_photo')),
