@@ -187,6 +187,21 @@ Future<void> pumpUntilFound(
   try {
     // prints widget tree to the logs
     debugDumpApp();
+    // Also print all widgets with keys to help debug
+    final allWidgets = find.byType(Widget);
+    print('Total widgets found: ${tester.widgetList(allWidgets).length}');
+    // Try to find AnalysisCard
+    try {
+      final analysisCardFinder = find.byType(AnalysisCard);
+      if (tester.any(analysisCardFinder)) {
+        print(
+            'AnalysisCard found: ${tester.widgetList(analysisCardFinder).length}');
+      } else {
+        print('AnalysisCard NOT found');
+      }
+    } catch (_) {
+      print('Could not check for AnalysisCard');
+    }
   } catch (_) {
     // ignore if debugDumpApp is not available
   }
