@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'core/theme/tea_garden_theme.dart';
-import 'core/utils/app_localizations.dart';
 import 'core/utils/app_initialization.dart';
 import 'core/widgets/common_cards.dart';
 import 'core/widgets/snackbar_helper.dart';
@@ -29,15 +27,16 @@ class TeaGardenApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appDefaults = AppInitialization.getMaterialAppDefaults();
     return MaterialApp(
       title: '茶園管理AI',
-      theme: TeaGardenTheme.lightTheme,
-      darkTheme: TeaGardenTheme.darkTheme,
-      themeMode: ThemeMode.system,
-      localizationsDelegates: AppLocalizations.delegates,
-      supportedLocales: AppLocalizations.supportedLocales,
+      theme: appDefaults.theme,
+      darkTheme: appDefaults.darkTheme,
+      themeMode: appDefaults.themeMode,
+      localizationsDelegates: appDefaults.localizationsDelegates,
+      supportedLocales: appDefaults.supportedLocales,
+      debugShowCheckedModeBanner: appDefaults.debugShowCheckedModeBanner,
       home: const TeaGardenHomePage(),
-      debugShowCheckedModeBanner: false,
     );
   }
 }

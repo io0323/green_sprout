@@ -4,7 +4,6 @@ import 'core/services/localization_service.dart';
 import 'core/services/wearable_device_service.dart';
 import 'core/utils/platform_utils.dart';
 import 'core/utils/app_logger.dart';
-import 'core/utils/app_localizations.dart';
 import 'core/utils/app_initialization.dart';
 import 'core/theme/tea_garden_theme.dart';
 import 'features/wearable/presentation/pages/wearable_home_page.dart';
@@ -161,15 +160,16 @@ class _WearableTeaGardenAppState extends State<WearableTeaGardenApp> {
           : TeaGardenTheme.darkTheme.textTheme,
     );
 
+    final appDefaults = AppInitialization.getMaterialAppDefaults();
     return MaterialApp(
       title: LocalizationService.instance.translate('app_title'),
       theme: wearableLightTheme,
       darkTheme: wearableDarkTheme,
-      themeMode: ThemeMode.system,
-      localizationsDelegates: AppLocalizations.delegates,
-      supportedLocales: AppLocalizations.supportedLocales,
+      themeMode: appDefaults.themeMode,
+      localizationsDelegates: appDefaults.localizationsDelegates,
+      supportedLocales: appDefaults.supportedLocales,
+      debugShowCheckedModeBanner: appDefaults.debugShowCheckedModeBanner,
       home: const WearableHomePage(),
-      debugShowCheckedModeBanner: false,
     );
   }
 }
