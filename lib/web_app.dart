@@ -1,17 +1,33 @@
 import 'package:flutter/material.dart';
 import 'core/theme/tea_garden_theme.dart';
 import 'core/utils/app_localizations.dart';
+import 'core/utils/app_initialization.dart';
 import 'core/widgets/common_cards.dart';
 import 'core/widgets/snackbar_helper.dart';
 
-void main() {
-  runApp(const TeaGardenWebApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // グローバルエラーハンドラーの設定
+  AppInitialization.setupGlobalErrorHandler();
+
+  // 非同期エラーハンドラーの設定とアプリ実行
+  await AppInitialization.runWithErrorHandling(() async {
+    // 国際化サービスの初期化
+    await AppInitialization.initializeLocalization();
+
+    runApp(TeaGardenWebApp());
+  });
 }
 
 /// 茶園管理AI - Web専用アプリ
 /// 依存性注入やBLoCを使わないシンプルな実装
 class TeaGardenWebApp extends StatelessWidget {
-  const TeaGardenWebApp({super.key});
+  TeaGardenWebApp({super.key}) {
+    /// エラーバウンダリーを一度だけ設定
+    /// ウィジェットツリーでエラーが発生した場合に表示されるカスタムエラー画面
+    AppInitialization.setupErrorWidget();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -30,12 +30,16 @@ void main() async {
       await AppInitialization.initializeDependencyInjection();
     }
 
-    runApp(const TeaGardenApp());
+    runApp(TeaGardenApp());
   });
 }
 
 class TeaGardenApp extends StatefulWidget {
-  const TeaGardenApp({super.key});
+  TeaGardenApp({super.key}) {
+    /// エラーバウンダリーを一度だけ設定
+    /// ウィジェットツリーでエラーが発生した場合に表示されるカスタムエラー画面
+    AppInitialization.setupErrorWidget();
+  }
 
   @override
   State<TeaGardenApp> createState() => _TeaGardenAppState();
