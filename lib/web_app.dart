@@ -15,18 +15,17 @@ void main() async {
     // 国際化サービスの初期化
     await AppInitialization.initializeLocalization();
 
-    runApp(TeaGardenWebApp());
+    // エラーワジェットの設定（コンストラクタをconstにするためmainに移動）
+    AppInitialization.setupErrorWidget();
+
+    runApp(const TeaGardenWebApp());
   });
 }
 
 /// 茶園管理AI - Web専用アプリ
 /// 依存性注入やBLoCを使わないシンプルな実装
 class TeaGardenWebApp extends StatelessWidget {
-  TeaGardenWebApp({super.key}) {
-    /// エラーバウンダリーを一度だけ設定
-    /// ウィジェットツリーでエラーが発生した場合に表示されるカスタムエラー画面
-    AppInitialization.setupErrorWidget();
-  }
+  const TeaGardenWebApp({super.key});
 
   @override
   Widget build(BuildContext context) {

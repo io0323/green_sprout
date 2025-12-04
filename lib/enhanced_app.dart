@@ -26,16 +26,15 @@ void main() async {
     // DIコンテナの初期化
     await AppInitialization.initializeDependencyInjection();
 
-    runApp(EnhancedTeaGardenApp());
+    // エラーワジェットの設定（コンストラクタをconstにするためmainに移動）
+    AppInitialization.setupErrorWidget();
+
+    runApp(const EnhancedTeaGardenApp());
   });
 }
 
 class EnhancedTeaGardenApp extends StatefulWidget {
-  EnhancedTeaGardenApp({super.key}) {
-    /// エラーバウンダリーを一度だけ設定
-    /// ウィジェットツリーでエラーが発生した場合に表示されるカスタムエラー画面
-    AppInitialization.setupErrorWidget();
-  }
+  const EnhancedTeaGardenApp({super.key});
 
   @override
   State<EnhancedTeaGardenApp> createState() => _EnhancedTeaGardenAppState();

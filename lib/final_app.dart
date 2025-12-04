@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'core/theme/tea_garden_theme.dart';
 import 'core/utils/app_initialization.dart';
 import 'core/widgets/common_cards.dart';
 import 'core/widgets/snackbar_helper.dart';
@@ -14,16 +15,15 @@ void main() async {
     // 国際化サービスの初期化
     await AppInitialization.initializeLocalization();
 
-    runApp(TeaGardenApp());
+    // エラーワジェットの設定（コンストラクタをconstにするためmainに移動）
+    AppInitialization.setupErrorWidget();
+
+    runApp(const TeaGardenApp());
   });
 }
 
 class TeaGardenApp extends StatelessWidget {
-  TeaGardenApp({super.key}) {
-    /// エラーバウンダリーを一度だけ設定
-    /// ウィジェットツリーでエラーが発生した場合に表示されるカスタムエラー画面
-    AppInitialization.setupErrorWidget();
-  }
+  const TeaGardenApp({super.key});
 
   @override
   Widget build(BuildContext context) {

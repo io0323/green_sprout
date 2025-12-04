@@ -17,9 +17,12 @@ void main() async {
     // 国際化サービスの初期化
     await AppInitialization.initializeLocalization();
 
+    // エラーワジェットの設定（コンストラクタをconstにするためmainに移動）
+    AppInitialization.setupErrorWidget();
+
     // ウェアラブルデバイスの場合は専用アプリを起動
     if (PlatformUtils.isWearable) {
-      runApp(WearableTeaGardenApp());
+      runApp(const WearableTeaGardenApp());
       return;
     }
 
@@ -28,16 +31,12 @@ void main() async {
       await AppInitialization.initializeDependencyInjection();
     }
 
-    runApp(TeaGardenApp());
+    runApp(const TeaGardenApp());
   });
 }
 
 class TeaGardenApp extends StatefulWidget {
-  TeaGardenApp({super.key}) {
-    /// エラーバウンダリーを一度だけ設定
-    /// ウィジェットツリーでエラーが発生した場合に表示されるカスタムエラー画面
-    AppInitialization.setupErrorWidget();
-  }
+  const TeaGardenApp({super.key});
 
   @override
   State<TeaGardenApp> createState() => _TeaGardenAppState();

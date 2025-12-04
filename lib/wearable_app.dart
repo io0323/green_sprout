@@ -50,6 +50,9 @@ void main() async {
     // DIコンテナの初期化
     await AppInitialization.initializeDependencyInjection();
 
+    // エラーワジェットの設定（コンストラクタをconstにするためmainに移動）
+    AppInitialization.setupErrorWidget();
+
     // ウェアラブルデバイスサービスの初期化
     try {
       _globalWearableService = WearableDeviceServiceImpl();
@@ -103,17 +106,13 @@ void main() async {
       // ウェアラブルデバイス機能は使用できない可能性がある
     }
 
-    runApp(WearableTeaGardenApp());
+    runApp(const WearableTeaGardenApp());
   });
 }
 
 /// ウェアラブルデバイス用のアプリ
 class WearableTeaGardenApp extends StatefulWidget {
-  WearableTeaGardenApp({super.key}) {
-    /// エラーバウンダリーを一度だけ設定
-    /// ウィジェットツリーでエラーが発生した場合に表示されるカスタムエラー画面
-    AppInitialization.setupErrorWidget();
-  }
+  const WearableTeaGardenApp({super.key});
 
   @override
   State<WearableTeaGardenApp> createState() => _WearableTeaGardenAppState();
