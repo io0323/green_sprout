@@ -3,10 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'dart:async';
 import 'core/services/localization_service.dart';
 import 'core/services/wearable_device_service.dart';
-import 'core/di/injection_container.dart' as di;
 import 'core/utils/platform_utils.dart';
 import 'core/utils/app_logger.dart';
 import 'core/utils/app_localizations.dart';
+import 'core/utils/app_initialization.dart';
 import 'core/theme/tea_garden_theme.dart';
 import 'features/wearable/presentation/pages/wearable_home_page.dart';
 
@@ -41,42 +41,16 @@ Future<bool> isWearableDeviceConnected() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  /// グローバルエラーハンドラーの設定
-  /// Flutterフレームワークレベルのエラーをキャッチ
-  FlutterError.onError = (FlutterErrorDetails details) {
-    FlutterError.presentError(details);
-    AppLogger.debugError(
-      'Flutterエラー',
-      '${details.exception}\n${details.stack}',
-    );
-  };
+  // グローバルエラーハンドラーの設定
+  AppInitialization.setupGlobalErrorHandler();
 
-  /// 非同期エラーハンドラーの設定
-  /// runZonedGuardedを使用して未処理の非同期エラーをキャッチ
-  runZonedGuarded(() async {
+  // 非同期エラーハンドラーの設定とアプリ実行
+  await AppInitialization.runWithErrorHandling(() async {
     // 国際化サービスの初期化
-    try {
-      await LocalizationService.instance.loadTranslations();
-      AppLogger.debugInfo('国際化サービスの初期化が完了しました');
-    } catch (e, stackTrace) {
-      AppLogger.debugError('翻訳データ読み込みエラー', e);
-      AppLogger.debugError('スタックトレース', stackTrace);
-      AppLogger.debugError('エラータイプ', e.runtimeType);
-      // エラーが発生してもアプリは起動を続行
-      // デフォルトの日本語翻訳が使用される
-    }
+    await AppInitialization.initializeLocalization();
 
     // DIコンテナの初期化
-    try {
-      await di.init();
-      AppLogger.debugInfo('DIコンテナの初期化が完了しました');
-    } catch (e, stackTrace) {
-      AppLogger.debugError('DI初期化エラー', e);
-      AppLogger.debugError('スタックトレース', stackTrace);
-      AppLogger.debugError('エラータイプ', e.runtimeType);
-      // エラーが発生してもアプリは起動を続行
-      // ただし、DIに依存する機能は使用できない可能性がある
-    }
+    await AppInitialization.initializeDependencyInjection();
 
     // ウェアラブルデバイスサービスの初期化
     try {
@@ -132,11 +106,6 @@ void main() async {
     }
 
     runApp(WearableTeaGardenApp());
-  }, (error, stack) {
-    /// 未処理の非同期エラーをキャッチ
-    /// アプリがクラッシュしないようにエラーをログに記録
-    AppLogger.debugError('未処理の非同期エラー', error);
-    AppLogger.debugError('スタックトレース', stack);
   });
 }
 
