@@ -1,43 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'core/di/injection_container.dart' as di;
 import 'core/services/localization_service.dart';
 import 'core/theme/tea_garden_theme.dart';
 import 'core/utils/platform_utils.dart';
 import 'core/utils/app_localizations.dart';
+import 'core/utils/app_initialization.dart';
 import 'features/tea_analysis/presentation/pages/web_home_page.dart';
 import 'wearable_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 国際化サービスの初期化
-  await LocalizationService.instance.loadTranslations();
+  // グローバルエラーハンドラーの設定
+  AppInitialization.setupGlobalErrorHandler();
 
-  // ウェアラブルデバイスの場合は専用アプリを起動
-  if (PlatformUtils.isWearable) {
-    runApp(WearableTeaGardenApp());
-    return;
-  }
+  // 非同期エラーハンドラーの設定とアプリ実行
+  await AppInitialization.runWithErrorHandling(() async {
+    // 国際化サービスの初期化
+    await AppInitialization.initializeLocalization();
 
-  // Webプラットフォームの場合は簡素化された初期化
-  if (kIsWeb) {
-    runApp(const TeaGardenApp());
-  } else {
-    // モバイルプラットフォームの場合は通常の初期化
-    try {
-      await _initializeMobileApp();
-      runApp(const TeaGardenApp());
-    } catch (e) {
-      // エラーが発生した場合はフォールバック
-      runApp(const TeaGardenApp());
+    // ウェアラブルデバイスの場合は専用アプリを起動
+    if (PlatformUtils.isWearable) {
+      runApp(WearableTeaGardenApp());
+      return;
     }
-  }
-}
 
-Future<void> _initializeMobileApp() async {
-  // モバイル用の依存性注入初期化
-  await di.init();
+    // DIコンテナの初期化（モバイルのみ）
+    if (!kIsWeb) {
+      await AppInitialization.initializeDependencyInjection();
+    }
+
+    runApp(const TeaGardenApp());
+  });
 }
 
 class TeaGardenApp extends StatefulWidget {

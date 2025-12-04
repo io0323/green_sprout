@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'src/web_storage.dart';
 import 'core/services/localization_service.dart';
 import 'core/widgets/language_selector.dart';
-import 'core/utils/app_logger.dart';
 import 'core/utils/app_localizations.dart';
+import 'core/utils/app_initialization.dart';
 import 'core/di/injection_container.dart' as di;
 import 'features/cloud_sync/presentation/bloc/cloud_sync_cubit.dart';
 import 'core/theme/tea_garden_theme.dart';
@@ -16,15 +16,19 @@ import 'core/widgets/snackbar_helper.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // DIコンテナの初期化
-  try {
-    await di.init();
-  } catch (e) {
-    // エラーが発生した場合はフォールバック
-    AppLogger.debugError('DI初期化エラー', e);
-  }
+  // グローバルエラーハンドラーの設定
+  AppInitialization.setupGlobalErrorHandler();
 
-  runApp(const EnhancedTeaGardenApp());
+  // 非同期エラーハンドラーの設定とアプリ実行
+  await AppInitialization.runWithErrorHandling(() async {
+    // 国際化サービスの初期化
+    await AppInitialization.initializeLocalization();
+
+    // DIコンテナの初期化
+    await AppInitialization.initializeDependencyInjection();
+
+    runApp(const EnhancedTeaGardenApp());
+  });
 }
 
 class EnhancedTeaGardenApp extends StatefulWidget {
