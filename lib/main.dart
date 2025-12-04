@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'core/services/localization_service.dart';
-import 'core/theme/tea_garden_theme.dart';
 import 'core/utils/platform_utils.dart';
-import 'core/utils/app_localizations.dart';
 import 'core/utils/app_initialization.dart';
 import 'features/tea_analysis/presentation/pages/web_home_page.dart';
 import 'wearable_app.dart';
@@ -19,9 +17,12 @@ void main() async {
     // 国際化サービスの初期化
     await AppInitialization.initializeLocalization();
 
+    // エラーワジェットの設定（コンストラクタをconstにするためmainに移動）
+    AppInitialization.setupErrorWidget();
+
     // ウェアラブルデバイスの場合は専用アプリを起動
     if (PlatformUtils.isWearable) {
-      runApp(WearableTeaGardenApp());
+      runApp(const WearableTeaGardenApp());
       return;
     }
 
@@ -50,13 +51,15 @@ class _TeaGardenAppState extends State<TeaGardenApp> {
 
   @override
   Widget build(BuildContext context) {
+    final appDefaults = AppInitialization.getMaterialAppDefaults();
     return MaterialApp(
       title: LocalizationService.instance.translate('app_title'),
-      theme: TeaGardenTheme.lightTheme,
-      darkTheme: TeaGardenTheme.darkTheme,
-      themeMode: ThemeMode.system,
-      localizationsDelegates: AppLocalizations.delegates,
-      supportedLocales: AppLocalizations.supportedLocales,
+      theme: appDefaults.theme,
+      darkTheme: appDefaults.darkTheme,
+      themeMode: appDefaults.themeMode,
+      localizationsDelegates: appDefaults.localizationsDelegates,
+      supportedLocales: appDefaults.supportedLocales,
+      debugShowCheckedModeBanner: appDefaults.debugShowCheckedModeBanner,
       home: kIsWeb
           ? WebHomePage(onLanguageChanged: _updateLanguage)
           : WebHomePage(onLanguageChanged: _updateLanguage),

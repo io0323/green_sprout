@@ -4,7 +4,6 @@ import 'core/services/localization_service.dart';
 import 'core/services/wearable_device_service.dart';
 import 'core/utils/platform_utils.dart';
 import 'core/utils/app_logger.dart';
-import 'core/utils/app_localizations.dart';
 import 'core/utils/app_initialization.dart';
 import 'core/theme/tea_garden_theme.dart';
 import 'features/wearable/presentation/pages/wearable_home_page.dart';
@@ -50,6 +49,9 @@ void main() async {
 
     // DIコンテナの初期化
     await AppInitialization.initializeDependencyInjection();
+
+    // エラーワジェットの設定（コンストラクタをconstにするためmainに移動）
+    AppInitialization.setupErrorWidget();
 
     // ウェアラブルデバイスサービスの初期化
     try {
@@ -104,17 +106,13 @@ void main() async {
       // ウェアラブルデバイス機能は使用できない可能性がある
     }
 
-    runApp(WearableTeaGardenApp());
+    runApp(const WearableTeaGardenApp());
   });
 }
 
 /// ウェアラブルデバイス用のアプリ
 class WearableTeaGardenApp extends StatefulWidget {
-  WearableTeaGardenApp({super.key}) {
-    /// エラーバウンダリーを一度だけ設定
-    /// ウィジェットツリーでエラーが発生した場合に表示されるカスタムエラー画面
-    AppInitialization.setupErrorWidget();
-  }
+  const WearableTeaGardenApp({super.key});
 
   @override
   State<WearableTeaGardenApp> createState() => _WearableTeaGardenAppState();
@@ -161,15 +159,16 @@ class _WearableTeaGardenAppState extends State<WearableTeaGardenApp> {
           : TeaGardenTheme.darkTheme.textTheme,
     );
 
+    final appDefaults = AppInitialization.getMaterialAppDefaults();
     return MaterialApp(
       title: LocalizationService.instance.translate('app_title'),
       theme: wearableLightTheme,
       darkTheme: wearableDarkTheme,
-      themeMode: ThemeMode.system,
-      localizationsDelegates: AppLocalizations.delegates,
-      supportedLocales: AppLocalizations.supportedLocales,
+      themeMode: appDefaults.themeMode,
+      localizationsDelegates: appDefaults.localizationsDelegates,
+      supportedLocales: appDefaults.supportedLocales,
+      debugShowCheckedModeBanner: appDefaults.debugShowCheckedModeBanner,
       home: const WearableHomePage(),
-      debugShowCheckedModeBanner: false,
     );
   }
 }

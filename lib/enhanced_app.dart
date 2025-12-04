@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'src/web_storage.dart';
 import 'core/services/localization_service.dart';
 import 'core/widgets/language_selector.dart';
-import 'core/utils/app_localizations.dart';
 import 'core/utils/app_initialization.dart';
 import 'core/di/injection_container.dart' as di;
 import 'features/cloud_sync/presentation/bloc/cloud_sync_cubit.dart';
@@ -27,6 +26,9 @@ void main() async {
     // DIコンテナの初期化
     await AppInitialization.initializeDependencyInjection();
 
+    // エラーワジェットの設定（コンストラクタをconstにするためmainに移動）
+    AppInitialization.setupErrorWidget();
+
     runApp(const EnhancedTeaGardenApp());
   });
 }
@@ -47,13 +49,15 @@ class _EnhancedTeaGardenAppState extends State<EnhancedTeaGardenApp> {
 
   @override
   Widget build(BuildContext context) {
+    final appDefaults = AppInitialization.getMaterialAppDefaults();
     return MaterialApp(
       title: LocalizationService.instance.translate('enhanced_app_title'),
-      theme: TeaGardenTheme.lightTheme,
-      darkTheme: TeaGardenTheme.darkTheme,
-      themeMode: ThemeMode.system,
-      localizationsDelegates: AppLocalizations.delegates,
-      supportedLocales: AppLocalizations.supportedLocales,
+      theme: appDefaults.theme,
+      darkTheme: appDefaults.darkTheme,
+      themeMode: appDefaults.themeMode,
+      localizationsDelegates: appDefaults.localizationsDelegates,
+      supportedLocales: appDefaults.supportedLocales,
+      debugShowCheckedModeBanner: appDefaults.debugShowCheckedModeBanner,
       home: FutureBuilder(
         future: di.sl.getAsync<CloudSyncCubit>(),
         builder: (context, snapshot) {
@@ -71,7 +75,6 @@ class _EnhancedTeaGardenAppState extends State<EnhancedTeaGardenApp> {
           }
         },
       ),
-      debugShowCheckedModeBanner: false,
     );
   }
 }

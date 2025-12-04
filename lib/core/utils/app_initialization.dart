@@ -5,6 +5,7 @@ import 'package:tea_garden_ai/core/services/localization_service.dart';
 import 'package:tea_garden_ai/core/di/injection_container.dart' as di;
 import 'package:tea_garden_ai/core/utils/app_logger.dart';
 import 'package:tea_garden_ai/core/utils/platform_utils.dart';
+import 'package:tea_garden_ai/core/utils/app_localizations.dart';
 import 'package:tea_garden_ai/core/theme/tea_garden_theme.dart';
 
 /// アプリケーション初期化処理を共通化するユーティリティ
@@ -146,4 +147,36 @@ class AppInitialization {
       );
     };
   }
+
+  /// MaterialAppの共通設定を取得
+  /// すべてのアプリで一貫したテーマ、ローカライゼーション、デバッグ設定を提供
+  static MaterialAppData getMaterialAppDefaults() {
+    return MaterialAppData(
+      theme: TeaGardenTheme.lightTheme,
+      darkTheme: TeaGardenTheme.darkTheme,
+      themeMode: ThemeMode.system,
+      localizationsDelegates: AppLocalizations.delegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+/// MaterialAppの共通設定データクラス
+class MaterialAppData {
+  final ThemeData theme;
+  final ThemeData darkTheme;
+  final ThemeMode themeMode;
+  final List<LocalizationsDelegate<dynamic>> localizationsDelegates;
+  final List<Locale> supportedLocales;
+  final bool debugShowCheckedModeBanner;
+
+  const MaterialAppData({
+    required this.theme,
+    required this.darkTheme,
+    required this.themeMode,
+    required this.localizationsDelegates,
+    required this.supportedLocales,
+    required this.debugShowCheckedModeBanner,
+  });
 }
