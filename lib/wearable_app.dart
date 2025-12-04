@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dart:async';
 import 'core/services/localization_service.dart';
 import 'core/services/wearable_device_service.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/utils/platform_utils.dart';
 import 'core/utils/app_logger.dart';
+import 'core/utils/app_localizations.dart';
 import 'core/theme/tea_garden_theme.dart';
 import 'features/wearable/presentation/pages/wearable_home_page.dart';
 
@@ -275,15 +275,8 @@ class _WearableTeaGardenAppState extends State<WearableTeaGardenApp> {
       theme: wearableLightTheme,
       darkTheme: wearableDarkTheme,
       themeMode: ThemeMode.system,
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('ja', 'JP'),
-        Locale('en', 'US'),
-      ],
+      localizationsDelegates: AppLocalizations.delegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: const WearableHomePage(),
       debugShowCheckedModeBanner: false,
     );

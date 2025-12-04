@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'core/theme/tea_garden_theme.dart';
+import 'core/utils/app_localizations.dart';
 import 'core/widgets/common_cards.dart';
 import 'core/widgets/snackbar_helper.dart';
 
@@ -19,6 +20,8 @@ class TeaGardenWebApp extends StatelessWidget {
       theme: TeaGardenTheme.lightTheme,
       darkTheme: TeaGardenTheme.darkTheme,
       themeMode: ThemeMode.system,
+      localizationsDelegates: AppLocalizations.delegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: const TeaGardenHomePage(),
       debugShowCheckedModeBanner: false,
     );

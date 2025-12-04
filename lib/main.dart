@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/services/localization_service.dart';
 import 'core/theme/tea_garden_theme.dart';
 import 'core/utils/platform_utils.dart';
+import 'core/utils/app_localizations.dart';
 import 'features/tea_analysis/presentation/pages/web_home_page.dart';
 import 'wearable_app.dart';
 
@@ -61,15 +61,8 @@ class _TeaGardenAppState extends State<TeaGardenApp> {
       theme: TeaGardenTheme.lightTheme,
       darkTheme: TeaGardenTheme.darkTheme,
       themeMode: ThemeMode.system,
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('ja', 'JP'),
-        Locale('en', 'US'),
-      ],
+      localizationsDelegates: AppLocalizations.delegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: kIsWeb
           ? WebHomePage(onLanguageChanged: _updateLanguage)
           : WebHomePage(onLanguageChanged: _updateLanguage),
