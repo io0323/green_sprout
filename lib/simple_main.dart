@@ -1,8 +1,23 @@
 import 'package:flutter/material.dart';
 import 'core/theme/tea_garden_theme.dart';
+import 'core/utils/app_initialization.dart';
 
-void main() {
-  runApp(const SimpleTeaApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // グローバルエラーハンドラーの設定
+  AppInitialization.setupGlobalErrorHandler();
+
+  // 非同期エラーハンドラーの設定とアプリ実行
+  await AppInitialization.runWithErrorHandling(() async {
+    // 国際化サービスの初期化
+    await AppInitialization.initializeLocalization();
+
+    // エラーワジェットの設定（コンストラクタをconstにするためmainに移動）
+    AppInitialization.setupErrorWidget();
+
+    runApp(const SimpleTeaApp());
+  });
 }
 
 class SimpleTeaApp extends StatelessWidget {
@@ -10,13 +25,16 @@ class SimpleTeaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appDefaults = AppInitialization.getMaterialAppDefaults();
     return MaterialApp(
       title: '茶園管理AI',
-      theme: TeaGardenTheme.lightTheme,
-      darkTheme: TeaGardenTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      theme: appDefaults.theme,
+      darkTheme: appDefaults.darkTheme,
+      themeMode: appDefaults.themeMode,
+      localizationsDelegates: appDefaults.localizationsDelegates,
+      supportedLocales: appDefaults.supportedLocales,
+      debugShowCheckedModeBanner: appDefaults.debugShowCheckedModeBanner,
       home: const SimpleHomePage(),
-      debugShowCheckedModeBanner: false,
     );
   }
 }
