@@ -35,6 +35,21 @@ Future<bool> isWearableDeviceConnected() async {
   }
 }
 
+/// ウェアラブルデバイスの接続状態を確認（非ブロッキング）
+/// エラーが発生してもログに記録するだけで処理を続行
+Future<void> _checkWearableConnection() async {
+  try {
+    final isConnected = await _globalWearableService!.isConnected();
+    if (isConnected) {
+      AppLogger.debugInfo('ウェアラブルデバイスが接続されています');
+    } else {
+      AppLogger.debugInfo('ウェアラブルデバイスは接続されていません');
+    }
+  } catch (error) {
+    AppLogger.debugError('ウェアラブルデバイス接続確認エラー', error);
+  }
+}
+
 /// ウェアラブルデバイスイベントを処理する
 /// [event] 処理するイベント
 void _handleWearableEvent(WearableEvent event) {
@@ -75,15 +90,7 @@ Future<void> _initializeWearableDeviceService() async {
     );
 
     // 接続状態を確認（非ブロッキング）
-    _globalWearableService!.isConnected().then((isConnected) {
-      if (isConnected) {
-        AppLogger.debugInfo('ウェアラブルデバイスが接続されています');
-      } else {
-        AppLogger.debugInfo('ウェアラブルデバイスは接続されていません');
-      }
-    }).catchError((error) {
-      AppLogger.debugError('ウェアラブルデバイス接続確認エラー', error);
-    });
+    _checkWearableConnection();
 
     AppLogger.debugInfo('ウェアラブルデバイスサービスの初期化が完了しました');
   } catch (e, stackTrace) {
