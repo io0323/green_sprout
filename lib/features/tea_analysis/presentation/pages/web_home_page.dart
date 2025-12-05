@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/services/localization_service.dart';
 import '../../../../core/widgets/language_selector.dart';
+import '../../../../core/widgets/snackbar_helper.dart';
 import '../../../../core/theme/tea_garden_theme.dart';
 
 /// Web用の簡素化されたホームページ
@@ -385,13 +386,9 @@ class _WebHomePageState extends State<WebHomePage> {
 
     // 成功メッセージを表示
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            LocalizationService.instance.translate('analysis_complete'),
-          ),
-          backgroundColor: TeaGardenTheme.successColor,
-        ),
+      SnackBarHelper.showSuccess(
+        context,
+        LocalizationService.instance.translate('analysis_complete'),
       );
     }
   }
