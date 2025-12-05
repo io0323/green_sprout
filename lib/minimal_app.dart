@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'core/utils/app_initialization.dart';
+import 'core/widgets/snackbar_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -140,11 +141,9 @@ class MyHomePageState extends State<MyHomePage> {
       }
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('茶葉の解析が完了しました！'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      ),
+    SnackBarHelper.showSuccess(
+      context,
+      '茶葉の解析が完了しました！',
     );
   }
 }

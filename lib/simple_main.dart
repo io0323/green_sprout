@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'core/theme/tea_garden_theme.dart';
 import 'core/utils/app_initialization.dart';
+import 'core/widgets/snackbar_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -120,11 +121,9 @@ class SimpleHomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Text('茶園管理AIが動作しています！'),
-              backgroundColor: colorScheme.primary,
-            ),
+          SnackBarHelper.showSuccess(
+            context,
+            '茶園管理AIが動作しています！',
           );
         },
         backgroundColor: colorScheme.primary,

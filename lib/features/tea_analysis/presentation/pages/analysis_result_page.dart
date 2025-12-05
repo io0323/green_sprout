@@ -7,6 +7,7 @@ import '../../../tea_analysis/presentation/widgets/analysis_result_widget.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../domain/entities/tea_analysis_result.dart';
 import '../../../../core/widgets/modern_ui_components.dart';
+import '../../../../core/widgets/snackbar_helper.dart';
 import '../../../../core/services/localization_service.dart';
 import '../../../../core/theme/tea_garden_theme.dart';
 
@@ -332,14 +333,9 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
 
       // 成功メッセージを表示
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              LocalizationService.instance.translate('save_result_success'),
-            ),
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            duration: const Duration(seconds: 2),
-          ),
+        SnackBarHelper.showSuccess(
+          context,
+          LocalizationService.instance.translate('save_result_success'),
         );
 
         // ホーム画面に戻る
@@ -352,14 +348,9 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
     } catch (e) {
       // エラーメッセージを表示
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              '${LocalizationService.instance.translate('save_result_failed')}: $e',
-            ),
-            backgroundColor: Theme.of(context).colorScheme.error,
-            duration: const Duration(seconds: 3),
-          ),
+        SnackBarHelper.showError(
+          context,
+          '${LocalizationService.instance.translate('save_result_failed')}: $e',
         );
       }
     }
