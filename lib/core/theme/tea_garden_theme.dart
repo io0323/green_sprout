@@ -232,6 +232,11 @@ class TeaGardenTheme {
     fontWeight: FontWeight.normal,
     color: textSecondary,
   );
+
+  /// ウェアラブルデバイス用のフォントサイズ定数
+  static const double wearableFontSizeLarge = 12.0;
+  static const double wearableFontSizeMedium = 11.0;
+  static const double wearableFontSizeSmall = 10.0;
 }
 
 /// アニメーション定数

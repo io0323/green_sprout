@@ -150,9 +150,15 @@ class _WearableTeaGardenAppState extends State<WearableTeaGardenApp> {
     return TeaGardenTheme.lightTheme.copyWith(
       textTheme: isWearable
           ? TeaGardenTheme.lightTheme.textTheme.copyWith(
-              bodyLarge: const TextStyle(fontSize: 12),
-              bodyMedium: const TextStyle(fontSize: 11),
-              bodySmall: const TextStyle(fontSize: 10),
+              bodyLarge: const TextStyle(
+                fontSize: TeaGardenTheme.wearableFontSizeLarge,
+              ),
+              bodyMedium: const TextStyle(
+                fontSize: TeaGardenTheme.wearableFontSizeMedium,
+              ),
+              bodySmall: const TextStyle(
+                fontSize: TeaGardenTheme.wearableFontSizeSmall,
+              ),
             )
           : TeaGardenTheme.lightTheme.textTheme,
     );
@@ -165,9 +171,15 @@ class _WearableTeaGardenAppState extends State<WearableTeaGardenApp> {
     return TeaGardenTheme.darkTheme.copyWith(
       textTheme: isWearable
           ? TeaGardenTheme.darkTheme.textTheme.copyWith(
-              bodyLarge: const TextStyle(fontSize: 12),
-              bodyMedium: const TextStyle(fontSize: 11),
-              bodySmall: const TextStyle(fontSize: 10),
+              bodyLarge: const TextStyle(
+                fontSize: TeaGardenTheme.wearableFontSizeLarge,
+              ),
+              bodyMedium: const TextStyle(
+                fontSize: TeaGardenTheme.wearableFontSizeMedium,
+              ),
+              bodySmall: const TextStyle(
+                fontSize: TeaGardenTheme.wearableFontSizeSmall,
+              ),
             )
           : TeaGardenTheme.darkTheme.textTheme,
     );
