@@ -35,6 +35,66 @@ Future<bool> isWearableDeviceConnected() async {
   }
 }
 
+/// ウェアラブルデバイスイベントを処理する
+/// [event] 処理するイベント
+void _handleWearableEvent(WearableEvent event) {
+  switch (event.type) {
+    case WearableEventType.connected:
+      AppLogger.debugInfo('ウェアラブルデバイスが接続されました');
+      break;
+    case WearableEventType.disconnected:
+      AppLogger.debugInfo('ウェアラブルデバイスが切断されました');
+      break;
+    case WearableEventType.dataReceived:
+      AppLogger.debugInfo('ウェアラブルデバイスからデータを受信しました');
+      if (event.data != null) {
+        AppLogger.debugInfo('受信データ', event.data.toString());
+      }
+      break;
+    case WearableEventType.error:
+      AppLogger.debugError(
+        'ウェアラブルデバイスエラー',
+        event.error ?? '不明なエラー',
+      );
+      break;
+  }
+}
+
+/// ウェアラブルデバイスサービスの初期化
+/// エラーが発生してもアプリは起動を続行（ウェアラブルデバイス機能は使用できない可能性がある）
+Future<void> _initializeWearableDeviceService() async {
+  try {
+    _globalWearableService = WearableDeviceServiceImpl();
+
+    // イベントストリームを監視して接続状態の変化を処理
+    _wearableEventSubscription = _globalWearableService!.eventStream.listen(
+      _handleWearableEvent,
+      onError: (error) {
+        AppLogger.debugError('ウェアラブルデバイスイベントストリームエラー', error);
+      },
+    );
+
+    // 接続状態を確認（非ブロッキング）
+    _globalWearableService!.isConnected().then((isConnected) {
+      if (isConnected) {
+        AppLogger.debugInfo('ウェアラブルデバイスが接続されています');
+      } else {
+        AppLogger.debugInfo('ウェアラブルデバイスは接続されていません');
+      }
+    }).catchError((error) {
+      AppLogger.debugError('ウェアラブルデバイス接続確認エラー', error);
+    });
+
+    AppLogger.debugInfo('ウェアラブルデバイスサービスの初期化が完了しました');
+  } catch (e, stackTrace) {
+    AppLogger.debugError('ウェアラブルデバイスサービス初期化エラー', e);
+    AppLogger.debugError('スタックトレース', stackTrace);
+    AppLogger.debugError('エラータイプ', e.runtimeType);
+    // エラーが発生してもアプリは起動を続行
+    // ウェアラブルデバイス機能は使用できない可能性がある
+  }
+}
+
 /// ウェアラブルデバイス用のアプリエントリーポイント
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,57 +114,7 @@ void main() async {
     AppInitialization.setupErrorWidget();
 
     // ウェアラブルデバイスサービスの初期化
-    try {
-      _globalWearableService = WearableDeviceServiceImpl();
-
-      // イベントストリームを監視して接続状態の変化を処理
-      _wearableEventSubscription = _globalWearableService!.eventStream.listen(
-        (event) {
-          switch (event.type) {
-            case WearableEventType.connected:
-              AppLogger.debugInfo('ウェアラブルデバイスが接続されました');
-              break;
-            case WearableEventType.disconnected:
-              AppLogger.debugInfo('ウェアラブルデバイスが切断されました');
-              break;
-            case WearableEventType.dataReceived:
-              AppLogger.debugInfo('ウェアラブルデバイスからデータを受信しました');
-              if (event.data != null) {
-                AppLogger.debugInfo('受信データ', event.data.toString());
-              }
-              break;
-            case WearableEventType.error:
-              AppLogger.debugError(
-                'ウェアラブルデバイスエラー',
-                event.error ?? '不明なエラー',
-              );
-              break;
-          }
-        },
-        onError: (error) {
-          AppLogger.debugError('ウェアラブルデバイスイベントストリームエラー', error);
-        },
-      );
-
-      // 接続状態を確認（非ブロッキング）
-      _globalWearableService!.isConnected().then((isConnected) {
-        if (isConnected) {
-          AppLogger.debugInfo('ウェアラブルデバイスが接続されています');
-        } else {
-          AppLogger.debugInfo('ウェアラブルデバイスは接続されていません');
-        }
-      }).catchError((error) {
-        AppLogger.debugError('ウェアラブルデバイス接続確認エラー', error);
-      });
-
-      AppLogger.debugInfo('ウェアラブルデバイスサービスの初期化が完了しました');
-    } catch (e, stackTrace) {
-      AppLogger.debugError('ウェアラブルデバイスサービス初期化エラー', e);
-      AppLogger.debugError('スタックトレース', stackTrace);
-      AppLogger.debugError('エラータイプ', e.runtimeType);
-      // エラーが発生してもアプリは起動を続行
-      // ウェアラブルデバイス機能は使用できない可能性がある
-    }
+    await _initializeWearableDeviceService();
 
     runApp(const WearableTeaGardenApp());
   });
@@ -133,13 +143,11 @@ class _WearableTeaGardenAppState extends State<WearableTeaGardenApp> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  /// ウェアラブル用のテーマを作成
+  /// TeaGardenThemeをベースに、小さなフォントサイズを適用
+  ThemeData _createWearableLightTheme() {
     final isWearable = PlatformUtils.isWearable;
-
-    /// ウェアラブル用のテーマを作成
-    /// TeaGardenThemeをベースに、小さなフォントサイズを適用
-    final wearableLightTheme = TeaGardenTheme.lightTheme.copyWith(
+    return TeaGardenTheme.lightTheme.copyWith(
       textTheme: isWearable
           ? TeaGardenTheme.lightTheme.textTheme.copyWith(
               bodyLarge: const TextStyle(fontSize: 12),
@@ -148,8 +156,13 @@ class _WearableTeaGardenAppState extends State<WearableTeaGardenApp> {
             )
           : TeaGardenTheme.lightTheme.textTheme,
     );
+  }
 
-    final wearableDarkTheme = TeaGardenTheme.darkTheme.copyWith(
+  /// ウェアラブル用のダークテーマを作成
+  /// TeaGardenThemeをベースに、小さなフォントサイズを適用
+  ThemeData _createWearableDarkTheme() {
+    final isWearable = PlatformUtils.isWearable;
+    return TeaGardenTheme.darkTheme.copyWith(
       textTheme: isWearable
           ? TeaGardenTheme.darkTheme.textTheme.copyWith(
               bodyLarge: const TextStyle(fontSize: 12),
@@ -158,12 +171,15 @@ class _WearableTeaGardenAppState extends State<WearableTeaGardenApp> {
             )
           : TeaGardenTheme.darkTheme.textTheme,
     );
+  }
 
+  @override
+  Widget build(BuildContext context) {
     final appDefaults = AppInitialization.getMaterialAppDefaults();
     return MaterialApp(
       title: LocalizationService.instance.translate('app_title'),
-      theme: wearableLightTheme,
-      darkTheme: wearableDarkTheme,
+      theme: _createWearableLightTheme(),
+      darkTheme: _createWearableDarkTheme(),
       themeMode: appDefaults.themeMode,
       localizationsDelegates: appDefaults.localizationsDelegates,
       supportedLocales: appDefaults.supportedLocales,
