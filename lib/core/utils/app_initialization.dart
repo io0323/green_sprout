@@ -110,31 +110,46 @@ class AppInitialization {
         color: backgroundColor,
         child: Container(
           color: errorColor.withOpacity(0.1),
-          padding: EdgeInsets.all(isWearable ? 12.0 : 16.0),
+          padding: EdgeInsets.all(
+            isWearable ? TeaGardenTheme.spacingM : TeaGardenTheme.spacingM,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 Icons.error_outline,
-                size: isWearable ? 40 : 48,
+                size: isWearable
+                    ? TeaGardenTheme.errorIconSizeWearable
+                    : TeaGardenTheme.errorIconSizeDefault,
                 color: errorColor,
               ),
-              SizedBox(height: isWearable ? 12 : 16),
+              SizedBox(
+                height: isWearable
+                    ? TeaGardenTheme.spacingM
+                    : TeaGardenTheme.spacingM,
+              ),
               Text(
                 errorMessage,
                 style: TextStyle(
-                  fontSize: isWearable ? 14 : 16,
+                  fontSize:
+                      isWearable ? TeaGardenTheme.wearableFontSizeMedium : 16.0,
                   fontWeight: FontWeight.bold,
                   color: errorColor,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: isWearable ? 6 : 8),
+              SizedBox(
+                height: isWearable
+                    ? TeaGardenTheme.spacingXS
+                    : TeaGardenTheme.spacingS,
+              ),
               if (kDebugMode)
                 Text(
                   details.exception.toString(),
                   style: TextStyle(
-                    fontSize: isWearable ? 10 : 12,
+                    fontSize: isWearable
+                        ? TeaGardenTheme.wearableFontSizeSmall
+                        : 12.0,
                     color: textColor.withOpacity(0.7),
                   ),
                   textAlign: TextAlign.center,
