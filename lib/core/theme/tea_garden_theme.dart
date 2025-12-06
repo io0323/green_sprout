@@ -237,6 +237,10 @@ class TeaGardenTheme {
   static const double wearableFontSizeLarge = 12.0;
   static const double wearableFontSizeMedium = 11.0;
   static const double wearableFontSizeSmall = 10.0;
+
+  /// エラーウィジェット用のアイコンサイズ定数
+  static const double errorIconSizeWearable = 40.0;
+  static const double errorIconSizeDefault = 48.0;
 }
 
 /// アニメーション定数
