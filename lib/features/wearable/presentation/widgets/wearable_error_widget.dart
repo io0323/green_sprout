@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/services/localization_service.dart';
 import '../../../../core/utils/platform_utils.dart';
+import '../../../../core/utils/failure_message_mapper.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/theme/tea_garden_theme.dart';
 
@@ -77,37 +78,12 @@ class WearableErrorWidget extends StatelessWidget {
 
   /// エラーの種類に応じた詳細メッセージを取得
   String _getDetailedMessage() {
-    final localization = LocalizationService.instance;
     final baseMessage = message;
 
     if (failure != null) {
-      String errorType = '';
-      String suggestion = '';
-
-      if (failure is NetworkFailure) {
-        errorType = localization.translate('error_network');
-        suggestion = localization.translate('error_network_suggestion');
-      } else if (failure is CacheFailure) {
-        errorType = localization.translate('error_cache');
-        suggestion = localization.translate('error_cache_suggestion');
-      } else if (failure is CameraFailure) {
-        errorType = localization.translate('error_camera');
-        suggestion = localization.translate('error_camera_suggestion');
-      } else if (failure is TFLiteFailure) {
-        errorType = localization.translate('error_ai');
-        suggestion = localization.translate('error_ai_suggestion');
-      } else if (failure is ServerFailure) {
-        errorType = localization.translate('error_server');
-        suggestion = localization.translate('error_server_suggestion');
-      } else if (failure is WearableFailure) {
-        errorType = localization.translate('error_wearable');
-        suggestion = localization.translate('error_wearable_suggestion');
-      } else {
-        errorType = localization.translate('error_unknown');
-        suggestion = localization.translate('error_unknown_suggestion');
-      }
-
-      return '$baseMessage\n\n$errorType\n$suggestion';
+      final errorInfo =
+          FailureMessageMapper.getErrorTypeAndSuggestion(failure!);
+      return '$baseMessage\n\n${errorInfo.errorType}\n${errorInfo.suggestion}';
     }
 
     return baseMessage;
