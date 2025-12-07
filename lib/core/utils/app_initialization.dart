@@ -44,9 +44,10 @@ class AppInitialization {
   static void setupGlobalErrorHandler() {
     FlutterError.onError = (FlutterErrorDetails details) {
       FlutterError.presentError(details);
-      AppLogger.debugError(
+      AppLogger.logErrorWithStackTrace(
         'Flutterエラー',
-        '${details.exception}\n${details.stack}',
+        details.exception,
+        details.stack,
       );
     };
   }
