@@ -24,6 +24,18 @@ class _WearableErrorMessages {
   static const String initializationError = 'ウェアラブルデバイスサービス初期化エラー';
 }
 
+/// ログメッセージ定数
+class _WearableLogMessages {
+  _WearableLogMessages._();
+  static const String deviceConnected = 'ウェアラブルデバイスが接続されています';
+  static const String deviceDisconnected = 'ウェアラブルデバイスは接続されていません';
+  static const String deviceConnectedEvent = 'ウェアラブルデバイスが接続されました';
+  static const String deviceDisconnectedEvent = 'ウェアラブルデバイスが切断されました';
+  static const String dataReceived = 'ウェアラブルデバイスからデータを受信しました';
+  static const String receivedData = '受信データ';
+  static const String initializationComplete = 'ウェアラブルデバイスサービスの初期化が完了しました';
+}
+
 /// グローバルなウェアラブルデバイスサービスインスタンスを取得
 /// サービスが初期化されていない場合はnullを返す
 WearableDeviceService? getWearableDeviceService() {
@@ -38,8 +50,12 @@ Future<bool> isWearableDeviceConnected() async {
   }
   try {
     return await _globalWearableService!.isConnected();
-  } catch (e) {
-    AppLogger.debugError(_WearableErrorMessages.connectionCheckError, e);
+  } catch (e, stackTrace) {
+    AppLogger.logErrorWithStackTrace(
+      _WearableErrorMessages.connectionCheckError,
+      e,
+      stackTrace,
+    );
     return false;
   }
 }
@@ -50,12 +66,16 @@ Future<void> _checkWearableConnection() async {
   try {
     final isConnected = await _globalWearableService!.isConnected();
     if (isConnected) {
-      AppLogger.debugInfo('ウェアラブルデバイスが接続されています');
+      AppLogger.debugInfo(_WearableLogMessages.deviceConnected);
     } else {
-      AppLogger.debugInfo('ウェアラブルデバイスは接続されていません');
+      AppLogger.debugInfo(_WearableLogMessages.deviceDisconnected);
     }
-  } catch (error) {
-    AppLogger.debugError(_WearableErrorMessages.connectionCheckError, error);
+  } catch (error, stackTrace) {
+    AppLogger.logErrorWithStackTrace(
+      _WearableErrorMessages.connectionCheckError,
+      error,
+      stackTrace,
+    );
   }
 }
 
@@ -64,15 +84,16 @@ Future<void> _checkWearableConnection() async {
 void _handleWearableEvent(WearableEvent event) {
   switch (event.type) {
     case WearableEventType.connected:
-      AppLogger.debugInfo('ウェアラブルデバイスが接続されました');
+      AppLogger.debugInfo(_WearableLogMessages.deviceConnectedEvent);
       break;
     case WearableEventType.disconnected:
-      AppLogger.debugInfo('ウェアラブルデバイスが切断されました');
+      AppLogger.debugInfo(_WearableLogMessages.deviceDisconnectedEvent);
       break;
     case WearableEventType.dataReceived:
-      AppLogger.debugInfo('ウェアラブルデバイスからデータを受信しました');
+      AppLogger.debugInfo(_WearableLogMessages.dataReceived);
       if (event.data != null) {
-        AppLogger.debugInfo('受信データ', event.data.toString());
+        AppLogger.debugInfo(
+            _WearableLogMessages.receivedData, event.data.toString());
       }
       break;
     case WearableEventType.error:
@@ -93,15 +114,19 @@ Future<void> _initializeWearableDeviceService() async {
     // イベントストリームを監視して接続状態の変化を処理
     _wearableEventSubscription = _globalWearableService!.eventStream.listen(
       _handleWearableEvent,
-      onError: (error) {
-        AppLogger.debugError(_WearableErrorMessages.eventStreamError, error);
+      onError: (error, stackTrace) {
+        AppLogger.logErrorWithStackTrace(
+          _WearableErrorMessages.eventStreamError,
+          error,
+          stackTrace,
+        );
       },
     );
 
     // 接続状態を確認（非ブロッキング）
     _checkWearableConnection();
 
-    AppLogger.debugInfo('ウェアラブルデバイスサービスの初期化が完了しました');
+    AppLogger.debugInfo(_WearableLogMessages.initializationComplete);
   } catch (e, stackTrace) {
     AppLogger.logErrorWithStackTrace(
       _WearableErrorMessages.initializationError,
