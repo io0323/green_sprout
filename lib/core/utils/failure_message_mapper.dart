@@ -63,4 +63,57 @@ class FailureMessageMapper {
       return '不明なエラーが発生しました: ${failure.message}';
     }
   }
+
+  /// Failureオブジェクトのエラータイプと提案を取得
+  /// [failure] 変換するFailureオブジェクト
+  /// 戻り値: (errorType, suggestion) のタプル
+  static ({String errorType, String suggestion}) getErrorTypeAndSuggestion(
+    Failure failure,
+  ) {
+    try {
+      final localization = LocalizationService.instance;
+      if (failure is NetworkFailure) {
+        return (
+          errorType: localization.translate('error_network'),
+          suggestion: localization.translate('error_network_suggestion'),
+        );
+      } else if (failure is CacheFailure) {
+        return (
+          errorType: localization.translate('error_cache'),
+          suggestion: localization.translate('error_cache_suggestion'),
+        );
+      } else if (failure is CameraFailure) {
+        return (
+          errorType: localization.translate('error_camera'),
+          suggestion: localization.translate('error_camera_suggestion'),
+        );
+      } else if (failure is TFLiteFailure) {
+        return (
+          errorType: localization.translate('error_ai'),
+          suggestion: localization.translate('error_ai_suggestion'),
+        );
+      } else if (failure is ServerFailure) {
+        return (
+          errorType: localization.translate('error_server'),
+          suggestion: localization.translate('error_server_suggestion'),
+        );
+      } else if (failure is WearableFailure) {
+        return (
+          errorType: localization.translate('error_wearable'),
+          suggestion: localization.translate('error_wearable_suggestion'),
+        );
+      } else {
+        return (
+          errorType: localization.translate('error_unknown'),
+          suggestion: localization.translate('error_unknown_suggestion'),
+        );
+      }
+    } catch (e) {
+      // 国際化サービスが使用できない場合はデフォルト値を返す
+      return (
+        errorType: 'エラー',
+        suggestion: 'もう一度お試しください',
+      );
+    }
+  }
 }
