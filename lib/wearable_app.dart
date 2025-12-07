@@ -15,6 +15,15 @@ WearableDeviceServiceImpl? _globalWearableService;
 /// イベントストリームの購読を管理するためのサブスクリプション
 StreamSubscription<WearableEvent>? _wearableEventSubscription;
 
+/// エラーメッセージ定数
+class _WearableErrorMessages {
+  _WearableErrorMessages._();
+  static const String connectionCheckError = 'ウェアラブルデバイス接続確認エラー';
+  static const String eventStreamError = 'ウェアラブルデバイスイベントストリームエラー';
+  static const String wearableError = 'ウェアラブルデバイスエラー';
+  static const String initializationError = 'ウェアラブルデバイスサービス初期化エラー';
+}
+
 /// グローバルなウェアラブルデバイスサービスインスタンスを取得
 /// サービスが初期化されていない場合はnullを返す
 WearableDeviceService? getWearableDeviceService() {
@@ -30,7 +39,7 @@ Future<bool> isWearableDeviceConnected() async {
   try {
     return await _globalWearableService!.isConnected();
   } catch (e) {
-    AppLogger.debugError('ウェアラブルデバイス接続確認エラー', e);
+    AppLogger.debugError(_WearableErrorMessages.connectionCheckError, e);
     return false;
   }
 }
@@ -46,7 +55,7 @@ Future<void> _checkWearableConnection() async {
       AppLogger.debugInfo('ウェアラブルデバイスは接続されていません');
     }
   } catch (error) {
-    AppLogger.debugError('ウェアラブルデバイス接続確認エラー', error);
+    AppLogger.debugError(_WearableErrorMessages.connectionCheckError, error);
   }
 }
 
@@ -68,7 +77,7 @@ void _handleWearableEvent(WearableEvent event) {
       break;
     case WearableEventType.error:
       AppLogger.debugError(
-        'ウェアラブルデバイスエラー',
+        _WearableErrorMessages.wearableError,
         event.error ?? '不明なエラー',
       );
       break;
@@ -85,7 +94,7 @@ Future<void> _initializeWearableDeviceService() async {
     _wearableEventSubscription = _globalWearableService!.eventStream.listen(
       _handleWearableEvent,
       onError: (error) {
-        AppLogger.debugError('ウェアラブルデバイスイベントストリームエラー', error);
+        AppLogger.debugError(_WearableErrorMessages.eventStreamError, error);
       },
     );
 
@@ -95,7 +104,7 @@ Future<void> _initializeWearableDeviceService() async {
     AppLogger.debugInfo('ウェアラブルデバイスサービスの初期化が完了しました');
   } catch (e, stackTrace) {
     AppLogger.logErrorWithStackTrace(
-      'ウェアラブルデバイスサービス初期化エラー',
+      _WearableErrorMessages.initializationError,
       e,
       stackTrace,
     );
