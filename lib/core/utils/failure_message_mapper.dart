@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import '../errors/failures.dart';
 import '../services/localization_service.dart';
+import '../theme/tea_garden_theme.dart';
 
 /// Failureオブジェクトをユーザーフレンドリーなメッセージに変換するユーティリティクラス
 class FailureMessageMapper {
@@ -114,6 +116,56 @@ class FailureMessageMapper {
         errorType: 'エラー',
         suggestion: 'もう一度お試しください',
       );
+    }
+  }
+
+  /// Failureオブジェクトに対応するエラーアイコンを取得
+  /// [failure] 変換するFailureオブジェクト
+  /// [defaultIcon] デフォルトのアイコン（デフォルト: Icons.error_outline）
+  static IconData getErrorIcon(
+    Failure failure, {
+    IconData defaultIcon = Icons.error_outline,
+  }) {
+    if (failure is NetworkFailure) {
+      return Icons.wifi_off;
+    } else if (failure is CacheFailure) {
+      return Icons.storage;
+    } else if (failure is CameraFailure) {
+      return Icons.camera_alt;
+    } else if (failure is TFLiteFailure) {
+      return Icons.smart_toy;
+    } else if (failure is ServerFailure) {
+      return Icons.cloud_off;
+    } else if (failure is WearableFailure) {
+      return Icons.watch;
+    } else {
+      return defaultIcon;
+    }
+  }
+
+  /// Failureオブジェクトに対応するエラー色を取得
+  /// [failure] 変換するFailureオブジェクト
+  /// [baseErrorColor] ベースとなるエラー色（デフォルト: TeaGardenTheme.errorColor）
+  static Color getErrorColor(
+    Failure failure, {
+    Color? baseErrorColor,
+  }) {
+    final defaultErrorColor = baseErrorColor ?? TeaGardenTheme.errorColor;
+
+    if (failure is NetworkFailure) {
+      return TeaGardenTheme.warningColor;
+    } else if (failure is CacheFailure) {
+      return TeaGardenTheme.infoColor;
+    } else if (failure is CameraFailure) {
+      return TeaGardenTheme.infoColor;
+    } else if (failure is TFLiteFailure) {
+      return defaultErrorColor;
+    } else if (failure is ServerFailure) {
+      return TeaGardenTheme.warningColor;
+    } else if (failure is WearableFailure) {
+      return TeaGardenTheme.infoColor;
+    } else {
+      return defaultErrorColor;
     }
   }
 }

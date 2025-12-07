@@ -3,7 +3,6 @@ import '../../../../core/services/localization_service.dart';
 import '../../../../core/utils/platform_utils.dart';
 import '../../../../core/utils/failure_message_mapper.dart';
 import '../../../../core/errors/failures.dart';
-import '../../../../core/theme/tea_garden_theme.dart';
 
 /// ウェアラブルデバイス用のエラー表示ウィジェット
 /// コンパクトなUIでエラーメッセージを表示し、リトライ機能を提供
@@ -33,19 +32,7 @@ class WearableErrorWidget extends StatelessWidget {
     if (icon != null) return icon!;
 
     if (failure != null) {
-      if (failure is NetworkFailure) {
-        return Icons.wifi_off;
-      } else if (failure is CacheFailure) {
-        return Icons.storage;
-      } else if (failure is CameraFailure) {
-        return Icons.camera_alt;
-      } else if (failure is TFLiteFailure) {
-        return Icons.smart_toy;
-      } else if (failure is ServerFailure) {
-        return Icons.cloud_off;
-      } else if (failure is WearableFailure) {
-        return Icons.watch;
-      }
+      return FailureMessageMapper.getErrorIcon(failure!);
     }
 
     return Icons.error_outline;
@@ -58,19 +45,10 @@ class WearableErrorWidget extends StatelessWidget {
     final baseErrorColor = theme.colorScheme.error;
 
     if (failure != null) {
-      if (failure is NetworkFailure) {
-        return TeaGardenTheme.warningColor;
-      } else if (failure is CacheFailure) {
-        return TeaGardenTheme.infoColor;
-      } else if (failure is CameraFailure) {
-        return TeaGardenTheme.infoColor;
-      } else if (failure is TFLiteFailure) {
-        return baseErrorColor;
-      } else if (failure is ServerFailure) {
-        return TeaGardenTheme.warningColor;
-      } else if (failure is WearableFailure) {
-        return TeaGardenTheme.infoColor;
-      }
+      return FailureMessageMapper.getErrorColor(
+        failure!,
+        baseErrorColor: baseErrorColor,
+      );
     }
 
     return baseErrorColor;
