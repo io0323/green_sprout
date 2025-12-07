@@ -20,9 +20,7 @@ class AppInitialization {
       await LocalizationService.instance.loadTranslations();
       AppLogger.debugInfo('国際化サービスの初期化が完了しました');
     } catch (e, stackTrace) {
-      AppLogger.debugError('翻訳データ読み込みエラー', e);
-      AppLogger.debugError('スタックトレース', stackTrace);
-      AppLogger.debugError('エラータイプ', e.runtimeType);
+      AppLogger.logErrorWithStackTrace('翻訳データ読み込みエラー', e, stackTrace);
       // エラーが発生してもアプリは起動を続行
       // デフォルトの日本語翻訳が使用される
     }
@@ -35,9 +33,7 @@ class AppInitialization {
       await di.init();
       AppLogger.debugInfo('DIコンテナの初期化が完了しました');
     } catch (e, stackTrace) {
-      AppLogger.debugError('DI初期化エラー', e);
-      AppLogger.debugError('スタックトレース', stackTrace);
-      AppLogger.debugError('エラータイプ', e.runtimeType);
+      AppLogger.logErrorWithStackTrace('DI初期化エラー', e, stackTrace);
       // エラーが発生してもアプリは起動を続行
       // ただし、DIに依存する機能は使用できない可能性がある
     }
@@ -65,8 +61,7 @@ class AppInitialization {
       (error, stack) {
         /// 未処理の非同期エラーをキャッチ
         /// アプリがクラッシュしないようにエラーをログに記録
-        AppLogger.debugError('未処理の非同期エラー', error);
-        AppLogger.debugError('スタックトレース', stack);
+        AppLogger.logErrorWithStackTrace('未処理の非同期エラー', error, stack);
       },
     );
   }
@@ -75,8 +70,11 @@ class AppInitialization {
   /// ウィジェットツリーでエラーが発生した場合に表示されるカスタムエラー画面を設定
   static void setupErrorWidget() {
     ErrorWidget.builder = (FlutterErrorDetails details) {
-      AppLogger.debugError('ウィジェットエラー', details.exception);
-      AppLogger.debugError('スタックトレース', details.stack);
+      AppLogger.logErrorWithStackTrace(
+        'ウィジェットエラー',
+        details.exception,
+        details.stack,
+      );
 
       /// 国際化サービスを使用してエラーメッセージを取得
       /// 初期化前の場合はデフォルトメッセージを使用

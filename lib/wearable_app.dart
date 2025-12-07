@@ -94,9 +94,11 @@ Future<void> _initializeWearableDeviceService() async {
 
     AppLogger.debugInfo('ウェアラブルデバイスサービスの初期化が完了しました');
   } catch (e, stackTrace) {
-    AppLogger.debugError('ウェアラブルデバイスサービス初期化エラー', e);
-    AppLogger.debugError('スタックトレース', stackTrace);
-    AppLogger.debugError('エラータイプ', e.runtimeType);
+    AppLogger.logErrorWithStackTrace(
+      'ウェアラブルデバイスサービス初期化エラー',
+      e,
+      stackTrace,
+    );
     // エラーが発生してもアプリは起動を続行
     // ウェアラブルデバイス機能は使用できない可能性がある
   }

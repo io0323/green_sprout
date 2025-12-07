@@ -88,8 +88,11 @@ class _WearableHomePageState extends State<WearableHomePage> {
         },
       );
     } catch (e, stackTrace) {
-      AppLogger.debugError('解析結果の読み込みエラー', e);
-      AppLogger.debugError('スタックトレース', stackTrace);
+      AppLogger.logErrorWithStackTrace(
+        '解析結果の読み込みエラー',
+        e,
+        stackTrace,
+      );
 
       final localization = LocalizationService.instance;
       final errorMessage = localization.translate('error_loading_data');
@@ -172,8 +175,11 @@ class _WearableHomePageState extends State<WearableHomePage> {
         }
       }
     } catch (e, stackTrace) {
-      AppLogger.debugError('カメラ画面への遷移エラー', e);
-      AppLogger.debugError('スタックトレース', stackTrace);
+      AppLogger.logErrorWithStackTrace(
+        'カメラ画面への遷移エラー',
+        e,
+        stackTrace,
+      );
       if (mounted) {
         SnackBarHelper.showError(
           context,
