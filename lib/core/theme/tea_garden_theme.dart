@@ -241,6 +241,10 @@ class TeaGardenTheme {
   /// エラーウィジェット用のアイコンサイズ定数
   static const double errorIconSizeWearable = 40.0;
   static const double errorIconSizeDefault = 48.0;
+
+  /// ボタン高さ定数
+  static const double buttonHeightWearable = 40.0;
+  static const double buttonHeightDefault = 48.0;
 }
 
 /// アニメーション定数

@@ -3,6 +3,7 @@ import '../../../../core/services/localization_service.dart';
 import '../../../../core/utils/platform_utils.dart';
 import '../../../../core/utils/failure_message_mapper.dart';
 import '../../../../core/errors/failures.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// ウェアラブルデバイス用のエラー表示ウィジェット
 /// コンパクトなUIでエラーメッセージを表示し、リトライ機能を提供
@@ -79,13 +80,17 @@ class WearableErrorWidget extends StatelessWidget {
 
     return Center(
       child: Padding(
-        padding: EdgeInsets.all(isWearable ? 12.0 : 16.0),
+        padding: EdgeInsets.all(
+          isWearable ? TeaGardenTheme.spacingM : TeaGardenTheme.spacingM,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             // エラーアイコン
             Container(
-              padding: EdgeInsets.all(isWearable ? 12.0 : 16.0),
+              padding: EdgeInsets.all(
+                isWearable ? TeaGardenTheme.spacingM : TeaGardenTheme.spacingM,
+              ),
               decoration: BoxDecoration(
                 color: errorColor.withOpacity(0.1),
                 shape: BoxShape.circle,
@@ -96,31 +101,45 @@ class WearableErrorWidget extends StatelessWidget {
               ),
               child: Icon(
                 errorIcon,
-                size: isWearable ? 32 : 40,
+                size: isWearable
+                    ? TeaGardenTheme.errorIconSizeWearable
+                    : TeaGardenTheme.errorIconSizeDefault,
                 color: errorColor,
               ),
             ),
 
-            SizedBox(height: isWearable ? 12 : 16),
+            SizedBox(
+              height: isWearable
+                  ? TeaGardenTheme.spacingM
+                  : TeaGardenTheme.spacingM,
+            ),
 
             // エラータイトル
             Text(
               localization.translate('error_occurred'),
               style: TextStyle(
-                fontSize: isWearable ? 14 : 18,
+                fontSize: isWearable
+                    ? TeaGardenTheme.wearableFontSizeMedium
+                    : TeaGardenTheme.bodyLarge.fontSize,
                 fontWeight: FontWeight.bold,
                 color: errorColor,
               ),
               textAlign: TextAlign.center,
             ),
 
-            SizedBox(height: isWearable ? 8 : 12),
+            SizedBox(
+              height: isWearable
+                  ? TeaGardenTheme.spacingS
+                  : TeaGardenTheme.spacingM,
+            ),
 
             // エラーメッセージ
             Text(
               detailedMessage,
               style: TextStyle(
-                fontSize: isWearable ? 10 : 12,
+                fontSize: isWearable
+                    ? TeaGardenTheme.wearableFontSizeSmall
+                    : TeaGardenTheme.bodySmall.fontSize,
                 color: colorScheme.onSurface.withOpacity(0.7),
               ),
               textAlign: TextAlign.center,
@@ -130,20 +149,30 @@ class WearableErrorWidget extends StatelessWidget {
 
             // リトライボタン
             if (onRetry != null) ...[
-              SizedBox(height: isWearable ? 12 : 16),
+              SizedBox(
+                height: isWearable
+                    ? TeaGardenTheme.spacingM
+                    : TeaGardenTheme.spacingM,
+              ),
               SizedBox(
                 width: double.infinity,
-                height: isWearable ? 40 : 48,
+                height: isWearable
+                    ? TeaGardenTheme.buttonHeightWearable
+                    : TeaGardenTheme.buttonHeightDefault,
                 child: ElevatedButton.icon(
                   onPressed: onRetry,
                   icon: Icon(
                     Icons.refresh,
-                    size: isWearable ? 16 : 20,
+                    size: isWearable
+                        ? TeaGardenTheme.wearableFontSizeMedium
+                        : TeaGardenTheme.bodyMedium.fontSize,
                   ),
                   label: Text(
                     localization.translate('retry'),
                     style: TextStyle(
-                      fontSize: isWearable ? 12 : 14,
+                      fontSize: isWearable
+                          ? TeaGardenTheme.wearableFontSizeMedium
+                          : TeaGardenTheme.bodyMedium.fontSize,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -151,7 +180,9 @@ class WearableErrorWidget extends StatelessWidget {
                     backgroundColor: errorColor,
                     foregroundColor: colorScheme.onError,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(
+                        TeaGardenTheme.borderRadiusSmall,
+                      ),
                     ),
                     elevation: 2,
                   ),
