@@ -9,6 +9,7 @@ import '../../../tea_analysis/domain/usecases/tea_analysis_usecases.dart';
 import '../../../../core/services/localization_service.dart';
 import '../../../../core/utils/platform_utils.dart';
 import '../../../../core/utils/app_logger.dart';
+import '../../../../core/utils/failure_message_mapper.dart';
 import '../../../../core/di/injection_container.dart' as di;
 import '../../../../core/errors/failures.dart';
 import '../../../../core/widgets/snackbar_helper.dart';
@@ -103,27 +104,7 @@ class _WearableHomePageState extends State<WearableHomePage> {
 
   /// エラーをユーザーフレンドリーなメッセージに変換
   String _mapFailureToMessage(Failure failure) {
-    final localization = LocalizationService.instance;
-
-    if (failure is ServerFailure) {
-      return localization.translate('error_server_detail',
-          params: {'message': failure.message});
-    } else if (failure is CacheFailure) {
-      return localization.translate('error_cache_detail',
-          params: {'message': failure.message});
-    } else if (failure is NetworkFailure) {
-      return localization.translate('error_network_detail',
-          params: {'message': failure.message});
-    } else if (failure is CameraFailure) {
-      return localization.translate('error_camera_detail',
-          params: {'message': failure.message});
-    } else if (failure is TFLiteFailure) {
-      return localization
-          .translate('error_ai_detail', params: {'message': failure.message});
-    } else {
-      return localization.translate('error_unknown_detail',
-          params: {'message': failure.message});
-    }
+    return FailureMessageMapper.mapToMessage(failure);
   }
 
   /// カメラ画面に遷移

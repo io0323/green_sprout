@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/errors/failures.dart';
+import '../../../../core/utils/failure_message_mapper.dart';
 import '../../domain/entities/analysis_result.dart';
 import '../../domain/usecases/analysis_usecases.dart';
 import '../../domain/usecases/advanced_analysis_usecases.dart';
@@ -124,18 +125,6 @@ class AnalysisCubit extends Cubit<AnalysisState> {
 
   /// エラーをメッセージに変換
   String _mapFailureToMessage(Failure failure) {
-    if (failure is ServerFailure) {
-      return 'サーバーエラーが発生しました: ${failure.message}';
-    } else if (failure is CacheFailure) {
-      return 'データエラーが発生しました: ${failure.message}';
-    } else if (failure is NetworkFailure) {
-      return 'ネットワークエラーが発生しました: ${failure.message}';
-    } else if (failure is CameraFailure) {
-      return 'カメラエラーが発生しました: ${failure.message}';
-    } else if (failure is TFLiteFailure) {
-      return 'AI解析エラーが発生しました: ${failure.message}';
-    } else {
-      return '不明なエラーが発生しました: ${failure.message}';
-    }
+    return FailureMessageMapper.mapToMessage(failure, useLocalization: false);
   }
 }
