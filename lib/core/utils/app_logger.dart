@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import '../errors/failures.dart';
 
 /// Centralized logging utility for the application
 /// Provides debug-only logging that won't be detected by CI grep
@@ -72,6 +73,20 @@ class AppLogger {
         debugError('スタックトレース', stackTrace);
       }
       debugError('エラータイプ', error.runtimeType);
+    }
+  }
+
+  /// Failureオブジェクトを統一された形式でログに記録
+  /// [context] エラーが発生したコンテキスト（例: '解析結果の読み込みエラー'）
+  /// [failure] Failureオブジェクト
+  static void logFailure(String context, Failure failure) {
+    if (kDebugMode) {
+      debugError(context, failure);
+      debugInfo('エラータイプ', failure.runtimeType);
+      debugInfo('エラーメッセージ', failure.message);
+      if (failure.code != null) {
+        debugInfo('エラーコード', failure.code);
+      }
     }
   }
 }

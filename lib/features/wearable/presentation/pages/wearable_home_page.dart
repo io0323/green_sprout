@@ -51,12 +51,7 @@ class _WearableHomePageState extends State<WearableHomePage> {
 
       result.fold(
         (failure) {
-          AppLogger.debugError('解析結果の読み込みエラー', failure);
-          AppLogger.debugInfo('エラータイプ', failure.runtimeType);
-          AppLogger.debugInfo('エラーメッセージ', failure.message);
-          if (failure.code != null) {
-            AppLogger.debugInfo('エラーコード', failure.code);
-          }
+          AppLogger.logFailure('解析結果の読み込みエラー', failure);
 
           final errorMessage = _mapFailureToMessage(failure);
 
