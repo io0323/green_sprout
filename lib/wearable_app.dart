@@ -152,45 +152,40 @@ class _WearableTeaGardenAppState extends State<WearableTeaGardenApp> {
     super.dispose();
   }
 
-  /// ウェアラブル用のテーマを作成
+  /// ウェアラブル用のテーマテキストスタイルを作成
+  /// [baseTextTheme] ベースとなるテキストテーマ
+  /// ウェアラブルデバイスの場合は小さなフォントサイズを適用
+  TextTheme _createWearableTextTheme(TextTheme baseTextTheme) {
+    final isWearable = PlatformUtils.isWearable;
+    if (!isWearable) {
+      return baseTextTheme;
+    }
+    return baseTextTheme.copyWith(
+      bodyLarge: const TextStyle(
+        fontSize: TeaGardenTheme.wearableFontSizeLarge,
+      ),
+      bodyMedium: const TextStyle(
+        fontSize: TeaGardenTheme.wearableFontSizeMedium,
+      ),
+      bodySmall: const TextStyle(
+        fontSize: TeaGardenTheme.wearableFontSizeSmall,
+      ),
+    );
+  }
+
+  /// ウェアラブル用のライトテーマを作成
   /// TeaGardenThemeをベースに、小さなフォントサイズを適用
   ThemeData _createWearableLightTheme() {
-    final isWearable = PlatformUtils.isWearable;
     return TeaGardenTheme.lightTheme.copyWith(
-      textTheme: isWearable
-          ? TeaGardenTheme.lightTheme.textTheme.copyWith(
-              bodyLarge: const TextStyle(
-                fontSize: TeaGardenTheme.wearableFontSizeLarge,
-              ),
-              bodyMedium: const TextStyle(
-                fontSize: TeaGardenTheme.wearableFontSizeMedium,
-              ),
-              bodySmall: const TextStyle(
-                fontSize: TeaGardenTheme.wearableFontSizeSmall,
-              ),
-            )
-          : TeaGardenTheme.lightTheme.textTheme,
+      textTheme: _createWearableTextTheme(TeaGardenTheme.lightTheme.textTheme),
     );
   }
 
   /// ウェアラブル用のダークテーマを作成
   /// TeaGardenThemeをベースに、小さなフォントサイズを適用
   ThemeData _createWearableDarkTheme() {
-    final isWearable = PlatformUtils.isWearable;
     return TeaGardenTheme.darkTheme.copyWith(
-      textTheme: isWearable
-          ? TeaGardenTheme.darkTheme.textTheme.copyWith(
-              bodyLarge: const TextStyle(
-                fontSize: TeaGardenTheme.wearableFontSizeLarge,
-              ),
-              bodyMedium: const TextStyle(
-                fontSize: TeaGardenTheme.wearableFontSizeMedium,
-              ),
-              bodySmall: const TextStyle(
-                fontSize: TeaGardenTheme.wearableFontSizeSmall,
-              ),
-            )
-          : TeaGardenTheme.darkTheme.textTheme,
+      textTheme: _createWearableTextTheme(TeaGardenTheme.darkTheme.textTheme),
     );
   }
 

@@ -67,20 +67,19 @@ class CameraCubit extends Cubit<CameraBlocState> {
 
     result.fold(
       (failure) => emit(CameraError(_mapFailureToMessage(failure))),
-      (unit) {
+      (unit) async {
         // 初期化成功後、現在の状態を取得
-        checkCameraInitialized().then((result) {
-          result.fold(
-            (failure) => emit(CameraError(_mapFailureToMessage(failure))),
-            (isInitialized) {
-              if (isInitialized) {
-                emit(CameraInitialized(const CameraState(isInitialized: true)));
-              } else {
-                emit(CameraInitial());
-              }
-            },
-          );
-        });
+        final checkResult = await checkCameraInitialized();
+        checkResult.fold(
+          (failure) => emit(CameraError(_mapFailureToMessage(failure))),
+          (isInitialized) {
+            if (isInitialized) {
+              emit(CameraInitialized(const CameraState(isInitialized: true)));
+            } else {
+              emit(CameraInitial());
+            }
+          },
+        );
       },
     );
   }
