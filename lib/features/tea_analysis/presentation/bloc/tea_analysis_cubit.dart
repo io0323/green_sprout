@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/errors/failures.dart';
+import '../../../../core/utils/failure_message_mapper.dart';
 import '../../domain/entities/tea_analysis_result.dart';
 import '../../domain/usecases/tea_analysis_usecases.dart';
 
@@ -108,19 +109,6 @@ class TeaAnalysisCubit extends Cubit<TeaAnalysisState> {
 
   /// エラーをメッセージに変換
   String _mapFailureToMessage(Failure failure) {
-    switch (failure.runtimeType) {
-      case ServerFailure _:
-        return 'サーバーエラーが発生しました: ${failure.message}';
-      case CacheFailure _:
-        return 'データエラーが発生しました: ${failure.message}';
-      case NetworkFailure _:
-        return 'ネットワークエラーが発生しました: ${failure.message}';
-      case CameraFailure _:
-        return 'カメラエラーが発生しました: ${failure.message}';
-      case TFLiteFailure _:
-        return 'AI解析エラーが発生しました: ${failure.message}';
-      default:
-        return '不明なエラーが発生しました: ${failure.message}';
-    }
+    return FailureMessageMapper.mapToMessage(failure, useLocalization: false);
   }
 }
