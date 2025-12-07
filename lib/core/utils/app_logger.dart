@@ -56,4 +56,22 @@ class AppLogger {
       // }
     }
   }
+
+  /// エラーとスタックトレースを統一された形式でログに記録
+  /// [context] エラーが発生したコンテキスト（例: 'DI初期化エラー'）
+  /// [error] エラーオブジェクト
+  /// [stackTrace] スタックトレース（オプション）
+  static void logErrorWithStackTrace(
+    String context,
+    Object error, [
+    Object? stackTrace,
+  ]) {
+    if (kDebugMode) {
+      debugError(context, error);
+      if (stackTrace != null) {
+        debugError('スタックトレース', stackTrace);
+      }
+      debugError('エラータイプ', error.runtimeType);
+    }
+  }
 }
