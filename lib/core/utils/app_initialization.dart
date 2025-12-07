@@ -129,8 +129,9 @@ class AppInitialization {
               Text(
                 errorMessage,
                 style: TextStyle(
-                  fontSize:
-                      isWearable ? TeaGardenTheme.wearableFontSizeMedium : 16.0,
+                  fontSize: isWearable
+                      ? TeaGardenTheme.wearableFontSizeMedium
+                      : TeaGardenTheme.bodyLarge.fontSize,
                   fontWeight: FontWeight.bold,
                   color: errorColor,
                 ),
@@ -147,7 +148,7 @@ class AppInitialization {
                   style: TextStyle(
                     fontSize: isWearable
                         ? TeaGardenTheme.wearableFontSizeSmall
-                        : 12.0,
+                        : TeaGardenTheme.bodySmall.fontSize,
                     color: textColor.withOpacity(0.7),
                   ),
                   textAlign: TextAlign.center,
