@@ -81,8 +81,12 @@ class PerformanceUtils {
       logMemoryUsage('Image loaded: ${path.split('/').last}');
 
       return bytes;
-    } catch (e) {
-      AppLogger.debugError('❌ Failed to load image', e);
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        '画像読み込みエラー',
+        e,
+        stackTrace,
+      );
       return null;
     }
   }
