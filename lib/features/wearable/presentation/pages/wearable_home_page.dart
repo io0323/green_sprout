@@ -13,6 +13,7 @@ import '../../../../core/utils/failure_message_mapper.dart';
 import '../../../../core/di/injection_container.dart' as di;
 import '../../../../core/errors/failures.dart';
 import '../../../../core/widgets/snackbar_helper.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// ウェアラブルデバイス用のホームページ
 /// 簡潔なUIで茶葉解析結果を表示
@@ -187,7 +188,9 @@ class _WearableHomePageState extends State<WearableHomePage> {
               child: Text(
                 localization.translate('app_title'),
                 style: TextStyle(
-                  fontSize: isWearable ? 16 : 20,
+                  fontSize: isWearable
+                      ? TeaGardenTheme.titleFontSizeWearable
+                      : TeaGardenTheme.titleFontSizeDefault,
                   fontWeight: FontWeight.bold,
                   color: colorScheme.primary,
                 ),
@@ -221,7 +224,9 @@ class _WearableHomePageState extends State<WearableHomePage> {
                                 child: Text(
                                   localization.translate('no_results'),
                                   style: TextStyle(
-                                    fontSize: isWearable ? 12 : 14,
+                                    fontSize: isWearable
+                                        ? TeaGardenTheme.wearableFontSizeSmall
+                                        : TeaGardenTheme.bodyMedium.fontSize,
                                     color: theme.colorScheme.onSurface
                                         .withOpacity(0.6),
                                   ),
