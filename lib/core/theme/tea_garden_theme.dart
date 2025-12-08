@@ -245,6 +245,10 @@ class TeaGardenTheme {
   /// ボタン高さ定数
   static const double buttonHeightWearable = 40.0;
   static const double buttonHeightDefault = 48.0;
+
+  /// タイトルフォントサイズ定数
+  static const double titleFontSizeWearable = 16.0;
+  static const double titleFontSizeDefault = 20.0;
 }
 
 /// アニメーション定数
