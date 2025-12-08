@@ -132,8 +132,12 @@ class _WearableHomePageState extends State<WearableHomePage> {
             );
             // 解析結果画面から戻ったら、結果を再読み込み
             _loadRecentResults();
-          } catch (e) {
-            AppLogger.debugError('解析結果画面への遷移エラー', e);
+          } catch (e, stackTrace) {
+            AppLogger.logErrorWithStackTrace(
+              '解析結果画面への遷移エラー',
+              e,
+              stackTrace,
+            );
             if (mounted) {
               SnackBarHelper.showError(
                 context,
