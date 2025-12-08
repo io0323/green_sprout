@@ -249,6 +249,11 @@ class TeaGardenTheme {
   /// タイトルフォントサイズ定数
   static const double titleFontSizeWearable = 16.0;
   static const double titleFontSizeDefault = 20.0;
+
+  /// エレベーション定数
+  static const double elevationLow = 2.0;
+  static const double elevationMedium = 4.0;
+  static const double elevationHigh = 8.0;
 }
 
 /// アニメーション定数

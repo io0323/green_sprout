@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/services/localization_service.dart';
 import '../../../../core/utils/platform_utils.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// ウェアラブルデバイス用のカメラボタン
 /// 大きなタッチターゲットとシンプルなデザイン
@@ -39,9 +40,10 @@ class WearableCameraButton extends StatelessWidget {
           backgroundColor: colorScheme.primary,
           foregroundColor: colorScheme.onPrimary,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius:
+                BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
           ),
-          elevation: 4,
+          elevation: TeaGardenTheme.elevationMedium,
         ),
       ),
     );
