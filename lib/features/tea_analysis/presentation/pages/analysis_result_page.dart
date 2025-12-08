@@ -81,7 +81,7 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
 
             if (state is AnalysisError) {
               return SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
                 child: Column(
                   children: [
                     BeautifulErrorMessage(
@@ -93,35 +93,35 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                             .analyzeImageFromPath(widget.imagePath);
                       },
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: TeaGardenTheme.spacingM),
                     // 高度な分析オプション
                     Card(
-                      elevation: 2,
+                      elevation: TeaGardenTheme.elevationLow,
                       child: Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Row(
+                            Row(
                               children: [
-                                Icon(Icons.auto_awesome,
+                                const Icon(Icons.auto_awesome,
                                     color: TeaGardenTheme.infoColor),
-                                SizedBox(width: 8),
+                                const SizedBox(width: TeaGardenTheme.spacingS),
                                 Text(
                                   '高度な分析',
                                   style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: TeaGardenTheme.bodyLarge.fontSize,
                                     fontWeight: FontWeight.bold,
                                     color: TeaGardenTheme.infoColor,
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: TeaGardenTheme.spacingS),
                             Text(
                               '複数の解析手法を組み合わせた高精度な分析を実行します',
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: TeaGardenTheme.bodySmall.fontSize,
                                 color: Theme.of(context)
                                     .colorScheme
                                     .onSurface
@@ -161,7 +161,7 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
 
             if (state is AnalysisLoaded) {
               return SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
                 child: Column(
                   children: [
                     // 解析結果表示
@@ -170,43 +170,43 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                       imagePath: widget.imagePath,
                     ),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(height: TeaGardenTheme.spacingM),
 
                     // 高度な分析オプション
                     Card(
-                      elevation: 2,
+                      elevation: TeaGardenTheme.elevationLow,
                       child: Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Row(
+                            Row(
                               children: [
-                                Icon(Icons.auto_awesome,
+                                const Icon(Icons.auto_awesome,
                                     color: TeaGardenTheme.infoColor),
-                                SizedBox(width: 8),
+                                const SizedBox(width: TeaGardenTheme.spacingS),
                                 Text(
                                   '高度な分析',
                                   style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: TeaGardenTheme.bodyLarge.fontSize,
                                     fontWeight: FontWeight.bold,
                                     color: TeaGardenTheme.infoColor,
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: TeaGardenTheme.spacingS),
                             Text(
                               '複数の解析手法を組み合わせた高精度な分析を実行します',
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: TeaGardenTheme.bodySmall.fontSize,
                                 color: Theme.of(context)
                                     .colorScheme
                                     .onSurface
                                     .withOpacity(0.7),
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: TeaGardenTheme.spacingM),
                             SizedBox(
                               width: double.infinity,
                               child: OutlinedButton.icon(
@@ -234,14 +234,15 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                       ),
                     ),
 
-                    const SizedBox(height: 24),
+                    const SizedBox(height: TeaGardenTheme.spacingL),
 
                     // コメント入力
                     Container(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.surface,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(
+                            TeaGardenTheme.borderRadiusMedium),
                         boxShadow: [
                           BoxShadow(
                             color: Theme.of(context)
@@ -259,12 +260,12 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                           Text(
                             LocalizationService.instance.translate('comment'),
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: TeaGardenTheme.bodyMedium.fontSize,
                               fontWeight: FontWeight.bold,
                               color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: TeaGardenTheme.spacingS),
                           TextField(
                             decoration: InputDecoration(
                               hintText: LocalizationService.instance
@@ -282,7 +283,7 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                       ),
                     ),
 
-                    const SizedBox(height: 24),
+                    const SizedBox(height: TeaGardenTheme.spacingL),
 
                     // 保存ボタン
                     SizedBox(
