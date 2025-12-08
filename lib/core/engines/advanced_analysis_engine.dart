@@ -3,6 +3,7 @@ import '../../src/tflite_interface.dart';
 import '../utils/advanced_image_processor.dart';
 import '../../features/tea_analysis/domain/entities/analysis_result.dart';
 import '../constants/app_constants.dart';
+import '../utils/app_logger.dart';
 
 /// 高度なAI解析エンジン
 /// 複数の解析手法を組み合わせた高精度な茶葉解析システム
@@ -21,8 +22,13 @@ class AdvancedAnalysisEngine {
       // _secondaryModel = await TfliteWrapper.create();
 
       _isInitialized = true;
-    } catch (e) {
+    } catch (e, stackTrace) {
       // フォールバックモードで初期化
+      AppLogger.logErrorWithStackTrace(
+        '高度なAI解析エンジンの初期化エラー',
+        e,
+        stackTrace,
+      );
       _isInitialized = true;
     }
   }
@@ -67,7 +73,12 @@ class AdvancedAnalysisEngine {
 
       // 結果を解析
       return _parsePrimaryModelOutput(output);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'プライマリモデルによる解析エラー',
+        e,
+        stackTrace,
+      );
       return _getFallbackResult();
     }
   }
