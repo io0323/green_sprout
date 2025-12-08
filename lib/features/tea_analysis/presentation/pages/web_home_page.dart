@@ -97,11 +97,11 @@ class _WebHomePageState extends State<WebHomePage> {
                         Theme.of(context).colorScheme.primary,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: TeaGardenTheme.spacingM),
                     Text(
                       LocalizationService.instance.translate('data_loading'),
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: TeaGardenTheme.bodyMedium.fontSize,
                         color: Theme.of(context)
                             .colorScheme
                             .onSurface
@@ -139,11 +139,11 @@ class _WebHomePageState extends State<WebHomePage> {
     }).toList();
 
     return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.all(TeaGardenTheme.spacingM),
+      padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
         boxShadow: [
           BoxShadow(
             color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
@@ -159,17 +159,17 @@ class _WebHomePageState extends State<WebHomePage> {
           Text(
             LocalizationService.instance.translate('today_analysis_results'),
             style: TextStyle(
-              fontSize: 18,
+              fontSize: TeaGardenTheme.bodyLarge.fontSize,
               fontWeight: FontWeight.bold,
               color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: TeaGardenTheme.spacingS),
           Text(
             LocalizationService.instance.translate('analysis_completed_count',
                 params: {'count': todayResults.length.toString()}),
             style: TextStyle(
-              fontSize: 14,
+              fontSize: TeaGardenTheme.bodySmall.fontSize,
               color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
             ),
           ),
@@ -180,7 +180,9 @@ class _WebHomePageState extends State<WebHomePage> {
 
   Widget _buildCameraButton() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.symmetric(
+          horizontal: TeaGardenTheme.spacingM,
+          vertical: TeaGardenTheme.spacingS),
       child: ElevatedButton.icon(
         onPressed: _isLoading ? null : _simulateAnalysis,
         icon: const Icon(Icons.camera_alt),
@@ -188,9 +190,12 @@ class _WebHomePageState extends State<WebHomePage> {
         style: ElevatedButton.styleFrom(
           backgroundColor: TeaGardenTheme.successColor,
           foregroundColor: TeaGardenTheme.textLight,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          padding: const EdgeInsets.symmetric(
+              horizontal: TeaGardenTheme.spacingL,
+              vertical: TeaGardenTheme.spacingM),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius:
+                BorderRadius.circular(TeaGardenTheme.borderRadiusSmall),
           ),
         ),
       ),
@@ -208,20 +213,20 @@ class _WebHomePageState extends State<WebHomePage> {
               size: 64,
               color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: TeaGardenTheme.spacingM),
             Text(
               LocalizationService.instance.translate('no_results_yet'),
               style: TextStyle(
-                fontSize: 18,
+                fontSize: TeaGardenTheme.bodyLarge.fontSize,
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: TeaGardenTheme.spacingS),
             Text(
               LocalizationService.instance.translate('take_photo_to_analyze'),
               style: TextStyle(
-                fontSize: 14,
+                fontSize: TeaGardenTheme.bodySmall.fontSize,
                 color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               ),
             ),
@@ -231,7 +236,7 @@ class _WebHomePageState extends State<WebHomePage> {
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
       itemCount: _mockResults.length,
       itemBuilder: (context, index) {
         final result = _mockResults[index];
@@ -246,11 +251,11 @@ class _WebHomePageState extends State<WebHomePage> {
     final confidence = result['confidence'] as double;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: TeaGardenTheme.spacingM),
+      padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
         boxShadow: [
           BoxShadow(
             color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
@@ -270,7 +275,8 @@ class _WebHomePageState extends State<WebHomePage> {
                 height: 60,
                 decoration: BoxDecoration(
                   color: TeaGardenTheme.successColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius:
+                      BorderRadius.circular(TeaGardenTheme.borderRadiusSmall),
                 ),
                 child: const Icon(
                   Icons.eco,
@@ -278,22 +284,22 @@ class _WebHomePageState extends State<WebHomePage> {
                   size: 30,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: TeaGardenTheme.spacingM),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       '${result['growthStage']} - ${result['healthStatus']}',
-                      style: const TextStyle(
-                        fontSize: 16,
+                      style: TextStyle(
+                        fontSize: TeaGardenTheme.bodyMedium.fontSize,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
                       '${timestamp.month}/${timestamp.day} ${timestamp.hour}:${timestamp.minute.toString().padLeft(2, '0')}',
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: TeaGardenTheme.caption.fontSize,
                         color: Theme.of(context)
                             .colorScheme
                             .onSurface
@@ -303,7 +309,7 @@ class _WebHomePageState extends State<WebHomePage> {
                     Text(
                       '${LocalizationService.instance.translate('confidence_label')} ${(confidence * 100).toInt()}%',
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: TeaGardenTheme.caption.fontSize,
                         color: Theme.of(context)
                             .colorScheme
                             .onSurface
@@ -314,18 +320,21 @@ class _WebHomePageState extends State<WebHomePage> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: TeaGardenTheme.spacingS,
+                    vertical: TeaGardenTheme.spacingXS),
                 decoration: BoxDecoration(
                   color: healthStatus ==
                           LocalizationService.instance.translate('healthy')
                       ? TeaGardenTheme.successColor.withOpacity(0.1)
                       : TeaGardenTheme.warningColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius:
+                      BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
                 ),
                 child: Text(
                   healthStatus,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: TeaGardenTheme.caption.fontSize,
                     fontWeight: FontWeight.bold,
                     color: healthStatus ==
                             LocalizationService.instance.translate('healthy')
@@ -337,11 +346,11 @@ class _WebHomePageState extends State<WebHomePage> {
             ],
           ),
           if (result['comment'] != null) ...[
-            const SizedBox(height: 8),
+            const SizedBox(height: TeaGardenTheme.spacingS),
             Text(
               result['comment'],
               style: TextStyle(
-                fontSize: 14,
+                fontSize: TeaGardenTheme.bodySmall.fontSize,
                 color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
               ),
             ),
