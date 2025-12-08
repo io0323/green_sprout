@@ -254,6 +254,16 @@ class TeaGardenTheme {
   static const double elevationLow = 2.0;
   static const double elevationMedium = 4.0;
   static const double elevationHigh = 8.0;
+
+  /// アイコンサイズ定数
+  static const double iconSizeWearableSmall = 20.0;
+  static const double iconSizeDefaultSmall = 24.0;
+  static const double iconSizeWearableMedium = 24.0;
+  static const double iconSizeDefaultMedium = 32.0;
+
+  /// ボタン高さ定数（追加）
+  static const double buttonHeightWearableLarge = 80.0;
+  static const double buttonHeightDefaultLarge = 100.0;
 }
 
 /// アニメーション定数

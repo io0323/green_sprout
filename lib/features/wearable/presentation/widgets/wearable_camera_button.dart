@@ -22,17 +22,23 @@ class WearableCameraButton extends StatelessWidget {
 
     return SizedBox(
       width: double.infinity,
-      height: isWearable ? 80 : 100,
+      height: isWearable
+          ? TeaGardenTheme.buttonHeightWearableLarge
+          : TeaGardenTheme.buttonHeightDefaultLarge,
       child: ElevatedButton.icon(
         onPressed: onPressed,
         icon: Icon(
           Icons.camera_alt,
-          size: isWearable ? 24 : 32,
+          size: isWearable
+              ? TeaGardenTheme.iconSizeWearableMedium
+              : TeaGardenTheme.iconSizeDefaultMedium,
         ),
         label: Text(
           localization.translate('take_photo'),
           style: TextStyle(
-            fontSize: isWearable ? 14 : 18,
+            fontSize: isWearable
+                ? TeaGardenTheme.wearableFontSizeMedium
+                : TeaGardenTheme.bodyLarge.fontSize,
             fontWeight: FontWeight.bold,
           ),
         ),

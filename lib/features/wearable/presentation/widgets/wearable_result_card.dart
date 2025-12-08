@@ -74,7 +74,9 @@ class WearableResultCard extends StatelessWidget {
               ),
               child: Icon(
                 growthIcon,
-                size: isWearable ? 20 : 24,
+                size: isWearable
+                    ? TeaGardenTheme.iconSizeWearableSmall
+                    : TeaGardenTheme.iconSizeDefaultSmall,
                 color: colorScheme.primary,
               ),
             ),
@@ -90,7 +92,9 @@ class WearableResultCard extends StatelessWidget {
                   Text(
                     result.growthStage,
                     style: TextStyle(
-                      fontSize: isWearable ? 12 : 14,
+                      fontSize: isWearable
+                          ? TeaGardenTheme.wearableFontSizeSmall
+                          : TeaGardenTheme.bodyMedium.fontSize,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -109,7 +113,9 @@ class WearableResultCard extends StatelessWidget {
                       Text(
                         result.healthStatus,
                         style: TextStyle(
-                          fontSize: isWearable ? 10 : 12,
+                          fontSize: isWearable
+                              ? TeaGardenTheme.wearableFontSizeSmall
+                              : TeaGardenTheme.bodySmall.fontSize,
                           color: healthColor,
                         ),
                       ),
@@ -126,7 +132,9 @@ class WearableResultCard extends StatelessWidget {
                 Text(
                   '${(result.confidence * 100).toInt()}%',
                   style: TextStyle(
-                    fontSize: isWearable ? 12 : 14,
+                    fontSize: isWearable
+                        ? TeaGardenTheme.wearableFontSizeSmall
+                        : TeaGardenTheme.bodyMedium.fontSize,
                     fontWeight: FontWeight.bold,
                     color: colorScheme.primary,
                   ),
@@ -134,7 +142,9 @@ class WearableResultCard extends StatelessWidget {
                 Text(
                   '信頼度',
                   style: TextStyle(
-                    fontSize: isWearable ? 8 : 10,
+                    fontSize: isWearable
+                        ? TeaGardenTheme.wearableFontSizeSmall
+                        : TeaGardenTheme.caption.fontSize,
                     color: colorScheme.onSurface.withOpacity(0.6),
                   ),
                 ),
