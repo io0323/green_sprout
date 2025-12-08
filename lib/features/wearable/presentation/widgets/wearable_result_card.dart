@@ -60,12 +60,14 @@ class WearableResultCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Padding(
-        padding: EdgeInsets.all(isWearable ? 8.0 : 12.0),
+        padding: EdgeInsets.all(
+          isWearable ? TeaGardenTheme.spacingS : TeaGardenTheme.spacingM,
+        ),
         child: Row(
           children: [
             // 成長段階アイコン
             Container(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(TeaGardenTheme.spacingS),
               decoration: BoxDecoration(
                 color: colorScheme.primary.withOpacity(0.1),
                 shape: BoxShape.circle,
@@ -77,7 +79,7 @@ class WearableResultCard extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(width: 12),
+            const SizedBox(width: TeaGardenTheme.spacingM),
 
             // 情報
             Expanded(
@@ -92,18 +94,18 @@ class WearableResultCard extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: TeaGardenTheme.spacingXS),
                   Row(
                     children: [
                       Container(
-                        width: 8,
-                        height: 8,
+                        width: TeaGardenTheme.spacingS,
+                        height: TeaGardenTheme.spacingS,
                         decoration: BoxDecoration(
                           color: healthColor,
                           shape: BoxShape.circle,
                         ),
                       ),
-                      const SizedBox(width: 4),
+                      const SizedBox(width: TeaGardenTheme.spacingXS),
                       Text(
                         result.healthStatus,
                         style: TextStyle(
