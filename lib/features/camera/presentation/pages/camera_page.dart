@@ -82,14 +82,15 @@ class _CameraPageState extends State<CameraPage> {
                   // 撮影ガイド
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    margin: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
+                    margin: const EdgeInsets.all(TeaGardenTheme.spacingM),
                     decoration: BoxDecoration(
                       color: Theme.of(context)
                           .colorScheme
                           .primary
                           .withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(
+                          TeaGardenTheme.borderRadiusMedium),
                       border: Border.all(
                           color: Theme.of(context)
                               .colorScheme
@@ -101,15 +102,15 @@ class _CameraPageState extends State<CameraPage> {
                         Icon(
                           Icons.info_outline,
                           color: Theme.of(context).colorScheme.primary,
-                          size: 24,
+                          size: TeaGardenTheme.iconSizeDefaultSmall,
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: TeaGardenTheme.spacingM),
                         Expanded(
                           child: Text(
                             LocalizationService.instance
                                 .translate('place_leaf_center'),
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: TeaGardenTheme.bodySmall.fontSize,
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.w500,
                             ),
@@ -122,9 +123,11 @@ class _CameraPageState extends State<CameraPage> {
                   // カメラプレビュー
                   Expanded(
                     child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: TeaGardenTheme.spacingM),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(
+                            TeaGardenTheme.borderRadiusMedium),
                         boxShadow: [
                           BoxShadow(
                             color: Theme.of(context)
@@ -137,7 +140,8 @@ class _CameraPageState extends State<CameraPage> {
                         ],
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(
+                            TeaGardenTheme.borderRadiusMedium),
                         child: const CameraPreviewWidget(),
                       ),
                     ),
@@ -145,7 +149,7 @@ class _CameraPageState extends State<CameraPage> {
 
                   // 撮影ボタン
                   Container(
-                    padding: const EdgeInsets.all(24),
+                    padding: const EdgeInsets.all(TeaGardenTheme.spacingL),
                     child: const CaptureButtonWidget(),
                   ),
                 ],
