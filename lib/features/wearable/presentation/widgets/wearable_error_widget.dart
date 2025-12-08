@@ -184,7 +184,7 @@ class WearableErrorWidget extends StatelessWidget {
                         TeaGardenTheme.borderRadiusSmall,
                       ),
                     ),
-                    elevation: 2,
+                    elevation: TeaGardenTheme.elevationLow,
                   ),
                 ),
               ),

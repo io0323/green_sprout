@@ -55,9 +55,9 @@ class WearableResultCard extends StatelessWidget {
     final growthIcon = _getGrowthStageIcon(result.growthStage);
 
     return Card(
-      elevation: 2,
+      elevation: TeaGardenTheme.elevationLow,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusSmall),
       ),
       child: Padding(
         padding: EdgeInsets.all(
