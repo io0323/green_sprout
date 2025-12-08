@@ -9,24 +9,26 @@ class CameraButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
       child: SizedBox(
         width: double.infinity,
-        height: 60,
+        height: TeaGardenTheme.buttonHeightDefault,
         child: ElevatedButton.icon(
           onPressed: () {
             Navigator.pushNamed(context, '/camera');
           },
-          icon: const Icon(Icons.camera_alt, size: 30),
-          label: const Text(
+          icon: const Icon(Icons.camera_alt,
+              size: TeaGardenTheme.iconSizeDefaultMedium),
+          label: Text(
             '写真を撮る',
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(fontSize: TeaGardenTheme.bodyLarge.fontSize),
           ),
           style: ElevatedButton.styleFrom(
             backgroundColor: TeaGardenTheme.successColor,
             foregroundColor: TeaGardenTheme.textLight,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius:
+                  BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
             ),
           ),
         ),

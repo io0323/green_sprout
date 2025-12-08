@@ -112,20 +112,20 @@ class _HomePageState extends State<HomePage> {
               size: 64,
               color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: TeaGardenTheme.spacingM),
             Text(
               'まだ解析結果がありません',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: TeaGardenTheme.bodyLarge.fontSize,
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: TeaGardenTheme.spacingS),
             Text(
               '写真を撮って茶葉を解析してみましょう',
               style: TextStyle(
-                fontSize: 14,
+                fontSize: TeaGardenTheme.bodySmall.fontSize,
                 color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
               ),
             ),
