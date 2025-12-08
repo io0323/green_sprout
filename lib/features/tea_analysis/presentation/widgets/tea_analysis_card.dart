@@ -16,7 +16,9 @@ class TeaAnalysisCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      margin: const EdgeInsets.symmetric(
+          horizontal: TeaGardenTheme.spacingM,
+          vertical: TeaGardenTheme.spacingXS),
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: AppUtils.getHealthStatusColor(result.healthStatus),
@@ -32,13 +34,13 @@ class TeaAnalysisCard extends StatelessWidget {
             Text(result.healthStatus),
             Text(
               '信頼度: ${AppUtils.formatConfidence(result.confidence)}',
-              style: const TextStyle(fontSize: 12),
+              style: TextStyle(fontSize: TeaGardenTheme.caption.fontSize),
             ),
           ],
         ),
         trailing: Text(
           AppUtils.formatRelativeTime(result.timestamp),
-          style: const TextStyle(fontSize: 12),
+          style: TextStyle(fontSize: TeaGardenTheme.caption.fontSize),
         ),
         onTap: () {
           // 詳細画面への遷移（実装予定）
