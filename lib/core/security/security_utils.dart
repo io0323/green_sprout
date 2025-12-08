@@ -41,10 +41,12 @@ class SecurityUtils {
       final combined = '$iv:$encrypted';
 
       return base64Encode(utf8.encode(combined));
-    } catch (e) {
-      if (kDebugMode) {
-        AppLogger.debugError('Encryption error', e);
-      }
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        '暗号化エラー',
+        e,
+        stackTrace,
+      );
       return data; // エラー時は元のデータを返す
     }
   }
@@ -65,10 +67,12 @@ class SecurityUtils {
 
       final key = _generateKey();
       return _xorDecrypt(encrypted, key);
-    } catch (e) {
-      if (kDebugMode) {
-        AppLogger.debugError('Decryption error', e);
-      }
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        '復号化エラー',
+        e,
+        stackTrace,
+      );
       return encryptedData; // エラー時は元のデータを返す
     }
   }
@@ -138,10 +142,12 @@ class SecurityUtils {
       if (kDebugMode) {
         AppLogger.debug('Securely stored: $key');
       }
-    } catch (e) {
-      if (kDebugMode) {
-        AppLogger.debugError('Secure store error', e);
-      }
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'セキュアストレージ保存エラー',
+        e,
+        stackTrace,
+      );
     }
   }
 
@@ -167,10 +173,12 @@ class SecurityUtils {
       if (kDebugMode) {
         AppLogger.debug('Securely deleted: $key');
       }
-    } catch (e) {
-      if (kDebugMode) {
-        AppLogger.debugError('Secure delete error', e);
-      }
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'セキュアストレージ削除エラー',
+        e,
+        stackTrace,
+      );
     }
   }
 
