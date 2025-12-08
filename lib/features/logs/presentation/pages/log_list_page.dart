@@ -117,7 +117,7 @@ class _LogListPageState extends State<LogListPage> {
               if (filteredResults.isEmpty) {
                 return Center(
                   child: Padding(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: const EdgeInsets.all(TeaGardenTheme.spacingL),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -129,13 +129,13 @@ class _LogListPageState extends State<LogListPage> {
                               .primary
                               .withOpacity(0.3),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: TeaGardenTheme.spacingM),
                         Text(
                           _searchQuery.isNotEmpty || _selectedFilter != 'all'
                               ? t('no_matching_records')
                               : t('no_records_yet'),
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: TeaGardenTheme.bodyLarge.fontSize,
                             color: Theme.of(context)
                                 .colorScheme
                                 .onSurface
@@ -143,13 +143,13 @@ class _LogListPageState extends State<LogListPage> {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: TeaGardenTheme.spacingS),
                         Text(
                           _searchQuery.isNotEmpty || _selectedFilter != 'all'
                               ? t('change_search_conditions')
                               : t('take_photo_to_analyze'),
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: TeaGardenTheme.bodySmall.fontSize,
                             color: Theme.of(context)
                                 .colorScheme
                                 .onSurface
@@ -158,7 +158,7 @@ class _LogListPageState extends State<LogListPage> {
                         ),
                         if (_searchQuery.isNotEmpty ||
                             _selectedFilter != 'all') ...[
-                          const SizedBox(height: 16),
+                          const SizedBox(height: TeaGardenTheme.spacingM),
                           ElevatedButton(
                             onPressed: () {
                               setState(() {
@@ -185,11 +185,12 @@ class _LogListPageState extends State<LogListPage> {
                 children: [
                   // 統計情報
                   Container(
-                    margin: const EdgeInsets.all(16),
-                    padding: const EdgeInsets.all(16),
+                    margin: const EdgeInsets.all(TeaGardenTheme.spacingM),
+                    padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(
+                          TeaGardenTheme.borderRadiusMedium),
                       boxShadow: [
                         BoxShadow(
                           color: Theme.of(context)
@@ -235,15 +236,18 @@ class _LogListPageState extends State<LogListPage> {
                   // フィルター表示
                   if (_selectedFilter != 'all' || _searchQuery.isNotEmpty)
                     Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: TeaGardenTheme.spacingM),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
+                          horizontal: TeaGardenTheme.spacingM,
+                          vertical: TeaGardenTheme.spacingS),
                       decoration: BoxDecoration(
                         color: Theme.of(context)
                             .colorScheme
                             .primary
                             .withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(
+                            TeaGardenTheme.borderRadiusSmall),
                         border: Border.all(
                             color: Theme.of(context)
                                 .colorScheme
@@ -253,14 +257,14 @@ class _LogListPageState extends State<LogListPage> {
                       child: Row(
                         children: [
                           Icon(Icons.filter_alt,
-                              size: 16,
+                              size: TeaGardenTheme.iconSizeDefaultSmall,
                               color: Theme.of(context).colorScheme.primary),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: TeaGardenTheme.spacingS),
                           Expanded(
                             child: Text(
                               _buildFilterText(),
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: TeaGardenTheme.caption.fontSize,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
@@ -273,24 +277,26 @@ class _LogListPageState extends State<LogListPage> {
                               });
                             },
                             child: Icon(Icons.close,
-                                size: 16,
+                                size: TeaGardenTheme.iconSizeDefaultSmall,
                                 color: Theme.of(context).colorScheme.primary),
                           ),
                         ],
                       ),
                     ),
 
-                  const SizedBox(height: 8),
+                  const SizedBox(height: TeaGardenTheme.spacingS),
 
                   // 結果リスト
                   Expanded(
                     child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: TeaGardenTheme.spacingM),
                       itemCount: filteredResults.length,
                       itemBuilder: (context, index) {
                         final result = filteredResults[index];
                         return Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.only(
+                              bottom: TeaGardenTheme.spacingM),
                           child: TeaAnalysisCard(result: result),
                         );
                       },
@@ -311,12 +317,12 @@ class _LogListPageState extends State<LogListPage> {
       String label, String value, IconData icon, Color color) {
     return Column(
       children: [
-        Icon(icon, color: color, size: 24),
-        const SizedBox(height: 4),
+        Icon(icon, color: color, size: TeaGardenTheme.iconSizeDefaultSmall),
+        const SizedBox(height: TeaGardenTheme.spacingXS),
         Text(
           value,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: TeaGardenTheme.bodyLarge.fontSize,
             fontWeight: FontWeight.bold,
             color: color,
           ),
@@ -324,7 +330,7 @@ class _LogListPageState extends State<LogListPage> {
         Text(
           label,
           style: TextStyle(
-            fontSize: 12,
+            fontSize: TeaGardenTheme.caption.fontSize,
             color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
           ),
         ),
