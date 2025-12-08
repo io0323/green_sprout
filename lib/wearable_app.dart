@@ -22,6 +22,7 @@ class _WearableErrorMessages {
   static const String eventStreamError = 'ウェアラブルデバイスイベントストリームエラー';
   static const String wearableError = 'ウェアラブルデバイスエラー';
   static const String initializationError = 'ウェアラブルデバイスサービス初期化エラー';
+  static const String unknownError = '不明なエラー';
 }
 
 /// ログメッセージ定数
@@ -99,7 +100,7 @@ void _handleWearableEvent(WearableEvent event) {
     case WearableEventType.error:
       AppLogger.debugError(
         _WearableErrorMessages.wearableError,
-        event.error ?? '不明なエラー',
+        event.error ?? _WearableErrorMessages.unknownError,
       );
       break;
   }
@@ -150,11 +151,11 @@ void main() async {
     // 国際化サービスの初期化
     await AppInitialization.initializeLocalization();
 
-    // DIコンテナの初期化
-    await AppInitialization.initializeDependencyInjection();
-
     // エラーワジェットの設定（コンストラクタをconstにするためmainに移動）
     AppInitialization.setupErrorWidget();
+
+    // DIコンテナの初期化
+    await AppInitialization.initializeDependencyInjection();
 
     // ウェアラブルデバイスサービスの初期化
     await _initializeWearableDeviceService();
