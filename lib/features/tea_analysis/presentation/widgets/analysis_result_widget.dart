@@ -20,10 +20,11 @@ class AnalysisResultWidget extends StatelessWidget {
     return Semantics(
       label: '茶葉解析結果',
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius:
+              BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
           boxShadow: [
             BoxShadow(
               color: Theme.of(context).colorScheme.shadow.withOpacity(0.05),
@@ -56,7 +57,8 @@ class AnalysisResultWidget extends StatelessWidget {
                     ],
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(
+                        TeaGardenTheme.borderRadiusMedium),
                     child: Image.file(
                       File(imagePath),
                       fit: BoxFit.cover,
@@ -79,19 +81,19 @@ class AnalysisResultWidget extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: TeaGardenTheme.spacingL),
 
             // 解析結果
             Text(
               '解析結果',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: TeaGardenTheme.bodyLarge.fontSize,
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: TeaGardenTheme.spacingM),
 
             // 成長状態
             _buildResultItem(
@@ -102,7 +104,7 @@ class AnalysisResultWidget extends StatelessWidget {
               _getGrowthStageColor(result.growthStage),
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: TeaGardenTheme.spacingM),
 
             // 健康状態
             _buildResultItem(
@@ -113,7 +115,7 @@ class AnalysisResultWidget extends StatelessWidget {
               _getHealthStatusColor(result.healthStatus),
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: TeaGardenTheme.spacingM),
 
             // 信頼度
             _buildResultItem(
@@ -124,7 +126,7 @@ class AnalysisResultWidget extends StatelessWidget {
               TeaGardenTheme.infoColor,
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: TeaGardenTheme.spacingL),
 
             // 信頼度バー
             Column(
@@ -133,7 +135,7 @@ class AnalysisResultWidget extends StatelessWidget {
                 Text(
                   '解析の信頼度',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: TeaGardenTheme.bodySmall.fontSize,
                     fontWeight: FontWeight.w500,
                     color: Theme.of(context)
                         .colorScheme
@@ -141,7 +143,7 @@ class AnalysisResultWidget extends StatelessWidget {
                         .withOpacity(0.7),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: TeaGardenTheme.spacingS),
                 Semantics(
                   label: '信頼度 ${(result.confidence * 100).toStringAsFixed(1)}%',
                   child: LinearProgressIndicator(
@@ -153,11 +155,11 @@ class AnalysisResultWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: TeaGardenTheme.spacingS),
                 Text(
                   _getConfidenceDescription(result.confidence),
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: TeaGardenTheme.caption.fontSize,
                     color: Theme.of(context)
                         .colorScheme
                         .onSurface
@@ -176,16 +178,16 @@ class AnalysisResultWidget extends StatelessWidget {
   Widget _buildResultItem(BuildContext context, String label, String value,
       IconData icon, Color color) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusSmall),
         border: Border.all(color: color.withOpacity(0.3)),
       ),
       child: Row(
         children: [
-          Icon(icon, color: color, size: 24),
-          const SizedBox(width: 12),
+          Icon(icon, color: color, size: TeaGardenTheme.iconSizeDefaultSmall),
+          const SizedBox(width: TeaGardenTheme.spacingM),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,18 +195,18 @@ class AnalysisResultWidget extends StatelessWidget {
                 Text(
                   label,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: TeaGardenTheme.caption.fontSize,
                     color: Theme.of(context)
                         .colorScheme
                         .onSurface
                         .withOpacity(0.6),
                   ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: TeaGardenTheme.spacingXS),
                 Text(
                   value,
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: TeaGardenTheme.bodyMedium.fontSize,
                     fontWeight: FontWeight.bold,
                     color: color,
                   ),
