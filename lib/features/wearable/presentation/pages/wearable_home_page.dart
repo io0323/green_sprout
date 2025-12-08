@@ -184,7 +184,7 @@ class _WearableHomePageState extends State<WearableHomePage> {
           children: [
             // ヘッダー
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(TeaGardenTheme.spacingS),
               child: Text(
                 localization.translate('app_title'),
                 style: TextStyle(
@@ -200,8 +200,10 @@ class _WearableHomePageState extends State<WearableHomePage> {
 
             // カメラボタン
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: TeaGardenTheme.spacingM,
+                vertical: TeaGardenTheme.spacingS,
+              ),
               child: WearableCameraButton(
                 onPressed: _navigateToCamera,
               ),
@@ -220,7 +222,8 @@ class _WearableHomePageState extends State<WearableHomePage> {
                       : _recentResults.isEmpty
                           ? Center(
                               child: Padding(
-                                padding: const EdgeInsets.all(16.0),
+                                padding: const EdgeInsets.all(
+                                    TeaGardenTheme.spacingM),
                                 child: Text(
                                   localization.translate('no_results'),
                                   style: TextStyle(
@@ -235,11 +238,14 @@ class _WearableHomePageState extends State<WearableHomePage> {
                               ),
                             )
                           : ListView.builder(
-                              padding: const EdgeInsets.all(8.0),
+                              padding:
+                                  const EdgeInsets.all(TeaGardenTheme.spacingS),
                               itemCount: _recentResults.length,
                               itemBuilder: (context, index) {
                                 return Padding(
-                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  padding: const EdgeInsets.only(
+                                    bottom: TeaGardenTheme.spacingS,
+                                  ),
                                   child: WearableResultCard(
                                     result: _recentResults[index],
                                   ),
