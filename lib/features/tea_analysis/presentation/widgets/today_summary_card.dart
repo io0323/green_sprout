@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/tea_analysis_result.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// 今日のサマリーカードウィジェット
 /// 再利用可能なUIコンポーネント
@@ -21,10 +22,10 @@ class TodaySummaryCard extends StatelessWidget {
     }).toList();
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
       child: Card(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -32,13 +33,13 @@ class TodaySummaryCard extends StatelessWidget {
                 '今日の解析結果',
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: TeaGardenTheme.spacingS),
               Text(
                 '${todayResults.length}件の解析を実行しました',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               if (todayResults.isNotEmpty) ...[
-                const SizedBox(height: 8),
+                const SizedBox(height: TeaGardenTheme.spacingS),
                 Text(
                   '最新: ${todayResults.first.growthStage} - ${todayResults.first.healthStatus}',
                   style: Theme.of(context).textTheme.bodySmall,

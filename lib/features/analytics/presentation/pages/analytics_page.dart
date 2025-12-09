@@ -89,29 +89,29 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
             if (state is TeaAnalysisLoaded) {
               final filteredResults = _filterResultsByPeriod(state.results);
               return SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // 期間選択表示
                     _buildPeriodSelector(),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: TeaGardenTheme.spacingM),
 
                     // 統計サマリー
                     _buildStatsSummary(filteredResults),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: TeaGardenTheme.spacingL),
 
                     // 成長状態分布グラフ
                     _buildGrowthStageChart(filteredResults),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: TeaGardenTheme.spacingL),
 
                     // 健康状態分布グラフ
                     _buildHealthStatusChart(filteredResults),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: TeaGardenTheme.spacingL),
 
                     // 時系列グラフ
                     _buildTimeSeriesChart(filteredResults),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: TeaGardenTheme.spacingL),
 
                     // 信頼度分布
                     _buildConfidenceChart(filteredResults),
@@ -129,10 +129,12 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
 
   Widget _buildPeriodSelector() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(
+          horizontal: TeaGardenTheme.spacingM,
+          vertical: TeaGardenTheme.spacingS),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusSmall),
         boxShadow: [
           BoxShadow(
             color: Theme.of(context).colorScheme.shadow.withOpacity(0.05),
@@ -145,7 +147,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
         children: [
           Icon(Icons.calendar_today,
               color: Theme.of(context).colorScheme.primary),
-          const SizedBox(width: 8),
+          const SizedBox(width: TeaGardenTheme.spacingS),
           Text(
             _getPeriodText(),
             style: const TextStyle(fontWeight: FontWeight.bold),
@@ -188,7 +190,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
               color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: TeaGardenTheme.spacingM),
           Row(
             children: [
               Expanded(
@@ -199,7 +201,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                   TeaGardenTheme.infoColor,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: TeaGardenTheme.spacingM),
               Expanded(
                 child: _buildStatCard(
                   t('health_rate'),
@@ -210,7 +212,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                   TeaGardenTheme.successColor,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: TeaGardenTheme.spacingM),
               Expanded(
                 child: _buildStatCard(
                   t('avg_confidence'),
@@ -229,20 +231,20 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
   Widget _buildStatCard(
       String title, String value, IconData icon, Color color) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusSmall),
         border: Border.all(color: color.withOpacity(0.3)),
       ),
       child: Column(
         children: [
-          Icon(icon, color: color, size: 24),
-          const SizedBox(height: 8),
+          Icon(icon, color: color, size: TeaGardenTheme.iconSizeDefaultSmall),
+          const SizedBox(height: TeaGardenTheme.spacingS),
           Text(
             value,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: TeaGardenTheme.bodyLarge.fontSize,
               fontWeight: FontWeight.bold,
               color: color,
             ),
@@ -250,7 +252,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
           Text(
             title,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: TeaGardenTheme.caption.fontSize,
               color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
             ),
             textAlign: TextAlign.center,
@@ -499,10 +501,10 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
 
   Widget _buildChartContainer(String title, Widget chart) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
         boxShadow: [
           BoxShadow(
             color: Theme.of(context).colorScheme.shadow.withOpacity(0.05),
@@ -517,12 +519,12 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
           Text(
             title,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: TeaGardenTheme.bodyMedium.fontSize,
               fontWeight: FontWeight.bold,
               color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: TeaGardenTheme.spacingM),
           SizedBox(
             height: 200,
             child: chart,

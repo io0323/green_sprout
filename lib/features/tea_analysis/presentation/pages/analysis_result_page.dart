@@ -128,7 +128,7 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                                     .withOpacity(0.7),
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: TeaGardenTheme.spacingM),
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton.icon(
