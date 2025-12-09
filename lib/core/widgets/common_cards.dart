@@ -135,9 +135,9 @@ class StatCard extends StatelessWidget {
     final finalColor = color ?? colorScheme.primary;
 
     return Card(
-      elevation: 2,
+      elevation: TeaGardenTheme.elevationLow,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
         child: StatItem(
           label: label,
           value: value,
