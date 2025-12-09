@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'dart:io' show Platform;
+import 'app_logger.dart';
 
 /// プラットフォーム検出ユーティリティ
 /// Web、モバイル、デスクトップ、ウェアラブルの判定を行う
@@ -23,7 +24,12 @@ class PlatformUtils {
       return Platform.isAndroid &&
           (Platform.environment['WEAR_OS'] == 'true' ||
               Platform.environment.containsKey('WEAR_OS'));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'Wear OS判定エラー',
+        e,
+        stackTrace,
+      );
       return false;
     }
   }
@@ -35,7 +41,12 @@ class PlatformUtils {
       return Platform.isIOS &&
           (Platform.environment['WATCH_OS'] == 'true' ||
               Platform.environment.containsKey('WATCH_OS'));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'watchOS判定エラー',
+        e,
+        stackTrace,
+      );
       return false;
     }
   }

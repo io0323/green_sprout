@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import '../errors/failures.dart';
 import '../../features/tea_analysis/domain/entities/tea_analysis_result.dart';
 import '../theme/tea_garden_theme.dart';
+import '../utils/app_logger.dart';
 
 /// ウェアラブルデバイスサービスのインターフェース
 abstract class WearableDeviceService {
@@ -61,7 +62,12 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
       final result = await _channel.invokeMethod('isWearableConnected');
       _isConnected = result as bool;
       return _isConnected;
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'ウェアラブルデバイス接続確認エラー',
+        e,
+        stackTrace,
+      );
       return false;
     }
   }
@@ -72,8 +78,13 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
       await _channel.invokeMethod('connectWearable');
       _isConnected = true;
       _startHeartbeat();
-    } catch (e) {
+    } catch (e, stackTrace) {
       _isConnected = false;
+      AppLogger.logErrorWithStackTrace(
+        'ウェアラブルデバイス接続エラー',
+        e,
+        stackTrace,
+      );
       throw WearableFailure('ウェアラブルデバイスの接続に失敗しました: $e');
     }
   }
@@ -84,7 +95,12 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
       await _channel.invokeMethod('disconnectWearable');
       _stopHeartbeat();
       _isConnected = false;
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'ウェアラブルデバイス切断エラー',
+        e,
+        stackTrace,
+      );
       throw WearableFailure('ウェアラブルデバイスの切断に失敗しました: $e');
     }
   }
@@ -107,7 +123,12 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
       };
 
       await _channel.invokeMethod('sendToWearable', {'data': data});
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'ウェアラブルデバイスデータ送信エラー',
+        e,
+        stackTrace,
+      );
       throw WearableFailure('データの送信に失敗しました: $e');
     }
   }
@@ -127,7 +148,12 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
       };
 
       await _channel.invokeMethod('sendToWearable', {'data': data});
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'ウェアラブルデバイス通知送信エラー',
+        e,
+        stackTrace,
+      );
       throw WearableFailure('通知の送信に失敗しました: $e');
     }
   }
@@ -144,7 +170,12 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
       if (_isConnected) {
         try {
           await _channel.invokeMethod('sendHeartbeat');
-        } catch (e) {
+        } catch (e, stackTrace) {
+          AppLogger.logErrorWithStackTrace(
+            'ウェアラブルデバイスハートビートエラー',
+            e,
+            stackTrace,
+          );
           _isConnected = false;
           _eventController.add(WearableEvent.disconnected());
           _stopHeartbeat();
@@ -333,16 +364,16 @@ class WearableCameraControl extends StatelessWidget {
     final iconColor = colorScheme.onPrimary;
 
     return Container(
-      width: 60,
-      height: 60,
+      width: TeaGardenTheme.buttonHeightWearableMedium,
+      height: TeaGardenTheme.buttonHeightWearableMedium,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: buttonColor,
         boxShadow: [
           BoxShadow(
             color: colorScheme.shadow.withOpacity(0.3),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
+            blurRadius: TeaGardenTheme.blurRadiusSmall,
+            offset: TeaGardenTheme.offsetSmall,
           ),
         ],
       ),
@@ -350,12 +381,14 @@ class WearableCameraControl extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: isCapturing ? null : onCapture,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(
+            TeaGardenTheme.buttonHeightWearableMedium / 2,
+          ),
           child: Center(
             child: Icon(
               Icons.camera_alt,
               color: iconColor,
-              size: 24,
+              size: TeaGardenTheme.iconSizeDefaultMedium,
             ),
           ),
         ),
