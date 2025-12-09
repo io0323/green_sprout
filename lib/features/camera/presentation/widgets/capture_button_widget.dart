@@ -75,7 +75,7 @@ class CaptureButtonWidget extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: TeaGardenTheme.spacingM),
 
             // 撮影説明
             Text(
@@ -86,7 +86,7 @@ class CaptureButtonWidget extends StatelessWidget {
                       : LocalizationService.instance
                           .translate('camera_initializing'),
               style: TextStyle(
-                fontSize: 16,
+                fontSize: TeaGardenTheme.bodyMedium.fontSize,
                 color: isEnabled
                     ? TeaGardenTheme.primaryGreen
                     : Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
@@ -94,14 +94,17 @@ class CaptureButtonWidget extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: TeaGardenTheme.spacingL),
 
             // 撮影のヒント
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: TeaGardenTheme.spacingM,
+                  vertical: TeaGardenTheme.spacingM),
               decoration: BoxDecoration(
                 color: TeaGardenTheme.successColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius:
+                    BorderRadius.circular(TeaGardenTheme.borderRadiusSmall),
                 border: Border.all(
                   color: TeaGardenTheme.successColor.withOpacity(0.3),
                 ),
@@ -111,14 +114,14 @@ class CaptureButtonWidget extends StatelessWidget {
                 children: [
                   const Icon(
                     Icons.lightbulb_outline,
-                    size: 20,
+                    size: TeaGardenTheme.iconSizeWearableSmall,
                     color: TeaGardenTheme.primaryGreen,
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: TeaGardenTheme.spacingS),
                   Text(
                     LocalizationService.instance.translate('capture_tip'),
-                    style: const TextStyle(
-                      fontSize: 12,
+                    style: TextStyle(
+                      fontSize: TeaGardenTheme.caption.fontSize,
                       color: TeaGardenTheme.primaryGreen,
                     ),
                   ),

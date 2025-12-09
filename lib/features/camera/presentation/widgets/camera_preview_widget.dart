@@ -39,7 +39,8 @@ class CameraPreviewWidget extends StatelessWidget {
                             .withOpacity(0.8),
                         width: 2,
                       ),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(
+                          TeaGardenTheme.borderRadiusMedium),
                     ),
                     child: Stack(
                       children: [
@@ -143,13 +144,13 @@ class CameraPreviewWidget extends StatelessWidget {
                     ),
                     child: SafeArea(
                       child: Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
                         child: Text(
                           LocalizationService.instance
                               .translate('align_leaf_in_frame'),
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
-                            fontSize: 16,
+                            fontSize: TeaGardenTheme.bodyMedium.fontSize,
                             fontWeight: FontWeight.w500,
                           ),
                           textAlign: TextAlign.center,
@@ -198,12 +199,12 @@ class CameraPreviewWidget extends StatelessWidget {
                   size: 64,
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: TeaGardenTheme.spacingM),
                 Text(
                   LocalizationService.instance.translate('camera_initializing'),
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurface,
-                    fontSize: 16,
+                    fontSize: TeaGardenTheme.bodyMedium.fontSize,
                   ),
                 ),
               ],
