@@ -207,44 +207,46 @@ class WearableAnalysisCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(4),
+      margin: const EdgeInsets.all(TeaGardenTheme.spacingXS),
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(TeaGardenTheme.spacingS),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               // 成長状態
               Row(
                 children: [
-                  const Icon(Icons.eco, size: 16),
-                  const SizedBox(width: 4),
+                  const Icon(Icons.eco,
+                      size: TeaGardenTheme.iconSizeWearableSmall),
+                  const SizedBox(width: TeaGardenTheme.spacingXS),
                   Expanded(
                     child: Text(
                       result.growthStage,
-                      style: const TextStyle(
-                          fontSize: 12, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: TeaGardenTheme.caption.fontSize,
+                          fontWeight: FontWeight.bold),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: TeaGardenTheme.spacingXS),
               // 健康状態
               Row(
                 children: [
                   Icon(
                     _getHealthIcon(result.healthStatus),
-                    size: 14,
+                    size: TeaGardenTheme.wearableFontSizeMedium,
                     color: _getHealthColor(result.healthStatus),
                   ),
-                  const SizedBox(width: 4),
+                  const SizedBox(width: TeaGardenTheme.spacingXS),
                   Expanded(
                     child: Text(
                       result.healthStatus,
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: TeaGardenTheme.wearableFontSizeSmall,
                         color: _getHealthColor(result.healthStatus),
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -252,7 +254,7 @@ class WearableAnalysisCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: TeaGardenTheme.spacingXS),
               // 信頼度
               LinearProgressIndicator(
                 value: result.confidence,
@@ -261,10 +263,11 @@ class WearableAnalysisCard extends StatelessWidget {
                   _getConfidenceColor(context, result.confidence),
                 ),
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: TeaGardenTheme.spacingXS),
               Text(
                 '${(result.confidence * 100).toInt()}%',
-                style: const TextStyle(fontSize: 8),
+                style: const TextStyle(
+                    fontSize: TeaGardenTheme.wearableFontSizeSmall),
               ),
             ],
           ),
@@ -383,11 +386,11 @@ class WearableNotification extends StatelessWidget {
     final secondaryTextColor = colorScheme.onSurface.withOpacity(0.7);
 
     return Container(
-      margin: const EdgeInsets.all(4),
-      padding: const EdgeInsets.all(8),
+      margin: const EdgeInsets.all(TeaGardenTheme.spacingXS),
+      padding: const EdgeInsets.all(TeaGardenTheme.spacingS),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusSmall),
         border: Border.all(
           color: colorScheme.outline.withOpacity(0.2),
         ),
@@ -400,15 +403,15 @@ class WearableNotification extends StatelessWidget {
               Icon(
                 Icons.notifications,
                 color: colorScheme.primary,
-                size: 16,
+                size: TeaGardenTheme.iconSizeWearableSmall,
               ),
-              const SizedBox(width: 4),
+              const SizedBox(width: TeaGardenTheme.spacingXS),
               Expanded(
                 child: Text(
                   title,
                   style: TextStyle(
                     color: textColor,
-                    fontSize: 12,
+                    fontSize: TeaGardenTheme.caption.fontSize,
                     fontWeight: FontWeight.bold,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -420,17 +423,17 @@ class WearableNotification extends StatelessWidget {
                   child: Icon(
                     Icons.close,
                     color: textColor,
-                    size: 14,
+                    size: TeaGardenTheme.wearableFontSizeMedium,
                   ),
                 ),
             ],
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: TeaGardenTheme.spacingXS),
           Text(
             message,
             style: TextStyle(
               color: secondaryTextColor,
-              fontSize: 10,
+              fontSize: TeaGardenTheme.wearableFontSizeSmall,
             ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,

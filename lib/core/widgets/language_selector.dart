@@ -50,7 +50,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                   _selectedLanguage == languageCode ? Icons.check : null,
                   color: TeaGardenTheme.successColor,
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: TeaGardenTheme.spacingS),
                 Text(
                     LocalizationService.instance.getLanguageName(languageCode)),
               ],
