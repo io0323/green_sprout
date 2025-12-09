@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import '../../src/web_storage.dart';
+import '../utils/app_logger.dart';
 
 /// 国際化サービスクラス
 /// アプリケーションの多言語対応を管理
@@ -28,7 +29,12 @@ class LocalizationService {
       if (savedLanguage != null && _translations.containsKey(savedLanguage)) {
         _currentLanguage = savedLanguage;
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        '翻訳データ読み込みエラー',
+        e,
+        stackTrace,
+      );
       // フォールバック: デフォルトの日本語翻訳
       _translations = {
         'ja': {
@@ -180,7 +186,12 @@ class LocalizationService {
       }
 
       return text;
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        '翻訳処理エラー',
+        e,
+        stackTrace,
+      );
       return key; // フォールバック
     }
   }

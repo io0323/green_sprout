@@ -264,6 +264,17 @@ class TeaGardenTheme {
   /// ボタン高さ定数（追加）
   static const double buttonHeightWearableLarge = 80.0;
   static const double buttonHeightDefaultLarge = 100.0;
+  static const double buttonHeightWearableMedium = 60.0;
+
+  /// ブラー半径定数
+  static const double blurRadiusSmall = 4.0;
+  static const double blurRadiusMedium = 8.0;
+  static const double blurRadiusLarge = 16.0;
+
+  /// オフセット定数
+  static const Offset offsetSmall = Offset(0, 2);
+  static const Offset offsetMedium = Offset(0, 4);
+  static const Offset offsetLarge = Offset(0, 8);
 }
 
 /// アニメーション定数
