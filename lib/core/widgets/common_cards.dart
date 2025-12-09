@@ -27,12 +27,13 @@ class WelcomeCard extends StatelessWidget {
         subtitle ?? LocalizationService.instance.translate('welcome_message');
 
     return Card(
-      elevation: 4,
+      elevation: TeaGardenTheme.elevationMedium,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(TeaGardenTheme.spacingL),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius:
+              BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
           gradient: TeaGardenTheme.primaryGradient,
         ),
         child: Column(
@@ -42,20 +43,20 @@ class WelcomeCard extends StatelessWidget {
               size: iconSize,
               color: colorScheme.onPrimary,
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: TeaGardenTheme.spacingM),
             Text(
               finalTitle,
               style: TextStyle(
-                fontSize: 24,
+                fontSize: TeaGardenTheme.heading2.fontSize,
                 fontWeight: FontWeight.bold,
                 color: colorScheme.onPrimary,
               ),
             ),
-            const SizedBox(height: 5),
+            const SizedBox(height: TeaGardenTheme.spacingXS),
             Text(
               finalSubtitle,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: TeaGardenTheme.bodySmall.fontSize,
                 color: colorScheme.onPrimary.withOpacity(0.7),
               ),
             ),
@@ -89,12 +90,13 @@ class StatItem extends StatelessWidget {
 
     return Column(
       children: [
-        Icon(icon, color: finalColor, size: 30),
-        const SizedBox(height: 8),
+        Icon(icon,
+            color: finalColor, size: TeaGardenTheme.iconSizeDefaultMedium),
+        const SizedBox(height: TeaGardenTheme.spacingS),
         Text(
           value,
           style: TextStyle(
-            fontSize: 20,
+            fontSize: TeaGardenTheme.heading3.fontSize,
             fontWeight: FontWeight.bold,
             color: finalColor,
           ),
@@ -102,7 +104,7 @@ class StatItem extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontSize: 12,
+            fontSize: TeaGardenTheme.caption.fontSize,
             color: colorScheme.onSurface.withOpacity(0.6),
           ),
         ),
@@ -176,26 +178,26 @@ class AnalysisCard extends StatelessWidget {
         buttonText ?? LocalizationService.instance.translate('take_photo');
 
     return Card(
-      elevation: 2,
+      elevation: TeaGardenTheme.elevationLow,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
         child: Column(
           children: [
             Text(
               LocalizationService.instance.translate('tea_analysis'),
-              style: const TextStyle(
-                fontSize: 18,
+              style: TextStyle(
+                fontSize: TeaGardenTheme.bodyLarge.fontSize,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: TeaGardenTheme.spacingM),
             if (isAnalyzing)
               Column(
                 children: [
                   CircularProgressIndicator(
                     color: colorScheme.primary,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: TeaGardenTheme.spacingM),
                   Text(finalAnalyzingText),
                 ],
               )
@@ -209,8 +211,8 @@ class AnalysisCard extends StatelessWidget {
                   backgroundColor: colorScheme.primary,
                   foregroundColor: colorScheme.onPrimary,
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 12,
+                    horizontal: TeaGardenTheme.spacingL,
+                    vertical: TeaGardenTheme.spacingM,
                   ),
                 ),
               ),
@@ -252,21 +254,21 @@ class EmptyStateWidget extends StatelessWidget {
             size: iconSize,
             color: colorScheme.onSurface.withOpacity(0.6),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: TeaGardenTheme.spacingM),
           Text(
             finalMessage,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: TeaGardenTheme.bodyLarge.fontSize,
               fontWeight: FontWeight.bold,
               color: colorScheme.onSurface.withOpacity(0.6),
             ),
           ),
           if (subtitle != null) ...[
-            const SizedBox(height: 8),
+            const SizedBox(height: TeaGardenTheme.spacingS),
             Text(
               subtitle!,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: TeaGardenTheme.bodySmall.fontSize,
                 color: colorScheme.onSurface.withOpacity(0.5),
               ),
             ),

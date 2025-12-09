@@ -44,7 +44,8 @@ class AnalysisResultWidget extends StatelessWidget {
                   width: 200,
                   height: 200,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(
+                        TeaGardenTheme.borderRadiusMedium),
                     boxShadow: [
                       BoxShadow(
                         color: Theme.of(context)
