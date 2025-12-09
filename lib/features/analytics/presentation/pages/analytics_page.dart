@@ -185,7 +185,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
           Text(
             t('stats_summary'),
             style: TextStyle(
-              fontSize: 18,
+              fontSize: TeaGardenTheme.bodyLarge.fontSize,
               fontWeight: FontWeight.bold,
               color: Theme.of(context).colorScheme.onSurface,
             ),
@@ -294,7 +294,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
               title: '$stage\n$count',
               radius: 80,
               titleStyle: TextStyle(
-                fontSize: 12,
+                fontSize: TeaGardenTheme.caption.fontSize,
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.onPrimary,
               ),
@@ -356,7 +356,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                 getTitlesWidget: (value, meta) {
                   return Text(
                     healthStatuses[value.toInt()],
-                    style: const TextStyle(fontSize: 10),
+                    style: TextStyle(fontSize: TeaGardenTheme.caption.fontSize),
                   );
                 },
               ),
@@ -404,7 +404,8 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                     final date = sortedDates[value.toInt()];
                     return Text(
                       date.split('-')[2], // 日のみ表示
-                      style: const TextStyle(fontSize: 10),
+                      style:
+                          TextStyle(fontSize: TeaGardenTheme.caption.fontSize),
                     );
                   }
                   return const Text('');
@@ -479,7 +480,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                 getTitlesWidget: (value, meta) {
                   return Text(
                     confidenceRanges[value.toInt()],
-                    style: const TextStyle(fontSize: 10),
+                    style: TextStyle(fontSize: TeaGardenTheme.caption.fontSize),
                   );
                 },
               ),

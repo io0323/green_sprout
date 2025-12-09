@@ -222,7 +222,7 @@ class _AnimatedButtonState extends State<AnimatedButton>
                     widget.text,
                     style: TextStyle(
                       color: widget.textColor ?? TeaGardenTheme.textLight,
-                      fontSize: 16,
+                      fontSize: TeaGardenTheme.bodyMedium.fontSize,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
