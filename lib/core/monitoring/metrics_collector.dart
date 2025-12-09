@@ -314,7 +314,12 @@ class MetricsCollector {
     try {
       final uri = Uri.parse(url);
       return '${uri.scheme}://${uri.host}${uri.path}';
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'URLサニタイズエラー',
+        e,
+        stackTrace,
+      );
       return 'invalid_url';
     }
   }
