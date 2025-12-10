@@ -11,6 +11,7 @@ import 'features/cloud_sync/presentation/bloc/cloud_sync_cubit.dart';
 import 'core/theme/tea_garden_theme.dart';
 import 'core/widgets/common_cards.dart';
 import 'core/widgets/snackbar_helper.dart';
+import 'core/utils/app_logger.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -310,7 +311,12 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         return timestamp.year == today.year &&
             timestamp.month == today.month &&
             timestamp.day == today.day;
-      } catch (e) {
+      } catch (e, stackTrace) {
+        AppLogger.logErrorWithStackTrace(
+          '日付パースエラー（今日の解析数計算）',
+          e,
+          stackTrace,
+        );
         return false;
       }
     }).length;
@@ -799,7 +805,12 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
           if (dailyCounts.containsKey(date)) {
             dailyCounts[date] = (dailyCounts[date] ?? 0) + 1;
           }
-        } catch (e) {
+        } catch (e, stackTrace) {
+          AppLogger.logErrorWithStackTrace(
+            '日付パースエラー（日次集計）',
+            e,
+            stackTrace,
+          );
           // パースエラーは無視
         }
       }
@@ -1694,7 +1705,12 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
             LocalizationService.instance.translate('analysis_complete');
         SnackBarHelper.showSuccess(context, text);
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        '解析エラー（enhanced_app）',
+        e,
+        stackTrace,
+      );
       // End analyzing state on error and optionally show an error SnackBar
       if (mounted) {
         setState(() {
@@ -2170,7 +2186,12 @@ ${_results.map((r) {
         try {
           final timestamp = DateTime.parse(timestampStr);
           return timestamp.isBefore(cutoffDate);
-        } catch (e) {
+        } catch (e, stackTrace) {
+          AppLogger.logErrorWithStackTrace(
+            '日付パースエラー（古いデータ削除）',
+            e,
+            stackTrace,
+          );
           return false;
         }
       });
