@@ -123,7 +123,7 @@ class _LogListPageState extends State<LogListPage> {
                       children: [
                         Icon(
                           Icons.book_outlined,
-                          size: 80,
+                          size: TeaGardenTheme.iconSizeDefaultXLarge,
                           color: Theme.of(context)
                               .colorScheme
                               .primary

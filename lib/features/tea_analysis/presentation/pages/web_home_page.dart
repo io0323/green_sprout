@@ -210,7 +210,7 @@ class _WebHomePageState extends State<WebHomePage> {
           children: [
             Icon(
               Icons.photo_camera_outlined,
-              size: 64,
+              size: TeaGardenTheme.iconSizeDefaultLarge,
               color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
             ),
             const SizedBox(height: TeaGardenTheme.spacingM),
@@ -271,8 +271,8 @@ class _WebHomePageState extends State<WebHomePage> {
           Row(
             children: [
               Container(
-                width: 60,
-                height: 60,
+                width: TeaGardenTheme.webHomeButtonSize,
+                height: TeaGardenTheme.webHomeButtonSize,
                 decoration: BoxDecoration(
                   color: TeaGardenTheme.successColor.withOpacity(0.1),
                   borderRadius:
@@ -281,7 +281,7 @@ class _WebHomePageState extends State<WebHomePage> {
                 child: const Icon(
                   Icons.eco,
                   color: TeaGardenTheme.successColor,
-                  size: 30,
+                  size: TeaGardenTheme.webHomeIconSize,
                 ),
               ),
               const SizedBox(width: TeaGardenTheme.spacingM),
@@ -409,7 +409,7 @@ class _WebHomePageState extends State<WebHomePage> {
         title: Text(LocalizationService.instance.translate('analysis_history')),
         content: SizedBox(
           width: double.maxFinite,
-          height: 400,
+          height: TeaGardenTheme.webHomeChartHeight,
           child: ListView.builder(
             itemCount: _mockResults.length,
             itemBuilder: (context, index) {

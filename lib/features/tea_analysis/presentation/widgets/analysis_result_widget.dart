@@ -41,8 +41,8 @@ class AnalysisResultWidget extends StatelessWidget {
               child: Semantics(
                 label: '撮影した茶葉の画像',
                 child: Container(
-                  width: 200,
-                  height: 200,
+                  width: TeaGardenTheme.analysisResultImageSize,
+                  height: TeaGardenTheme.analysisResultImageSize,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(
                         TeaGardenTheme.borderRadiusMedium),
@@ -68,7 +68,7 @@ class AnalysisResultWidget extends StatelessWidget {
                           color: Theme.of(context).colorScheme.surfaceVariant,
                           child: Icon(
                             Icons.image_not_supported,
-                            size: 64,
+                            size: TeaGardenTheme.iconSizeDefaultLarge,
                             color: Theme.of(context)
                                 .colorScheme
                                 .onSurface

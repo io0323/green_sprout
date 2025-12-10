@@ -96,7 +96,7 @@ class WearableErrorWidget extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: errorColor.withOpacity(0.3),
-                  width: 2,
+                  width: TeaGardenTheme.cameraBorderWidth,
                 ),
               ),
               child: Icon(

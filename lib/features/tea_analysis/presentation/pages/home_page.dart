@@ -109,7 +109,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             Icon(
               Icons.photo_camera_outlined,
-              size: 64,
+              size: TeaGardenTheme.iconSizeDefaultLarge,
               color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
             ),
             const SizedBox(height: TeaGardenTheme.spacingM),
