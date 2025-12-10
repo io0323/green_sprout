@@ -26,6 +26,16 @@ class AppUtils {
     return '${dateTime.year}年${dateTime.month}月${dateTime.day}日 ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
   }
 
+  /// 日時をフォーマット（月/日 時:分）
+  static String formatShortDateTime(DateTime dateTime) {
+    return '${dateTime.month}/${dateTime.day} ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+  }
+
+  /// 日付をフォーマット（YYYY-MM-DD）
+  static String formatDate(DateTime dateTime) {
+    return '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+  }
+
   /// 信頼度に応じた色を取得
   static Color getConfidenceColor(double confidence) {
     if (confidence >= AppConstants.highConfidenceThreshold) {

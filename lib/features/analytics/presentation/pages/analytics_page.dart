@@ -6,6 +6,7 @@ import '../../../tea_analysis/domain/entities/tea_analysis_result.dart';
 import '../../../../core/services/localization_service.dart';
 import '../../../../core/widgets/modern_ui_components.dart';
 import '../../../../core/theme/tea_garden_theme.dart';
+import '../../../../core/utils/app_utils.dart';
 
 /// 茶園分析ページ
 /// 茶葉解析結果の統計とグラフを表示
@@ -381,8 +382,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
     // 日付ごとの解析数を計算
     final Map<String, int> dailyCounts = {};
     for (final result in results) {
-      final dateKey =
-          '${result.timestamp.year}-${result.timestamp.month.toString().padLeft(2, '0')}-${result.timestamp.day.toString().padLeft(2, '0')}';
+      final dateKey = AppUtils.formatDate(result.timestamp);
       dailyCounts[dateKey] = (dailyCounts[dateKey] ?? 0) + 1;
     }
 

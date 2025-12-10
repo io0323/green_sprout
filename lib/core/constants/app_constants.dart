@@ -21,6 +21,28 @@ class AppConstants {
   static const double highConfidenceThreshold = 0.8;
   static const double mediumConfidenceThreshold = 0.6;
   static const double lowConfidenceThreshold = 0.4;
+
+  // 画像解析関連の定数
+  static const double brightnessThresholdLow = 100.0;
+  static const double brightnessThresholdMedium = 150.0;
+  static const double brightnessThresholdHigh = 200.0;
+  static const double greennessThresholdLow = 0.4;
+  static const double greennessThresholdMedium = 0.45;
+  static const double greennessThresholdHigh = 0.5;
+  static const double greennessThresholdVeryHigh = 0.55;
+  static const double fallbackConfidenceLow = 0.75;
+  static const double fallbackConfidenceMedium = 0.80;
+  static const double fallbackConfidenceHigh = 0.85;
+  static const double fallbackConfidenceVeryHigh = 0.90;
+
+  // データベース関連の定数
+  static const int maxQueryResults = 1000;
+
+  // 設定関連の定数
+  static const int retentionPeriodMin = 1;
+  static const int retentionPeriodMax = 365;
+  static const int autoAnalysisIntervalMin = 5;
+  static const int autoAnalysisIntervalMax = 1440;
 }
 
 /// 成長状態の定数

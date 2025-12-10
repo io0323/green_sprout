@@ -118,7 +118,7 @@ class TeaAnalysisLocalDataSourceImpl implements TeaAnalysisLocalDataSource {
       final maps = await db.query(
         AppConstants.teaAnalysisTable,
         orderBy: 'timestamp DESC',
-        limit: 1000, // 最大1000件まで取得
+        limit: AppConstants.maxQueryResults, // 最大取得件数
       );
 
       final results = maps

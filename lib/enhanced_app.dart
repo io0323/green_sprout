@@ -12,6 +12,8 @@ import 'core/theme/tea_garden_theme.dart';
 import 'core/widgets/common_cards.dart';
 import 'core/widgets/snackbar_helper.dart';
 import 'core/utils/app_logger.dart';
+import 'core/constants/app_constants.dart';
+import 'core/utils/app_utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -1344,9 +1346,10 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
             Text(LocalizationService.instance.translate('retention_period')),
             Slider(
               value: _retentionPeriod,
-              min: 1,
-              max: 365,
-              divisions: 364,
+              min: AppConstants.retentionPeriodMin.toDouble(),
+              max: AppConstants.retentionPeriodMax.toDouble(),
+              divisions: AppConstants.retentionPeriodMax -
+                  AppConstants.retentionPeriodMin,
               label:
                   '${_retentionPeriod.toInt()}${LocalizationService.instance.translate('days')}',
               onChanged: (value) {
@@ -1367,9 +1370,10 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                 .translate('auto_analysis_interval')),
             Slider(
               value: _autoAnalysisInterval,
-              min: 5,
-              max: 1440,
-              divisions: 287,
+              min: AppConstants.autoAnalysisIntervalMin.toDouble(),
+              max: AppConstants.autoAnalysisIntervalMax.toDouble(),
+              divisions: AppConstants.autoAnalysisIntervalMax -
+                  AppConstants.autoAnalysisIntervalMin,
               label:
                   '${_autoAnalysisInterval.toInt()}${LocalizationService.instance.translate('minutes')}',
               onChanged: (value) {
@@ -2003,8 +2007,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     final attentionStatus = LocalizationService.instance.translate('attention');
 
     final now = DateTime.now();
-    final dateStr =
-        '${now.year}年${now.month}月${now.day}日 ${now.hour}:${now.minute.toString().padLeft(2, '0')}';
+    final dateStr = AppUtils.formatAbsoluteTime(now);
 
     final healthyCount =
         _results.where((r) => r['healthStatus'] == healthyStatus).length;

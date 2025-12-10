@@ -3,6 +3,7 @@ import '../../../../core/services/localization_service.dart';
 import '../../../../core/widgets/language_selector.dart';
 import '../../../../core/widgets/snackbar_helper.dart';
 import '../../../../core/theme/tea_garden_theme.dart';
+import '../../../../core/utils/app_utils.dart';
 
 /// Web用の簡素化されたホームページ
 /// 依存性注入を使わずに直接実装
@@ -297,7 +298,7 @@ class _WebHomePageState extends State<WebHomePage> {
                       ),
                     ),
                     Text(
-                      '${timestamp.month}/${timestamp.day} ${timestamp.hour}:${timestamp.minute.toString().padLeft(2, '0')}',
+                      AppUtils.formatShortDateTime(timestamp),
                       style: TextStyle(
                         fontSize: TeaGardenTheme.caption.fontSize,
                         color: Theme.of(context)
