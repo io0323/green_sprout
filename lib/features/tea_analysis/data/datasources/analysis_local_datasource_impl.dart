@@ -8,6 +8,7 @@ import 'package:image/image.dart' as img;
 import '../../../../ml/tflite_interface.dart';
 
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/utils/app_logger.dart';
 import '../../../../core/errors/failures.dart';
 import '../../domain/entities/analysis_result.dart';
 import 'analysis_local_datasource.dart';
@@ -51,7 +52,12 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
         // フォールバック：画像特徴量ベースの簡易解析
         return _analyzeWithFallback(resizedImage);
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        '画像解析エラー',
+        e,
+        stackTrace,
+      );
       return Left(TFLiteFailure('画像解析に失敗しました: $e'));
     }
   }
@@ -85,7 +91,12 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
         _isModelLoaded = true;
         return const Right(unit);
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'モデル読み込みエラー（フォールバック使用）',
+        e,
+        stackTrace,
+      );
       // Model loading failed - use fallback
       _isTFLiteAvailable = false;
       _isModelLoaded = true;

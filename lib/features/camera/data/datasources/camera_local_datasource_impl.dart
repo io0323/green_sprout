@@ -5,6 +5,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/errors/failures.dart';
 import '../../domain/entities/camera_state.dart';
 import 'camera_local_datasource.dart';
+import '../../../../core/utils/app_logger.dart';
 
 /// カメラのローカルデータソース実装
 /// カメラとの直接的なやり取りを実装
@@ -40,7 +41,12 @@ class CameraLocalDataSourceImpl implements CameraLocalDataSource {
         isInitialized: true,
         errorMessage: null,
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'カメラ初期化エラー（データソース）',
+        e,
+        stackTrace,
+      );
       _currentState = _currentState.copyWith(
         errorMessage: e.toString(),
         isInitialized: false,
@@ -68,7 +74,12 @@ class CameraLocalDataSourceImpl implements CameraLocalDataSource {
       );
 
       return Right(imageFile);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        '画像撮影エラー（データソース）',
+        e,
+        stackTrace,
+      );
       _currentState = _currentState.copyWith(
         isCapturing: false,
         errorMessage: e.toString(),

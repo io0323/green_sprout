@@ -4,6 +4,7 @@ import '../../../../core/errors/failures.dart';
 import '../../domain/entities/analysis_result.dart';
 import '../../domain/repositories/analysis_repository.dart';
 import '../datasources/analysis_local_datasource.dart';
+import '../../../../core/utils/app_logger.dart';
 
 /// AI解析リポジトリの実装
 /// TensorFlow Liteモデルを使用した画像解析
@@ -19,7 +20,12 @@ class AnalysisRepositoryImpl implements AnalysisRepository {
     try {
       final result = await localDataSource.loadModel();
       return result;
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'モデル読み込みエラー',
+        e,
+        stackTrace,
+      );
       return Left(TFLiteFailure('モデルの読み込みに失敗しました: $e'));
     }
   }
@@ -29,7 +35,12 @@ class AnalysisRepositoryImpl implements AnalysisRepository {
     try {
       final result = await localDataSource.analyzeImage(imageFile);
       return result;
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        '画像解析エラー',
+        e,
+        stackTrace,
+      );
       return Left(TFLiteFailure('画像解析に失敗しました: $e'));
     }
   }

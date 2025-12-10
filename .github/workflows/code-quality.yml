@@ -9,21 +9,74 @@ on:
 jobs:
   code-quality:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     
     steps:
     - uses: actions/checkout@v4
     
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
+    - name: Cache Flutter SDK
+      uses: actions/cache@v4
+      id: flutter-cache
       with:
-        flutter-version: '3.24.5'
-        channel: 'stable'
+        path: ${{ runner.temp }}/flutter-sdk
+        key: flutter-sdk-3.24.5-${{ runner.os }}-${{ hashFiles('**/pubspec.yaml') }}
+        restore-keys: |
+          flutter-sdk-3.24.5-${{ runner.os }}-
+    
+    - name: Download and install Flutter (resumable + retry)
+      id: flutter-setup
+      run: |
+        set -euo pipefail
+        FLUTTER_VERSION=3.24.5
+        FLUTTER_DIR="${RUNNER_TEMP:-/tmp}/flutter-sdk"
+        mkdir -p "$FLUTTER_DIR"
+        cd "$FLUTTER_DIR"
+        ARCHIVE="flutter_linux_${FLUTTER_VERSION}-stable.tar.xz"
+        URL="https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/$ARCHIVE"
+        
+        # If archive isn't present or is incomplete, download with retries and resume support
+        if [ ! -f "$ARCHIVE" ] || [ ! -s "$ARCHIVE" ]; then
+          echo "Downloading Flutter SDK..."
+          curl --fail --location --retry 5 --retry-delay 5 --continue-at - --max-time 600 --output "$ARCHIVE" "$URL" || {
+            echo "Download failed, removing partial file and retrying..."
+            rm -f "$ARCHIVE"
+            curl --fail --location --retry 5 --retry-delay 5 --max-time 600 --output "$ARCHIVE" "$URL"
+          }
+        else
+          echo "Using cached Flutter SDK archive"
+        fi
+        
+        # Extract only if the flutter/ folder is missing
+        if [ ! -d "$FLUTTER_DIR/flutter" ]; then
+          echo "Extracting Flutter SDK..."
+          tar -xJf "$ARCHIVE" -C "$FLUTTER_DIR"
+        else
+          echo "Using cached Flutter SDK"
+        fi
+        
+        # Add flutter to PATH for following steps
+        echo "$FLUTTER_DIR/flutter/bin" >> $GITHUB_PATH
+        echo "Flutter SDK installed successfully"
+      timeout-minutes: 15
+    
+    - name: Cache pub packages
+      uses: actions/cache@v4
+      if: steps.flutter-setup.outcome == 'success'
+      with:
+        path: |
+          ${{ env.HOME }}/.pub-cache
+        key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-pub-
     
     - name: Check Flutter version
       run: flutter --version
+      if: steps.flutter-setup.outcome == 'success'
     
     - name: Install dependencies
       run: flutter pub get
+      if: steps.flutter-setup.outcome == 'success'
+      timeout-minutes: 10
     
     - name: Check code formatting
       run: dart format --set-exit-if-changed .
@@ -70,18 +123,70 @@ jobs:
 
   dependency-check:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     
     steps:
     - uses: actions/checkout@v4
     
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
+    - name: Cache Flutter SDK
+      uses: actions/cache@v4
+      id: flutter-cache
       with:
-        flutter-version: '3.24.5'
-        channel: 'stable'
+        path: ${{ runner.temp }}/flutter-sdk
+        key: flutter-sdk-3.24.5-${{ runner.os }}-${{ hashFiles('**/pubspec.yaml') }}
+        restore-keys: |
+          flutter-sdk-3.24.5-${{ runner.os }}-
+    
+    - name: Download and install Flutter (resumable + retry)
+      id: flutter-setup
+      run: |
+        set -euo pipefail
+        FLUTTER_VERSION=3.24.5
+        FLUTTER_DIR="${RUNNER_TEMP:-/tmp}/flutter-sdk"
+        mkdir -p "$FLUTTER_DIR"
+        cd "$FLUTTER_DIR"
+        ARCHIVE="flutter_linux_${FLUTTER_VERSION}-stable.tar.xz"
+        URL="https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/$ARCHIVE"
+        
+        # If archive isn't present or is incomplete, download with retries and resume support
+        if [ ! -f "$ARCHIVE" ] || [ ! -s "$ARCHIVE" ]; then
+          echo "Downloading Flutter SDK..."
+          curl --fail --location --retry 5 --retry-delay 5 --continue-at - --max-time 600 --output "$ARCHIVE" "$URL" || {
+            echo "Download failed, removing partial file and retrying..."
+            rm -f "$ARCHIVE"
+            curl --fail --location --retry 5 --retry-delay 5 --max-time 600 --output "$ARCHIVE" "$URL"
+          }
+        else
+          echo "Using cached Flutter SDK archive"
+        fi
+        
+        # Extract only if the flutter/ folder is missing
+        if [ ! -d "$FLUTTER_DIR/flutter" ]; then
+          echo "Extracting Flutter SDK..."
+          tar -xJf "$ARCHIVE" -C "$FLUTTER_DIR"
+        else
+          echo "Using cached Flutter SDK"
+        fi
+        
+        # Add flutter to PATH for following steps
+        echo "$FLUTTER_DIR/flutter/bin" >> $GITHUB_PATH
+        echo "Flutter SDK installed successfully"
+      timeout-minutes: 15
+    
+    - name: Cache pub packages
+      uses: actions/cache@v4
+      if: steps.flutter-setup.outcome == 'success'
+      with:
+        path: |
+          ${{ env.HOME }}/.pub-cache
+        key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-pub-
     
     - name: Install dependencies
       run: flutter pub get
+      if: steps.flutter-setup.outcome == 'success'
+      timeout-minutes: 10
     
     - name: Check for outdated dependencies
       run: flutter pub outdated
@@ -96,18 +201,70 @@ jobs:
 
   documentation-check:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     
     steps:
     - uses: actions/checkout@v4
     
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
+    - name: Cache Flutter SDK
+      uses: actions/cache@v4
+      id: flutter-cache
       with:
-        flutter-version: '3.24.5'
-        channel: 'stable'
+        path: ${{ runner.temp }}/flutter-sdk
+        key: flutter-sdk-3.24.5-${{ runner.os }}-${{ hashFiles('**/pubspec.yaml') }}
+        restore-keys: |
+          flutter-sdk-3.24.5-${{ runner.os }}-
+    
+    - name: Download and install Flutter (resumable + retry)
+      id: flutter-setup
+      run: |
+        set -euo pipefail
+        FLUTTER_VERSION=3.24.5
+        FLUTTER_DIR="${RUNNER_TEMP:-/tmp}/flutter-sdk"
+        mkdir -p "$FLUTTER_DIR"
+        cd "$FLUTTER_DIR"
+        ARCHIVE="flutter_linux_${FLUTTER_VERSION}-stable.tar.xz"
+        URL="https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/$ARCHIVE"
+        
+        # If archive isn't present or is incomplete, download with retries and resume support
+        if [ ! -f "$ARCHIVE" ] || [ ! -s "$ARCHIVE" ]; then
+          echo "Downloading Flutter SDK..."
+          curl --fail --location --retry 5 --retry-delay 5 --continue-at - --max-time 600 --output "$ARCHIVE" "$URL" || {
+            echo "Download failed, removing partial file and retrying..."
+            rm -f "$ARCHIVE"
+            curl --fail --location --retry 5 --retry-delay 5 --max-time 600 --output "$ARCHIVE" "$URL"
+          }
+        else
+          echo "Using cached Flutter SDK archive"
+        fi
+        
+        # Extract only if the flutter/ folder is missing
+        if [ ! -d "$FLUTTER_DIR/flutter" ]; then
+          echo "Extracting Flutter SDK..."
+          tar -xJf "$ARCHIVE" -C "$FLUTTER_DIR"
+        else
+          echo "Using cached Flutter SDK"
+        fi
+        
+        # Add flutter to PATH for following steps
+        echo "$FLUTTER_DIR/flutter/bin" >> $GITHUB_PATH
+        echo "Flutter SDK installed successfully"
+      timeout-minutes: 15
+    
+    - name: Cache pub packages
+      uses: actions/cache@v4
+      if: steps.flutter-setup.outcome == 'success'
+      with:
+        path: |
+          ${{ env.HOME }}/.pub-cache
+        key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-pub-
     
     - name: Install dependencies
       run: flutter pub get
+      if: steps.flutter-setup.outcome == 'success'
+      timeout-minutes: 10
     
     - name: Check documentation
       run: |
