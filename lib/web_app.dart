@@ -432,7 +432,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
     });
 
     // 解析処理をシミュレート
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(AnimationConstants.threeSeconds);
 
     // 新しい解析結果を追加
     final newResult = TeaAnalysisResult(

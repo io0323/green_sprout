@@ -263,12 +263,12 @@ class _BeautifulLoadingIndicatorState extends State<BeautifulLoadingIndicator>
   void initState() {
     super.initState();
     _rotationController = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: AnimationConstants.twoSeconds,
       vsync: this,
     )..repeat();
 
     _pulseController = AnimationController(
-      duration: const Duration(milliseconds: 1000),
+      duration: AnimationConstants.veryLongDuration,
       vsync: this,
     )..repeat(reverse: true);
 

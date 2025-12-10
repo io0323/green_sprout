@@ -166,7 +166,7 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
     // 既存のタイマーがある場合は停止
     _stopHeartbeat();
     _heartbeatTimer =
-        Timer.periodic(const Duration(seconds: 30), (timer) async {
+        Timer.periodic(AnimationConstants.thirtySeconds, (timer) async {
       if (_isConnected) {
         try {
           await _channel.invokeMethod('sendHeartbeat');

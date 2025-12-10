@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'app_logger.dart';
+import '../theme/tea_garden_theme.dart';
 
 /// パフォーマンス監視とメモリ管理のユーティリティクラス
 class PerformanceUtils {
@@ -225,7 +226,7 @@ class DatabaseConnectionPool {
           return connection;
         }
       }
-      await Future.delayed(const Duration(milliseconds: 100));
+      await Future.delayed(AnimationConstants.extraShortDuration);
     }
   }
 
@@ -244,11 +245,11 @@ class DatabaseConnection {
 
   Future<void> initialize() async {
     // データベース接続の初期化
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future.delayed(AnimationConstants.extraShortDuration);
   }
 
   Future<void> close() async {
     // データベース接続の終了
-    await Future.delayed(const Duration(milliseconds: 50));
+    await Future.delayed(AnimationConstants.veryShortDuration);
   }
 }

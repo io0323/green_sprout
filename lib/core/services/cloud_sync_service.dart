@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../errors/failures.dart';
 import '../../features/tea_analysis/domain/entities/tea_analysis_result.dart';
 import '../utils/app_logger.dart';
+import '../theme/tea_garden_theme.dart';
 
 /// クラウド同期サービスのインターフェース
 abstract class CloudSyncService {
@@ -39,7 +40,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
       final response = await _httpClient.get(
         Uri.parse('$_baseUrl/health'),
         headers: {'Content-Type': 'application/json'},
-      ).timeout(const Duration(seconds: 5));
+      ).timeout(AnimationConstants.fiveSeconds);
 
       return response.statusCode == 200;
     } catch (e, stackTrace) {

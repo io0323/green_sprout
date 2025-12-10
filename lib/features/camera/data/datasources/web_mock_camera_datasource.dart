@@ -5,6 +5,7 @@ import 'package:tea_garden_ai/core/utils/platform_utils.dart';
 import 'package:tea_garden_ai/core/errors/failures.dart';
 import 'package:tea_garden_ai/features/camera/domain/entities/camera_state.dart';
 import 'package:tea_garden_ai/features/camera/data/datasources/camera_local_datasource.dart';
+import 'package:tea_garden_ai/core/theme/tea_garden_theme.dart';
 
 /// Web用のモックカメラデータソース
 /// 実際のカメラの代わりにファイル選択を使用
@@ -19,7 +20,7 @@ class WebMockCameraDataSource implements CameraLocalDataSource {
     }
 
     // カメラ初期化をシミュレート
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(AnimationConstants.longDuration);
     _currentState = _currentState.copyWith(isInitialized: true);
     return const Right(unit);
   }
@@ -32,7 +33,7 @@ class WebMockCameraDataSource implements CameraLocalDataSource {
 
     // Webでは実際のカメラキャプチャはできないため、
     // ファイル選択ダイアログをシミュレート
-    await Future.delayed(const Duration(milliseconds: 300));
+    await Future.delayed(AnimationConstants.mediumDuration);
 
     // モック画像ファイルを作成
     final mockImagePath =
@@ -51,7 +52,7 @@ class WebMockCameraDataSource implements CameraLocalDataSource {
     }
 
     // カメラ破棄をシミュレート
-    await Future.delayed(const Duration(milliseconds: 200));
+    await Future.delayed(AnimationConstants.shortDuration);
     _currentState = const CameraState();
     _mockController = null;
     return const Right(unit);

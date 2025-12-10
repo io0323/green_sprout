@@ -3,6 +3,7 @@ import 'package:tea_garden_ai/core/utils/platform_utils.dart';
 import 'package:tea_garden_ai/core/errors/failures.dart';
 import 'package:tea_garden_ai/features/tea_analysis/domain/entities/tea_analysis_result.dart';
 import 'package:tea_garden_ai/features/tea_analysis/data/datasources/tea_analysis_local_datasource.dart';
+import 'package:tea_garden_ai/core/theme/tea_garden_theme.dart';
 
 /// Web用のモックデータソース
 /// 実際のデータベースの代わりにメモリ内のデータを使用
@@ -45,7 +46,7 @@ class WebMockTeaAnalysisDataSource implements TeaAnalysisLocalDataSource {
     }
 
     // 非同期処理をシミュレート
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(AnimationConstants.longDuration);
     return Right(List.from(_mockData));
   }
 
@@ -56,7 +57,7 @@ class WebMockTeaAnalysisDataSource implements TeaAnalysisLocalDataSource {
       return const Left(ServerFailure('Web用のモックデータソースはWebプラットフォームでのみ使用可能です'));
     }
 
-    await Future.delayed(const Duration(milliseconds: 300));
+    await Future.delayed(AnimationConstants.mediumDuration);
     final results = _mockData.where((result) {
       return result.timestamp.year == date.year &&
           result.timestamp.month == date.month &&
@@ -72,7 +73,7 @@ class WebMockTeaAnalysisDataSource implements TeaAnalysisLocalDataSource {
       return const Left(ServerFailure('Web用のモックデータソースはWebプラットフォームでのみ使用可能です'));
     }
 
-    await Future.delayed(const Duration(milliseconds: 200));
+    await Future.delayed(AnimationConstants.shortDuration);
     final newId = (_mockData.length + 1).toString();
     final newResult = result.copyWith(id: newId);
     _mockData.insert(0, newResult);
@@ -86,7 +87,7 @@ class WebMockTeaAnalysisDataSource implements TeaAnalysisLocalDataSource {
       return const Left(ServerFailure('Web用のモックデータソースはWebプラットフォームでのみ使用可能です'));
     }
 
-    await Future.delayed(const Duration(milliseconds: 200));
+    await Future.delayed(AnimationConstants.shortDuration);
     final index = _mockData.indexWhere((r) => r.id == result.id);
     if (index != -1) {
       _mockData[index] = result;
@@ -101,7 +102,7 @@ class WebMockTeaAnalysisDataSource implements TeaAnalysisLocalDataSource {
       return const Left(ServerFailure('Web用のモックデータソースはWebプラットフォームでのみ使用可能です'));
     }
 
-    await Future.delayed(const Duration(milliseconds: 200));
+    await Future.delayed(AnimationConstants.shortDuration);
     final initialLength = _mockData.length;
     _mockData.removeWhere((result) => result.id == id);
     final finalLength = _mockData.length;
