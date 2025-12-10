@@ -24,8 +24,8 @@ class CaptureButtonWidget extends StatelessWidget {
                   ? () => context.read<CameraCubit>().capture()
                   : null,
               child: Container(
-                width: 80,
-                height: 80,
+                width: TeaGardenTheme.captureButtonSize,
+                height: TeaGardenTheme.captureButtonSize,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: isEnabled && !isCapturing
@@ -38,24 +38,24 @@ class CaptureButtonWidget extends StatelessWidget {
                             .colorScheme
                             .onSurface
                             .withOpacity(0.4),
-                    width: 4,
+                    width: TeaGardenTheme.captureButtonBorderWidth,
                   ),
                   boxShadow: [
                     BoxShadow(
                       color:
                           Theme.of(context).colorScheme.shadow.withOpacity(0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
+                      blurRadius: TeaGardenTheme.blurRadiusMedium,
+                      offset: TeaGardenTheme.offsetMedium,
                     ),
                   ],
                 ),
                 child: Center(
                   child: isCapturing
                       ? const SizedBox(
-                          width: 30,
-                          height: 30,
+                          width: TeaGardenTheme.progressIndicatorSize,
+                          height: TeaGardenTheme.progressIndicatorSize,
                           child: CircularProgressIndicator(
-                            strokeWidth: 3,
+                            strokeWidth: TeaGardenTheme.strokeWidthMedium,
                             valueColor: AlwaysStoppedAnimation<Color>(
                               TeaGardenTheme.successColor,
                             ),
@@ -63,7 +63,7 @@ class CaptureButtonWidget extends StatelessWidget {
                         )
                       : Icon(
                           Icons.camera_alt,
-                          size: 40,
+                          size: TeaGardenTheme.iconSizeDefaultMedium,
                           color: isEnabled
                               ? TeaGardenTheme.successColor
                               : Theme.of(context)

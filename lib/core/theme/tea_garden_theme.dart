@@ -275,6 +275,34 @@ class TeaGardenTheme {
   static const Offset offsetSmall = Offset(0, 2);
   static const Offset offsetMedium = Offset(0, 4);
   static const Offset offsetLarge = Offset(0, 8);
+
+  /// カメラ関連のサイズ定数
+  static const double cameraFrameSize = 200.0;
+  static const double cameraCornerSize = 20.0;
+  static const double cameraOverlayHeight = 100.0;
+  static const double cameraBorderWidth = 2.0;
+  static const double cameraCornerBorderWidth = 3.0;
+
+  /// キャプチャーボタン関連のサイズ定数
+  static const double captureButtonSize = 80.0;
+  static const double captureButtonBorderWidth = 4.0;
+  static const double progressIndicatorSize = 30.0;
+
+  /// グラフ関連のサイズ定数
+  static const double chartBarWidth = 20.0;
+  static const double chartHeight = 200.0;
+  static const double chartBorderRadius = 4.0;
+
+  /// アイコンサイズ定数（追加）
+  static const double iconSizeDefaultLarge = 64.0;
+  static const double iconSizeDefaultXLarge = 80.0;
+
+  /// その他のサイズ定数
+  static const double analysisResultImageSize = 200.0;
+  static const double webHomeButtonSize = 60.0;
+  static const double webHomeIconSize = 30.0;
+  static const double webHomeChartHeight = 400.0;
+  static const double strokeWidthMedium = 3.0;
 }
 
 /// アニメーション定数

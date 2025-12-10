@@ -342,9 +342,10 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                 BarChartRodData(
                   toY: count.toDouble(),
                   color: colors[index],
-                  width: 20,
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(4)),
+                  width: TeaGardenTheme.chartBarWidth,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(TeaGardenTheme.chartBorderRadius),
+                  ),
                 ),
               ],
             );
@@ -527,7 +528,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
           ),
           const SizedBox(height: TeaGardenTheme.spacingM),
           SizedBox(
-            height: 200,
+            height: TeaGardenTheme.chartHeight,
             child: chart,
           ),
         ],

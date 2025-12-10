@@ -29,15 +29,15 @@ class CameraPreviewWidget extends StatelessWidget {
                 // 撮影ガイド（中央の枠）
                 Center(
                   child: Container(
-                    width: 200,
-                    height: 200,
+                    width: TeaGardenTheme.cameraFrameSize,
+                    height: TeaGardenTheme.cameraFrameSize,
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: Theme.of(context)
                             .colorScheme
                             .onSurface
                             .withOpacity(0.8),
-                        width: 2,
+                        width: TeaGardenTheme.cameraBorderWidth,
                       ),
                       borderRadius: BorderRadius.circular(
                           TeaGardenTheme.borderRadiusMedium),
@@ -49,16 +49,18 @@ class CameraPreviewWidget extends StatelessWidget {
                           top: 0,
                           left: 0,
                           child: Container(
-                            width: 20,
-                            height: 20,
+                            width: TeaGardenTheme.cameraCornerSize,
+                            height: TeaGardenTheme.cameraCornerSize,
                             decoration: const BoxDecoration(
                               border: Border(
                                 top: BorderSide(
                                     color: TeaGardenTheme.successColor,
-                                    width: 3),
+                                    width:
+                                        TeaGardenTheme.cameraCornerBorderWidth),
                                 left: BorderSide(
                                     color: TeaGardenTheme.successColor,
-                                    width: 3),
+                                    width:
+                                        TeaGardenTheme.cameraCornerBorderWidth),
                               ),
                             ),
                           ),
@@ -67,16 +69,18 @@ class CameraPreviewWidget extends StatelessWidget {
                           top: 0,
                           right: 0,
                           child: Container(
-                            width: 20,
-                            height: 20,
+                            width: TeaGardenTheme.cameraCornerSize,
+                            height: TeaGardenTheme.cameraCornerSize,
                             decoration: const BoxDecoration(
                               border: Border(
                                 top: BorderSide(
                                     color: TeaGardenTheme.successColor,
-                                    width: 3),
+                                    width:
+                                        TeaGardenTheme.cameraCornerBorderWidth),
                                 right: BorderSide(
                                     color: TeaGardenTheme.successColor,
-                                    width: 3),
+                                    width:
+                                        TeaGardenTheme.cameraCornerBorderWidth),
                               ),
                             ),
                           ),
@@ -85,16 +89,18 @@ class CameraPreviewWidget extends StatelessWidget {
                           bottom: 0,
                           left: 0,
                           child: Container(
-                            width: 20,
-                            height: 20,
+                            width: TeaGardenTheme.cameraCornerSize,
+                            height: TeaGardenTheme.cameraCornerSize,
                             decoration: const BoxDecoration(
                               border: Border(
                                 bottom: BorderSide(
                                     color: TeaGardenTheme.successColor,
-                                    width: 3),
+                                    width:
+                                        TeaGardenTheme.cameraCornerBorderWidth),
                                 left: BorderSide(
                                     color: TeaGardenTheme.successColor,
-                                    width: 3),
+                                    width:
+                                        TeaGardenTheme.cameraCornerBorderWidth),
                               ),
                             ),
                           ),
@@ -103,16 +109,18 @@ class CameraPreviewWidget extends StatelessWidget {
                           bottom: 0,
                           right: 0,
                           child: Container(
-                            width: 20,
-                            height: 20,
+                            width: TeaGardenTheme.cameraCornerSize,
+                            height: TeaGardenTheme.cameraCornerSize,
                             decoration: const BoxDecoration(
                               border: Border(
                                 bottom: BorderSide(
                                     color: TeaGardenTheme.successColor,
-                                    width: 3),
+                                    width:
+                                        TeaGardenTheme.cameraCornerBorderWidth),
                                 right: BorderSide(
                                     color: TeaGardenTheme.successColor,
-                                    width: 3),
+                                    width:
+                                        TeaGardenTheme.cameraCornerBorderWidth),
                               ),
                             ),
                           ),
@@ -128,7 +136,7 @@ class CameraPreviewWidget extends StatelessWidget {
                   left: 0,
                   right: 0,
                   child: Container(
-                    height: 100,
+                    height: TeaGardenTheme.cameraOverlayHeight,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
@@ -166,7 +174,7 @@ class CameraPreviewWidget extends StatelessWidget {
                   left: 0,
                   right: 0,
                   child: Container(
-                    height: 100,
+                    height: TeaGardenTheme.cameraOverlayHeight,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
@@ -196,7 +204,7 @@ class CameraPreviewWidget extends StatelessWidget {
               children: [
                 Icon(
                   Icons.camera_alt_outlined,
-                  size: 64,
+                  size: TeaGardenTheme.iconSizeDefaultLarge,
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
                 const SizedBox(height: TeaGardenTheme.spacingM),
