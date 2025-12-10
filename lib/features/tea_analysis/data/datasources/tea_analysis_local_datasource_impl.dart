@@ -7,6 +7,7 @@ import '../../../../core/errors/failures.dart';
 import '../../domain/entities/tea_analysis_result.dart';
 import '../models/tea_analysis_result_model.dart';
 import 'tea_analysis_local_datasource.dart';
+import '../../../../core/utils/app_logger.dart';
 
 /// 茶葉解析のローカルデータソースの実装
 class TeaAnalysisLocalDataSourceImpl implements TeaAnalysisLocalDataSource {
@@ -96,7 +97,12 @@ class TeaAnalysisLocalDataSourceImpl implements TeaAnalysisLocalDataSource {
       });
 
       return Right(result);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'データ保存エラー（ローカル）',
+        e,
+        stackTrace,
+      );
       return Left(CacheFailure('データの保存に失敗しました: $e'));
     }
   }
@@ -119,7 +125,12 @@ class TeaAnalysisLocalDataSourceImpl implements TeaAnalysisLocalDataSource {
           .map((map) => TeaAnalysisResultModel.fromMap(map).toEntity())
           .toList();
       return Right(results);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'データ読み込みエラー（全件）',
+        e,
+        stackTrace,
+      );
       return Left(CacheFailure('データの読み込みに失敗しました: $e'));
     }
   }
@@ -135,7 +146,12 @@ class TeaAnalysisLocalDataSourceImpl implements TeaAnalysisLocalDataSource {
       );
 
       return const Right(unit);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'データ削除エラー（ローカル）',
+        e,
+        stackTrace,
+      );
       return Left(CacheFailure('データの削除に失敗しました: $e'));
     }
   }
@@ -155,7 +171,12 @@ class TeaAnalysisLocalDataSourceImpl implements TeaAnalysisLocalDataSource {
       );
 
       return Right(result);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'データ更新エラー（ローカル）',
+        e,
+        stackTrace,
+      );
       return Left(CacheFailure('データの更新に失敗しました: $e'));
     }
   }
@@ -185,7 +206,12 @@ class TeaAnalysisLocalDataSourceImpl implements TeaAnalysisLocalDataSource {
           .map((map) => TeaAnalysisResultModel.fromMap(map).toEntity())
           .toList();
       return Right(results);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'データ読み込みエラー（日付指定）',
+        e,
+        stackTrace,
+      );
       return Left(CacheFailure('指定日のデータの読み込みに失敗しました: $e'));
     }
   }
