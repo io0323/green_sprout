@@ -9,6 +9,7 @@ on:
 jobs:
   code-quality:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     
     steps:
     - uses: actions/checkout@v4
@@ -18,12 +19,16 @@ jobs:
       with:
         flutter-version: '3.24.5'
         channel: 'stable'
+      id: flutter-setup
     
     - name: Check Flutter version
       run: flutter --version
+      if: steps.flutter-setup.outcome == 'success'
     
     - name: Install dependencies
       run: flutter pub get
+      if: steps.flutter-setup.outcome == 'success'
+      timeout-minutes: 10
     
     - name: Check code formatting
       run: dart format --set-exit-if-changed .
@@ -70,6 +75,7 @@ jobs:
 
   dependency-check:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     
     steps:
     - uses: actions/checkout@v4
@@ -79,9 +85,12 @@ jobs:
       with:
         flutter-version: '3.24.5'
         channel: 'stable'
+      id: flutter-setup
     
     - name: Install dependencies
       run: flutter pub get
+      if: steps.flutter-setup.outcome == 'success'
+      timeout-minutes: 10
     
     - name: Check for outdated dependencies
       run: flutter pub outdated
@@ -96,6 +105,7 @@ jobs:
 
   documentation-check:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     
     steps:
     - uses: actions/checkout@v4
@@ -105,9 +115,12 @@ jobs:
       with:
         flutter-version: '3.24.5'
         channel: 'stable'
+      id: flutter-setup
     
     - name: Install dependencies
       run: flutter pub get
+      if: steps.flutter-setup.outcome == 'success'
+      timeout-minutes: 10
     
     - name: Check documentation
       run: |
