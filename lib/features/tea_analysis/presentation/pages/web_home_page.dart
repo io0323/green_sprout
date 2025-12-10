@@ -366,7 +366,7 @@ class _WebHomePageState extends State<WebHomePage> {
     });
 
     // 解析処理をシミュレート
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(AnimationConstants.threeSeconds);
 
     // 新しい結果を追加
     final loc = LocalizationService.instance;

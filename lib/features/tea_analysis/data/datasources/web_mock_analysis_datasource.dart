@@ -6,6 +6,7 @@ import '../../../../core/errors/failures.dart';
 import '../../domain/entities/analysis_result.dart';
 import 'analysis_local_datasource.dart';
 import '../../../../core/utils/app_logger.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// Web用の画像解析データソース
 /// 画像特徴量ベースの解析機能（Webプラットフォーム用のモック実装）
@@ -95,7 +96,7 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
       img.Image image) async {
     try {
       // AI解析をシミュレート（実際の処理時間を模擬）
-      await Future.delayed(const Duration(milliseconds: 800));
+      await Future.delayed(AnimationConstants.extraLongDuration);
 
       // より高度な画像特徴量解析
       final result = _advancedImageAnalysis(image);

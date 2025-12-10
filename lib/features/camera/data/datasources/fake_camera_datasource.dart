@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failures.dart';
 import '../../domain/entities/camera_state.dart';
 import 'camera_local_datasource.dart';
+import '../../../../core/theme/tea_garden_theme.dart';
 
 /// テスト用のFakeカメラデータソース
 /// テスト環境でカメラ機能をシミュレート
@@ -30,7 +31,7 @@ class FakeCameraDataSource implements CameraLocalDataSource {
     }
 
     // テスト用のモック画像ファイルパスを返す
-    await Future<void>.delayed(const Duration(milliseconds: 10));
+    await Future<void>.delayed(AnimationConstants.veryShortDuration);
     final mockImagePath =
         '/tmp/test_photo_${DateTime.now().millisecondsSinceEpoch}.jpg';
     final mockFile = File(mockImagePath);

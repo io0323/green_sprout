@@ -75,7 +75,7 @@ class SnackBarHelper {
         content: Text(message),
         backgroundColor:
             backgroundColor ?? Theme.of(context).colorScheme.surface,
-        duration: duration ?? const Duration(seconds: 4),
+        duration: duration ?? AnimationConstants.fourSeconds,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),

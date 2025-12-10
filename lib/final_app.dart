@@ -228,7 +228,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
       _isAnalyzing = true;
     });
 
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(AnimationConstants.threeSeconds);
 
     final result = {
       'growthStage': [

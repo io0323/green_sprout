@@ -1644,7 +1644,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                               value ? '自動同期を有効にしました' : '自動同期を無効にしました',
                               backgroundColor:
                                   Theme.of(context).colorScheme.primary,
-                              duration: const Duration(seconds: 2),
+                              duration: AnimationConstants.twoSeconds,
                             );
                           }
                         },
@@ -1667,7 +1667,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
 
     try {
       // Simulate a short network delay (CI-friendly)
-      await Future.delayed(const Duration(milliseconds: 200));
+      await Future.delayed(AnimationConstants.shortDuration);
 
       final now = DateTime.now().toIso8601String();
       final growthStages = [
@@ -1981,7 +1981,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
       context,
       '${LocalizationService.instance.translate('pdf')}レポートを生成しました。ブラウザで印刷してPDFとして保存できます。',
       backgroundColor: Theme.of(context).colorScheme.primary,
-      duration: const Duration(seconds: 4),
+      duration: AnimationConstants.fourSeconds,
     );
   }
 

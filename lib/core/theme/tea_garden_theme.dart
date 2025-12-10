@@ -307,10 +307,23 @@ class TeaGardenTheme {
 
 /// アニメーション定数
 class AnimationConstants {
+  // 短いアニメーション（ミリ秒）
+  static const Duration veryShortDuration = Duration(milliseconds: 50);
+  static const Duration extraShortDuration = Duration(milliseconds: 100);
   static const Duration shortDuration = Duration(milliseconds: 200);
   static const Duration mediumDuration = Duration(milliseconds: 300);
   static const Duration longDuration = Duration(milliseconds: 500);
+  static const Duration extraLongDuration = Duration(milliseconds: 800);
+  static const Duration veryLongDuration = Duration(milliseconds: 1000);
 
+  // 長いアニメーション（秒）
+  static const Duration twoSeconds = Duration(seconds: 2);
+  static const Duration threeSeconds = Duration(seconds: 3);
+  static const Duration fourSeconds = Duration(seconds: 4);
+  static const Duration fiveSeconds = Duration(seconds: 5);
+  static const Duration thirtySeconds = Duration(seconds: 30);
+
+  // カーブ
   static const Curve defaultCurve = Curves.easeInOut;
   static const Curve bounceCurve = Curves.elasticOut;
   static const Curve slideCurve = Curves.easeOutCubic;
