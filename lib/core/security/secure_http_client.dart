@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import '../utils/app_logger.dart';
 
 /// セキュアなHTTPクライアント
 /// セキュリティを強化したHTTP通信を提供
@@ -178,7 +179,12 @@ class SecureHttpClient {
         if (retryCount < _maxRetries) {
           await Future.delayed(Duration(seconds: retryCount * 2));
         }
-      } catch (e) {
+      } catch (e, stackTrace) {
+        AppLogger.logErrorWithStackTrace(
+          'HTTPリクエストエラー',
+          e,
+          stackTrace,
+        );
         lastException = Exception('Unexpected error: $e');
         retryCount++;
         if (retryCount < _maxRetries) {

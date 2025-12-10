@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../errors/failures.dart';
 import '../../features/tea_analysis/domain/entities/tea_analysis_result.dart';
+import '../utils/app_logger.dart';
 
 /// クラウド同期サービスのインターフェース
 abstract class CloudSyncService {
@@ -41,7 +42,12 @@ class CloudSyncServiceImpl implements CloudSyncService {
       ).timeout(const Duration(seconds: 5));
 
       return response.statusCode == 200;
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'クラウド接続確認エラー',
+        e,
+        stackTrace,
+      );
       return false;
     }
   }
@@ -82,7 +88,15 @@ class CloudSyncServiceImpl implements CloudSyncService {
       } else {
         throw ServerFailure('同期に失敗しました: ${response.statusCode}');
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'クラウド同期エラー（送信）',
+        e,
+        stackTrace,
+      );
+      if (e is ServerFailure) {
+        rethrow;
+      }
       throw ServerFailure('クラウド同期エラー: $e');
     }
   }
@@ -118,7 +132,15 @@ class CloudSyncServiceImpl implements CloudSyncService {
       } else {
         throw ServerFailure('同期に失敗しました: ${response.statusCode}');
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'クラウド同期エラー（受信）',
+        e,
+        stackTrace,
+      );
+      if (e is ServerFailure) {
+        rethrow;
+      }
       throw ServerFailure('クラウド同期エラー: $e');
     }
   }

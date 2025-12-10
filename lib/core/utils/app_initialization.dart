@@ -82,7 +82,12 @@ class AppInitialization {
       String errorMessage;
       try {
         errorMessage = LocalizationService.instance.translate('error_occurred');
-      } catch (e) {
+      } catch (e, stackTrace) {
+        AppLogger.logErrorWithStackTrace(
+          'エラーメッセージ取得エラー（デフォルトメッセージ使用）',
+          e,
+          stackTrace,
+        );
         errorMessage = 'エラーが発生しました';
       }
 

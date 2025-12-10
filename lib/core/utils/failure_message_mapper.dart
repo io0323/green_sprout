@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../errors/failures.dart';
 import '../services/localization_service.dart';
 import '../theme/tea_garden_theme.dart';
+import 'app_logger.dart';
 
 /// Failureオブジェクトをユーザーフレンドリーなメッセージに変換するユーティリティクラス
 class FailureMessageMapper {
@@ -37,7 +38,12 @@ class FailureMessageMapper {
           return localization.translate('error_unknown_detail',
               params: {'message': failure.message});
         }
-      } catch (e) {
+      } catch (e, stackTrace) {
+        AppLogger.logErrorWithStackTrace(
+          '国際化サービスエラー（フォールバック使用）',
+          e,
+          stackTrace,
+        );
         // 国際化サービスが使用できない場合はフォールバック
         return _mapToHardcodedMessage(failure);
       }
@@ -110,7 +116,12 @@ class FailureMessageMapper {
           suggestion: localization.translate('error_unknown_suggestion'),
         );
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        '国際化サービスエラー（デフォルト値使用）',
+        e,
+        stackTrace,
+      );
       // 国際化サービスが使用できない場合はデフォルト値を返す
       return (
         errorType: 'エラー',
