@@ -10,6 +10,7 @@ import '../../../../core/widgets/modern_ui_components.dart';
 import '../../../../core/widgets/snackbar_helper.dart';
 import '../../../../core/services/localization_service.dart';
 import '../../../../core/theme/tea_garden_theme.dart';
+import '../../../../core/utils/app_logger.dart';
 
 /// 解析結果ページ
 /// 撮影した画像の解析結果を表示
@@ -346,7 +347,12 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
           (route) => false,
         );
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        '結果保存エラー',
+        e,
+        stackTrace,
+      );
       // エラーメッセージを表示
       if (mounted) {
         SnackBarHelper.showError(

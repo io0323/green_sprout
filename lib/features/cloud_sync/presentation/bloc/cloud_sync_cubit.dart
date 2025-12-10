@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/services/cloud_sync_service.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../features/tea_analysis/domain/repositories/tea_analysis_repository.dart';
+import '../../../../core/utils/app_logger.dart';
 
 /// クラウド同期の状態
 abstract class CloudSyncState {}
@@ -92,7 +93,12 @@ class CloudSyncCubit extends Cubit<CloudSyncState> {
         emit(CloudSyncOffline());
         syncStatusNotifier.setOffline();
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        '接続確認エラー',
+        e,
+        stackTrace,
+      );
       emit(CloudSyncOffline());
       syncStatusNotifier.setOffline();
     }
@@ -149,7 +155,12 @@ class CloudSyncCubit extends Cubit<CloudSyncState> {
       syncStatusNotifier.setSuccess(
         message: '${results.length}件のデータを同期しました',
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'クラウド同期エラー（送信）',
+        e,
+        stackTrace,
+      );
       final errorMessage =
           e is ServerFailure ? e.message : '同期エラー: ${e.toString()}';
       emit(CloudSyncError(errorMessage));
@@ -192,7 +203,12 @@ class CloudSyncCubit extends Cubit<CloudSyncState> {
       syncStatusNotifier.setSuccess(
         message: '${cloudResults.length}件のデータを取得しました',
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'クラウド同期エラー（受信）',
+        e,
+        stackTrace,
+      );
       final errorMessage =
           e is ServerFailure ? e.message : '同期エラー: ${e.toString()}';
       emit(CloudSyncError(errorMessage));
@@ -207,7 +223,12 @@ class CloudSyncCubit extends Cubit<CloudSyncState> {
       await syncToCloud();
       // 次にクラウドから取得
       await syncFromCloud();
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        '双方向同期エラー',
+        e,
+        stackTrace,
+      );
       emit(CloudSyncError('同期エラー: ${e.toString()}'));
     }
   }
@@ -249,7 +270,12 @@ class CloudSyncCubit extends Cubit<CloudSyncState> {
         message: '${queue.length}件のデータを同期しました',
         syncedItems: queue.length,
       ));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'オフラインキュー処理エラー',
+        e,
+        stackTrace,
+      );
       emit(CloudSyncError('オフラインキューの処理に失敗しました'));
     }
   }

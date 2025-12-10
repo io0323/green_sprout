@@ -131,7 +131,12 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
       final result = _parseModelOutput(output);
 
       return Right(result);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'TensorFlow Lite解析エラー',
+        e,
+        stackTrace,
+      );
       return Left(TFLiteFailure('TensorFlow Lite解析に失敗しました: $e'));
     }
   }
@@ -197,7 +202,12 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
         healthStatus: healthStatus,
         confidence: confidence,
       ));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'フォールバック解析エラー',
+        e,
+        stackTrace,
+      );
       return Left(TFLiteFailure('フォールバック解析に失敗しました: $e'));
     }
   }

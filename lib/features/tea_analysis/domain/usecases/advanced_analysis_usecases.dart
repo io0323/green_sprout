@@ -5,6 +5,7 @@ import '../../../../core/errors/failures.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../entities/analysis_result.dart';
 import '../../../../core/engines/advanced_analysis_engine.dart';
+import '../../../../core/utils/app_logger.dart';
 
 /// 高度な画像解析を実行するユースケース
 class AdvancedAnalyzeImage implements UseCase<AnalysisResult, File> {
@@ -27,7 +28,12 @@ class AdvancedAnalyzeImage implements UseCase<AnalysisResult, File> {
       final result = await advancedAnalysisEngine.analyzeImage(image);
 
       return Right(result);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        '高度な解析エラー',
+        e,
+        stackTrace,
+      );
       return Left(TFLiteFailure('高度な解析エラー: ${e.toString()}'));
     }
   }
@@ -44,7 +50,12 @@ class InitializeAdvancedAnalysisEngine implements UseCaseNoParams<Unit> {
     try {
       await advancedAnalysisEngine.initialize();
       return const Right(unit);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        '高度な解析エンジン初期化エラー',
+        e,
+        stackTrace,
+      );
       return Left(TFLiteFailure('高度な解析エンジンの初期化に失敗しました: ${e.toString()}'));
     }
   }

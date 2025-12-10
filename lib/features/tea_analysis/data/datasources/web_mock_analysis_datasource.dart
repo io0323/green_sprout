@@ -5,6 +5,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/errors/failures.dart';
 import '../../domain/entities/analysis_result.dart';
 import 'analysis_local_datasource.dart';
+import '../../../../core/utils/app_logger.dart';
 
 /// Web用の画像解析データソース
 /// 画像特徴量ベースの解析機能（Webプラットフォーム用のモック実装）
@@ -22,13 +23,23 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
         _isTFLiteAvailable = false; // 現在は無効化
         _isModelLoaded = true;
         return const Right(unit);
-      } catch (e) {
+      } catch (e, stackTrace) {
+        AppLogger.logErrorWithStackTrace(
+          'TensorFlow Lite初期化エラー（フォールバック使用）',
+          e,
+          stackTrace,
+        );
         // TensorFlow Liteが利用できない場合はフォールバックモード
         _isTFLiteAvailable = false;
         _isModelLoaded = true;
         return const Right(unit);
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'モデル読み込みエラー',
+        e,
+        stackTrace,
+      );
       return Left(TFLiteFailure('モデルの読み込みに失敗しました: $e'));
     }
   }
@@ -65,7 +76,12 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
         // フォールバック：画像特徴量ベースの簡易解析
         return _analyzeWithFallback(resizedImage);
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        '画像解析エラー（Web）',
+        e,
+        stackTrace,
+      );
       return Left(TFLiteFailure('画像解析に失敗しました: $e'));
     }
   }
@@ -85,7 +101,12 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
       final result = _advancedImageAnalysis(image);
 
       return Right(result);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'Web解析エラー',
+        e,
+        stackTrace,
+      );
       return Left(TFLiteFailure('Web解析に失敗しました: $e'));
     }
   }
@@ -151,7 +172,12 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
         healthStatus: healthStatus,
         confidence: confidence,
       ));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'フォールバック解析エラー（Web）',
+        e,
+        stackTrace,
+      );
       return Left(TFLiteFailure('フォールバック解析に失敗しました: $e'));
     }
   }
