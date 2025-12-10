@@ -1,5 +1,6 @@
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'tflite_interface.dart';
+import '../core/utils/app_logger.dart';
 
 /// Mobile implementation for TFLite functionality
 /// Provides actual TFLite inference on mobile platforms
@@ -19,7 +20,12 @@ class TfliteWrapper {
       final interpreter =
           await Interpreter.fromAsset('assets/models/tea_model.tflite');
       return TfliteWrapper._(interpreter);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'TFLiteモデル読み込みエラー',
+        e,
+        stackTrace,
+      );
       return null; // Model loading failed
     }
   }
@@ -33,7 +39,12 @@ class TfliteWrapper {
     try {
       final tensor = _interpreter.getInputTensors()[index];
       return TensorInfo(shape: tensor.shape, dtype: tensor.type.toString());
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        '入力テンソル取得エラー',
+        e,
+        stackTrace,
+      );
       throw Exception('Failed to get input tensor: $e');
     }
   }
@@ -47,7 +58,12 @@ class TfliteWrapper {
     try {
       final tensor = _interpreter.getOutputTensors()[index];
       return TensorInfo(shape: tensor.shape, dtype: tensor.type.toString());
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        '出力テンソル取得エラー',
+        e,
+        stackTrace,
+      );
       throw Exception('Failed to get output tensor: $e');
     }
   }
@@ -60,7 +76,12 @@ class TfliteWrapper {
 
     try {
       _interpreter.run(input, output);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'モデル推論エラー',
+        e,
+        stackTrace,
+      );
       throw Exception('Model inference failed: $e');
     }
   }
@@ -78,7 +99,12 @@ class TfliteWrapper {
           List.filled(1, List.filled(3, 0.0)); // Assuming 3 outputs
 
       _interpreter.run(inputTensor, outputTensor);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'モデル推論エラー（入力データ）',
+        e,
+        stackTrace,
+      );
       throw Exception('Model inference failed: $e');
     }
   }
@@ -99,7 +125,12 @@ class TfliteWrapper {
       // Convert to List<List<double>>
       final output = outputTensor.first.data as List<List<double>>;
       return output;
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'モデル出力取得エラー',
+        e,
+        stackTrace,
+      );
       throw Exception('Failed to get model output: $e');
     }
   }

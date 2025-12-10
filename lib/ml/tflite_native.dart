@@ -1,6 +1,7 @@
 // Native implementation for TFLite functionality
 // Uses the actual tflite_flutter package on platforms with FFI support
 import 'package:tflite_flutter/tflite_flutter.dart' as tflite;
+import '../core/utils/app_logger.dart';
 
 /// TFLite service for native platforms (Android, iOS, Desktop)
 class TfliteService {
@@ -11,7 +12,12 @@ class TfliteService {
       String assetPath) async {
     try {
       return await tflite.Interpreter.fromAsset(assetPath);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.logErrorWithStackTrace(
+        'TFLiteインタープリター作成エラー（ネイティブ）',
+        e,
+        stackTrace,
+      );
       return null; // Model loading failed
     }
   }
