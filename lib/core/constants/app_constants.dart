@@ -87,4 +87,23 @@ class ErrorMessages {
   static const String updateFailed = 'データの更新に失敗しました';
   static const String networkError = 'ネットワークエラーが発生しました';
   static const String unknownError = '不明なエラーが発生しました';
+
+  // ウェアラブルデバイス関連のエラーメッセージ
+  static const String wearableConnectionCheckError = 'ウェアラブルデバイス接続確認エラー';
+  static const String wearableEventStreamError = 'ウェアラブルデバイスイベントストリームエラー';
+  static const String wearableError = 'ウェアラブルデバイスエラー';
+  static const String wearableInitializationError = 'ウェアラブルデバイスサービス初期化エラー';
+}
+
+/// ログメッセージの定数
+class LogMessages {
+  // ウェアラブルデバイス関連のログメッセージ
+  static const String wearableDeviceConnected = 'ウェアラブルデバイスが接続されています';
+  static const String wearableDeviceDisconnected = 'ウェアラブルデバイスは接続されていません';
+  static const String wearableDeviceConnectedEvent = 'ウェアラブルデバイスが接続されました';
+  static const String wearableDeviceDisconnectedEvent = 'ウェアラブルデバイスが切断されました';
+  static const String wearableDataReceived = 'ウェアラブルデバイスからデータを受信しました';
+  static const String wearableReceivedData = '受信データ';
+  static const String wearableInitializationComplete =
+      'ウェアラブルデバイスサービスの初期化が完了しました';
 }
