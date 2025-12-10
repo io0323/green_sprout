@@ -3,6 +3,7 @@ import 'core/theme/tea_garden_theme.dart';
 import 'core/utils/app_initialization.dart';
 import 'core/widgets/common_cards.dart';
 import 'core/widgets/snackbar_helper.dart';
+import 'core/utils/app_utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -378,7 +379,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${result.timestamp.month}/${result.timestamp.day} ${result.timestamp.hour}:${result.timestamp.minute.toString().padLeft(2, '0')}',
+                    AppUtils.formatAbsoluteTime(result.timestamp),
                     style: TextStyle(
                       fontSize: 12,
                       color: Theme.of(context)

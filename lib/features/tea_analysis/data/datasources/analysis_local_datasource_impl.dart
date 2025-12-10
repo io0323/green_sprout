@@ -171,30 +171,30 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
       String healthStatus;
       double confidence;
 
-      if (brightness < 100) {
+      if (brightness < AppConstants.brightnessThresholdLow) {
         growthStage = GrowthStageConstants.oldLeaf;
-        healthStatus = greenness > 0.4
+        healthStatus = greenness > AppConstants.greennessThresholdLow
             ? HealthStatusConstants.healthy
             : HealthStatusConstants.damaged;
-        confidence = 0.75;
-      } else if (brightness < 150) {
+        confidence = AppConstants.fallbackConfidenceLow;
+      } else if (brightness < AppConstants.brightnessThresholdMedium) {
         growthStage = GrowthStageConstants.matureLeaf;
-        healthStatus = greenness > 0.45
+        healthStatus = greenness > AppConstants.greennessThresholdMedium
             ? HealthStatusConstants.healthy
             : HealthStatusConstants.slightlyDamaged;
-        confidence = 0.80;
-      } else if (brightness < 200) {
+        confidence = AppConstants.fallbackConfidenceMedium;
+      } else if (brightness < AppConstants.brightnessThresholdHigh) {
         growthStage = GrowthStageConstants.youngLeaf;
-        healthStatus = greenness > 0.5
+        healthStatus = greenness > AppConstants.greennessThresholdHigh
             ? HealthStatusConstants.healthy
             : HealthStatusConstants.slightlyDamaged;
-        confidence = 0.85;
+        confidence = AppConstants.fallbackConfidenceHigh;
       } else {
         growthStage = GrowthStageConstants.bud;
-        healthStatus = greenness > 0.55
+        healthStatus = greenness > AppConstants.greennessThresholdVeryHigh
             ? HealthStatusConstants.healthy
             : HealthStatusConstants.slightlyDamaged;
-        confidence = 0.90;
+        confidence = AppConstants.fallbackConfidenceVeryHigh;
       }
 
       return Right(AnalysisResult(
