@@ -7,6 +7,7 @@ import '../../../../core/services/localization_service.dart';
 import '../../../../core/widgets/modern_ui_components.dart';
 import '../../../../core/theme/tea_garden_theme.dart';
 import '../../../../core/utils/app_utils.dart';
+import '../../../../core/constants/app_constants.dart';
 
 /// 茶園分析ページ
 /// 茶葉解析結果の統計とグラフを表示
@@ -546,10 +547,11 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
         startDate = now.subtract(const Duration(days: 7));
         break;
       case 'month':
-        startDate = now.subtract(const Duration(days: 30));
+        startDate = now.subtract(const Duration(days: AppConstants.daysThirty));
         break;
       case 'year':
-        startDate = now.subtract(const Duration(days: 365));
+        startDate = now.subtract(
+            const Duration(days: AppConstants.daysThreeHundredSixtyFive));
         break;
       default:
         startDate = now.subtract(const Duration(days: 7));

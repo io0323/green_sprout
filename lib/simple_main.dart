@@ -85,9 +85,9 @@ class SimpleHomePage extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               Card(
-                margin: const EdgeInsets.all(16),
+                margin: const EdgeInsets.all(TeaGardenTheme.spacingM),
                 child: Padding(
-                  padding: const EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(TeaGardenTheme.spacingL),
                   child: Column(
                     children: [
                       Icon(

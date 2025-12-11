@@ -185,7 +185,9 @@ class TeaGardenTheme {
   /// スペーシング
   static const double spacingXS = 4.0;
   static const double spacingS = 8.0;
+  static const double spacingSM = 12.0; // Small-Medium
   static const double spacingM = 16.0;
+  static const double spacingML = 20.0; // Medium-Large
   static const double spacingL = 24.0;
   static const double spacingXL = 32.0;
   static const double spacingXXL = 48.0;

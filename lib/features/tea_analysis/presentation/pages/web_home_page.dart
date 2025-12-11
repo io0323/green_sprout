@@ -4,6 +4,7 @@ import '../../../../core/widgets/language_selector.dart';
 import '../../../../core/widgets/snackbar_helper.dart';
 import '../../../../core/theme/tea_garden_theme.dart';
 import '../../../../core/utils/app_utils.dart';
+import '../../../../core/constants/app_constants.dart';
 
 /// Web用の簡素化されたホームページ
 /// 依存性注入を使わずに直接実装
@@ -32,7 +33,8 @@ class _WebHomePageState extends State<WebHomePage> {
       {
         'id': '1',
         'imagePath': '/assets/images/sample_tea_1.jpg',
-        'timestamp': DateTime.now().subtract(const Duration(days: 1)),
+        'timestamp':
+            DateTime.now().subtract(const Duration(days: AppConstants.daysOne)),
         'healthStatus': loc.translate('healthy'),
         'growthStage': loc.translate('maturity_period'),
         'confidence': 0.85,
@@ -41,7 +43,8 @@ class _WebHomePageState extends State<WebHomePage> {
       {
         'id': '2',
         'imagePath': '/assets/images/sample_tea_2.jpg',
-        'timestamp': DateTime.now().subtract(const Duration(days: 3)),
+        'timestamp': DateTime.now()
+            .subtract(const Duration(days: AppConstants.daysThree)),
         'healthStatus': loc.translate('attention'),
         'growthStage': loc.translate('growth_period'),
         'confidence': 0.72,
@@ -50,7 +53,8 @@ class _WebHomePageState extends State<WebHomePage> {
       {
         'id': '3',
         'imagePath': '/assets/images/sample_tea_3.jpg',
-        'timestamp': DateTime.now().subtract(const Duration(days: 5)),
+        'timestamp': DateTime.now()
+            .subtract(const Duration(days: AppConstants.daysFive)),
         'healthStatus': loc.translate('healthy'),
         'growthStage': loc.translate('maturity_period'),
         'confidence': 0.90,
