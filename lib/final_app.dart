@@ -157,7 +157,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
       padding: const EdgeInsets.all(TeaGardenTheme.spacingSM),
       decoration: BoxDecoration(
         color: colorScheme.surfaceVariant,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusSmall),
         border: Border(
           left: BorderSide(
             color: isHealthy
@@ -183,7 +183,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                   color: isHealthy
                       ? TeaGardenTheme.successColor.withOpacity(0.1)
                       : TeaGardenTheme.warningColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius:
+                      BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
                 ),
                 child: Text(
                   result['healthStatus'],

@@ -55,7 +55,7 @@ class TeaGardenTheme {
           elevation: 2,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(borderRadiusMedium),
           ),
           textStyle: const TextStyle(
             fontSize: 16,
@@ -117,7 +117,7 @@ class TeaGardenTheme {
           elevation: 2,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(borderRadiusMedium),
           ),
           textStyle: const TextStyle(
             fontSize: 16,
