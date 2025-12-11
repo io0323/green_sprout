@@ -4,6 +4,7 @@ import 'package:tea_garden_ai/core/errors/failures.dart';
 import 'package:tea_garden_ai/features/tea_analysis/domain/entities/tea_analysis_result.dart';
 import 'package:tea_garden_ai/features/tea_analysis/data/datasources/tea_analysis_local_datasource.dart';
 import 'package:tea_garden_ai/core/theme/tea_garden_theme.dart';
+import 'package:tea_garden_ai/core/constants/app_constants.dart';
 
 /// Web用のモックデータソース
 /// 実際のデータベースの代わりにメモリ内のデータを使用
@@ -12,7 +13,8 @@ class WebMockTeaAnalysisDataSource implements TeaAnalysisLocalDataSource {
     TeaAnalysisResult(
       id: '1',
       imagePath: '/assets/images/sample_tea_1.jpg',
-      timestamp: DateTime.now().subtract(const Duration(days: 1)),
+      timestamp:
+          DateTime.now().subtract(const Duration(days: AppConstants.daysOne)),
       healthStatus: '健康',
       growthStage: '成熟期',
       confidence: 0.85,
@@ -21,7 +23,8 @@ class WebMockTeaAnalysisDataSource implements TeaAnalysisLocalDataSource {
     TeaAnalysisResult(
       id: '2',
       imagePath: '/assets/images/sample_tea_2.jpg',
-      timestamp: DateTime.now().subtract(const Duration(days: 3)),
+      timestamp:
+          DateTime.now().subtract(const Duration(days: AppConstants.daysThree)),
       healthStatus: '注意',
       growthStage: '成長期',
       confidence: 0.72,
@@ -30,7 +33,8 @@ class WebMockTeaAnalysisDataSource implements TeaAnalysisLocalDataSource {
     TeaAnalysisResult(
       id: '3',
       imagePath: '/assets/images/sample_tea_3.jpg',
-      timestamp: DateTime.now().subtract(const Duration(days: 5)),
+      timestamp:
+          DateTime.now().subtract(const Duration(days: AppConstants.daysFive)),
       healthStatus: '健康',
       growthStage: '成熟期',
       confidence: 0.90,

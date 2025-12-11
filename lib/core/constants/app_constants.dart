@@ -43,6 +43,14 @@ class AppConstants {
   static const int retentionPeriodMax = 365;
   static const int autoAnalysisIntervalMin = 5;
   static const int autoAnalysisIntervalMax = 1440;
+
+  // 日付計算関連の定数（日数）
+  static const int daysOne = 1;
+  static const int daysThree = 3;
+  static const int daysFive = 5;
+  static const int daysSeven = 7;
+  static const int daysThirty = 30;
+  static const int daysThreeHundredSixtyFive = 365;
 }
 
 /// 成長状態の定数

@@ -4,6 +4,7 @@ import 'core/utils/app_initialization.dart';
 import 'core/widgets/common_cards.dart';
 import 'core/widgets/snackbar_helper.dart';
 import 'core/utils/app_utils.dart';
+import 'core/constants/app_constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,7 +60,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
     TeaAnalysisResult(
       id: '1',
       imagePath: 'assets/sample_tea_1.jpg',
-      timestamp: DateTime.now().subtract(const Duration(days: 1)),
+      timestamp:
+          DateTime.now().subtract(const Duration(days: AppConstants.daysOne)),
       healthStatus: '健康',
       growthStage: '成熟期',
       confidence: 0.92,
@@ -68,7 +70,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
     TeaAnalysisResult(
       id: '2',
       imagePath: 'assets/sample_tea_2.jpg',
-      timestamp: DateTime.now().subtract(const Duration(days: 3)),
+      timestamp:
+          DateTime.now().subtract(const Duration(days: AppConstants.daysThree)),
       healthStatus: '注意',
       growthStage: '成長期',
       confidence: 0.78,
@@ -77,7 +80,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
     TeaAnalysisResult(
       id: '3',
       imagePath: 'assets/sample_tea_3.jpg',
-      timestamp: DateTime.now().subtract(const Duration(days: 5)),
+      timestamp:
+          DateTime.now().subtract(const Duration(days: AppConstants.daysFive)),
       healthStatus: '健康',
       growthStage: '成熟期',
       confidence: 0.88,

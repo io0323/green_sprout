@@ -190,7 +190,8 @@ class TeaAnalysisLocalDataSourceImpl implements TeaAnalysisLocalDataSource {
 
       // 日付範囲の計算を最適化
       final startOfDay = DateTime(date.year, date.month, date.day);
-      final endOfDay = startOfDay.add(const Duration(days: 1));
+      final endOfDay =
+          startOfDay.add(const Duration(days: AppConstants.daysOne));
 
       final startTimestamp = startOfDay.millisecondsSinceEpoch;
       final endTimestamp = endOfDay.millisecondsSinceEpoch;
