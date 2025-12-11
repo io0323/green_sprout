@@ -181,8 +181,10 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: isHealthy
-                      ? TeaGardenTheme.successColor.withOpacity(0.1)
-                      : TeaGardenTheme.warningColor.withOpacity(0.1),
+                      ? TeaGardenTheme.successColor
+                          .withOpacity(TeaGardenTheme.opacityVeryLow)
+                      : TeaGardenTheme.warningColor
+                          .withOpacity(TeaGardenTheme.opacityVeryLow),
                   borderRadius:
                       BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
                 ),
@@ -204,7 +206,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
             '${result['timestamp']} | 信頼度: ${result['confidence']}%',
             style: TextStyle(
               fontSize: TeaGardenTheme.bodySmall.fontSize,
-              color: colorScheme.onSurface.withOpacity(0.6),
+              color:
+                  colorScheme.onSurface.withOpacity(TeaGardenTheme.opacityHigh),
             ),
           ),
           const SizedBox(height: TeaGardenTheme.spacingXS),

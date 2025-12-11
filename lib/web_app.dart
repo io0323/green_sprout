@@ -153,7 +153,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
             'AIが茶葉の状態を分析しています',
             style: TextStyle(
               fontSize: 14,
-              color: colorScheme.onSurface.withOpacity(0.6),
+              color:
+                  colorScheme.onSurface.withOpacity(TeaGardenTheme.opacityHigh),
             ),
           ),
         ],
@@ -217,7 +218,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                       color: Theme.of(context)
                           .colorScheme
                           .onPrimary
-                          .withOpacity(0.9),
+                          .withOpacity(TeaGardenTheme.opacityAlmostOpaque),
                     ),
                   ),
                 ],
@@ -391,7 +392,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                       color: Theme.of(context)
                           .colorScheme
                           .onSurface
-                          .withOpacity(0.6),
+                          .withOpacity(TeaGardenTheme.opacityHigh),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -402,7 +403,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                       color: Theme.of(context)
                           .colorScheme
                           .onSurface
-                          .withOpacity(0.6),
+                          .withOpacity(TeaGardenTheme.opacityHigh),
                     ),
                   ),
                 ],

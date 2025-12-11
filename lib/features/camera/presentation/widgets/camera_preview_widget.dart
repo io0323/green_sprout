@@ -145,7 +145,7 @@ class CameraPreviewWidget extends StatelessWidget {
                           Theme.of(context)
                               .colorScheme
                               .surface
-                              .withOpacity(0.3),
+                              .withOpacity(TeaGardenTheme.opacityLow),
                           Colors.transparent,
                         ],
                       ),
@@ -183,7 +183,7 @@ class CameraPreviewWidget extends StatelessWidget {
                           Theme.of(context)
                               .colorScheme
                               .surface
-                              .withOpacity(0.3),
+                              .withOpacity(TeaGardenTheme.opacityLow),
                           Colors.transparent,
                         ],
                       ),

@@ -182,7 +182,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
           controller: _tabController,
           indicatorColor: colorScheme.onPrimary,
           labelColor: colorScheme.onPrimary,
-          unselectedLabelColor: colorScheme.onPrimary.withOpacity(0.7),
+          unselectedLabelColor:
+              colorScheme.onPrimary.withOpacity(TeaGardenTheme.opacityVeryHigh),
           onTap: (index) {
             // Tab selection handled by TabController
           },
@@ -553,7 +554,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                       color: Theme.of(context)
                           .colorScheme
                           .onSurface
-                          .withOpacity(0.6),
+                          .withOpacity(TeaGardenTheme.opacityHigh),
                     ),
                     const SizedBox(height: TeaGardenTheme.spacingSM),
                     Text(LocalizationService.instance
@@ -567,7 +568,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                         color: Theme.of(context)
                             .colorScheme
                             .onSurface
-                            .withOpacity(0.6),
+                            .withOpacity(TeaGardenTheme.opacityHigh),
                       ),
                     ),
                   ],
@@ -583,7 +584,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                       color: Theme.of(context)
                           .colorScheme
                           .onSurface
-                          .withOpacity(0.6),
+                          .withOpacity(TeaGardenTheme.opacityHigh),
                     ),
                     const SizedBox(height: TeaGardenTheme.spacingSM),
                     Text(LocalizationService.instance
@@ -597,7 +598,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                         color: Theme.of(context)
                             .colorScheme
                             .onSurface
-                            .withOpacity(0.6),
+                            .withOpacity(TeaGardenTheme.opacityHigh),
                       ),
                     ),
                   ],
@@ -700,8 +701,10 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                         color: result['healthStatus'] ==
                                 LocalizationService.instance
                                     .translate('healthy')
-                            ? TeaGardenTheme.successColor.withOpacity(0.1)
-                            : TeaGardenTheme.warningColor.withOpacity(0.1),
+                            ? TeaGardenTheme.successColor
+                                .withOpacity(TeaGardenTheme.opacityVeryLow)
+                            : TeaGardenTheme.warningColor
+                                .withOpacity(TeaGardenTheme.opacityVeryLow),
                         borderRadius: BorderRadius.circular(
                             TeaGardenTheme.borderRadiusMedium),
                       ),
@@ -728,7 +731,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                     color: Theme.of(context)
                         .colorScheme
                         .onSurface
-                        .withOpacity(0.6),
+                        .withOpacity(TeaGardenTheme.opacityHigh),
                   ),
                 ),
                 const SizedBox(height: TeaGardenTheme.spacingXS),
@@ -902,7 +905,10 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
             dotData: const FlDotData(show: true),
             belowBarData: BarAreaData(
               show: true,
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+              color: Theme.of(context)
+                  .colorScheme
+                  .primary
+                  .withOpacity(TeaGardenTheme.opacityLow),
             ),
           ),
         ],
@@ -1366,7 +1372,10 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
               '${_retentionPeriod.toInt()}${LocalizationService.instance.translate('days')}',
               style: TextStyle(
                 fontSize: 14,
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withOpacity(TeaGardenTheme.opacityVeryHigh),
               ),
             ),
             const SizedBox(height: 16),
@@ -1390,7 +1399,10 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
               '${_autoAnalysisInterval.toInt()}${LocalizationService.instance.translate('minutes')}',
               style: TextStyle(
                 fontSize: 14,
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withOpacity(TeaGardenTheme.opacityVeryHigh),
               ),
             ),
             const SizedBox(height: 16),
@@ -1483,7 +1495,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: statusColor.withOpacity(0.1),
+                      color: statusColor
+                          .withOpacity(TeaGardenTheme.opacityVeryLow),
                       borderRadius: BorderRadius.circular(
                           TeaGardenTheme.borderRadiusSmall),
                     ),
@@ -1531,7 +1544,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                     color: Theme.of(context)
                         .colorScheme
                         .onSurface
-                        .withOpacity(0.7),
+                        .withOpacity(TeaGardenTheme.opacityVeryHigh),
                   ),
                 ),
                 const SizedBox(height: 16),
