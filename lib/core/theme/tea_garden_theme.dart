@@ -22,6 +22,11 @@ class TeaGardenTheme {
   static const Color successColor = Color(0xFF4CAF50);
   static const Color infoColor = Color(0xFF2196F3);
 
+  /// ボーダー幅定数
+  static const double borderWidthThin = 1.0;
+  static const double borderWidthMedium = 2.0;
+  static const double borderWidthThick = 4.0;
+
   /// ライトテーマ
   static ThemeData get lightTheme {
     return ThemeData(
@@ -76,7 +81,8 @@ class TeaGardenTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: primaryGreen, width: 2),
+          borderSide:
+              const BorderSide(color: primaryGreen, width: borderWidthMedium),
         ),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -138,7 +144,8 @@ class TeaGardenTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: lightGreen, width: 2),
+          borderSide:
+              const BorderSide(color: lightGreen, width: borderWidthMedium),
         ),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

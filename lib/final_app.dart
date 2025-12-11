@@ -163,7 +163,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
             color: isHealthy
                 ? TeaGardenTheme.successColor
                 : TeaGardenTheme.warningColor,
-            width: 4,
+            width: TeaGardenTheme.borderWidthThick,
           ),
         ),
       ),
