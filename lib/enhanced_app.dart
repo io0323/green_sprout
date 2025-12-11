@@ -445,7 +445,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                       )
                     : null,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius:
+                      BorderRadius.circular(TeaGardenTheme.borderRadiusSmall),
                 ),
               ),
               onChanged: (value) {
@@ -463,7 +464,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                       labelText: LocalizationService.instance
                           .translate('growth_stage'),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(
+                            TeaGardenTheme.borderRadiusSmall),
                       ),
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -504,7 +506,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                       labelText: LocalizationService.instance
                           .translate('health_status'),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(
+                            TeaGardenTheme.borderRadiusSmall),
                       ),
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -699,7 +702,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                                     .translate('healthy')
                             ? TeaGardenTheme.successColor.withOpacity(0.1)
                             : TeaGardenTheme.warningColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(
+                            TeaGardenTheme.borderRadiusMedium),
                       ),
                       child: Text(
                         result['healthStatus'],
@@ -1480,7 +1484,8 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                     ),
                     decoration: BoxDecoration(
                       color: statusColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(
+                          TeaGardenTheme.borderRadiusSmall),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,

@@ -181,12 +181,12 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusLarge),
       ),
       child: Container(
         padding: const EdgeInsets.all(TeaGardenTheme.spacingL),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusLarge),
           gradient: TeaGardenTheme.primaryGradient,
         ),
         child: Row(
@@ -240,7 +240,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
       ),
       child: Padding(
         padding: const EdgeInsets.all(TeaGardenTheme.spacingML),
@@ -328,7 +328,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
     return const Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(12)),
+        borderRadius: BorderRadius.all(
+            Radius.circular(TeaGardenTheme.borderRadiusMedium)),
       ),
       child: Padding(
         padding: EdgeInsets.all(TeaGardenTheme.spacingXL),
@@ -346,7 +347,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
       elevation: 2,
       margin: const EdgeInsets.only(bottom: TeaGardenTheme.spacingSM),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
       ),
       child: Padding(
         padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
@@ -359,7 +360,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                 color: result.healthStatus == '健康'
                     ? TeaGardenTheme.successColor.withOpacity(0.1)
                     : TeaGardenTheme.warningColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius:
+                    BorderRadius.circular(TeaGardenTheme.borderRadiusSmall),
               ),
               child: Icon(
                 Icons.eco,
@@ -414,7 +416,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                 color: result.healthStatus == '健康'
                     ? TeaGardenTheme.successColor.withOpacity(0.1)
                     : TeaGardenTheme.warningColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius:
+                    BorderRadius.circular(TeaGardenTheme.borderRadiusLarge),
               ),
               child: Text(
                 result.healthStatus,
