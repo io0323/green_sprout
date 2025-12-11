@@ -66,7 +66,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
         child: Column(
           children: [
             _buildWelcomeCard(),
@@ -90,7 +90,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
     return Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
         child: Row(
           children: [
             Expanded(
@@ -126,7 +126,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
     return Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -153,8 +153,8 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
     final colorScheme = theme.colorScheme;
     final isHealthy = result['healthStatus'] == '健康';
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: TeaGardenTheme.spacingS),
+      padding: const EdgeInsets.all(TeaGardenTheme.spacingSM),
       decoration: BoxDecoration(
         color: colorScheme.surfaceVariant,
         borderRadius: BorderRadius.circular(8),

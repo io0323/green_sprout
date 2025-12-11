@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'core/utils/app_initialization.dart';
 import 'core/widgets/snackbar_helper.dart';
+import 'core/theme/tea_garden_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -109,7 +110,7 @@ class MyHomePageState extends State<MyHomePage> {
                   itemCount: _analysisResults.length,
                   itemBuilder: (context, index) {
                     return Card(
-                      margin: const EdgeInsets.all(5),
+                      margin: const EdgeInsets.all(TeaGardenTheme.spacingXS),
                       child: ListTile(
                         leading: Icon(Icons.eco, color: colorScheme.primary),
                         title: Text(_analysisResults[index]),

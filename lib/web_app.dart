@@ -163,7 +163,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
 
   Widget _buildMainContent() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -184,7 +184,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Container(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(TeaGardenTheme.spacingL),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           gradient: TeaGardenTheme.primaryGradient,
@@ -243,7 +243,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(TeaGardenTheme.spacingML),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -331,7 +331,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
       child: Padding(
-        padding: EdgeInsets.all(32),
+        padding: EdgeInsets.all(TeaGardenTheme.spacingXL),
         child: EmptyStateWidget(
           icon: Icons.photo_camera_outlined,
           iconSize: 64,
@@ -344,12 +344,12 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
   Widget _buildAnalysisCard(TeaAnalysisResult result) {
     return Card(
       elevation: 2,
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: TeaGardenTheme.spacingSM),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
         child: Row(
           children: [
             Container(
@@ -407,7 +407,9 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: TeaGardenTheme.spacingSM,
+                  vertical: TeaGardenTheme.spacingS),
               decoration: BoxDecoration(
                 color: result.healthStatus == '健康'
                     ? TeaGardenTheme.successColor.withOpacity(0.1)
