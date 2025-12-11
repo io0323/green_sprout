@@ -88,7 +88,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
 
   Widget _buildStatsCard() {
     return Card(
-      elevation: 2,
+      elevation: TeaGardenTheme.elevationLow,
       child: Padding(
         padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
         child: Row(
@@ -124,7 +124,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
 
   Widget _buildResultsCard() {
     return Card(
-      elevation: 2,
+      elevation: TeaGardenTheme.elevationLow,
       child: Padding(
         padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
         child: Column(

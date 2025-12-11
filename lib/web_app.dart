@@ -179,7 +179,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
 
   Widget _buildWelcomeCard() {
     return Card(
-      elevation: 4,
+      elevation: TeaGardenTheme.elevationHigh,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusLarge),
       ),
@@ -238,7 +238,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
     }).toList();
 
     return Card(
-      elevation: 2,
+      elevation: TeaGardenTheme.elevationLow,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),
       ),
@@ -326,7 +326,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
 
   Widget _buildEmptyState() {
     return const Card(
-      elevation: 2,
+      elevation: TeaGardenTheme.elevationLow,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
             Radius.circular(TeaGardenTheme.borderRadiusMedium)),
@@ -344,7 +344,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
 
   Widget _buildAnalysisCard(TeaAnalysisResult result) {
     return Card(
-      elevation: 2,
+      elevation: TeaGardenTheme.elevationLow,
       margin: const EdgeInsets.only(bottom: TeaGardenTheme.spacingSM),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(TeaGardenTheme.borderRadiusMedium),

@@ -375,7 +375,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
 
   Widget _buildRecentResultsCard() {
     return Card(
-      elevation: 2,
+      elevation: TeaGardenTheme.elevationLow,
       child: Padding(
         padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
         child: Column(
@@ -403,7 +403,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     final filteredResults = _getFilteredResults();
 
     return Card(
-      elevation: 2,
+      elevation: TeaGardenTheme.elevationLow,
       child: Padding(
         padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
         child: Column(
@@ -760,7 +760,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
 
   Widget _buildTimeSeriesChartCard() {
     return Card(
-      elevation: 2,
+      elevation: TeaGardenTheme.elevationLow,
       child: Padding(
         padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
         child: Column(
@@ -912,7 +912,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
 
   Widget _buildHealthChartCard() {
     return Card(
-      elevation: 2,
+      elevation: TeaGardenTheme.elevationLow,
       child: Padding(
         padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
         child: Column(
@@ -941,7 +941,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
 
   Widget _buildConfidenceChartCard() {
     return Card(
-      elevation: 2,
+      elevation: TeaGardenTheme.elevationLow,
       child: Padding(
         padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
         child: Column(
@@ -1024,7 +1024,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
 
   Widget _buildGrowthChartCard() {
     return Card(
-      elevation: 2,
+      elevation: TeaGardenTheme.elevationLow,
       child: Padding(
         padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
         child: Column(
@@ -1231,7 +1231,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
 
   Widget _buildExportCard() {
     return Card(
-      elevation: 2,
+      elevation: TeaGardenTheme.elevationLow,
       child: Padding(
         padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
         child: Column(
@@ -1289,7 +1289,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
 
   Widget _buildLanguageSettingsCard() {
     return Card(
-      elevation: 2,
+      elevation: TeaGardenTheme.elevationLow,
       child: Padding(
         padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
         child: Column(
@@ -1333,7 +1333,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
 
   Widget _buildSettingsCard() {
     return Card(
-      elevation: 2,
+      elevation: TeaGardenTheme.elevationLow,
       child: Padding(
         padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
         child: Column(
@@ -1456,7 +1456,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
         // 初期化時にのみ呼び出されるようにCubit側で実装されている
 
         return Card(
-          elevation: 2,
+          elevation: TeaGardenTheme.elevationLow,
           child: Padding(
             padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
             child: Column(
