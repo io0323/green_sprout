@@ -27,6 +27,14 @@ class TeaGardenTheme {
   static const double borderWidthMedium = 2.0;
   static const double borderWidthThick = 4.0;
 
+  /// オパシティ定数
+  static const double opacityVeryLow = 0.1;
+  static const double opacityLow = 0.3;
+  static const double opacityMedium = 0.5;
+  static const double opacityHigh = 0.6;
+  static const double opacityVeryHigh = 0.7;
+  static const double opacityAlmostOpaque = 0.9;
+
   /// ライトテーマ
   static ThemeData get lightTheme {
     return ThemeData(
@@ -177,7 +185,7 @@ class TeaGardenTheme {
 
   static List<BoxShadow> get buttonShadow => [
         BoxShadow(
-          color: primaryGreen.withOpacity(0.3),
+          color: primaryGreen.withOpacity(opacityLow),
           blurRadius: 4,
           offset: const Offset(0, 2),
         ),
