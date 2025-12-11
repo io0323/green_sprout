@@ -253,6 +253,7 @@ class TeaGardenTheme {
   static const double titleFontSizeDefault = 20.0;
 
   /// エレベーション定数
+  static const double elevationNone = 0.0;
   static const double elevationLow = 2.0;
   static const double elevationMedium = 4.0;
   static const double elevationHigh = 8.0;
