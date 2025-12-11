@@ -555,10 +555,10 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                           .onSurface
                           .withOpacity(0.6),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: TeaGardenTheme.spacingSM),
                     Text(LocalizationService.instance
                         .translate('no_results_yet')),
-                    const SizedBox(height: 5),
+                    const SizedBox(height: TeaGardenTheme.spacingXS),
                     Text(
                       LocalizationService.instance
                           .translate('take_photo_to_analyze'),
@@ -585,10 +585,10 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                           .onSurface
                           .withOpacity(0.6),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: TeaGardenTheme.spacingSM),
                     Text(LocalizationService.instance
                         .translate('no_matching_records')),
-                    const SizedBox(height: 5),
+                    const SizedBox(height: TeaGardenTheme.spacingXS),
                     Text(
                       LocalizationService.instance
                           .translate('change_search_conditions'),
@@ -676,7 +676,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                     LocalizationService.instance.translate('healthy')
                 ? TeaGardenTheme.successColor
                 : TeaGardenTheme.warningColor,
-            width: 4,
+            width: TeaGardenTheme.borderWidthThick,
           ),
         ),
       ),
@@ -720,7 +720,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                     ),
                   ],
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: TeaGardenTheme.spacingXS),
                 Text(
                   '${result['timestamp']} | 信頼度: ${((result['confidence'] as double) * 100).round()}%',
                   style: TextStyle(
@@ -731,7 +731,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
                         .withOpacity(0.6),
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: TeaGardenTheme.spacingXS),
                 Text(
                   result['comment'],
                   style: const TextStyle(fontSize: 14),
