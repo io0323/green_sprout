@@ -225,9 +225,9 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
       child: Column(
         children: [
           _buildWelcomeCard(),
-          const SizedBox(height: 20),
+          const SizedBox(height: TeaGardenTheme.spacingML),
           _buildStatsGrid(),
-          const SizedBox(height: 20),
+          const SizedBox(height: TeaGardenTheme.spacingML),
           _buildRecentResultsCard(),
         ],
       ),
@@ -240,7 +240,7 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
       child: Column(
         children: [
           _buildAnalysisCard(),
-          const SizedBox(height: 20),
+          const SizedBox(height: TeaGardenTheme.spacingML),
           _buildAllResultsCard(),
         ],
       ),
@@ -253,11 +253,11 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
       child: Column(
         children: [
           _buildTimeSeriesChartCard(),
-          const SizedBox(height: 20),
+          const SizedBox(height: TeaGardenTheme.spacingML),
           _buildHealthChartCard(),
-          const SizedBox(height: 20),
+          const SizedBox(height: TeaGardenTheme.spacingML),
           _buildGrowthChartCard(),
-          const SizedBox(height: 20),
+          const SizedBox(height: TeaGardenTheme.spacingML),
           _buildConfidenceChartCard(),
         ],
       ),
