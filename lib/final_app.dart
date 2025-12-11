@@ -70,11 +70,11 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
         child: Column(
           children: [
             _buildWelcomeCard(),
-            const SizedBox(height: 20),
+            const SizedBox(height: TeaGardenTheme.spacingML),
             _buildStatsCard(),
-            const SizedBox(height: 20),
+            const SizedBox(height: TeaGardenTheme.spacingML),
             _buildAnalysisCard(),
-            const SizedBox(height: 20),
+            const SizedBox(height: TeaGardenTheme.spacingML),
             _buildResultsCard(),
           ],
         ),
@@ -130,14 +130,14 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               '最近の解析結果',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: TeaGardenTheme.heading3.fontSize,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: TeaGardenTheme.spacingM),
             if (_results.isEmpty)
               const EmptyStateWidget()
             else
@@ -189,7 +189,7 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
                 child: Text(
                   result['healthStatus'],
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: TeaGardenTheme.bodySmall.fontSize,
                     fontWeight: FontWeight.bold,
                     color: isHealthy
                         ? TeaGardenTheme.successColor
@@ -199,18 +199,18 @@ class _TeaGardenHomePageState extends State<TeaGardenHomePage> {
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: TeaGardenTheme.spacingXS),
           Text(
             '${result['timestamp']} | 信頼度: ${result['confidence']}%',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: TeaGardenTheme.bodySmall.fontSize,
               color: colorScheme.onSurface.withOpacity(0.6),
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: TeaGardenTheme.spacingXS),
           Text(
             result['comment'],
-            style: const TextStyle(fontSize: 14),
+            style: TextStyle(fontSize: TeaGardenTheme.bodyMedium.fontSize),
           ),
         ],
       ),
