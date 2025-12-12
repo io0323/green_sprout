@@ -231,7 +231,8 @@ class _WearableHomePageState extends State<WearableHomePage> {
                                         ? TeaGardenTheme.wearableFontSizeSmall
                                         : TeaGardenTheme.bodyMedium.fontSize,
                                     color: theme.colorScheme.onSurface
-                                        .withOpacity(0.6),
+                                        .withOpacity(
+                                            TeaGardenTheme.opacityHigh),
                                   ),
                                   textAlign: TextAlign.center,
                                 ),

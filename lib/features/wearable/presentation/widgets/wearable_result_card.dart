@@ -69,7 +69,8 @@ class WearableResultCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(TeaGardenTheme.spacingS),
               decoration: BoxDecoration(
-                color: colorScheme.primary.withOpacity(0.1),
+                color: colorScheme.primary
+                    .withOpacity(TeaGardenTheme.opacityVeryLow),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -145,7 +146,8 @@ class WearableResultCard extends StatelessWidget {
                     fontSize: isWearable
                         ? TeaGardenTheme.wearableFontSizeSmall
                         : TeaGardenTheme.caption.fontSize,
-                    color: colorScheme.onSurface.withOpacity(0.6),
+                    color: colorScheme.onSurface
+                        .withOpacity(TeaGardenTheme.opacityHigh),
                   ),
                 ),
               ],
