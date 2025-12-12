@@ -265,7 +265,8 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
 
     return {
       'textureVariation': totalVariation / variationCount,
-      'smoothness': 1.0 - (totalVariation / variationCount) / 765.0, // 正規化
+      'smoothness': 1.0 -
+          (totalVariation / variationCount) / AppConstants.rgbMaxSum, // 正規化
     };
   }
 
@@ -288,7 +289,8 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
             (center.g - down.g).abs() +
             (center.b - down.b).abs();
 
-        if (horizontalDiff > 50 || verticalDiff > 50) {
+        if (horizontalDiff > AppConstants.edgeDiffThreshold ||
+            verticalDiff > AppConstants.edgeDiffThreshold) {
           edgeCount++;
         }
       }
@@ -310,16 +312,16 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
 
     // 複合的な判定ロジック
     if (brightness > AppConstants.brightnessThresholdHigh &&
-        greenness > 0.6 &&
-        smoothness > 0.8) {
+        greenness > AppConstants.greennessThresholdExtraHigh &&
+        smoothness > AppConstants.smoothnessHighThreshold) {
       return GrowthStageConstants.bud;
     } else if (brightness > AppConstants.brightnessThresholdMedium &&
         greenness > AppConstants.greennessThresholdHigh &&
-        complexity < 0.1) {
+        complexity < AppConstants.complexityLowThreshold) {
       return GrowthStageConstants.youngLeaf;
     } else if (brightness > AppConstants.brightnessThresholdLow &&
         greenness > AppConstants.greennessThresholdLow &&
-        complexity < 0.2) {
+        complexity < AppConstants.complexityMediumThreshold) {
       return GrowthStageConstants.matureLeaf;
     } else {
       return GrowthStageConstants.oldLeaf;
@@ -334,14 +336,16 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
     final brightness = colorStats['brightness']!;
 
     // 健康度のスコア計算
-    final healthScore =
-        (greenness * 0.4) + (smoothness * 0.3) + ((brightness / 255.0) * 0.3);
+    final healthScore = (greenness * AppConstants.healthScoreWeightGreenness) +
+        (smoothness * AppConstants.healthScoreWeightSmoothness) +
+        ((brightness / AppConstants.rgbMaxChannel) *
+            AppConstants.healthScoreWeightBrightness);
 
-    if (healthScore > 0.7) {
+    if (healthScore > AppConstants.healthScoreThresholdHealthy) {
       return HealthStatusConstants.healthy;
-    } else if (healthScore > 0.5) {
+    } else if (healthScore > AppConstants.healthScoreThresholdSlightlyDamaged) {
       return HealthStatusConstants.slightlyDamaged;
-    } else if (healthScore > 0.3) {
+    } else if (healthScore > AppConstants.healthScoreThresholdDamaged) {
       return HealthStatusConstants.damaged;
     } else {
       return HealthStatusConstants.diseased;
@@ -352,8 +356,11 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
   double _calculateConfidence(Map<String, double> colorStats,
       Map<String, double> textureStats, Map<String, double> shapeStats) {
     // 特徴量の一貫性に基づく信頼度計算
-    final colorConsistency =
-        1.0 - (colorStats['brightness']! / 255.0 - 0.5).abs() * 2;
+    final colorConsistency = 1.0 -
+        (colorStats['brightness']! / AppConstants.rgbMaxChannel -
+                    AppConstants.colorConsistencyCenter)
+                .abs() *
+            2;
     final textureConsistency = textureStats['smoothness']!;
     final shapeConsistency = 1.0 - shapeStats['complexity']!;
 

@@ -30,10 +30,32 @@ class AppConstants {
   static const double greennessThresholdMedium = 0.45;
   static const double greennessThresholdHigh = 0.5;
   static const double greennessThresholdVeryHigh = 0.55;
+  static const double greennessThresholdExtraHigh = 0.6;
   static const double fallbackConfidenceLow = 0.75;
   static const double fallbackConfidenceMedium = 0.80;
   static const double fallbackConfidenceHigh = 0.85;
   static const double fallbackConfidenceVeryHigh = 0.90;
+
+  /*
+   * Webモック解析（高度な特徴量解析）関連の定数
+   * - マジックナンバーを排除し、判定基準を調整しやすくする
+   */
+  static const double rgbMaxChannel = 255.0;
+  static const double rgbMaxSum = 765.0; // 255 * 3
+  static const double colorConsistencyCenter = 0.5;
+
+  static const int edgeDiffThreshold = 50;
+  static const double smoothnessHighThreshold = 0.8;
+  static const double complexityLowThreshold = 0.1;
+  static const double complexityMediumThreshold = 0.2;
+
+  static const double healthScoreWeightGreenness = 0.4;
+  static const double healthScoreWeightSmoothness = 0.3;
+  static const double healthScoreWeightBrightness = 0.3;
+
+  static const double healthScoreThresholdHealthy = 0.7;
+  static const double healthScoreThresholdSlightlyDamaged = 0.5;
+  static const double healthScoreThresholdDamaged = 0.3;
 
   // データベース関連の定数
   static const int maxQueryResults = 1000;
