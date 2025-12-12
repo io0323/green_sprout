@@ -309,11 +309,17 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
     final complexity = shapeStats['complexity']!;
 
     // 複合的な判定ロジック
-    if (brightness > 200 && greenness > 0.6 && smoothness > 0.8) {
+    if (brightness > AppConstants.brightnessThresholdHigh &&
+        greenness > 0.6 &&
+        smoothness > 0.8) {
       return GrowthStageConstants.bud;
-    } else if (brightness > 150 && greenness > 0.5 && complexity < 0.1) {
+    } else if (brightness > AppConstants.brightnessThresholdMedium &&
+        greenness > AppConstants.greennessThresholdHigh &&
+        complexity < 0.1) {
       return GrowthStageConstants.youngLeaf;
-    } else if (brightness > 100 && greenness > 0.4 && complexity < 0.2) {
+    } else if (brightness > AppConstants.brightnessThresholdLow &&
+        greenness > AppConstants.greennessThresholdLow &&
+        complexity < 0.2) {
       return GrowthStageConstants.matureLeaf;
     } else {
       return GrowthStageConstants.oldLeaf;
