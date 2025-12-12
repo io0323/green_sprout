@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import '../../src/web_storage.dart';
+import '../constants/app_constants.dart';
 import '../utils/app_logger.dart';
 
 /// 国際化サービスクラス
@@ -31,7 +32,7 @@ class LocalizationService {
       }
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        '翻訳データ読み込みエラー',
+        ErrorMessages.translationDataLoadError,
         e,
         stackTrace,
       );
