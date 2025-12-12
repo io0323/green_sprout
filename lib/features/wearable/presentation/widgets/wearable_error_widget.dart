@@ -80,22 +80,18 @@ class WearableErrorWidget extends StatelessWidget {
 
     return Center(
       child: Padding(
-        padding: EdgeInsets.all(
-          isWearable ? TeaGardenTheme.spacingM : TeaGardenTheme.spacingM,
-        ),
+        padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             // エラーアイコン
             Container(
-              padding: EdgeInsets.all(
-                isWearable ? TeaGardenTheme.spacingM : TeaGardenTheme.spacingM,
-              ),
+              padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
               decoration: BoxDecoration(
-                color: errorColor.withOpacity(0.1),
+                color: errorColor.withOpacity(TeaGardenTheme.opacityVeryLow),
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: errorColor.withOpacity(0.3),
+                  color: errorColor.withOpacity(TeaGardenTheme.opacityLow),
                   width: TeaGardenTheme.cameraBorderWidth,
                 ),
               ),
@@ -108,11 +104,7 @@ class WearableErrorWidget extends StatelessWidget {
               ),
             ),
 
-            SizedBox(
-              height: isWearable
-                  ? TeaGardenTheme.spacingM
-                  : TeaGardenTheme.spacingM,
-            ),
+            const SizedBox(height: TeaGardenTheme.spacingM),
 
             // エラータイトル
             Text(
@@ -140,7 +132,8 @@ class WearableErrorWidget extends StatelessWidget {
                 fontSize: isWearable
                     ? TeaGardenTheme.wearableFontSizeSmall
                     : TeaGardenTheme.bodySmall.fontSize,
-                color: colorScheme.onSurface.withOpacity(0.7),
+                color: colorScheme.onSurface
+                    .withOpacity(TeaGardenTheme.opacityVeryHigh),
               ),
               textAlign: TextAlign.center,
               maxLines: isWearable ? 4 : 6,
@@ -149,11 +142,7 @@ class WearableErrorWidget extends StatelessWidget {
 
             // リトライボタン
             if (onRetry != null) ...[
-              SizedBox(
-                height: isWearable
-                    ? TeaGardenTheme.spacingM
-                    : TeaGardenTheme.spacingM,
-              ),
+              const SizedBox(height: TeaGardenTheme.spacingM),
               SizedBox(
                 width: double.infinity,
                 height: isWearable
