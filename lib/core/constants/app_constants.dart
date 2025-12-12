@@ -123,6 +123,20 @@ class ErrorMessages {
   static const String wearableEventStreamError = 'ウェアラブルデバイスイベントストリームエラー';
   static const String wearableError = 'ウェアラブルデバイスエラー';
   static const String wearableInitializationError = 'ウェアラブルデバイスサービス初期化エラー';
+
+  // ログ用途（共通）
+  static const String translationDataLoadError = '翻訳データ読み込みエラー';
+  static const String diInitializationError = 'DI初期化エラー';
+  static const String flutterFrameworkError = 'Flutterエラー';
+  static const String widgetTreeError = 'ウィジェットエラー';
+  static const String unhandledAsyncError = '未処理の非同期エラー';
+  static const String errorMessageFetchErrorFallback =
+      'エラーメッセージ取得エラー（デフォルトメッセージ使用）';
+
+  // ログ用途（画面遷移）
+  static const String navigationToAnalysisResultError = '解析結果画面への遷移エラー';
+  static const String navigationToCameraError = 'カメラ画面への遷移エラー';
+  static const String cameraScreenReturnedError = 'カメラ画面からのエラー';
 }
 
 /// ログメッセージの定数
@@ -136,4 +150,8 @@ class LogMessages {
   static const String wearableReceivedData = '受信データ';
   static const String wearableInitializationComplete =
       'ウェアラブルデバイスサービスの初期化が完了しました';
+
+  // 初期化関連
+  static const String localizationInitializationComplete = '国際化サービスの初期化が完了しました';
+  static const String diInitializationComplete = 'DIコンテナの初期化が完了しました';
 }

@@ -10,6 +10,7 @@ import '../../../../core/services/localization_service.dart';
 import '../../../../core/utils/platform_utils.dart';
 import '../../../../core/utils/app_logger.dart';
 import '../../../../core/utils/failure_message_mapper.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/di/injection_container.dart' as di;
 import '../../../../core/errors/failures.dart';
 import '../../../../core/widgets/snackbar_helper.dart';
@@ -135,7 +136,7 @@ class _WearableHomePageState extends State<WearableHomePage> {
             _loadRecentResults();
           } catch (e, stackTrace) {
             AppLogger.logErrorWithStackTrace(
-              '解析結果画面への遷移エラー',
+              ErrorMessages.navigationToAnalysisResultError,
               e,
               stackTrace,
             );
@@ -149,7 +150,10 @@ class _WearableHomePageState extends State<WearableHomePage> {
         } else if (result['error'] != null && mounted) {
           // カメラ画面からエラーが返された場合
           final errorMessage = result['error'] as String;
-          AppLogger.debugError('カメラ画面からのエラー', errorMessage);
+          AppLogger.debugError(
+            ErrorMessages.cameraScreenReturnedError,
+            errorMessage,
+          );
           if (mounted) {
             SnackBarHelper.showError(context, errorMessage);
           }
@@ -157,7 +161,7 @@ class _WearableHomePageState extends State<WearableHomePage> {
       }
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'カメラ画面への遷移エラー',
+        ErrorMessages.navigationToCameraError,
         e,
         stackTrace,
       );

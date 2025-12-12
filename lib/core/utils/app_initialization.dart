@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tea_garden_ai/core/services/localization_service.dart';
+import 'package:tea_garden_ai/core/constants/app_constants.dart';
 import 'package:tea_garden_ai/core/di/injection_container.dart' as di;
 import 'package:tea_garden_ai/core/utils/app_logger.dart';
 import 'package:tea_garden_ai/core/utils/platform_utils.dart';
@@ -18,9 +19,13 @@ class AppInitialization {
   static Future<void> initializeLocalization() async {
     try {
       await LocalizationService.instance.loadTranslations();
-      AppLogger.debugInfo('国際化サービスの初期化が完了しました');
+      AppLogger.debugInfo(LogMessages.localizationInitializationComplete);
     } catch (e, stackTrace) {
-      AppLogger.logErrorWithStackTrace('翻訳データ読み込みエラー', e, stackTrace);
+      AppLogger.logErrorWithStackTrace(
+        ErrorMessages.translationDataLoadError,
+        e,
+        stackTrace,
+      );
       // エラーが発生してもアプリは起動を続行
       // デフォルトの日本語翻訳が使用される
     }
@@ -31,9 +36,13 @@ class AppInitialization {
   static Future<void> initializeDependencyInjection() async {
     try {
       await di.init();
-      AppLogger.debugInfo('DIコンテナの初期化が完了しました');
+      AppLogger.debugInfo(LogMessages.diInitializationComplete);
     } catch (e, stackTrace) {
-      AppLogger.logErrorWithStackTrace('DI初期化エラー', e, stackTrace);
+      AppLogger.logErrorWithStackTrace(
+        ErrorMessages.diInitializationError,
+        e,
+        stackTrace,
+      );
       // エラーが発生してもアプリは起動を続行
       // ただし、DIに依存する機能は使用できない可能性がある
     }
@@ -45,7 +54,7 @@ class AppInitialization {
     FlutterError.onError = (FlutterErrorDetails details) {
       FlutterError.presentError(details);
       AppLogger.logErrorWithStackTrace(
-        'Flutterエラー',
+        ErrorMessages.flutterFrameworkError,
         details.exception,
         details.stack,
       );
@@ -62,7 +71,11 @@ class AppInitialization {
       (error, stack) {
         /// 未処理の非同期エラーをキャッチ
         /// アプリがクラッシュしないようにエラーをログに記録
-        AppLogger.logErrorWithStackTrace('未処理の非同期エラー', error, stack);
+        AppLogger.logErrorWithStackTrace(
+          ErrorMessages.unhandledAsyncError,
+          error,
+          stack,
+        );
       },
     );
   }
@@ -72,7 +85,7 @@ class AppInitialization {
   static void setupErrorWidget() {
     ErrorWidget.builder = (FlutterErrorDetails details) {
       AppLogger.logErrorWithStackTrace(
-        'ウィジェットエラー',
+        ErrorMessages.widgetTreeError,
         details.exception,
         details.stack,
       );
@@ -84,7 +97,7 @@ class AppInitialization {
         errorMessage = LocalizationService.instance.translate('error_occurred');
       } catch (e, stackTrace) {
         AppLogger.logErrorWithStackTrace(
-          'エラーメッセージ取得エラー（デフォルトメッセージ使用）',
+          ErrorMessages.errorMessageFetchErrorFallback,
           e,
           stackTrace,
         );
