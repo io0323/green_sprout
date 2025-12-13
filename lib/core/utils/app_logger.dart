@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import '../constants/app_constants.dart';
 import '../errors/failures.dart';
 
 /// Centralized logging utility for the application
@@ -70,9 +71,9 @@ class AppLogger {
     if (kDebugMode) {
       debugError(context, error);
       if (stackTrace != null) {
-        debugError('スタックトレース', stackTrace);
+        debugError(LogMessages.loggerLabelStackTrace, stackTrace);
       }
-      debugError('エラータイプ', error.runtimeType);
+      debugError(LogMessages.loggerLabelErrorType, error.runtimeType);
     }
   }
 
@@ -82,10 +83,10 @@ class AppLogger {
   static void logFailure(String context, Failure failure) {
     if (kDebugMode) {
       debugError(context, failure);
-      debugInfo('エラータイプ', failure.runtimeType);
-      debugInfo('エラーメッセージ', failure.message);
+      debugInfo(LogMessages.loggerLabelErrorType, failure.runtimeType);
+      debugInfo(LogMessages.loggerLabelErrorMessage, failure.message);
       if (failure.code != null) {
-        debugInfo('エラーコード', failure.code);
+        debugInfo(LogMessages.loggerLabelErrorCode, failure.code);
       }
     }
   }
