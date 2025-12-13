@@ -2,18 +2,19 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import '../constants/app_constants.dart';
 import '../utils/app_logger.dart';
 
 /// セキュアなHTTPクライアント
 /// セキュリティを強化したHTTP通信を提供
 class SecureHttpClient {
-  static const Duration _defaultTimeout = Duration(seconds: 30);
-  static const int _maxRetries = 3;
+  static const Duration _defaultTimeout = HttpConstants.defaultTimeout;
+  static const int _maxRetries = HttpConstants.maxRetries;
 
   late http.Client _client;
   final Map<String, String> _defaultHeaders = {
-    'Content-Type': 'application/json',
-    'User-Agent': 'TeaGardenAI/1.0.0',
+    HttpConstants.headerContentType: HttpConstants.contentTypeJson,
+    HttpConstants.headerUserAgent: HttpConstants.defaultUserAgent,
   };
 
   SecureHttpClient() {
@@ -165,19 +166,31 @@ class SecureHttpClient {
         lastException = TimeoutException('Request timeout');
         retryCount++;
         if (retryCount < _maxRetries) {
-          await Future.delayed(Duration(seconds: retryCount * 2));
+          await Future.delayed(
+            Duration(
+              seconds: retryCount * HttpConstants.retryBackoffSecondsBase,
+            ),
+          );
         }
       } on SocketException {
         lastException = const SocketException('Network error');
         retryCount++;
         if (retryCount < _maxRetries) {
-          await Future.delayed(Duration(seconds: retryCount * 2));
+          await Future.delayed(
+            Duration(
+              seconds: retryCount * HttpConstants.retryBackoffSecondsBase,
+            ),
+          );
         }
       } on HttpException {
         lastException = const HttpException('HTTP error');
         retryCount++;
         if (retryCount < _maxRetries) {
-          await Future.delayed(Duration(seconds: retryCount * 2));
+          await Future.delayed(
+            Duration(
+              seconds: retryCount * HttpConstants.retryBackoffSecondsBase,
+            ),
+          );
         }
       } catch (e, stackTrace) {
         AppLogger.logErrorWithStackTrace(
@@ -188,7 +201,11 @@ class SecureHttpClient {
         lastException = Exception('Unexpected error: $e');
         retryCount++;
         if (retryCount < _maxRetries) {
-          await Future.delayed(Duration(seconds: retryCount * 2));
+          await Future.delayed(
+            Duration(
+              seconds: retryCount * HttpConstants.retryBackoffSecondsBase,
+            ),
+          );
         }
       }
     }
@@ -209,7 +226,7 @@ class SecureHttpClient {
     // NOTE: Removed restrictive content-type check to allow non-JSON responses.
 
     // レスポンスサイズの検証（10MB制限）
-    if (response.bodyBytes.length > 10 * 1024 * 1024) {
+    if (response.bodyBytes.length > HttpConstants.maxResponseBytes) {
       return false;
     }
 

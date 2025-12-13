@@ -200,3 +200,23 @@ class MetricsConstants {
   static const String defaultUnknown = 'unknown';
   static const String invalidUrl = 'invalid_url';
 }
+
+/*
+ * HTTP/ネットワーク関連の定数
+ * - タイムアウトやリトライ、ヘッダー等のマジックナンバー/文字列を集約する
+ */
+class HttpConstants {
+  /* リトライ/タイムアウト */
+  static const int maxRetries = 3;
+  static const Duration defaultTimeout = Duration(seconds: 30);
+  static const int retryBackoffSecondsBase = 2;
+
+  /* レスポンス制限 */
+  static const int maxResponseBytes = 10 * 1024 * 1024; // 10MB
+
+  /* デフォルトヘッダー */
+  static const String headerContentType = 'Content-Type';
+  static const String headerUserAgent = 'User-Agent';
+  static const String contentTypeJson = 'application/json';
+  static const String defaultUserAgent = 'TeaGardenAI/1.0.0';
+}
