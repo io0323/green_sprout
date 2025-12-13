@@ -163,7 +163,8 @@ class SecureHttpClient {
 
         return response as http.Response;
       } on TimeoutException {
-        lastException = TimeoutException('Request timeout');
+        lastException =
+            TimeoutException(ErrorMessages.secureHttpRequestTimeout);
         retryCount++;
         if (retryCount < _maxRetries) {
           await Future.delayed(
@@ -173,7 +174,9 @@ class SecureHttpClient {
           );
         }
       } on SocketException {
-        lastException = const SocketException('Network error');
+        lastException = const SocketException(
+          ErrorMessages.secureHttpNetworkError,
+        );
         retryCount++;
         if (retryCount < _maxRetries) {
           await Future.delayed(
@@ -183,7 +186,7 @@ class SecureHttpClient {
           );
         }
       } on HttpException {
-        lastException = const HttpException('HTTP error');
+        lastException = const HttpException(ErrorMessages.secureHttpError);
         retryCount++;
         if (retryCount < _maxRetries) {
           await Future.delayed(
@@ -194,11 +197,13 @@ class SecureHttpClient {
         }
       } catch (e, stackTrace) {
         AppLogger.logErrorWithStackTrace(
-          'HTTPリクエストエラー',
+          HttpLogMessages.secureHttpRequestError,
           e,
           stackTrace,
         );
-        lastException = Exception('Unexpected error: $e');
+        lastException = Exception(
+          '${ErrorMessages.secureHttpUnexpectedErrorPrefix} $e',
+        );
         retryCount++;
         if (retryCount < _maxRetries) {
           await Future.delayed(
@@ -210,7 +215,8 @@ class SecureHttpClient {
       }
     }
 
-    throw lastException ?? Exception('Max retries exceeded');
+    throw lastException ??
+        Exception(ErrorMessages.secureHttpMaxRetriesExceeded);
   }
 
   /// レスポンスを検証する
