@@ -220,3 +220,19 @@ class HttpConstants {
   static const String contentTypeJson = 'application/json';
   static const String defaultUserAgent = 'TeaGardenAI/1.0.0';
 }
+
+/*
+ * クラウド同期関連の定数
+ * - APIのベースURL/エンドポイント/保存キーを集約してマジック文字列を排除する
+ */
+class CloudSyncConstants {
+  /* API */
+  static const String baseUrl = 'https://api.tea-garden-ai.com';
+  static const String healthPath = '/health';
+  static const String syncEndpointPath = '/api/v1/sync';
+
+  /* SharedPreferences keys */
+  static const String keyAutoSyncEnabled = 'auto_sync_enabled';
+  static const String keyLastSyncTimestamp = 'last_sync_timestamp';
+  static const String keyUserId = 'user_id';
+}
