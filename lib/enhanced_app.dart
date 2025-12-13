@@ -1979,7 +1979,11 @@ class _EnhancedTeaGardenHomePageState extends State<EnhancedTeaGardenHomePage>
     }
 
     final jsonContent = jsonEncode(_results);
-    _downloadFile(jsonContent, 'tea_analysis_results.json', 'application/json');
+    _downloadFile(
+      jsonContent,
+      'tea_analysis_results.json',
+      HttpConstants.contentTypeJson,
+    );
     SnackBarHelper.showSuccess(
       context,
       LocalizationService.instance.translate('json_exported'),
