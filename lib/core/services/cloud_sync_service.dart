@@ -20,12 +20,6 @@ abstract class CloudSyncService {
 /// クラウド同期サービスの実装
 /// Firebase Firestore または REST API を使用
 class CloudSyncServiceImpl implements CloudSyncService {
-  static const String _baseUrl = 'https://api.tea-garden-ai.com';
-  static const String _syncEndpoint = '/api/v1/sync';
-  static const String _autoSyncKey = 'auto_sync_enabled';
-  static const String _lastSyncKey = 'last_sync_timestamp';
-  static const String _userIdKey = 'user_id';
-
   final http.Client _httpClient;
   final SharedPreferences _prefs;
 
@@ -39,7 +33,9 @@ class CloudSyncServiceImpl implements CloudSyncService {
   Future<bool> isConnected() async {
     try {
       final response = await _httpClient.get(
-        Uri.parse('$_baseUrl/health'),
+        Uri.parse(
+          '${CloudSyncConstants.baseUrl}${CloudSyncConstants.healthPath}',
+        ),
         headers: {
           HttpConstants.headerContentType: HttpConstants.contentTypeJson,
         },
@@ -64,7 +60,8 @@ class CloudSyncServiceImpl implements CloudSyncService {
 
     try {
       final userId = await _getUserId();
-      final lastSync = _prefs.getString(_lastSyncKey);
+      final lastSync =
+          _prefs.getString(CloudSyncConstants.keyLastSyncTimestamp);
 
       // 最後の同期以降のデータのみを送信
       final filteredResults = _filterResultsSinceLastSync(results, lastSync);
@@ -74,7 +71,10 @@ class CloudSyncServiceImpl implements CloudSyncService {
       }
 
       final response = await _httpClient.post(
-        Uri.parse('$_baseUrl$_syncEndpoint'),
+        Uri.parse(
+          '${CloudSyncConstants.baseUrl}'
+          '${CloudSyncConstants.syncEndpointPath}',
+        ),
         headers: {
           HttpConstants.headerContentType: HttpConstants.contentTypeJson,
           'Authorization': 'Bearer ${await _getAuthToken()}',
@@ -88,7 +88,10 @@ class CloudSyncServiceImpl implements CloudSyncService {
 
       if (response.statusCode == 200) {
         // 同期成功時はタイムスタンプを更新
-        await _prefs.setString(_lastSyncKey, DateTime.now().toIso8601String());
+        await _prefs.setString(
+          CloudSyncConstants.keyLastSyncTimestamp,
+          DateTime.now().toIso8601String(),
+        );
       } else {
         throw ServerFailure('同期に失敗しました: ${response.statusCode}');
       }
@@ -113,11 +116,14 @@ class CloudSyncServiceImpl implements CloudSyncService {
 
     try {
       final userId = await _getUserId();
-      final lastSync = _prefs.getString(_lastSyncKey);
+      final lastSync =
+          _prefs.getString(CloudSyncConstants.keyLastSyncTimestamp);
 
       final response = await _httpClient.get(
         Uri.parse(
-            '$_baseUrl$_syncEndpoint?userId=$userId&since=${lastSync ?? ''}'),
+          '${CloudSyncConstants.baseUrl}${CloudSyncConstants.syncEndpointPath}'
+          '?userId=$userId&since=${lastSync ?? ''}',
+        ),
         headers: {
           'Authorization': 'Bearer ${await _getAuthToken()}',
         },
@@ -130,7 +136,10 @@ class CloudSyncServiceImpl implements CloudSyncService {
             .toList();
 
         // 同期成功時はタイムスタンプを更新
-        await _prefs.setString(_lastSyncKey, DateTime.now().toIso8601String());
+        await _prefs.setString(
+          CloudSyncConstants.keyLastSyncTimestamp,
+          DateTime.now().toIso8601String(),
+        );
 
         return results;
       } else {
@@ -151,20 +160,20 @@ class CloudSyncServiceImpl implements CloudSyncService {
 
   @override
   Future<void> enableAutoSync(bool enabled) async {
-    await _prefs.setBool(_autoSyncKey, enabled);
+    await _prefs.setBool(CloudSyncConstants.keyAutoSyncEnabled, enabled);
   }
 
   @override
   Future<bool> isAutoSyncEnabled() async {
-    return _prefs.getBool(_autoSyncKey) ?? false;
+    return _prefs.getBool(CloudSyncConstants.keyAutoSyncEnabled) ?? false;
   }
 
   /// ユーザーIDを取得または生成
   Future<String> _getUserId() async {
-    String? userId = _prefs.getString(_userIdKey);
+    String? userId = _prefs.getString(CloudSyncConstants.keyUserId);
     if (userId == null) {
       userId = _generateUserId();
-      await _prefs.setString(_userIdKey, userId);
+      await _prefs.setString(CloudSyncConstants.keyUserId, userId);
     }
     return userId;
   }
