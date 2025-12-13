@@ -202,6 +202,25 @@ class MetricsConstants {
 }
 
 /*
+ * メトリクス/デバッグ表示用の文言定数
+ * - MetricsCollector のログ/レポート生成で使用する文字列を集約する
+ */
+class MetricsMessages {
+  static const String debugMetricRecordedPrefix = 'Metric recorded:';
+  static const String reportHeader = '=== Metrics Report ===';
+  static const String reportTotalMetricsPrefix = 'Total metrics:';
+  static const String reportActiveTimersPrefix = 'Active timers:';
+
+  static const String reportCountLabel = 'Count';
+  static const String reportSumLabel = 'Sum';
+  static const String reportAverageLabel = 'Average';
+  static const String reportMinLabel = 'Min';
+  static const String reportMaxLabel = 'Max';
+
+  static const String urlSanitizeError = 'URLサニタイズエラー';
+}
+
+/*
  * HTTP/ネットワーク関連の定数
  * - タイムアウトやリトライ、ヘッダー等のマジックナンバー/文字列を集約する
  */

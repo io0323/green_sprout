@@ -38,7 +38,10 @@ class MetricsCollector {
     _metrics.add(metric);
 
     if (kDebugMode) {
-      AppLogger.debug('Metric recorded: $name = $value $unit');
+      AppLogger.debug(
+        '${MetricsMessages.debugMetricRecordedPrefix} '
+        '$name = $value $unit',
+      );
     }
   }
 
@@ -290,9 +293,13 @@ class MetricsCollector {
   /// @return レポート文字列
   String generateReport() {
     final buffer = StringBuffer();
-    buffer.writeln('=== Metrics Report ===');
-    buffer.writeln('Total metrics: ${_metrics.length}');
-    buffer.writeln('Active timers: ${_timers.length}');
+    buffer.writeln(MetricsMessages.reportHeader);
+    buffer.writeln(
+      '${MetricsMessages.reportTotalMetricsPrefix} ${_metrics.length}',
+    );
+    buffer.writeln(
+      '${MetricsMessages.reportActiveTimersPrefix} ${_timers.length}',
+    );
     buffer.writeln();
 
     // メトリクス名ごとの統計
@@ -300,11 +307,20 @@ class MetricsCollector {
     for (final name in metricNames) {
       final stats = getMetricStatistics(name);
       buffer.writeln('$name:');
-      buffer.writeln('  Count: ${stats.count}');
-      buffer.writeln('  Sum: ${stats.sum.toStringAsFixed(2)}');
-      buffer.writeln('  Average: ${stats.average.toStringAsFixed(2)}');
-      buffer.writeln('  Min: ${stats.min.toStringAsFixed(2)}');
-      buffer.writeln('  Max: ${stats.max.toStringAsFixed(2)}');
+      buffer.writeln('  ${MetricsMessages.reportCountLabel}: ${stats.count}');
+      buffer.writeln(
+        '  ${MetricsMessages.reportSumLabel}: ${stats.sum.toStringAsFixed(2)}',
+      );
+      buffer.writeln(
+        '  ${MetricsMessages.reportAverageLabel}: '
+        '${stats.average.toStringAsFixed(2)}',
+      );
+      buffer.writeln(
+        '  ${MetricsMessages.reportMinLabel}: ${stats.min.toStringAsFixed(2)}',
+      );
+      buffer.writeln(
+        '  ${MetricsMessages.reportMaxLabel}: ${stats.max.toStringAsFixed(2)}',
+      );
       buffer.writeln();
     }
 
@@ -320,7 +336,7 @@ class MetricsCollector {
       return '${uri.scheme}://${uri.host}${uri.path}';
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'URLサニタイズエラー',
+        MetricsMessages.urlSanitizeError,
         e,
         stackTrace,
       );
