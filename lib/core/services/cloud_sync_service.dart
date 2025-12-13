@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../constants/app_constants.dart';
 import '../errors/failures.dart';
 import '../../features/tea_analysis/domain/entities/tea_analysis_result.dart';
 import '../utils/app_logger.dart';
@@ -39,7 +40,9 @@ class CloudSyncServiceImpl implements CloudSyncService {
     try {
       final response = await _httpClient.get(
         Uri.parse('$_baseUrl/health'),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          HttpConstants.headerContentType: HttpConstants.contentTypeJson,
+        },
       ).timeout(AnimationConstants.fiveSeconds);
 
       return response.statusCode == 200;
@@ -73,7 +76,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
       final response = await _httpClient.post(
         Uri.parse('$_baseUrl$_syncEndpoint'),
         headers: {
-          'Content-Type': 'application/json',
+          HttpConstants.headerContentType: HttpConstants.contentTypeJson,
           'Authorization': 'Bearer ${await _getAuthToken()}',
         },
         body: json.encode({

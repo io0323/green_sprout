@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:typed_data';
 import '../utils/platform_utils.dart';
+import '../constants/app_constants.dart';
 import '../../features/tea_analysis/data/datasources/analysis_local_datasource.dart';
 import '../../features/tea_analysis/data/datasources/analysis_local_datasource_impl.dart';
 import '../../features/tea_analysis/data/datasources/web_mock_analysis_datasource.dart';
@@ -197,42 +198,48 @@ Future<void> init({bool testing = false}) async {
 class _TestHttpClient implements http.Client {
   @override
   Future<http.Response> get(Uri url, {Map<String, String>? headers}) async {
-    return http.Response('{}', 200,
-        headers: {'content-type': 'application/json'});
+    return http.Response('{}', 200, headers: {
+      HttpConstants.headerContentType: HttpConstants.contentTypeJson,
+    });
   }
 
   @override
   Future<http.Response> post(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
-    return http.Response('{}', 200,
-        headers: {'content-type': 'application/json'});
+    return http.Response('{}', 200, headers: {
+      HttpConstants.headerContentType: HttpConstants.contentTypeJson,
+    });
   }
 
   @override
   Future<http.Response> put(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
-    return http.Response('{}', 200,
-        headers: {'content-type': 'application/json'});
+    return http.Response('{}', 200, headers: {
+      HttpConstants.headerContentType: HttpConstants.contentTypeJson,
+    });
   }
 
   @override
   Future<http.Response> patch(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
-    return http.Response('{}', 200,
-        headers: {'content-type': 'application/json'});
+    return http.Response('{}', 200, headers: {
+      HttpConstants.headerContentType: HttpConstants.contentTypeJson,
+    });
   }
 
   @override
   Future<http.Response> delete(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
-    return http.Response('{}', 200,
-        headers: {'content-type': 'application/json'});
+    return http.Response('{}', 200, headers: {
+      HttpConstants.headerContentType: HttpConstants.contentTypeJson,
+    });
   }
 
   @override
   Future<http.Response> head(Uri url, {Map<String, String>? headers}) async {
-    return http.Response('', 200,
-        headers: {'content-type': 'application/json'});
+    return http.Response('', 200, headers: {
+      HttpConstants.headerContentType: HttpConstants.contentTypeJson,
+    });
   }
 
   @override
@@ -250,7 +257,9 @@ class _TestHttpClient implements http.Client {
     return http.StreamedResponse(
       Stream.value(utf8.encode('{}')),
       200,
-      headers: {'content-type': 'application/json'},
+      headers: {
+        HttpConstants.headerContentType: HttpConstants.contentTypeJson,
+      },
     );
   }
 
