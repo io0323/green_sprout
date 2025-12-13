@@ -196,70 +196,86 @@ Future<void> init({bool testing = false}) async {
 /// テスト用のHTTPクライアント
 /// すべてのHTTPリクエストに対して即座に成功レスポンスを返す
 class _TestHttpClient implements http.Client {
+  static const Map<String, String> _jsonHeaders = {
+    HttpConstants.headerContentType: HttpConstants.contentTypeJson,
+  };
+
   @override
   Future<http.Response> get(Uri url, {Map<String, String>? headers}) async {
-    return http.Response('{}', 200, headers: {
-      HttpConstants.headerContentType: HttpConstants.contentTypeJson,
-    });
+    return http.Response(
+      TestHttpClientConstants.emptyJsonObject,
+      TestHttpClientConstants.successStatusCode,
+      headers: _jsonHeaders,
+    );
   }
 
   @override
   Future<http.Response> post(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
-    return http.Response('{}', 200, headers: {
-      HttpConstants.headerContentType: HttpConstants.contentTypeJson,
-    });
+    return http.Response(
+      TestHttpClientConstants.emptyJsonObject,
+      TestHttpClientConstants.successStatusCode,
+      headers: _jsonHeaders,
+    );
   }
 
   @override
   Future<http.Response> put(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
-    return http.Response('{}', 200, headers: {
-      HttpConstants.headerContentType: HttpConstants.contentTypeJson,
-    });
+    return http.Response(
+      TestHttpClientConstants.emptyJsonObject,
+      TestHttpClientConstants.successStatusCode,
+      headers: _jsonHeaders,
+    );
   }
 
   @override
   Future<http.Response> patch(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
-    return http.Response('{}', 200, headers: {
-      HttpConstants.headerContentType: HttpConstants.contentTypeJson,
-    });
+    return http.Response(
+      TestHttpClientConstants.emptyJsonObject,
+      TestHttpClientConstants.successStatusCode,
+      headers: _jsonHeaders,
+    );
   }
 
   @override
   Future<http.Response> delete(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
-    return http.Response('{}', 200, headers: {
-      HttpConstants.headerContentType: HttpConstants.contentTypeJson,
-    });
+    return http.Response(
+      TestHttpClientConstants.emptyJsonObject,
+      TestHttpClientConstants.successStatusCode,
+      headers: _jsonHeaders,
+    );
   }
 
   @override
   Future<http.Response> head(Uri url, {Map<String, String>? headers}) async {
-    return http.Response('', 200, headers: {
-      HttpConstants.headerContentType: HttpConstants.contentTypeJson,
-    });
+    return http.Response(
+      TestHttpClientConstants.emptyBody,
+      TestHttpClientConstants.successStatusCode,
+      headers: _jsonHeaders,
+    );
   }
 
   @override
   Future<String> read(Uri url, {Map<String, String>? headers}) async {
-    return '{}';
+    return TestHttpClientConstants.emptyJsonObject;
   }
 
   @override
   Future<Uint8List> readBytes(Uri url, {Map<String, String>? headers}) async {
-    return Uint8List.fromList(utf8.encode('{}'));
+    return Uint8List.fromList(
+      utf8.encode(TestHttpClientConstants.emptyJsonObject),
+    );
   }
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
     return http.StreamedResponse(
-      Stream.value(utf8.encode('{}')),
-      200,
-      headers: {
-        HttpConstants.headerContentType: HttpConstants.contentTypeJson,
-      },
+      Stream.value(utf8.encode(TestHttpClientConstants.emptyJsonObject)),
+      TestHttpClientConstants.successStatusCode,
+      headers: _jsonHeaders,
     );
   }
 
