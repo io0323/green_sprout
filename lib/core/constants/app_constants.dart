@@ -137,6 +137,24 @@ class ErrorMessages {
   static const String navigationToAnalysisResultError = '解析結果画面への遷移エラー';
   static const String navigationToCameraError = 'カメラ画面への遷移エラー';
   static const String cameraScreenReturnedError = 'カメラ画面からのエラー';
+
+  /*
+   * SecureHttpClient関連
+   * - ネットワークリトライ等で使用する例外メッセージを集約する
+   */
+  static const String secureHttpRequestTimeout = 'Request timeout';
+  static const String secureHttpNetworkError = 'Network error';
+  static const String secureHttpError = 'HTTP error';
+  static const String secureHttpUnexpectedErrorPrefix = 'Unexpected error:';
+  static const String secureHttpMaxRetriesExceeded = 'Max retries exceeded';
+}
+
+/*
+ * ログメッセージの定数（HTTP）
+ * - SecureHttpClientのログコンテキスト等で使用する
+ */
+class HttpLogMessages {
+  static const String secureHttpRequestError = 'HTTPリクエストエラー';
 }
 
 /// ログメッセージの定数
