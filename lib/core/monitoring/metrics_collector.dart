@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:tea_garden_ai/core/utils/performance_utils.dart';
+import '../constants/app_constants.dart';
 import '../utils/app_logger.dart';
 
 /// メトリクス収集サービス
@@ -23,7 +24,7 @@ class MetricsCollector {
   void recordMetric(
     String name,
     double value, {
-    String unit = 'count',
+    String unit = MetricsConstants.unitCount,
     Map<String, String>? tags,
   }) {
     final metric = MetricData(
@@ -50,7 +51,7 @@ class MetricsCollector {
     double increment = 1.0,
     Map<String, String>? tags,
   }) {
-    recordMetric(name, increment, unit: 'count', tags: tags);
+    recordMetric(name, increment, unit: MetricsConstants.unitCount, tags: tags);
   }
 
   /// ゲージメトリクスを設定する
@@ -62,7 +63,7 @@ class MetricsCollector {
     double value, {
     Map<String, String>? tags,
   }) {
-    recordMetric(name, value, unit: 'gauge', tags: tags);
+    recordMetric(name, value, unit: MetricsConstants.unitGauge, tags: tags);
   }
 
   /// タイマーを開始する
@@ -82,9 +83,9 @@ class MetricsCollector {
 
     if (timer != null) {
       recordMetric(
-        'timer.$name',
+        '${MetricsConstants.timerPrefix}.$name',
         duration.inMilliseconds.toDouble(),
-        unit: 'milliseconds',
+        unit: MetricsConstants.unitMilliseconds,
         tags: timer.tags,
       );
     }
@@ -97,10 +98,10 @@ class MetricsCollector {
   void recordMemoryUsage(String operation) {
     final memoryUsage = PerformanceUtils.getCurrentMemoryUsage();
     recordMetric(
-      'memory.usage',
+      MetricsConstants.memoryUsage,
       memoryUsage,
-      unit: 'bytes',
-      tags: {'operation': operation},
+      unit: MetricsConstants.unitBytes,
+      tags: {MetricsConstants.tagOperation: operation},
     );
 
     PerformanceUtils.logMemoryUsage(operation);
@@ -111,10 +112,10 @@ class MetricsCollector {
   /// @param context コンテキスト
   void recordError(dynamic error, {String? context}) {
     incrementCounter(
-      'errors.total',
+      MetricsConstants.errorsTotal,
       tags: {
-        'error_type': error.runtimeType.toString(),
-        'context': context ?? 'unknown',
+        MetricsConstants.tagErrorType: error.runtimeType.toString(),
+        MetricsConstants.tagContext: context ?? MetricsConstants.defaultUnknown,
       },
     );
 
@@ -128,16 +129,19 @@ class MetricsCollector {
   /// @param details 詳細
   void recordUserAction(String action, {Map<String, dynamic>? details}) {
     incrementCounter(
-      'user.actions',
-      tags: {'action': action},
+      MetricsConstants.userActions,
+      tags: {MetricsConstants.tagAction: action},
     );
 
     if (details != null) {
       details.forEach((key, value) {
         recordMetric(
-          'user.action.$action.$key',
+          '${MetricsConstants.userActionPrefix}.$action.$key',
           value is num ? value.toDouble() : 0.0,
-          tags: {'action': action, 'detail': key},
+          tags: {
+            MetricsConstants.tagAction: action,
+            MetricsConstants.tagDetail: key,
+          },
         );
       });
     }
@@ -157,31 +161,31 @@ class MetricsCollector {
     int responseSize,
   ) {
     recordMetric(
-      'network.request.duration',
+      MetricsConstants.networkRequestDuration,
       duration,
-      unit: 'milliseconds',
+      unit: MetricsConstants.unitMilliseconds,
       tags: {
-        'method': method,
-        'status_code': statusCode.toString(),
-        'url': _sanitizeUrl(url),
+        MetricsConstants.tagMethod: method,
+        MetricsConstants.tagStatusCode: statusCode.toString(),
+        MetricsConstants.tagUrl: _sanitizeUrl(url),
       },
     );
 
     recordMetric(
-      'network.request.size',
+      MetricsConstants.networkRequestSize,
       responseSize.toDouble(),
-      unit: 'bytes',
+      unit: MetricsConstants.unitBytes,
       tags: {
-        'method': method,
-        'url': _sanitizeUrl(url),
+        MetricsConstants.tagMethod: method,
+        MetricsConstants.tagUrl: _sanitizeUrl(url),
       },
     );
 
     incrementCounter(
-      'network.requests.total',
+      MetricsConstants.networkRequestsTotal,
       tags: {
-        'method': method,
-        'status_code': statusCode.toString(),
+        MetricsConstants.tagMethod: method,
+        MetricsConstants.tagStatusCode: statusCode.toString(),
       },
     );
   }
@@ -198,22 +202,22 @@ class MetricsCollector {
     int recordCount,
   ) {
     recordMetric(
-      'database.operation.duration',
+      MetricsConstants.databaseOperationDuration,
       duration,
-      unit: 'milliseconds',
+      unit: MetricsConstants.unitMilliseconds,
       tags: {
-        'operation': operation,
-        'table': table,
+        MetricsConstants.tagOperation: operation,
+        MetricsConstants.tagTable: table,
       },
     );
 
     recordMetric(
-      'database.operation.records',
+      MetricsConstants.databaseOperationRecords,
       recordCount.toDouble(),
-      unit: 'count',
+      unit: MetricsConstants.unitCount,
       tags: {
-        'operation': operation,
-        'table': table,
+        MetricsConstants.tagOperation: operation,
+        MetricsConstants.tagTable: table,
       },
     );
   }
@@ -320,7 +324,7 @@ class MetricsCollector {
         e,
         stackTrace,
       );
-      return 'invalid_url';
+      return MetricsConstants.invalidUrl;
     }
   }
 }

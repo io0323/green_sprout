@@ -155,3 +155,42 @@ class LogMessages {
   static const String localizationInitializationComplete = '国際化サービスの初期化が完了しました';
   static const String diInitializationComplete = 'DIコンテナの初期化が完了しました';
 }
+
+/*
+ * メトリクス収集関連の定数
+ * - メトリクス名/単位/タグキー/デフォルト値を集約してマジック文字列を排除する
+ */
+class MetricsConstants {
+  /* メトリクス名 */
+  static const String memoryUsage = 'memory.usage';
+  static const String errorsTotal = 'errors.total';
+  static const String userActions = 'user.actions';
+  static const String userActionPrefix = 'user.action';
+  static const String timerPrefix = 'timer';
+  static const String networkRequestDuration = 'network.request.duration';
+  static const String networkRequestSize = 'network.request.size';
+  static const String networkRequestsTotal = 'network.requests.total';
+  static const String databaseOperationDuration = 'database.operation.duration';
+  static const String databaseOperationRecords = 'database.operation.records';
+
+  /* 単位 */
+  static const String unitCount = 'count';
+  static const String unitGauge = 'gauge';
+  static const String unitMilliseconds = 'milliseconds';
+  static const String unitBytes = 'bytes';
+
+  /* タグキー */
+  static const String tagOperation = 'operation';
+  static const String tagErrorType = 'error_type';
+  static const String tagContext = 'context';
+  static const String tagAction = 'action';
+  static const String tagDetail = 'detail';
+  static const String tagMethod = 'method';
+  static const String tagStatusCode = 'status_code';
+  static const String tagUrl = 'url';
+  static const String tagTable = 'table';
+
+  /* デフォルト値 */
+  static const String defaultUnknown = 'unknown';
+  static const String invalidUrl = 'invalid_url';
+}
