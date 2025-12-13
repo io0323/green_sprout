@@ -154,6 +154,12 @@ class LogMessages {
   // 初期化関連
   static const String localizationInitializationComplete = '国際化サービスの初期化が完了しました';
   static const String diInitializationComplete = 'DIコンテナの初期化が完了しました';
+
+  // AppLogger用ラベル
+  static const String loggerLabelStackTrace = 'スタックトレース';
+  static const String loggerLabelErrorType = 'エラータイプ';
+  static const String loggerLabelErrorMessage = 'エラーメッセージ';
+  static const String loggerLabelErrorCode = 'エラーコード';
 }
 
 /*
