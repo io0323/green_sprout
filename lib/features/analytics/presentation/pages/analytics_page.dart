@@ -544,7 +544,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
 
     switch (_selectedPeriod) {
       case 'week':
-        startDate = now.subtract(const Duration(days: 7));
+        startDate = now.subtract(const Duration(days: AppConstants.daysSeven));
         break;
       case 'month':
         startDate = now.subtract(const Duration(days: AppConstants.daysThirty));
@@ -554,7 +554,7 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
             const Duration(days: AppConstants.daysThreeHundredSixtyFive));
         break;
       default:
-        startDate = now.subtract(const Duration(days: 7));
+        startDate = now.subtract(const Duration(days: AppConstants.daysSeven));
     }
 
     return results
