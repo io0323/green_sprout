@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'app_logger.dart';
+import '../constants/app_constants.dart';
 import '../theme/tea_garden_theme.dart';
 
 /// パフォーマンス監視とメモリ管理のユーティリティクラス
@@ -22,7 +23,10 @@ class PerformanceUtils {
       final duration = timer.elapsed;
       _timers.remove(name);
 
-      AppLogger.debug('⏱️ $name: ${duration.inMilliseconds}ms');
+      AppLogger.debug(
+        '${PerformanceLogMessages.timerPrefix} '
+        '$name: ${duration.inMilliseconds}${PerformanceLogMessages.timeUnitMilliseconds}',
+      );
 
       return duration;
     }
@@ -39,14 +43,21 @@ class PerformanceUtils {
   static void logMemoryUsage(String context) {
     if (kDebugMode) {
       final memoryInfo = ProcessInfo.currentRss;
-      final memoryMB = memoryInfo / (1024 * 1024);
-      _memoryLogs.add('$context: ${memoryMB.toStringAsFixed(2)}MB');
+      final memoryMB = memoryInfo / PerformanceConstants.bytesPerMegabyte;
+      _memoryLogs.add(
+        '$context: ${memoryMB.toStringAsFixed(2)}'
+        '${PerformanceLogMessages.memoryUnitMb}',
+      );
 
-      if (_memoryLogs.length > 100) {
+      if (_memoryLogs.length > PerformanceConstants.memoryLogMaxEntries) {
         _memoryLogs.removeAt(0); // 古いログを削除
       }
 
-      AppLogger.debug('🧠 Memory $context: ${memoryMB.toStringAsFixed(2)}MB');
+      AppLogger.debug(
+        '${PerformanceLogMessages.memoryPrefix} '
+        '$context: ${memoryMB.toStringAsFixed(2)}'
+        '${PerformanceLogMessages.memoryUnitMb}',
+      );
     }
   }
 
@@ -79,7 +90,9 @@ class PerformanceUtils {
       final bytes = await file.readAsBytes();
 
       // メモリ使用量をログ
-      logMemoryUsage('Image loaded: ${path.split('/').last}');
+      logMemoryUsage(
+        '${PerformanceLogMessages.imageLoadedPrefix} ${path.split('/').last}',
+      );
 
       return bytes;
     } catch (e, stackTrace) {
@@ -109,17 +122,26 @@ class PerformanceUtils {
   /// メモリリークの検出
   static void detectMemoryLeaks() {
     if (kDebugMode) {
-      final currentMemory = ProcessInfo.currentRss / (1024 * 1024);
+      final currentMemory =
+          ProcessInfo.currentRss / PerformanceConstants.bytesPerMegabyte;
 
-      if (currentMemory > 200) {
-        // 200MB以上で警告
+      if (currentMemory > PerformanceConstants.memoryWarningThresholdMb) {
+        // 閾値以上で警告
         AppLogger.debugWarning(
-            'High memory usage detected: ${currentMemory.toStringAsFixed(2)}MB');
-        AppLogger.debug('📊 Recent memory logs:');
-        for (final log in _memoryLogs.length > 10
-            ? _memoryLogs.sublist(_memoryLogs.length - 10)
+          '${PerformanceLogMessages.highMemoryUsageDetected} '
+          '${currentMemory.toStringAsFixed(2)}'
+          '${PerformanceLogMessages.memoryUnitMb}',
+        );
+        AppLogger.debug(PerformanceLogMessages.recentMemoryLogsHeader);
+        for (final log in _memoryLogs.length >
+                PerformanceConstants.memoryRecentLogsMaxEntries
+            ? _memoryLogs.sublist(
+                _memoryLogs.length -
+                    PerformanceConstants.memoryRecentLogsMaxEntries,
+              )
             : _memoryLogs) {
-          AppLogger.debug('   $log');
+          AppLogger.debug(
+              '${PerformanceLogMessages.recentMemoryLogIndent}$log');
         }
       }
     }
@@ -128,10 +150,11 @@ class PerformanceUtils {
   /// パフォーマンス統計を取得
   static Map<String, dynamic> getPerformanceStats() {
     return {
-      'active_timers': _timers.length,
-      'memory_logs_count': _memoryLogs.length,
-      'current_memory_mb':
-          (ProcessInfo.currentRss / (1024 * 1024)).toStringAsFixed(2),
+      PerformanceStatsKeys.activeTimers: _timers.length,
+      PerformanceStatsKeys.memoryLogsCount: _memoryLogs.length,
+      PerformanceStatsKeys.currentMemoryMb:
+          (ProcessInfo.currentRss / PerformanceConstants.bytesPerMegabyte)
+              .toStringAsFixed(2),
     };
   }
 }
@@ -139,7 +162,8 @@ class PerformanceUtils {
 /// 画像キャッシュ管理クラス
 class ImageCacheManager {
   static final Map<String, Uint8List> _cache = {};
-  static const int _maxCacheSize = 50; // 最大50枚までキャッシュ
+  static const int _maxCacheSize =
+      PerformanceConstants.imageCacheMaxEntries; // 最大枚数
 
   /// 画像をキャッシュから取得
   static Uint8List? getCachedImage(String key) {
@@ -157,7 +181,10 @@ class ImageCacheManager {
     _cache[key] = bytes;
 
     if (kDebugMode) {
-      AppLogger.debug('📸 Cached image: $key (${bytes.length} bytes)');
+      AppLogger.debug(
+        '${PerformanceLogMessages.imageCacheEntryPrefix} '
+        '$key (${bytes.length} bytes)',
+      );
     }
   }
 
@@ -165,7 +192,7 @@ class ImageCacheManager {
   static void clearCache() {
     _cache.clear();
     if (kDebugMode) {
-      AppLogger.debug('🗑️ Image cache cleared');
+      AppLogger.debug(PerformanceLogMessages.imageCacheCleared);
     }
   }
 
@@ -177,9 +204,11 @@ class ImageCacheManager {
     );
 
     return {
-      'cached_images': _cache.length,
-      'total_size_bytes': totalSize,
-      'total_size_mb': (totalSize / (1024 * 1024)).toStringAsFixed(2),
+      PerformanceStatsKeys.cachedImages: _cache.length,
+      PerformanceStatsKeys.totalSizeBytes: totalSize,
+      PerformanceStatsKeys.totalSizeMb:
+          (totalSize / PerformanceConstants.bytesPerMegabyte)
+              .toStringAsFixed(2),
     };
   }
 }
@@ -187,7 +216,8 @@ class ImageCacheManager {
 /// データベース接続プール管理
 class DatabaseConnectionPool {
   static final List<DatabaseConnection> _connections = [];
-  static const int _maxConnections = 5;
+  static const int _maxConnections =
+      PerformanceConstants.maxDatabaseConnections;
 
   /// データベース接続を取得
   static Future<DatabaseConnection> getConnection() async {
