@@ -236,3 +236,13 @@ class CloudSyncConstants {
   static const String keyLastSyncTimestamp = 'last_sync_timestamp';
   static const String keyUserId = 'user_id';
 }
+
+/*
+ * テスト用HTTPクライアント関連の定数
+ * - injection_container.dart の _TestHttpClient で使用する値を集約する
+ */
+class TestHttpClientConstants {
+  static const int successStatusCode = 200;
+  static const String emptyJsonObject = '{}';
+  static const String emptyBody = '';
+}
