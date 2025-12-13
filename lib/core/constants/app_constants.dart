@@ -283,3 +283,52 @@ class TestHttpClientConstants {
   static const String emptyJsonObject = '{}';
   static const String emptyBody = '';
 }
+
+/*
+ * パフォーマンス/メモリ監視関連の定数
+ * - performance_utils.dart 内のマジックナンバー/キーを集約する
+ */
+class PerformanceConstants {
+  static const int bytesPerMegabyte = 1024 * 1024;
+
+  static const int memoryLogMaxEntries = 100;
+  static const int memoryWarningThresholdMb = 200;
+  static const int memoryRecentLogsMaxEntries = 10;
+
+  static const int imageCacheMaxEntries = 50;
+  static const int maxDatabaseConnections = 5;
+}
+
+/*
+ * パフォーマンス監視のログ文言（デバッグ）
+ * - 文言を集約してマジック文字列を削減する
+ */
+class PerformanceLogMessages {
+  static const String timerPrefix = '⏱️';
+  static const String timeUnitMilliseconds = 'ms';
+
+  static const String memoryPrefix = '🧠 Memory';
+  static const String memoryUnitMb = 'MB';
+
+  static const String imageLoadedPrefix = 'Image loaded:';
+  static const String imageCacheEntryPrefix = '📸 Cached image:';
+  static const String imageCacheCleared = '🗑️ Image cache cleared';
+
+  static const String highMemoryUsageDetected = 'High memory usage detected:';
+  static const String recentMemoryLogsHeader = '📊 Recent memory logs:';
+  static const String recentMemoryLogIndent = '   ';
+}
+
+/*
+ * パフォーマンス統計のキー定義
+ * - getPerformanceStats()/getCacheStats() の返却キーを集約する
+ */
+class PerformanceStatsKeys {
+  static const String activeTimers = 'active_timers';
+  static const String memoryLogsCount = 'memory_logs_count';
+  static const String currentMemoryMb = 'current_memory_mb';
+
+  static const String cachedImages = 'cached_images';
+  static const String totalSizeBytes = 'total_size_bytes';
+  static const String totalSizeMb = 'total_size_mb';
+}
