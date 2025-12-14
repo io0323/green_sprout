@@ -36,8 +36,13 @@ class MetricsCollector {
     );
 
     _metrics.add(metric);
-    while (_metrics.length > MetricsConstants.maxMetricEntries) {
-      _metrics.removeAt(0);
+    /*
+     * メトリクス保持数を上限制にする（リングバッファ相当）。
+     * 先頭removeを繰り返すとコストが高いため、超過分は一括で削除する。
+     */
+    final overflow = _metrics.length - MetricsConstants.maxMetricEntries;
+    if (overflow > 0) {
+      _metrics.removeRange(0, overflow);
     }
 
     if (kDebugMode) {
