@@ -224,6 +224,7 @@ class DatabaseConnectionPool {
   static final List<DatabaseConnection> _connections = [];
   static const int _maxConnections =
       PerformanceConstants.maxDatabaseConnections;
+  static final List<Completer<DatabaseConnection>> _waiters = [];
 
   /// データベース接続を取得
   static Future<DatabaseConnection> getConnection() async {
@@ -250,24 +251,44 @@ class DatabaseConnectionPool {
 
   /// 接続の解放
   static void releaseConnection(DatabaseConnection connection) {
+    /*
+     * 待機中の要求がある場合は、解放された接続を即時に割り当てる。
+     * busy-wait を避けて無駄なポーリングを削減する。
+     */
+    if (_waiters.isNotEmpty) {
+      final waiter = _waiters.removeAt(0);
+      connection.isInUse = true;
+      if (!waiter.isCompleted) {
+        waiter.complete(connection);
+      }
+      return;
+    }
+
     connection.isInUse = false;
   }
 
   /// 接続を待機
   static Future<DatabaseConnection> _waitForConnection() async {
-    while (true) {
-      for (final connection in _connections) {
-        if (!connection.isInUse) {
-          connection.isInUse = true;
-          return connection;
-        }
-      }
-      await Future.delayed(AnimationConstants.extraShortDuration);
-    }
+    /*
+     * 接続が解放されるまで待機（releaseConnectionで通知される）。
+     */
+    final completer = Completer<DatabaseConnection>();
+    _waiters.add(completer);
+    return completer.future;
   }
 
   /// 全接続を閉じる
   static Future<void> closeAllConnections() async {
+    /*
+     * クローズ時に待機中がいる場合、待機を解除してデッドロックを防ぐ。
+     */
+    for (final waiter in _waiters) {
+      if (!waiter.isCompleted) {
+        waiter.completeError(StateError('Connection pool closed'));
+      }
+    }
+    _waiters.clear();
+
     for (final connection in _connections) {
       await connection.close();
     }
