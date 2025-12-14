@@ -70,15 +70,21 @@ class PerformanceUtils {
   }
 
   /// 非同期処理のデバウンス
-  static Timer? _debounceTimer;
+  ///
+  /// `key` ごとに独立してデバウンスできるようにすることで、
+  /// 無関係な処理同士のタイマーキャンセルを防ぐ。
+  static final Map<String, Timer> _debounceTimers = {};
 
   static void debounce(
     String key,
     Duration delay,
     VoidCallback callback,
   ) {
-    _debounceTimer?.cancel();
-    _debounceTimer = Timer(delay, callback);
+    _debounceTimers[key]?.cancel();
+    _debounceTimers[key] = Timer(delay, () {
+      _debounceTimers.remove(key);
+      callback();
+    });
   }
 
   /// 画像のメモリ効率的な読み込み
