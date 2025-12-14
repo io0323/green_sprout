@@ -9,7 +9,7 @@ import '../theme/tea_garden_theme.dart';
 /// パフォーマンス監視とメモリ管理のユーティリティクラス
 class PerformanceUtils {
   static final Map<String, Stopwatch> _timers = {};
-  static final List<String> _memoryLogs = [];
+  static final Queue<String> _memoryLogs = Queue();
 
   /// パフォーマンス測定を開始
   static void startTimer(String name) {
@@ -51,7 +51,7 @@ class PerformanceUtils {
       );
 
       if (_memoryLogs.length > PerformanceConstants.memoryLogMaxEntries) {
-        _memoryLogs.removeAt(0); // 古いログを削除
+        _memoryLogs.removeFirst(); // 古いログを削除
       }
 
       AppLogger.debug(
@@ -63,7 +63,8 @@ class PerformanceUtils {
   }
 
   /// メモリログを取得
-  static List<String> getMemoryLogs() => List.unmodifiable(_memoryLogs);
+  static List<String> getMemoryLogs() =>
+      List.unmodifiable(_memoryLogs.toList());
 
   /// メモリログをクリア
   static void clearMemoryLogs() {
@@ -140,13 +141,12 @@ class PerformanceUtils {
           '${PerformanceLogMessages.memoryUnitMb}',
         );
         AppLogger.debug(PerformanceLogMessages.recentMemoryLogsHeader);
-        for (final log in _memoryLogs.length >
-                PerformanceConstants.memoryRecentLogsMaxEntries
-            ? _memoryLogs.sublist(
-                _memoryLogs.length -
-                    PerformanceConstants.memoryRecentLogsMaxEntries,
-              )
-            : _memoryLogs) {
+        final logs = _memoryLogs.toList(growable: false);
+        final startIndex =
+            logs.length > PerformanceConstants.memoryRecentLogsMaxEntries
+                ? logs.length - PerformanceConstants.memoryRecentLogsMaxEntries
+                : 0;
+        for (final log in logs.sublist(startIndex)) {
           AppLogger.debug(
               '${PerformanceLogMessages.recentMemoryLogIndent}$log');
         }
