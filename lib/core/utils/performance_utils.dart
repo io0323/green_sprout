@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'app_logger.dart';
@@ -224,7 +225,7 @@ class DatabaseConnectionPool {
   static final List<DatabaseConnection> _connections = [];
   static const int _maxConnections =
       PerformanceConstants.maxDatabaseConnections;
-  static final List<Completer<DatabaseConnection>> _waiters = [];
+  static final Queue<Completer<DatabaseConnection>> _waiters = Queue();
 
   /// データベース接続を取得
   static Future<DatabaseConnection> getConnection() async {
@@ -256,7 +257,7 @@ class DatabaseConnectionPool {
      * busy-wait を避けて無駄なポーリングを削減する。
      */
     if (_waiters.isNotEmpty) {
-      final waiter = _waiters.removeAt(0);
+      final waiter = _waiters.removeFirst();
       connection.isInUse = true;
       if (!waiter.isCompleted) {
         waiter.complete(connection);
@@ -273,7 +274,7 @@ class DatabaseConnectionPool {
      * 接続が解放されるまで待機（releaseConnectionで通知される）。
      */
     final completer = Completer<DatabaseConnection>();
-    _waiters.add(completer);
+    _waiters.addLast(completer);
     return completer.future;
   }
 
