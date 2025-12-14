@@ -41,46 +41,7 @@ final GetIt sl = GetIt.instance;
 /// [testing] が true の場合、テスト用の設定で初期化する
 Future<void> init({bool testing = false}) async {
   // データソース - プラットフォームに応じて実装を切り替え
-  if (testing) {
-    // テストモードではFake実装を使用
-    sl.registerLazySingleton<TeaAnalysisLocalDataSource>(
-      () => WebMockTeaAnalysisDataSource(),
-    );
-
-    sl.registerLazySingleton<AnalysisLocalDataSource>(
-      () => WebMockAnalysisDataSource(),
-    );
-
-    sl.registerLazySingleton<CameraLocalDataSource>(
-      () => FakeCameraDataSource(),
-    );
-  } else if (PlatformUtils.isWeb) {
-    // Webプラットフォーム用のモック実装
-    sl.registerLazySingleton<TeaAnalysisLocalDataSource>(
-      () => WebMockTeaAnalysisDataSource(),
-    );
-
-    sl.registerLazySingleton<AnalysisLocalDataSource>(
-      () => WebMockAnalysisDataSource(),
-    );
-
-    sl.registerLazySingleton<CameraLocalDataSource>(
-      () => WebMockCameraDataSource(),
-    );
-  } else {
-    // モバイルプラットフォーム用の実装
-    sl.registerLazySingleton<TeaAnalysisLocalDataSource>(
-      () => TeaAnalysisLocalDataSourceImpl(),
-    );
-
-    sl.registerLazySingleton<AnalysisLocalDataSource>(
-      () => AnalysisLocalDataSourceImpl(),
-    );
-
-    sl.registerLazySingleton<CameraLocalDataSource>(
-      () => CameraLocalDataSourceImpl(),
-    );
-  }
+  _registerDataSources(testing: testing);
 
   // リポジトリ
   sl.registerLazySingleton<TeaAnalysisRepository>(
@@ -191,6 +152,70 @@ Future<void> init({bool testing = false}) async {
     );
     return cubit;
   });
+}
+
+/*
+ * DataSource登録をまとめるヘルパー
+ * - 分岐の重複を減らし、DI初期化の可読性を上げる
+ */
+void _registerDataSources({required bool testing}) {
+  if (testing) {
+    _registerTestingDataSources();
+    return;
+  }
+
+  if (PlatformUtils.isWeb) {
+    _registerWebDataSources();
+    return;
+  }
+
+  _registerMobileDataSources();
+}
+
+/*
+ * テストモード用DataSourceを登録
+ * - カメラのみFake実装、それ以外はWebモック実装を使用
+ */
+void _registerTestingDataSources() {
+  sl.registerLazySingleton<TeaAnalysisLocalDataSource>(
+    () => WebMockTeaAnalysisDataSource(),
+  );
+  sl.registerLazySingleton<AnalysisLocalDataSource>(
+    () => WebMockAnalysisDataSource(),
+  );
+  sl.registerLazySingleton<CameraLocalDataSource>(
+    () => FakeCameraDataSource(),
+  );
+}
+
+/*
+ * Web用DataSourceを登録
+ */
+void _registerWebDataSources() {
+  sl.registerLazySingleton<TeaAnalysisLocalDataSource>(
+    () => WebMockTeaAnalysisDataSource(),
+  );
+  sl.registerLazySingleton<AnalysisLocalDataSource>(
+    () => WebMockAnalysisDataSource(),
+  );
+  sl.registerLazySingleton<CameraLocalDataSource>(
+    () => WebMockCameraDataSource(),
+  );
+}
+
+/*
+ * モバイル用DataSourceを登録
+ */
+void _registerMobileDataSources() {
+  sl.registerLazySingleton<TeaAnalysisLocalDataSource>(
+    () => TeaAnalysisLocalDataSourceImpl(),
+  );
+  sl.registerLazySingleton<AnalysisLocalDataSource>(
+    () => AnalysisLocalDataSourceImpl(),
+  );
+  sl.registerLazySingleton<CameraLocalDataSource>(
+    () => CameraLocalDataSourceImpl(),
+  );
 }
 
 /// テスト用のHTTPクライアント
