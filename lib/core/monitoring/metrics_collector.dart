@@ -279,15 +279,26 @@ class MetricsCollector {
       );
     }
 
-    final values = metrics.map((m) => m.value).toList();
-    values.sort();
+    /*
+     * 統計を単一ループで算出する
+     * - sort/list生成/reduceの重複を避けてメモリと計算量を削減
+     */
+    var sum = 0.0;
+    var min = metrics.first.value;
+    var max = metrics.first.value;
+    for (final metric in metrics) {
+      final value = metric.value;
+      sum += value;
+      if (value < min) min = value;
+      if (value > max) max = value;
+    }
 
     return MetricStatistics(
-      count: values.length,
-      sum: values.reduce((a, b) => a + b),
-      average: values.reduce((a, b) => a + b) / values.length,
-      min: values.first,
-      max: values.last,
+      count: metrics.length,
+      sum: sum,
+      average: sum / metrics.length,
+      min: min,
+      max: max,
     );
   }
 
