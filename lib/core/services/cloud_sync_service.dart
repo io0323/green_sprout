@@ -77,7 +77,8 @@ class CloudSyncServiceImpl implements CloudSyncService {
         ),
         headers: {
           HttpConstants.headerContentType: HttpConstants.contentTypeJson,
-          'Authorization': 'Bearer ${await _getAuthToken()}',
+          HttpConstants.headerAuthorization:
+              '${HttpConstants.bearerPrefix}${await _getAuthToken()}',
         },
         body: json.encode({
           'userId': userId,
@@ -125,7 +126,8 @@ class CloudSyncServiceImpl implements CloudSyncService {
           '?userId=$userId&since=${lastSync ?? ''}',
         ),
         headers: {
-          'Authorization': 'Bearer ${await _getAuthToken()}',
+          HttpConstants.headerAuthorization:
+              '${HttpConstants.bearerPrefix}${await _getAuthToken()}',
         },
       );
 
