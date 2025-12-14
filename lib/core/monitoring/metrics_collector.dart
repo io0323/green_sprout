@@ -36,6 +36,9 @@ class MetricsCollector {
     );
 
     _metrics.add(metric);
+    while (_metrics.length > MetricsConstants.maxMetricEntries) {
+      _metrics.removeAt(0);
+    }
 
     if (kDebugMode) {
       AppLogger.debug(

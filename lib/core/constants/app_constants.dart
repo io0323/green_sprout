@@ -217,6 +217,12 @@ class MetricsConstants {
   /* デフォルト値 */
   static const String defaultUnknown = 'unknown';
   static const String invalidUrl = 'invalid_url';
+
+  /*
+   * 保持上限
+   * - 長時間動作で _metrics が無制限に増えないようにする
+   */
+  static const int maxMetricEntries = 1000;
 }
 
 /*
