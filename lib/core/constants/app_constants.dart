@@ -260,8 +260,13 @@ class HttpConstants {
   /* デフォルトヘッダー */
   static const String headerContentType = 'Content-Type';
   static const String headerUserAgent = 'User-Agent';
+  static const String headerAuthorization = 'Authorization';
+
   static const String contentTypeJson = 'application/json';
   static const String defaultUserAgent = 'TeaGardenAI/1.0.0';
+
+  /* 認証 */
+  static const String bearerPrefix = 'Bearer ';
 }
 
 /*
