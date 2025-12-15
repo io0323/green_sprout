@@ -241,22 +241,26 @@ class MetricsCollector {
     String? name,
     Map<String, String>? tags,
   }) {
-    var filteredMetrics = _metrics;
-
-    if (name != null) {
-      filteredMetrics = filteredMetrics
-          .where((metric) => metric.name.contains(name))
-          .toList();
+    /*
+     * フィルタがない場合は既存挙動に合わせて内部リストを返す。
+     * フィルタがある場合は遅延評価で条件を連結し、toList() を1回に抑える。
+     */
+    if (name == null && tags == null) {
+      return _metrics;
     }
 
+    Iterable<MetricData> iterable = _metrics;
+    if (name != null) {
+      iterable = iterable.where((metric) => metric.name.contains(name));
+    }
     if (tags != null) {
-      filteredMetrics = filteredMetrics.where((metric) {
+      iterable = iterable.where((metric) {
         return tags.entries
             .every((entry) => metric.tags[entry.key] == entry.value);
-      }).toList();
+      });
     }
 
-    return filteredMetrics;
+    return iterable.toList();
   }
 
   /// メトリクス統計を取得する
