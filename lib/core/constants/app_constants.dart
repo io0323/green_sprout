@@ -267,6 +267,11 @@ class HttpConstants {
 
   /* 認証 */
   static const String bearerPrefix = 'Bearer ';
+
+  /* 共通ヘッダー */
+  static const Map<String, String> jsonContentTypeHeaders = {
+    headerContentType: contentTypeJson,
+  };
 }
 
 /*
