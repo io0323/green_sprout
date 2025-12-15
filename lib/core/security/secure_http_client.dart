@@ -21,6 +21,18 @@ class SecureHttpClient {
     _client = http.Client();
   }
 
+  /*
+   * リトライまでの待機を行う
+   * - リトライ回数に応じて指数的ではなく線形にバックオフする（既存挙動）
+   */
+  Future<void> _delayBeforeRetry(int retryCount) async {
+    await Future.delayed(
+      Duration(
+        seconds: retryCount * HttpConstants.retryBackoffSecondsBase,
+      ),
+    );
+  }
+
   /// GETリクエストを送信する
   /// @param url URL
   /// @param headers ヘッダー
@@ -167,11 +179,7 @@ class SecureHttpClient {
             TimeoutException(ErrorMessages.secureHttpRequestTimeout);
         retryCount++;
         if (retryCount < _maxRetries) {
-          await Future.delayed(
-            Duration(
-              seconds: retryCount * HttpConstants.retryBackoffSecondsBase,
-            ),
-          );
+          await _delayBeforeRetry(retryCount);
         }
       } on SocketException {
         lastException = const SocketException(
@@ -179,21 +187,13 @@ class SecureHttpClient {
         );
         retryCount++;
         if (retryCount < _maxRetries) {
-          await Future.delayed(
-            Duration(
-              seconds: retryCount * HttpConstants.retryBackoffSecondsBase,
-            ),
-          );
+          await _delayBeforeRetry(retryCount);
         }
       } on HttpException {
         lastException = const HttpException(ErrorMessages.secureHttpError);
         retryCount++;
         if (retryCount < _maxRetries) {
-          await Future.delayed(
-            Duration(
-              seconds: retryCount * HttpConstants.retryBackoffSecondsBase,
-            ),
-          );
+          await _delayBeforeRetry(retryCount);
         }
       } catch (e, stackTrace) {
         AppLogger.logErrorWithStackTrace(
@@ -206,11 +206,7 @@ class SecureHttpClient {
         );
         retryCount++;
         if (retryCount < _maxRetries) {
-          await Future.delayed(
-            Duration(
-              seconds: retryCount * HttpConstants.retryBackoffSecondsBase,
-            ),
-          );
+          await _delayBeforeRetry(retryCount);
         }
       }
     }
