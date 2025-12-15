@@ -280,13 +280,15 @@ class HttpConstants {
  */
 class CloudSyncConstants {
   /* API */
+  static const String envKeyApiBaseUrl = 'TEA_GARDEN_AI_API_BASE_URL';
+
   /*
    * Cloud Sync API Base URL
    * - `--dart-define=TEA_GARDEN_AI_API_BASE_URL=...` で環境ごとに切替可能
    * - 未指定時はデフォルト値を使用（現状挙動は維持）
    */
   static const String baseUrl = String.fromEnvironment(
-    'TEA_GARDEN_AI_API_BASE_URL',
+    envKeyApiBaseUrl,
     defaultValue: 'https://api.tea-garden-ai.com',
   );
   static const String healthPath = '/health';
