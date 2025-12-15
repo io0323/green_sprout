@@ -12,7 +12,7 @@ class SecureHttpClient {
   static const int _maxRetries = HttpConstants.maxRetries;
 
   late http.Client _client;
-  final Map<String, String> _defaultHeaders = {
+  static const Map<String, String> _defaultHeaders = {
     HttpConstants.headerContentType: HttpConstants.contentTypeJson,
     HttpConstants.headerUserAgent: HttpConstants.defaultUserAgent,
   };
