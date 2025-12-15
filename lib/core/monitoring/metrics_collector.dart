@@ -390,9 +390,7 @@ class _MetricAccumulator {
 
   _MetricAccumulator(double firstValue)
       : _min = firstValue,
-        _max = firstValue {
-    add(firstValue);
-  }
+        _max = firstValue;
 
   void add(double value) {
     _count += 1;
