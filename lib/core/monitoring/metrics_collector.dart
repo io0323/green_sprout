@@ -321,10 +321,20 @@ class MetricsCollector {
     );
     buffer.writeln();
 
-    // メトリクス名ごとの統計
-    final metricNames = _metrics.map((m) => m.name).toSet();
-    for (final name in metricNames) {
-      final stats = getMetricStatistics(name);
+    /*
+     * メトリクス名ごとの統計を1回の走査で集計する
+     * - getMetricStatistics(name) を名前ごとに呼ぶと、都度フィルタ/走査が発生するため
+     */
+    final statsByName = <String, _MetricAccumulator>{};
+    for (final metric in _metrics) {
+      statsByName
+          .putIfAbsent(metric.name, () => _MetricAccumulator(metric.value))
+          .add(metric.value);
+    }
+
+    for (final entry in statsByName.entries) {
+      final name = entry.key;
+      final stats = entry.value.toMetricStatistics();
       buffer.writeln('$name:');
       buffer.writeln('  ${MetricsMessages.reportCountLabel}: ${stats.count}');
       buffer.writeln(
@@ -361,6 +371,41 @@ class MetricsCollector {
       );
       return MetricsConstants.invalidUrl;
     }
+  }
+}
+
+/*
+ * メトリクス統計の集計用ヘルパー
+ * - レポート生成時に名前ごとの統計を1パスで算出するために使用
+ */
+class _MetricAccumulator {
+  int _count = 0;
+  double _sum = 0.0;
+  double _min;
+  double _max;
+
+  _MetricAccumulator(double firstValue)
+      : _min = firstValue,
+        _max = firstValue {
+    add(firstValue);
+  }
+
+  void add(double value) {
+    _count += 1;
+    _sum += value;
+    if (value < _min) _min = value;
+    if (value > _max) _max = value;
+  }
+
+  MetricStatistics toMetricStatistics() {
+    final average = _count == 0 ? 0.0 : _sum / _count;
+    return MetricStatistics(
+      count: _count,
+      sum: _sum,
+      average: average,
+      min: _min,
+      max: _max,
+    );
   }
 }
 
