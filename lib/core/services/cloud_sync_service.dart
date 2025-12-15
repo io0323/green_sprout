@@ -61,7 +61,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
       return response.statusCode == 200;
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'クラウド接続確認エラー',
+        LogMessages.cloudSyncConnectionCheckError,
         e,
         stackTrace,
       );
@@ -72,7 +72,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
   @override
   Future<void> syncToCloud(List<TeaAnalysisResult> results) async {
     if (!await isConnected()) {
-      throw const ServerFailure('インターネット接続がありません');
+      throw const ServerFailure(ErrorMessages.cloudSyncNoInternet);
     }
 
     try {
@@ -107,25 +107,27 @@ class CloudSyncServiceImpl implements CloudSyncService {
           DateTime.now().toIso8601String(),
         );
       } else {
-        throw ServerFailure('同期に失敗しました: ${response.statusCode}');
+        throw ServerFailure(
+          '${ErrorMessages.cloudSyncFailedPrefix} ${response.statusCode}',
+        );
       }
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'クラウド同期エラー（送信）',
+        LogMessages.cloudSyncSendError,
         e,
         stackTrace,
       );
       if (e is ServerFailure) {
         rethrow;
       }
-      throw ServerFailure('クラウド同期エラー: $e');
+      throw ServerFailure('${ErrorMessages.cloudSyncErrorPrefix} $e');
     }
   }
 
   @override
   Future<List<TeaAnalysisResult>> syncFromCloud() async {
     if (!await isConnected()) {
-      throw const ServerFailure('インターネット接続がありません');
+      throw const ServerFailure(ErrorMessages.cloudSyncNoInternet);
     }
 
     try {
@@ -155,18 +157,20 @@ class CloudSyncServiceImpl implements CloudSyncService {
 
         return results;
       } else {
-        throw ServerFailure('同期に失敗しました: ${response.statusCode}');
+        throw ServerFailure(
+          '${ErrorMessages.cloudSyncFailedPrefix} ${response.statusCode}',
+        );
       }
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'クラウド同期エラー（受信）',
+        LogMessages.cloudSyncReceiveError,
         e,
         stackTrace,
       );
       if (e is ServerFailure) {
         rethrow;
       }
-      throw ServerFailure('クラウド同期エラー: $e');
+      throw ServerFailure('${ErrorMessages.cloudSyncErrorPrefix} $e');
     }
   }
 
