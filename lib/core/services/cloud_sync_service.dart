@@ -29,6 +29,23 @@ class CloudSyncServiceImpl implements CloudSyncService {
   })  : _httpClient = httpClient,
         _prefs = prefs;
 
+  /*
+   * CloudSync用のHTTPヘッダーを生成する
+   * - Authorization/Bearer と Content-Type(JSON) の生成ロジックを集約する
+   */
+  Future<Map<String, String>> _buildHeaders({
+    required bool includeJsonContentType,
+  }) async {
+    final headers = <String, String>{
+      HttpConstants.headerAuthorization:
+          '${HttpConstants.bearerPrefix}${await _getAuthToken()}',
+    };
+    if (includeJsonContentType) {
+      headers[HttpConstants.headerContentType] = HttpConstants.contentTypeJson;
+    }
+    return headers;
+  }
+
   @override
   Future<bool> isConnected() async {
     try {
@@ -75,11 +92,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
           '${CloudSyncConstants.baseUrl}'
           '${CloudSyncConstants.syncEndpointPath}',
         ),
-        headers: {
-          HttpConstants.headerContentType: HttpConstants.contentTypeJson,
-          HttpConstants.headerAuthorization:
-              '${HttpConstants.bearerPrefix}${await _getAuthToken()}',
-        },
+        headers: await _buildHeaders(includeJsonContentType: true),
         body: json.encode({
           'userId': userId,
           'results': filteredResults.map((r) => _resultToJson(r)).toList(),
@@ -125,10 +138,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
           '${CloudSyncConstants.baseUrl}${CloudSyncConstants.syncEndpointPath}'
           '?userId=$userId&since=${lastSync ?? ''}',
         ),
-        headers: {
-          HttpConstants.headerAuthorization:
-              '${HttpConstants.bearerPrefix}${await _getAuthToken()}',
-        },
+        headers: await _buildHeaders(includeJsonContentType: false),
       );
 
       if (response.statusCode == 200) {
