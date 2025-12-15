@@ -17,6 +17,17 @@ class SecureHttpClient {
     HttpConstants.headerUserAgent: HttpConstants.defaultUserAgent,
   };
 
+  /*
+   * デフォルトヘッダーと追加ヘッダーを結合する
+   * - 追加ヘッダーが無い場合はMap生成を避けて割り当てを削減する
+   */
+  Map<String, String> _mergeHeaders(Map<String, String>? headers) {
+    if (headers == null || headers.isEmpty) {
+      return _defaultHeaders;
+    }
+    return {..._defaultHeaders, ...headers};
+  }
+
   SecureHttpClient() {
     _client = http.Client();
   }
@@ -58,7 +69,7 @@ class SecureHttpClient {
     return await _makeRequest(
       () => _client.get(
         Uri.parse(url),
-        headers: {..._defaultHeaders, ...?headers},
+        headers: _mergeHeaders(headers),
       ),
       timeout: timeout,
     );
@@ -79,7 +90,7 @@ class SecureHttpClient {
     return await _makeRequest(
       () => _client.post(
         Uri.parse(url),
-        headers: {..._defaultHeaders, ...?headers},
+        headers: _mergeHeaders(headers),
         body: body is String ? body : jsonEncode(body),
       ),
       timeout: timeout,
@@ -101,7 +112,7 @@ class SecureHttpClient {
     return await _makeRequest(
       () => _client.put(
         Uri.parse(url),
-        headers: {..._defaultHeaders, ...?headers},
+        headers: _mergeHeaders(headers),
         body: body is String ? body : jsonEncode(body),
       ),
       timeout: timeout,
@@ -121,7 +132,7 @@ class SecureHttpClient {
     return await _makeRequest(
       () => _client.delete(
         Uri.parse(url),
-        headers: {..._defaultHeaders, ...?headers},
+        headers: _mergeHeaders(headers),
       ),
       timeout: timeout,
     );
@@ -144,7 +155,10 @@ class SecureHttpClient {
     final request = http.MultipartRequest('POST', Uri.parse(url));
 
     // ヘッダーを追加
-    request.headers.addAll({..._defaultHeaders, ...?headers});
+    request.headers.addAll(_defaultHeaders);
+    if (headers != null && headers.isNotEmpty) {
+      request.headers.addAll(headers);
+    }
 
     // ファイルを追加
     request.files.add(await http.MultipartFile.fromPath(fieldName, file.path));
