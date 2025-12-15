@@ -33,6 +33,18 @@ class SecureHttpClient {
     );
   }
 
+  /*
+   * リトライ回数を進め、必要なら待機する
+   * - 例外処理ブロック内の重複を減らし、挙動を統一する
+   */
+  Future<int> _advanceRetryAndMaybeDelay(int retryCount) async {
+    final nextRetryCount = retryCount + 1;
+    if (nextRetryCount < _maxRetries) {
+      await _delayBeforeRetry(nextRetryCount);
+    }
+    return nextRetryCount;
+  }
+
   /// GETリクエストを送信する
   /// @param url URL
   /// @param headers ヘッダー
@@ -177,24 +189,15 @@ class SecureHttpClient {
       } on TimeoutException {
         lastException =
             TimeoutException(ErrorMessages.secureHttpRequestTimeout);
-        retryCount++;
-        if (retryCount < _maxRetries) {
-          await _delayBeforeRetry(retryCount);
-        }
+        retryCount = await _advanceRetryAndMaybeDelay(retryCount);
       } on SocketException {
         lastException = const SocketException(
           ErrorMessages.secureHttpNetworkError,
         );
-        retryCount++;
-        if (retryCount < _maxRetries) {
-          await _delayBeforeRetry(retryCount);
-        }
+        retryCount = await _advanceRetryAndMaybeDelay(retryCount);
       } on HttpException {
         lastException = const HttpException(ErrorMessages.secureHttpError);
-        retryCount++;
-        if (retryCount < _maxRetries) {
-          await _delayBeforeRetry(retryCount);
-        }
+        retryCount = await _advanceRetryAndMaybeDelay(retryCount);
       } catch (e, stackTrace) {
         AppLogger.logErrorWithStackTrace(
           HttpLogMessages.secureHttpRequestError,
@@ -204,10 +207,7 @@ class SecureHttpClient {
         lastException = Exception(
           '${ErrorMessages.secureHttpUnexpectedErrorPrefix} $e',
         );
-        retryCount++;
-        if (retryCount < _maxRetries) {
-          await _delayBeforeRetry(retryCount);
-        }
+        retryCount = await _advanceRetryAndMaybeDelay(retryCount);
       }
     }
 
