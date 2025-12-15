@@ -147,6 +147,11 @@ class ErrorMessages {
   static const String secureHttpError = 'HTTP error';
   static const String secureHttpUnexpectedErrorPrefix = 'Unexpected error:';
   static const String secureHttpMaxRetriesExceeded = 'Max retries exceeded';
+
+  // CloudSyncService関連
+  static const String cloudSyncNoInternet = 'インターネット接続がありません';
+  static const String cloudSyncFailedPrefix = '同期に失敗しました:';
+  static const String cloudSyncErrorPrefix = 'クラウド同期エラー:';
 }
 
 /*
@@ -178,6 +183,11 @@ class LogMessages {
   static const String loggerLabelErrorType = 'エラータイプ';
   static const String loggerLabelErrorMessage = 'エラーメッセージ';
   static const String loggerLabelErrorCode = 'エラーコード';
+
+  // CloudSyncService関連（ログ用途）
+  static const String cloudSyncConnectionCheckError = 'クラウド接続確認エラー';
+  static const String cloudSyncSendError = 'クラウド同期エラー（送信）';
+  static const String cloudSyncReceiveError = 'クラウド同期エラー（受信）';
 }
 
 /*
