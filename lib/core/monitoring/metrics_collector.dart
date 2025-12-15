@@ -32,7 +32,11 @@ class MetricsCollector {
       value: value,
       unit: unit,
       timestamp: DateTime.now(),
-      tags: tags ?? {},
+      /*
+       * tags未指定時はconst空Mapを使い、不要なMap生成を避ける。
+       * - 破壊的変更の対象にならない（constのため）点もメリット。
+       */
+      tags: tags ?? const <String, String>{},
     );
 
     _metrics.add(metric);
@@ -445,7 +449,10 @@ class Timer {
   final DateTime startTime;
 
   Timer(this.name, {Map<String, String>? tags})
-      : tags = tags ?? {},
+      /*
+       * tags未指定時の不要なMap生成を避ける。
+       */
+      : tags = tags ?? const <String, String>{},
         startTime = DateTime.now();
 }
 
