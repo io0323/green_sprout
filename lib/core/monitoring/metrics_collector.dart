@@ -242,11 +242,11 @@ class MetricsCollector {
     Map<String, String>? tags,
   }) {
     /*
-     * フィルタがない場合は既存挙動に合わせて内部リストを返す。
+     * フィルタがない場合は外部からの破壊的変更を防ぐため読み取り専用で返す。
      * フィルタがある場合は遅延評価で条件を連結し、toList() を1回に抑える。
      */
     if (name == null && tags == null) {
-      return _metrics;
+      return List<MetricData>.unmodifiable(_metrics);
     }
 
     Iterable<MetricData> iterable = _metrics;
