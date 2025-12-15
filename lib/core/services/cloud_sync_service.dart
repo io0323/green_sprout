@@ -49,14 +49,14 @@ class CloudSyncServiceImpl implements CloudSyncService {
   @override
   Future<bool> isConnected() async {
     try {
-      final response = await _httpClient.get(
-        Uri.parse(
-          '${CloudSyncConstants.baseUrl}${CloudSyncConstants.healthPath}',
-        ),
-        headers: {
-          HttpConstants.headerContentType: HttpConstants.contentTypeJson,
-        },
-      ).timeout(AnimationConstants.fiveSeconds);
+      final response = await _httpClient
+          .get(
+            Uri.parse(
+              '${CloudSyncConstants.baseUrl}${CloudSyncConstants.healthPath}',
+            ),
+            headers: HttpConstants.jsonContentTypeHeaders,
+          )
+          .timeout(AnimationConstants.fiveSeconds);
 
       return response.statusCode == 200;
     } catch (e, stackTrace) {

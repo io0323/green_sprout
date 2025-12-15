@@ -221,9 +221,8 @@ void _registerMobileDataSources() {
 /// テスト用のHTTPクライアント
 /// すべてのHTTPリクエストに対して即座に成功レスポンスを返す
 class _TestHttpClient implements http.Client {
-  static const Map<String, String> _jsonHeaders = {
-    HttpConstants.headerContentType: HttpConstants.contentTypeJson,
-  };
+  static const Map<String, String> _jsonHeaders =
+      HttpConstants.jsonContentTypeHeaders;
 
   @override
   Future<http.Response> get(Uri url, {Map<String, String>? headers}) async {
