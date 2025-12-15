@@ -256,12 +256,13 @@ class DatabaseConnectionPool {
      * 待機中の要求がある場合は、解放された接続を即時に割り当てる。
      * busy-wait を避けて無駄なポーリングを削減する。
      */
-    if (_waiters.isNotEmpty) {
+    while (_waiters.isNotEmpty) {
       final waiter = _waiters.removeFirst();
-      connection.isInUse = true;
-      if (!waiter.isCompleted) {
-        waiter.complete(connection);
+      if (waiter.isCompleted) {
+        continue;
       }
+      connection.isInUse = true;
+      waiter.complete(connection);
       return;
     }
 
