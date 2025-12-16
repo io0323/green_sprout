@@ -340,7 +340,7 @@ class CloudSyncConstants {
  * - injection_container.dart の _TestHttpClient で使用する値を集約する
  */
 class TestHttpClientConstants {
-  static const int successStatusCode = 200;
+  static const int successStatusCode = HttpConstants.statusOk;
   static const String emptyJsonObject = '{}';
   static const String emptyBody = '';
 }
