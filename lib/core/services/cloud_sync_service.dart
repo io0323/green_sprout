@@ -259,7 +259,6 @@ class CloudSyncServiceImpl implements CloudSyncService {
 /// オフライン同期キュー
 /// ネットワークが利用できない場合のデータを管理
 class OfflineSyncQueue {
-  static const String _queueKey = 'offline_sync_queue';
   final SharedPreferences _prefs;
 
   OfflineSyncQueue(this._prefs);
@@ -273,7 +272,7 @@ class OfflineSyncQueue {
 
   /// オフラインキューを取得
   Future<List<TeaAnalysisResult>> getQueue() async {
-    final jsonString = _prefs.getString(_queueKey);
+    final jsonString = _prefs.getString(CloudSyncConstants.keyOfflineSyncQueue);
     if (jsonString == null) return [];
 
     final jsonList = json.decode(jsonString) as List;
@@ -282,13 +281,16 @@ class OfflineSyncQueue {
 
   /// オフラインキューをクリア
   Future<void> clearQueue() async {
-    await _prefs.remove(_queueKey);
+    await _prefs.remove(CloudSyncConstants.keyOfflineSyncQueue);
   }
 
   /// キューを保存
   Future<void> _saveQueue(List<TeaAnalysisResult> queue) async {
     final jsonList = queue.map((result) => _resultToJson(result)).toList();
-    await _prefs.setString(_queueKey, json.encode(jsonList));
+    await _prefs.setString(
+      CloudSyncConstants.keyOfflineSyncQueue,
+      json.encode(jsonList),
+    );
   }
 
   /// TeaAnalysisResultをJSONに変換

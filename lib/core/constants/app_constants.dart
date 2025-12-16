@@ -312,6 +312,7 @@ class CloudSyncConstants {
   static const String keyAutoSyncEnabled = 'auto_sync_enabled';
   static const String keyLastSyncTimestamp = 'last_sync_timestamp';
   static const String keyUserId = 'user_id';
+  static const String keyOfflineSyncQueue = 'offline_sync_queue';
 
   /* JSON keys */
   static const String jsonKeyUserId = 'userId';
