@@ -94,9 +94,10 @@ class CloudSyncServiceImpl implements CloudSyncService {
         ),
         headers: await _buildHeaders(includeJsonContentType: true),
         body: json.encode({
-          'userId': userId,
-          'results': filteredResults.map((r) => _resultToJson(r)).toList(),
-          'timestamp': DateTime.now().toIso8601String(),
+          CloudSyncConstants.jsonKeyUserId: userId,
+          CloudSyncConstants.jsonKeyResults:
+              filteredResults.map((r) => _resultToJson(r)).toList(),
+          CloudSyncConstants.jsonKeyTimestamp: DateTime.now().toIso8601String(),
         }),
       );
 
@@ -145,7 +146,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
 
       if (response.statusCode == HttpConstants.statusOk) {
         final data = json.decode(response.body);
-        final results = (data['results'] as List)
+        final results = (data[CloudSyncConstants.jsonKeyResults] as List)
             .map((json) => _resultFromJson(json))
             .toList();
 
@@ -237,7 +238,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
       'healthStatus': result.healthStatus,
       'confidence': result.confidence,
       'comment': result.comment,
-      'timestamp': result.timestamp.toIso8601String(),
+      CloudSyncConstants.jsonKeyTimestamp: result.timestamp.toIso8601String(),
     };
   }
 
@@ -250,7 +251,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
       healthStatus: json['healthStatus'],
       confidence: (json['confidence'] as num).toDouble(),
       comment: json['comment'],
-      timestamp: DateTime.parse(json['timestamp']),
+      timestamp: DateTime.parse(json[CloudSyncConstants.jsonKeyTimestamp]),
     );
   }
 }
@@ -299,7 +300,7 @@ class OfflineSyncQueue {
       'healthStatus': result.healthStatus,
       'confidence': result.confidence,
       'comment': result.comment,
-      'timestamp': result.timestamp.toIso8601String(),
+      CloudSyncConstants.jsonKeyTimestamp: result.timestamp.toIso8601String(),
     };
   }
 
@@ -312,7 +313,7 @@ class OfflineSyncQueue {
       healthStatus: json['healthStatus'],
       confidence: (json['confidence'] as num).toDouble(),
       comment: json['comment'],
-      timestamp: DateTime.parse(json['timestamp']),
+      timestamp: DateTime.parse(json[CloudSyncConstants.jsonKeyTimestamp]),
     );
   }
 }
