@@ -58,7 +58,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
           )
           .timeout(AnimationConstants.fiveSeconds);
 
-      return response.statusCode == 200;
+      return response.statusCode == HttpConstants.statusOk;
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
         LogMessages.cloudSyncConnectionCheckError,
@@ -100,7 +100,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
         }),
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == HttpConstants.statusOk) {
         // 同期成功時はタイムスタンプを更新
         await _prefs.setString(
           CloudSyncConstants.keyLastSyncTimestamp,
@@ -143,7 +143,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
         headers: await _buildHeaders(includeJsonContentType: false),
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == HttpConstants.statusOk) {
         final data = json.decode(response.body);
         final results = (data['results'] as List)
             .map((json) => _resultFromJson(json))
