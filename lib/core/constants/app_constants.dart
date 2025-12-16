@@ -265,6 +265,9 @@ class HttpConstants {
   static const Duration defaultTimeout = Duration(seconds: 30);
   static const int retryBackoffSecondsBase = 2;
 
+  /* HTTPステータス */
+  static const int statusOk = 200;
+
   /* レスポンス制限 */
   static const int maxResponseBytes = 10 * 1024 * 1024; // 10MB
 
