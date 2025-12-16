@@ -224,6 +224,13 @@ class MetricsConstants {
   static const String tagUrl = 'url';
   static const String tagTable = 'table';
 
+  /* JSON keys */
+  static const String jsonKeyName = 'name';
+  static const String jsonKeyValue = 'value';
+  static const String jsonKeyUnit = 'unit';
+  static const String jsonKeyTimestamp = 'timestamp';
+  static const String jsonKeyTags = 'tags';
+
   /* デフォルト値 */
   static const String defaultUnknown = 'unknown';
   static const String invalidUrl = 'invalid_url';

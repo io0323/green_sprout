@@ -436,11 +436,11 @@ class MetricData {
 
   Map<String, dynamic> toJson() {
     return {
-      'name': name,
-      'value': value,
-      'unit': unit,
-      'timestamp': timestamp.toIso8601String(),
-      'tags': tags,
+      MetricsConstants.jsonKeyName: name,
+      MetricsConstants.jsonKeyValue: value,
+      MetricsConstants.jsonKeyUnit: unit,
+      MetricsConstants.jsonKeyTimestamp: timestamp.toIso8601String(),
+      MetricsConstants.jsonKeyTags: tags,
     };
   }
 }
