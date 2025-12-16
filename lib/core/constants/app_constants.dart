@@ -319,6 +319,17 @@ class CloudSyncConstants {
   static const String jsonKeyResults = 'results';
   static const String jsonKeyTimestamp = 'timestamp';
 
+  /*
+   * TeaAnalysisResult JSON keys（Cloud Sync用）
+   * - cloud_sync_service.dart 内の変換処理で使用するキーを集約する
+   */
+  static const String jsonKeyResultId = 'id';
+  static const String jsonKeyResultImagePath = 'imagePath';
+  static const String jsonKeyResultGrowthStage = 'growthStage';
+  static const String jsonKeyResultHealthStatus = 'healthStatus';
+  static const String jsonKeyResultConfidence = 'confidence';
+  static const String jsonKeyResultComment = 'comment';
+
   /* Query params */
   static const String queryParamUserId = 'userId';
   static const String queryParamSince = 'since';

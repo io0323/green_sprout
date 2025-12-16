@@ -240,12 +240,12 @@ class CloudSyncServiceImpl implements CloudSyncService {
   /// TeaAnalysisResultをJSONに変換
   Map<String, dynamic> _resultToJson(TeaAnalysisResult result) {
     return {
-      'id': result.id,
-      'imagePath': result.imagePath,
-      'growthStage': result.growthStage,
-      'healthStatus': result.healthStatus,
-      'confidence': result.confidence,
-      'comment': result.comment,
+      CloudSyncConstants.jsonKeyResultId: result.id,
+      CloudSyncConstants.jsonKeyResultImagePath: result.imagePath,
+      CloudSyncConstants.jsonKeyResultGrowthStage: result.growthStage,
+      CloudSyncConstants.jsonKeyResultHealthStatus: result.healthStatus,
+      CloudSyncConstants.jsonKeyResultConfidence: result.confidence,
+      CloudSyncConstants.jsonKeyResultComment: result.comment,
       CloudSyncConstants.jsonKeyTimestamp: result.timestamp.toIso8601String(),
     };
   }
@@ -253,12 +253,13 @@ class CloudSyncServiceImpl implements CloudSyncService {
   /// JSONからTeaAnalysisResultに変換
   TeaAnalysisResult _resultFromJson(Map<String, dynamic> json) {
     return TeaAnalysisResult(
-      id: json['id'],
-      imagePath: json['imagePath'],
-      growthStage: json['growthStage'],
-      healthStatus: json['healthStatus'],
-      confidence: (json['confidence'] as num).toDouble(),
-      comment: json['comment'],
+      id: json[CloudSyncConstants.jsonKeyResultId],
+      imagePath: json[CloudSyncConstants.jsonKeyResultImagePath],
+      growthStage: json[CloudSyncConstants.jsonKeyResultGrowthStage],
+      healthStatus: json[CloudSyncConstants.jsonKeyResultHealthStatus],
+      confidence:
+          (json[CloudSyncConstants.jsonKeyResultConfidence] as num).toDouble(),
+      comment: json[CloudSyncConstants.jsonKeyResultComment],
       timestamp: DateTime.parse(json[CloudSyncConstants.jsonKeyTimestamp]),
     );
   }
@@ -305,12 +306,12 @@ class OfflineSyncQueue {
   /// TeaAnalysisResultをJSONに変換
   Map<String, dynamic> _resultToJson(TeaAnalysisResult result) {
     return {
-      'id': result.id,
-      'imagePath': result.imagePath,
-      'growthStage': result.growthStage,
-      'healthStatus': result.healthStatus,
-      'confidence': result.confidence,
-      'comment': result.comment,
+      CloudSyncConstants.jsonKeyResultId: result.id,
+      CloudSyncConstants.jsonKeyResultImagePath: result.imagePath,
+      CloudSyncConstants.jsonKeyResultGrowthStage: result.growthStage,
+      CloudSyncConstants.jsonKeyResultHealthStatus: result.healthStatus,
+      CloudSyncConstants.jsonKeyResultConfidence: result.confidence,
+      CloudSyncConstants.jsonKeyResultComment: result.comment,
       CloudSyncConstants.jsonKeyTimestamp: result.timestamp.toIso8601String(),
     };
   }
@@ -318,12 +319,13 @@ class OfflineSyncQueue {
   /// JSONからTeaAnalysisResultに変換
   TeaAnalysisResult _resultFromJson(Map<String, dynamic> json) {
     return TeaAnalysisResult(
-      id: json['id'],
-      imagePath: json['imagePath'],
-      growthStage: json['growthStage'],
-      healthStatus: json['healthStatus'],
-      confidence: (json['confidence'] as num).toDouble(),
-      comment: json['comment'],
+      id: json[CloudSyncConstants.jsonKeyResultId],
+      imagePath: json[CloudSyncConstants.jsonKeyResultImagePath],
+      growthStage: json[CloudSyncConstants.jsonKeyResultGrowthStage],
+      healthStatus: json[CloudSyncConstants.jsonKeyResultHealthStatus],
+      confidence:
+          (json[CloudSyncConstants.jsonKeyResultConfidence] as num).toDouble(),
+      comment: json[CloudSyncConstants.jsonKeyResultComment],
       timestamp: DateTime.parse(json[CloudSyncConstants.jsonKeyTimestamp]),
     );
   }
