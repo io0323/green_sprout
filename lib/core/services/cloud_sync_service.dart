@@ -136,11 +136,17 @@ class CloudSyncServiceImpl implements CloudSyncService {
       final lastSync =
           _prefs.getString(CloudSyncConstants.keyLastSyncTimestamp);
 
+      final uri = Uri.parse(
+        '${CloudSyncConstants.baseUrl}${CloudSyncConstants.syncEndpointPath}',
+      ).replace(
+        queryParameters: {
+          CloudSyncConstants.queryParamUserId: userId,
+          CloudSyncConstants.queryParamSince: lastSync ?? '',
+        },
+      );
+
       final response = await _httpClient.get(
-        Uri.parse(
-          '${CloudSyncConstants.baseUrl}${CloudSyncConstants.syncEndpointPath}'
-          '?userId=$userId&since=${lastSync ?? ''}',
-        ),
+        uri,
         headers: await _buildHeaders(includeJsonContentType: false),
       );
 
