@@ -145,9 +145,11 @@ class CloudSyncServiceImpl implements CloudSyncService {
       );
 
       if (response.statusCode == HttpConstants.statusOk) {
-        final data = json.decode(response.body);
+        final Map<String, dynamic> data =
+            json.decode(response.body) as Map<String, dynamic>;
         final results = (data[CloudSyncConstants.jsonKeyResults] as List)
-            .map((json) => _resultFromJson(json))
+            .cast<Map<String, dynamic>>()
+            .map(_resultFromJson)
             .toList();
 
         // 同期成功時はタイムスタンプを更新
@@ -275,8 +277,9 @@ class OfflineSyncQueue {
     final jsonString = _prefs.getString(CloudSyncConstants.keyOfflineSyncQueue);
     if (jsonString == null) return [];
 
-    final jsonList = json.decode(jsonString) as List;
-    return jsonList.map((json) => _resultFromJson(json)).toList();
+    final jsonList =
+        (json.decode(jsonString) as List).cast<Map<String, dynamic>>();
+    return jsonList.map(_resultFromJson).toList();
   }
 
   /// オフラインキューをクリア
