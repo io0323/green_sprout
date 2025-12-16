@@ -241,6 +241,7 @@ class MetricsConstants {
  */
 class MetricsMessages {
   static const String debugMetricRecordedPrefix = 'Metric recorded:';
+  static const String debugErrorRecordedPrefix = 'Error recorded:';
   static const String reportHeader = '=== Metrics Report ===';
   static const String reportTotalMetricsPrefix = 'Total metrics:';
   static const String reportActiveTimersPrefix = 'Active timers:';
