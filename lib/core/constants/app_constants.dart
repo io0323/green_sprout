@@ -338,7 +338,7 @@ class CloudSyncConstants {
   static const String jsonKeyResultComment = 'comment';
 
   /* Query params */
-  static const String queryParamUserId = 'userId';
+  static const String queryParamUserId = jsonKeyUserId;
   static const String queryParamSince = 'since';
 }
 
