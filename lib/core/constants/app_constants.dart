@@ -152,6 +152,10 @@ class ErrorMessages {
   static const String cloudSyncNoInternet = 'インターネット接続がありません';
   static const String cloudSyncFailedPrefix = '同期に失敗しました:';
   static const String cloudSyncErrorPrefix = 'クラウド同期エラー:';
+
+  // PerformanceUtils関連
+  static const String performanceImageLoadError = '画像読み込みエラー';
+  static const String databaseConnectionPoolClosed = 'Connection pool closed';
 }
 
 /*
