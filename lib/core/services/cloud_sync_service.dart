@@ -96,7 +96,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
         body: json.encode({
           CloudSyncConstants.jsonKeyUserId: userId,
           CloudSyncConstants.jsonKeyResults:
-              filteredResults.map((r) => _resultToJson(r)).toList(),
+              filteredResults.map(_resultToJson).toList(),
           CloudSyncConstants.jsonKeyTimestamp: DateTime.now().toIso8601String(),
         }),
       );
@@ -296,7 +296,7 @@ class OfflineSyncQueue {
 
   /// キューを保存
   Future<void> _saveQueue(List<TeaAnalysisResult> queue) async {
-    final jsonList = queue.map((result) => _resultToJson(result)).toList();
+    final jsonList = queue.map(_resultToJson).toList();
     await _prefs.setString(
       CloudSyncConstants.keyOfflineSyncQueue,
       json.encode(jsonList),
