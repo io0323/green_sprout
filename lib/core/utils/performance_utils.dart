@@ -190,7 +190,7 @@ class ImageCacheManager {
     if (kDebugMode) {
       AppLogger.debug(
         '${PerformanceLogMessages.imageCacheEntryPrefix} '
-        '$key (${bytes.length} bytes)',
+        '$key (${bytes.length} ${PerformanceLogMessages.sizeUnitBytes})',
       );
     }
   }

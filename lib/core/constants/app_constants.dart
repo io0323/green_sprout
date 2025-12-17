@@ -394,6 +394,9 @@ class PerformanceLogMessages {
   static const String memoryPrefix = '🧠 Memory';
   static const String memoryUnitMb = 'MB';
 
+  /* サイズ単位 */
+  static const String sizeUnitBytes = 'bytes';
+
   static const String imageLoadedPrefix = 'Image loaded:';
   static const String imageCacheEntryPrefix = '📸 Cached image:';
   static const String imageCacheCleared = '🗑️ Image cache cleared';
