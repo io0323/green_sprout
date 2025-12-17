@@ -137,7 +137,7 @@ class MetricsCollector {
     if (kDebugMode) {
       AppLogger.debugError(
         '${MetricsMessages.debugErrorRecordedPrefix} '
-        '$error (context: $context)',
+        '$error (${MetricsMessages.debugErrorContextLabel}: $context)',
       );
     }
   }
