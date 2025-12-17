@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import '../utils/app_logger.dart';
+import '../constants/app_constants.dart';
 
 /// セキュリティユーティリティクラス
 /// アプリケーションのセキュリティを強化するための機能を提供
@@ -43,7 +44,7 @@ class SecurityUtils {
       return base64Encode(utf8.encode(combined));
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        '暗号化エラー',
+        ErrorMessages.securityEncryptError,
         e,
         stackTrace,
       );
@@ -69,7 +70,7 @@ class SecurityUtils {
       return _xorDecrypt(encrypted, key);
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        '復号化エラー',
+        ErrorMessages.securityDecryptError,
         e,
         stackTrace,
       );
