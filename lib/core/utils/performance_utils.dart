@@ -105,7 +105,7 @@ class PerformanceUtils {
       return bytes;
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        '画像読み込みエラー',
+        ErrorMessages.performanceImageLoadError,
         e,
         stackTrace,
       );
@@ -286,7 +286,8 @@ class DatabaseConnectionPool {
      */
     for (final waiter in _waiters) {
       if (!waiter.isCompleted) {
-        waiter.completeError(StateError('Connection pool closed'));
+        waiter.completeError(
+            StateError(ErrorMessages.databaseConnectionPoolClosed));
       }
     }
     _waiters.clear();
