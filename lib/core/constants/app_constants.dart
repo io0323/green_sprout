@@ -156,6 +156,14 @@ class ErrorMessages {
   // PerformanceUtils関連
   static const String performanceImageLoadError = '画像読み込みエラー';
   static const String databaseConnectionPoolClosed = 'Connection pool closed';
+
+  // PlatformUtils関連（ログ用途）
+  static const String platformWearOsCheckError = 'Wear OS判定エラー';
+  static const String platformWatchOsCheckError = 'watchOS判定エラー';
+
+  // SecurityUtils関連（ログ用途）
+  static const String securityEncryptError = '暗号化エラー';
+  static const String securityDecryptError = '復号化エラー';
 }
 
 /*
