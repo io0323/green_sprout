@@ -87,6 +87,9 @@ class CloudSyncServiceImpl implements CloudSyncService {
         return; // 同期するデータがない
       }
 
+      /* 送信ボディと保存で同一のタイムスタンプを使い回す */
+      final nowIso = DateTime.now().toIso8601String();
+
       final response = await _httpClient.post(
         Uri.parse(
           '${CloudSyncConstants.baseUrl}'
@@ -97,7 +100,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
           CloudSyncConstants.jsonKeyUserId: userId,
           CloudSyncConstants.jsonKeyResults:
               filteredResults.map(_resultToJson).toList(),
-          CloudSyncConstants.jsonKeyTimestamp: DateTime.now().toIso8601String(),
+          CloudSyncConstants.jsonKeyTimestamp: nowIso,
         }),
       );
 
@@ -105,7 +108,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
         // 同期成功時はタイムスタンプを更新
         await _prefs.setString(
           CloudSyncConstants.keyLastSyncTimestamp,
-          DateTime.now().toIso8601String(),
+          nowIso,
         );
       } else {
         throw ServerFailure(
@@ -151,6 +154,9 @@ class CloudSyncServiceImpl implements CloudSyncService {
       );
 
       if (response.statusCode == HttpConstants.statusOk) {
+        /* 受信後の保存タイムスタンプは1回だけ生成して使い回す */
+        final nowIso = DateTime.now().toIso8601String();
+
         final Map<String, dynamic> data =
             json.decode(response.body) as Map<String, dynamic>;
         final results = (data[CloudSyncConstants.jsonKeyResults] as List)
@@ -161,7 +167,7 @@ class CloudSyncServiceImpl implements CloudSyncService {
         // 同期成功時はタイムスタンプを更新
         await _prefs.setString(
           CloudSyncConstants.keyLastSyncTimestamp,
-          DateTime.now().toIso8601String(),
+          nowIso,
         );
 
         return results;
