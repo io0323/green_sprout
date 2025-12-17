@@ -343,6 +343,17 @@ class CloudSyncConstants {
 }
 
 /*
+ * Cloud Sync の同期状態表示用文言
+ * - UI表示で使う直書き文言を集約して変更容易性を上げる
+ */
+class CloudSyncStatusMessages {
+  static const String empty = '';
+  static const String syncing = '同期中...';
+  static const String success = '同期完了';
+  static const String offline = 'オフライン';
+}
+
+/*
  * テスト用HTTPクライアント関連の定数
  * - injection_container.dart の _TestHttpClient で使用する値を集約する
  */

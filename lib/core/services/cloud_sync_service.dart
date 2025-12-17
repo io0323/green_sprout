@@ -343,38 +343,53 @@ enum SyncStatus {
 /// 同期状態の通知
 class SyncStatusNotifier extends ChangeNotifier {
   SyncStatus _status = SyncStatus.idle;
-  String _message = '';
+  String _message = CloudSyncStatusMessages.empty;
   int _pendingItems = 0;
 
   SyncStatus get status => _status;
   String get message => _message;
   int get pendingItems => _pendingItems;
 
-  void setStatus(SyncStatus status,
-      {String message = '', int pendingItems = 0}) {
+  /* 同期状態/メッセージ/保留数をまとめて更新する */
+  void setStatus(
+    SyncStatus status, {
+    String message = CloudSyncStatusMessages.empty,
+    int pendingItems = 0,
+  }) {
     _status = status;
     _message = message;
     _pendingItems = pendingItems;
     notifyListeners();
   }
 
+  /* 同期中状態へ更新する */
   void setSyncing({int pendingItems = 0}) {
-    setStatus(SyncStatus.syncing,
-        message: '同期中...', pendingItems: pendingItems);
+    setStatus(
+      SyncStatus.syncing,
+      message: CloudSyncStatusMessages.syncing,
+      pendingItems: pendingItems,
+    );
   }
 
-  void setSuccess({String message = '同期完了'}) {
+  /* 同期成功状態へ更新する */
+  void setSuccess({String message = CloudSyncStatusMessages.success}) {
     setStatus(SyncStatus.success, message: message);
   }
 
+  /* 同期失敗状態へ更新する */
   void setError(String message) {
     setStatus(SyncStatus.error, message: message);
   }
 
+  /* オフライン状態へ更新する */
   void setOffline() {
-    setStatus(SyncStatus.offline, message: 'オフライン');
+    setStatus(
+      SyncStatus.offline,
+      message: CloudSyncStatusMessages.offline,
+    );
   }
 
+  /* アイドル状態へ戻す */
   void setIdle() {
     setStatus(SyncStatus.idle);
   }
