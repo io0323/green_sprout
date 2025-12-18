@@ -178,6 +178,14 @@ class ErrorMessages {
   static const String localizationServiceFallbackError =
       '国際化サービスエラー（フォールバック使用）';
   static const String localizationServiceDefaultError = '国際化サービスエラー（デフォルト値使用）';
+
+  // TFLite関連（ログ用途）
+  static const String tfliteModelLoadError = 'TFLiteモデル読み込みエラー';
+  static const String tfliteInputTensorError = '入力テンソル取得エラー';
+  static const String tfliteOutputTensorError = '出力テンソル取得エラー';
+  static const String tfliteInferenceError = 'モデル推論エラー';
+  static const String tfliteInferenceWithInputError = 'モデル推論エラー（入力データ）';
+  static const String tfliteModelOutputError = 'モデル出力取得エラー';
 }
 
 /*

@@ -1,6 +1,7 @@
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'tflite_interface.dart';
 import '../core/utils/app_logger.dart';
+import '../core/constants/app_constants.dart';
 
 /// Mobile implementation for TFLite functionality
 /// Provides actual TFLite inference on mobile platforms
@@ -22,7 +23,7 @@ class TfliteWrapper {
       return TfliteWrapper._(interpreter);
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'TFLiteモデル読み込みエラー',
+        ErrorMessages.tfliteModelLoadError,
         e,
         stackTrace,
       );
@@ -41,7 +42,7 @@ class TfliteWrapper {
       return TensorInfo(shape: tensor.shape, dtype: tensor.type.toString());
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        '入力テンソル取得エラー',
+        ErrorMessages.tfliteInputTensorError,
         e,
         stackTrace,
       );
@@ -60,7 +61,7 @@ class TfliteWrapper {
       return TensorInfo(shape: tensor.shape, dtype: tensor.type.toString());
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        '出力テンソル取得エラー',
+        ErrorMessages.tfliteOutputTensorError,
         e,
         stackTrace,
       );
@@ -78,7 +79,7 @@ class TfliteWrapper {
       _interpreter.run(input, output);
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'モデル推論エラー',
+        ErrorMessages.tfliteInferenceError,
         e,
         stackTrace,
       );
@@ -101,7 +102,7 @@ class TfliteWrapper {
       _interpreter.run(inputTensor, outputTensor);
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'モデル推論エラー（入力データ）',
+        ErrorMessages.tfliteInferenceWithInputError,
         e,
         stackTrace,
       );
@@ -127,7 +128,7 @@ class TfliteWrapper {
       return output;
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'モデル出力取得エラー',
+        ErrorMessages.tfliteModelOutputError,
         e,
         stackTrace,
       );
