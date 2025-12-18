@@ -186,6 +186,8 @@ class ErrorMessages {
   static const String tfliteInferenceError = 'モデル推論エラー';
   static const String tfliteInferenceWithInputError = 'モデル推論エラー（入力データ）';
   static const String tfliteModelOutputError = 'モデル出力取得エラー';
+  static const String tfliteNativeInterpreterCreateError =
+      'TFLiteインタープリター作成エラー（ネイティブ）';
 }
 
 /*

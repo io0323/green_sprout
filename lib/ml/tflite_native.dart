@@ -2,6 +2,7 @@
 // Uses the actual tflite_flutter package on platforms with FFI support
 import 'package:tflite_flutter/tflite_flutter.dart' as tflite;
 import '../core/utils/app_logger.dart';
+import '../core/constants/app_constants.dart';
 
 /// TFLite service for native platforms (Android, iOS, Desktop)
 class TfliteService {
@@ -14,7 +15,7 @@ class TfliteService {
       return await tflite.Interpreter.fromAsset(assetPath);
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'TFLiteインタープリター作成エラー（ネイティブ）',
+        ErrorMessages.tfliteNativeInterpreterCreateError,
         e,
         stackTrace,
       );
