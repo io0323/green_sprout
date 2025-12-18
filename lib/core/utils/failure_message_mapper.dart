@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/app_constants.dart';
 import '../errors/failures.dart';
 import '../services/localization_service.dart';
 import '../theme/tea_garden_theme.dart';
@@ -40,7 +41,7 @@ class FailureMessageMapper {
         }
       } catch (e, stackTrace) {
         AppLogger.logErrorWithStackTrace(
-          '国際化サービスエラー（フォールバック使用）',
+          ErrorMessages.localizationServiceFallbackError,
           e,
           stackTrace,
         );
@@ -118,7 +119,7 @@ class FailureMessageMapper {
       }
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        '国際化サービスエラー（デフォルト値使用）',
+        ErrorMessages.localizationServiceDefaultError,
         e,
         stackTrace,
       );

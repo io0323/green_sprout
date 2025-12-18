@@ -164,6 +164,11 @@ class ErrorMessages {
   // SecurityUtils関連（ログ用途）
   static const String securityEncryptError = '暗号化エラー';
   static const String securityDecryptError = '復号化エラー';
+
+  // FailureMessageMapper関連（ログ用途）
+  static const String localizationServiceFallbackError =
+      '国際化サービスエラー（フォールバック使用）';
+  static const String localizationServiceDefaultError = '国際化サービスエラー（デフォルト値使用）';
 }
 
 /*
