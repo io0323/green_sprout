@@ -188,6 +188,9 @@ class ErrorMessages {
   static const String tfliteModelOutputError = 'モデル出力取得エラー';
   static const String tfliteNativeInterpreterCreateError =
       'TFLiteインタープリター作成エラー（ネイティブ）';
+
+  // AppInitialization関連（UIフォールバック）
+  static const String errorOccurred = 'エラーが発生しました';
 }
 
 /*

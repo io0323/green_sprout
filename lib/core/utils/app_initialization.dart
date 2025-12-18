@@ -101,7 +101,7 @@ class AppInitialization {
           e,
           stackTrace,
         );
-        errorMessage = 'エラーが発生しました';
+        errorMessage = ErrorMessages.errorOccurred;
       }
 
       /// テーマのエラー色を使用
@@ -127,9 +127,7 @@ class AppInitialization {
         color: backgroundColor,
         child: Container(
           color: errorColor.withOpacity(0.1),
-          padding: EdgeInsets.all(
-            isWearable ? TeaGardenTheme.spacingM : TeaGardenTheme.spacingM,
-          ),
+          padding: const EdgeInsets.all(TeaGardenTheme.spacingM),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -140,10 +138,8 @@ class AppInitialization {
                     : TeaGardenTheme.errorIconSizeDefault,
                 color: errorColor,
               ),
-              SizedBox(
-                height: isWearable
-                    ? TeaGardenTheme.spacingM
-                    : TeaGardenTheme.spacingM,
+              const SizedBox(
+                height: TeaGardenTheme.spacingM,
               ),
               Text(
                 errorMessage,
