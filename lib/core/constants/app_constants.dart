@@ -164,11 +164,30 @@ class ErrorMessages {
   // SecurityUtils関連（ログ用途）
   static const String securityEncryptError = '暗号化エラー';
   static const String securityDecryptError = '復号化エラー';
+  static const String securityInvalidEncryptedDataFormat =
+      'Invalid encrypted data format';
+
+  // SecurityUtils関連（環境変数）
+  static const String securityEncryptionKeyEnvNotSetWarning =
+      'ENCRYPTION_KEY environment variable not set. Using fallback key.';
+  static const String securityEncryptionKeyEnvNotSetException =
+      'Encryption key not set in environment variable ENCRYPTION_KEY. '
+      'Please set this variable in your deployment environment.';
 
   // FailureMessageMapper関連（ログ用途）
   static const String localizationServiceFallbackError =
       '国際化サービスエラー（フォールバック使用）';
   static const String localizationServiceDefaultError = '国際化サービスエラー（デフォルト値使用）';
+}
+
+/*
+ * SecurityUtils関連の定数
+ * - 環境変数名や開発用フォールバックキーなど、直書きになりがちな値を集約する
+ */
+class SecurityConstants {
+  static const String envEncryptionKey = 'ENCRYPTION_KEY';
+  static const String fallbackEncryptionKey =
+      'default_fallback_key_please_change';
 }
 
 /*

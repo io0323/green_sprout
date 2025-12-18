@@ -13,16 +13,16 @@ class SecurityUtils {
   /// Loads the encryption key from the environment variable ENCRYPTION_KEY.
   /// In production, this must be set. For development or testing, a fallback key is used.
   static String _getEncryptionKey() {
-    final key = Platform.environment['ENCRYPTION_KEY'];
+    final key = Platform.environment[SecurityConstants.envEncryptionKey];
     if (key == null || key.isEmpty) {
       // Fallback for development/testing only. DO NOT use in production.
       if (kDebugMode) {
         AppLogger.debugWarning(
-            'ENCRYPTION_KEY environment variable not set. Using fallback key.');
-        return 'default_fallback_key_please_change'; // Change this for local testing
+          ErrorMessages.securityEncryptionKeyEnvNotSetWarning,
+        );
+        return SecurityConstants.fallbackEncryptionKey;
       }
-      throw Exception(
-          'Encryption key not set in environment variable ENCRYPTION_KEY. Please set this variable in your deployment environment.');
+      throw Exception(ErrorMessages.securityEncryptionKeyEnvNotSetException);
     }
     return key;
   }
@@ -61,7 +61,7 @@ class SecurityUtils {
       final parts = decoded.split(':');
 
       if (parts.length != 2) {
-        throw Exception('Invalid encrypted data format');
+        throw Exception(ErrorMessages.securityInvalidEncryptedDataFormat);
       }
 
       final encrypted = parts[1];
