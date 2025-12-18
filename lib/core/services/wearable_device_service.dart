@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../constants/app_constants.dart';
 import '../errors/failures.dart';
 import '../../features/tea_analysis/domain/entities/tea_analysis_result.dart';
 import '../theme/tea_garden_theme.dart';
@@ -64,7 +65,7 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
       return _isConnected;
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'ウェアラブルデバイス接続確認エラー',
+        ErrorMessages.wearableConnectionCheckError,
         e,
         stackTrace,
       );
@@ -81,7 +82,7 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
     } catch (e, stackTrace) {
       _isConnected = false;
       AppLogger.logErrorWithStackTrace(
-        'ウェアラブルデバイス接続エラー',
+        ErrorMessages.wearableConnectError,
         e,
         stackTrace,
       );
@@ -97,7 +98,7 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
       _isConnected = false;
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'ウェアラブルデバイス切断エラー',
+        ErrorMessages.wearableDisconnectError,
         e,
         stackTrace,
       );
@@ -125,7 +126,7 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
       await _channel.invokeMethod('sendToWearable', {'data': data});
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'ウェアラブルデバイスデータ送信エラー',
+        ErrorMessages.wearableDataSendError,
         e,
         stackTrace,
       );
@@ -150,7 +151,7 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
       await _channel.invokeMethod('sendToWearable', {'data': data});
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'ウェアラブルデバイス通知送信エラー',
+        ErrorMessages.wearableNotificationSendError,
         e,
         stackTrace,
       );
@@ -172,7 +173,7 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
           await _channel.invokeMethod('sendHeartbeat');
         } catch (e, stackTrace) {
           AppLogger.logErrorWithStackTrace(
-            'ウェアラブルデバイスハートビートエラー',
+            ErrorMessages.wearableHeartbeatError,
             e,
             stackTrace,
           );
