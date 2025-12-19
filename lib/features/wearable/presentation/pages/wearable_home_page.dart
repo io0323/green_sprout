@@ -54,7 +54,7 @@ class _WearableHomePageState extends State<WearableHomePage> {
 
       result.fold(
         (failure) {
-          AppLogger.logFailure('解析結果の読み込みエラー', failure);
+          AppLogger.logFailure(ErrorMessages.analysisResultsLoadError, failure);
 
           final errorMessage = _mapFailureToMessage(failure);
 
@@ -69,12 +69,12 @@ class _WearableHomePageState extends State<WearableHomePage> {
           // 最新の10件を取得（タイムスタンプでソート）
           final sortedResults = teaResults.toList()
             ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
-          final recentTeaResults = sortedResults.take(10).toList();
+          final recentTeaResults =
+              sortedResults.take(WearableUiConstants.maxRecentResults).toList();
 
           // TeaAnalysisResultをWearableAnalysisResultに変換
           final wearableResults = recentTeaResults
-              .map((result) =>
-                  WearableAnalysisResult.fromTeaAnalysisResult(result))
+              .map(WearableAnalysisResult.fromTeaAnalysisResult)
               .toList();
 
           setState(() {
@@ -87,7 +87,7 @@ class _WearableHomePageState extends State<WearableHomePage> {
       );
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        '解析結果の読み込みエラー',
+        ErrorMessages.analysisResultsLoadError,
         e,
         stackTrace,
       );

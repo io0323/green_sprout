@@ -1,4 +1,5 @@
 import 'package:tea_garden_ai/features/tea_analysis/domain/entities/tea_analysis_result.dart';
+import 'package:tea_garden_ai/core/constants/app_constants.dart';
 
 /// ウェアラブルデバイス用の解析結果エンティティ
 /// 簡潔な情報のみを含む
@@ -39,20 +40,23 @@ class WearableAnalysisResult {
   /// JSONから作成
   factory WearableAnalysisResult.fromJson(Map<String, dynamic> json) {
     return WearableAnalysisResult(
-      growthStage: json['growthStage'] as String,
-      healthStatus: json['healthStatus'] as String,
-      confidence: (json['confidence'] as num).toDouble(),
-      timestamp: DateTime.parse(json['timestamp'] as String),
+      growthStage: json[WearablePayloadConstants.keyGrowthStage] as String,
+      healthStatus: json[WearablePayloadConstants.keyHealthStatus] as String,
+      confidence:
+          (json[WearablePayloadConstants.keyConfidence] as num).toDouble(),
+      timestamp: DateTime.parse(
+        json[WearablePayloadConstants.keyTimestamp] as String,
+      ),
     );
   }
 
   /// JSONに変換
   Map<String, dynamic> toJson() {
     return {
-      'growthStage': growthStage,
-      'healthStatus': healthStatus,
-      'confidence': confidence,
-      'timestamp': timestamp.toIso8601String(),
+      WearablePayloadConstants.keyGrowthStage: growthStage,
+      WearablePayloadConstants.keyHealthStatus: healthStatus,
+      WearablePayloadConstants.keyConfidence: confidence,
+      WearablePayloadConstants.keyTimestamp: timestamp.toIso8601String(),
     };
   }
 }
