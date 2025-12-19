@@ -123,6 +123,11 @@ class ErrorMessages {
   static const String wearableEventStreamError = 'ウェアラブルデバイスイベントストリームエラー';
   static const String wearableError = 'ウェアラブルデバイスエラー';
   static const String wearableInitializationError = 'ウェアラブルデバイスサービス初期化エラー';
+  static const String wearableConnectError = 'ウェアラブルデバイス接続エラー';
+  static const String wearableDisconnectError = 'ウェアラブルデバイス切断エラー';
+  static const String wearableDataSendError = 'ウェアラブルデバイスデータ送信エラー';
+  static const String wearableNotificationSendError = 'ウェアラブルデバイス通知送信エラー';
+  static const String wearableHeartbeatError = 'ウェアラブルデバイスハートビートエラー';
 
   // ログ用途（共通）
   static const String translationDataLoadError = '翻訳データ読み込みエラー';
