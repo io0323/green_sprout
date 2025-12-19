@@ -4,6 +4,7 @@ import '../widgets/wearable_result_card.dart';
 import '../widgets/wearable_camera_button.dart';
 import '../widgets/wearable_error_widget.dart';
 import '../../../camera/presentation/pages/camera_page.dart';
+import '../../../camera/domain/entities/camera_capture_result.dart';
 import '../../../tea_analysis/presentation/pages/analysis_result_page.dart';
 import '../../../tea_analysis/domain/usecases/tea_analysis_usecases.dart';
 import '../../../../core/services/localization_service.dart';
@@ -115,13 +116,14 @@ class _WearableHomePageState extends State<WearableHomePage> {
       final result = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const CameraPage(),
+          builder: (context) => const CameraPage(popResultOnCapture: true),
         ),
       );
 
       if (result != null && mounted) {
         // 解析結果画面に遷移
-        final imagePath = result['imagePath'] as String?;
+        final cameraResult = CameraCaptureResult.fromDynamic(result);
+        final imagePath = cameraResult?.imagePath;
         if (imagePath != null) {
           try {
             await Navigator.push(
@@ -147,9 +149,9 @@ class _WearableHomePageState extends State<WearableHomePage> {
               );
             }
           }
-        } else if (result['error'] != null && mounted) {
+        } else if (cameraResult?.errorMessage != null && mounted) {
           // カメラ画面からエラーが返された場合
-          final errorMessage = result['error'] as String;
+          final errorMessage = cameraResult!.errorMessage!;
           AppLogger.debugError(
             ErrorMessages.cameraScreenReturnedError,
             errorMessage,
