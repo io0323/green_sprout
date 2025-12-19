@@ -105,6 +105,60 @@ class HealthStatusConstants {
   ];
 }
 
+/*
+ * ウェアラブル連携関連の定数
+ * - MethodChannel名 / メソッド名 / ペイロードキーなどのマジックストリングを排除する
+ */
+class WearableChannelConstants {
+  static const String channelName = 'tea_garden_wearable';
+
+  /* Dart -> Native */
+  static const String methodIsConnected = 'isWearableConnected';
+  static const String methodConnect = 'connectWearable';
+  static const String methodDisconnect = 'disconnectWearable';
+  static const String methodSendToWearable = 'sendToWearable';
+  static const String methodSendHeartbeat = 'sendHeartbeat';
+
+  /* Native -> Dart */
+  static const String callbackOnConnected = 'onWearableConnected';
+  static const String callbackOnDisconnected = 'onWearableDisconnected';
+  static const String callbackOnDataReceived = 'onWearableDataReceived';
+  static const String callbackOnError = 'onWearableError';
+}
+
+/*
+ * ウェアラブル送受信ペイロードの定数
+ * - JSONキーや種別文字列を集約してタイポや不整合を防ぐ
+ */
+class WearablePayloadConstants {
+  static const String wrapperKeyData = 'data';
+
+  /* Common keys */
+  static const String keyType = 'type';
+  static const String keyTimestamp = 'timestamp';
+
+  /* Analysis result keys */
+  static const String typeAnalysisResult = 'analysis_result';
+  static const String keyId = 'id';
+  static const String keyGrowthStage = 'growthStage';
+  static const String keyHealthStatus = 'healthStatus';
+  static const String keyConfidence = 'confidence';
+  static const String keyComment = 'comment';
+
+  /* Notification keys */
+  static const String typeNotification = 'notification';
+  static const String keyTitle = 'title';
+  static const String keyMessage = 'message';
+}
+
+/*
+ * ウェアラブルUI関連の定数
+ * - 画面上の件数制限など、仕様値を集約する
+ */
+class WearableUiConstants {
+  static const int maxRecentResults = 10;
+}
+
 /// エラーメッセージの定数
 class ErrorMessages {
   static const String cameraInitializationFailed = 'カメラの初期化に失敗しました';
@@ -142,6 +196,7 @@ class ErrorMessages {
   static const String navigationToAnalysisResultError = '解析結果画面への遷移エラー';
   static const String navigationToCameraError = 'カメラ画面への遷移エラー';
   static const String cameraScreenReturnedError = 'カメラ画面からのエラー';
+  static const String analysisResultsLoadError = '解析結果の読み込みエラー';
 
   /*
    * SecureHttpClient関連

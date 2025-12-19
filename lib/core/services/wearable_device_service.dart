@@ -20,7 +20,9 @@ abstract class WearableDeviceService {
 /// ウェアラブルデバイスサービスの実装
 /// Wear OS (Android) と watchOS (iOS) に対応
 class WearableDeviceServiceImpl implements WearableDeviceService {
-  static const MethodChannel _channel = MethodChannel('tea_garden_wearable');
+  static const MethodChannel _channel = MethodChannel(
+    WearableChannelConstants.channelName,
+  );
 
   final StreamController<WearableEvent> _eventController =
       StreamController<WearableEvent>.broadcast();
@@ -38,29 +40,66 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
 
   Future<dynamic> _handleMethodCall(MethodCall call) async {
     switch (call.method) {
-      case 'onWearableConnected':
+      case WearableChannelConstants.callbackOnConnected:
         _isConnected = true;
         _eventController.add(WearableEvent.connected());
         break;
-      case 'onWearableDisconnected':
+      case WearableChannelConstants.callbackOnDisconnected:
         _isConnected = false;
         _eventController.add(WearableEvent.disconnected());
         break;
-      case 'onWearableDataReceived':
+      case WearableChannelConstants.callbackOnDataReceived:
         final data = call.arguments as Map<String, dynamic>;
         _eventController.add(WearableEvent.dataReceived(data));
         break;
-      case 'onWearableError':
+      case WearableChannelConstants.callbackOnError:
         final error = call.arguments as String;
         _eventController.add(WearableEvent.error(error));
         break;
     }
   }
 
+  /*
+   * 解析結果送信用ペイロードを生成する
+   * - 送信キー/種別を定数化し、送信側のマジックストリングを排除する
+   */
+  Map<String, dynamic> _buildAnalysisResultPayload(TeaAnalysisResult result) {
+    return {
+      WearablePayloadConstants.keyType:
+          WearablePayloadConstants.typeAnalysisResult,
+      WearablePayloadConstants.keyId: result.id,
+      WearablePayloadConstants.keyGrowthStage: result.growthStage,
+      WearablePayloadConstants.keyHealthStatus: result.healthStatus,
+      WearablePayloadConstants.keyConfidence: result.confidence,
+      WearablePayloadConstants.keyTimestamp: result.timestamp.toIso8601String(),
+      WearablePayloadConstants.keyComment: result.comment ?? '',
+    };
+  }
+
+  /*
+   * 通知送信用ペイロードを生成する
+   * - 送信キー/種別を定数化し、送信側のマジックストリングを排除する
+   */
+  Map<String, dynamic> _buildNotificationPayload(
+    String title,
+    String message,
+  ) {
+    final nowIso = DateTime.now().toIso8601String();
+    return {
+      WearablePayloadConstants.keyType:
+          WearablePayloadConstants.typeNotification,
+      WearablePayloadConstants.keyTitle: title,
+      WearablePayloadConstants.keyMessage: message,
+      WearablePayloadConstants.keyTimestamp: nowIso,
+    };
+  }
+
   @override
   Future<bool> isConnected() async {
     try {
-      final result = await _channel.invokeMethod('isWearableConnected');
+      final result = await _channel.invokeMethod(
+        WearableChannelConstants.methodIsConnected,
+      );
       _isConnected = result as bool;
       return _isConnected;
     } catch (e, stackTrace) {
@@ -76,7 +115,7 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
   @override
   Future<void> connect() async {
     try {
-      await _channel.invokeMethod('connectWearable');
+      await _channel.invokeMethod(WearableChannelConstants.methodConnect);
       _isConnected = true;
       _startHeartbeat();
     } catch (e, stackTrace) {
@@ -93,7 +132,7 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
   @override
   Future<void> disconnect() async {
     try {
-      await _channel.invokeMethod('disconnectWearable');
+      await _channel.invokeMethod(WearableChannelConstants.methodDisconnect);
       _stopHeartbeat();
       _isConnected = false;
     } catch (e, stackTrace) {
@@ -113,17 +152,11 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
     }
 
     try {
-      final data = {
-        'type': 'analysis_result',
-        'id': result.id,
-        'growthStage': result.growthStage,
-        'healthStatus': result.healthStatus,
-        'confidence': result.confidence,
-        'timestamp': result.timestamp.toIso8601String(),
-        'comment': result.comment ?? '',
-      };
-
-      await _channel.invokeMethod('sendToWearable', {'data': data});
+      final data = _buildAnalysisResultPayload(result);
+      await _channel.invokeMethod(
+        WearableChannelConstants.methodSendToWearable,
+        {WearablePayloadConstants.wrapperKeyData: data},
+      );
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
         ErrorMessages.wearableDataSendError,
@@ -141,14 +174,11 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
     }
 
     try {
-      final data = {
-        'type': 'notification',
-        'title': title,
-        'message': message,
-        'timestamp': DateTime.now().toIso8601String(),
-      };
-
-      await _channel.invokeMethod('sendToWearable', {'data': data});
+      final data = _buildNotificationPayload(title, message);
+      await _channel.invokeMethod(
+        WearableChannelConstants.methodSendToWearable,
+        {WearablePayloadConstants.wrapperKeyData: data},
+      );
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
         ErrorMessages.wearableNotificationSendError,
@@ -170,7 +200,9 @@ class WearableDeviceServiceImpl implements WearableDeviceService {
         Timer.periodic(AnimationConstants.thirtySeconds, (timer) async {
       if (_isConnected) {
         try {
-          await _channel.invokeMethod('sendHeartbeat');
+          await _channel.invokeMethod(
+            WearableChannelConstants.methodSendHeartbeat,
+          );
         } catch (e, stackTrace) {
           AppLogger.logErrorWithStackTrace(
             ErrorMessages.wearableHeartbeatError,
@@ -310,13 +342,13 @@ class WearableAnalysisCard extends StatelessWidget {
 
   IconData _getHealthIcon(String healthStatus) {
     switch (healthStatus) {
-      case '健康':
+      case HealthStatusConstants.healthy:
         return Icons.favorite;
-      case '軽微な損傷':
+      case HealthStatusConstants.slightlyDamaged:
         return Icons.warning;
-      case '損傷':
+      case HealthStatusConstants.damaged:
         return Icons.error;
-      case '病気':
+      case HealthStatusConstants.diseased:
         return Icons.sick;
       default:
         return Icons.help;
@@ -325,13 +357,13 @@ class WearableAnalysisCard extends StatelessWidget {
 
   Color _getHealthColor(String healthStatus) {
     switch (healthStatus) {
-      case '健康':
+      case HealthStatusConstants.healthy:
         return TeaGardenTheme.successColor;
-      case '軽微な損傷':
+      case HealthStatusConstants.slightlyDamaged:
         return TeaGardenTheme.warningColor;
-      case '損傷':
+      case HealthStatusConstants.damaged:
         return TeaGardenTheme.errorColor;
-      case '病気':
+      case HealthStatusConstants.diseased:
         return TeaGardenTheme.errorColor;
       default:
         return TeaGardenTheme.infoColor;
@@ -340,8 +372,12 @@ class WearableAnalysisCard extends StatelessWidget {
 
   Color _getConfidenceColor(BuildContext context, double confidence) {
     final theme = Theme.of(context);
-    if (confidence >= 0.8) return TeaGardenTheme.successColor;
-    if (confidence >= 0.6) return TeaGardenTheme.warningColor;
+    if (confidence >= AppConstants.highConfidenceThreshold) {
+      return TeaGardenTheme.successColor;
+    }
+    if (confidence >= AppConstants.mediumConfidenceThreshold) {
+      return TeaGardenTheme.warningColor;
+    }
     return theme.colorScheme.error;
   }
 }
