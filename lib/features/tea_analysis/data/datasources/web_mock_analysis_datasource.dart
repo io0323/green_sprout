@@ -8,6 +8,64 @@ import 'analysis_local_datasource.dart';
 import '../../../../core/utils/app_logger.dart';
 import '../../../../core/theme/tea_garden_theme.dart';
 
+/*
+ * Webモック解析で使用する統計値（型付き）
+ * - Map/Stringキーの利用を避け、typo防止と無駄な割り当て削減を狙う
+ */
+class _ColorStats {
+  final double avgR;
+  final double avgG;
+  final double avgB;
+  final double brightness;
+  final double greenness;
+
+  /*
+   * 色統計コンテナ
+   * - 輝度/緑度は判定ロジックで頻繁に参照されるため保持する
+   */
+  const _ColorStats({
+    required this.avgR,
+    required this.avgG,
+    required this.avgB,
+    required this.brightness,
+    required this.greenness,
+  });
+}
+
+/*
+ * テクスチャ統計（型付き）
+ */
+class _TextureStats {
+  final double textureVariation;
+  final double smoothness;
+
+  /*
+   * テクスチャ統計コンテナ
+   * - 変動量と平滑度（正規化）を保持する
+   */
+  const _TextureStats({
+    required this.textureVariation,
+    required this.smoothness,
+  });
+}
+
+/*
+ * 形状統計（型付き）
+ */
+class _ShapeStats {
+  final double edgeDensity;
+  final double complexity;
+
+  /*
+   * 形状統計コンテナ
+   * - 現状 complexity は edgeDensity と同義だが、将来の拡張に備えて分離する
+   */
+  const _ShapeStats({
+    required this.edgeDensity,
+    required this.complexity,
+  });
+}
+
 /// Web用の画像解析データソース
 /// 画像特徴量ベースの解析機能（Webプラットフォーム用のモック実装）
 class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
@@ -219,7 +277,7 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
   }
 
   /// 色統計の計算
-  Map<String, double> _calculateColorStatistics(img.Image image) {
+  _ColorStats _calculateColorStatistics(img.Image image) {
     double totalR = 0, totalG = 0, totalB = 0;
     int pixelCount = 0;
 
@@ -236,54 +294,73 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
     final avgR = totalR / pixelCount;
     final avgG = totalG / pixelCount;
     final avgB = totalB / pixelCount;
+    final brightness = (avgR + avgG + avgB) / 3;
+    final greenness = avgG / (avgR + avgG + avgB + 1);
 
-    return {
-      'avgR': avgR,
-      'avgG': avgG,
-      'avgB': avgB,
-      'brightness': (avgR + avgG + avgB) / 3,
-      'greenness': avgG / (avgR + avgG + avgB + 1),
-    };
+    return _ColorStats(
+      avgR: avgR,
+      avgG: avgG,
+      avgB: avgB,
+      brightness: brightness,
+      greenness: greenness,
+    );
   }
 
   /// テクスチャ統計の計算
-  Map<String, double> _calculateTextureStatistics(img.Image image) {
+  _TextureStats _calculateTextureStatistics(img.Image image) {
     double totalVariation = 0;
     int variationCount = 0;
 
     for (int y = 1; y < image.height - 1; y++) {
       for (int x = 1; x < image.width - 1; x++) {
         final center = image.getPixel(x, y);
-        final neighbors = [
-          image.getPixel(x - 1, y - 1),
-          image.getPixel(x, y - 1),
-          image.getPixel(x + 1, y - 1),
-          image.getPixel(x - 1, y),
-          image.getPixel(x + 1, y),
-          image.getPixel(x - 1, y + 1),
-          image.getPixel(x, y + 1),
-          image.getPixel(x + 1, y + 1),
-        ];
+        // neighbors の List 生成を避けて割り当てを削減する
+        final n1 = image.getPixel(x - 1, y - 1);
+        final n2 = image.getPixel(x, y - 1);
+        final n3 = image.getPixel(x + 1, y - 1);
+        final n4 = image.getPixel(x - 1, y);
+        final n5 = image.getPixel(x + 1, y);
+        final n6 = image.getPixel(x - 1, y + 1);
+        final n7 = image.getPixel(x, y + 1);
+        final n8 = image.getPixel(x + 1, y + 1);
 
-        for (final neighbor in neighbors) {
-          final variation = (center.r - neighbor.r).abs() +
-              (center.g - neighbor.g).abs() +
-              (center.b - neighbor.b).abs();
-          totalVariation += variation;
-          variationCount++;
-        }
+        totalVariation += (center.r - n1.r).abs() +
+            (center.g - n1.g).abs() +
+            (center.b - n1.b).abs();
+        totalVariation += (center.r - n2.r).abs() +
+            (center.g - n2.g).abs() +
+            (center.b - n2.b).abs();
+        totalVariation += (center.r - n3.r).abs() +
+            (center.g - n3.g).abs() +
+            (center.b - n3.b).abs();
+        totalVariation += (center.r - n4.r).abs() +
+            (center.g - n4.g).abs() +
+            (center.b - n4.b).abs();
+        totalVariation += (center.r - n5.r).abs() +
+            (center.g - n5.g).abs() +
+            (center.b - n5.b).abs();
+        totalVariation += (center.r - n6.r).abs() +
+            (center.g - n6.g).abs() +
+            (center.b - n6.b).abs();
+        totalVariation += (center.r - n7.r).abs() +
+            (center.g - n7.g).abs() +
+            (center.b - n7.b).abs();
+        totalVariation += (center.r - n8.r).abs() +
+            (center.g - n8.g).abs() +
+            (center.b - n8.b).abs();
+        variationCount += 8;
       }
     }
 
-    return {
-      'textureVariation': totalVariation / variationCount,
-      'smoothness': 1.0 -
-          (totalVariation / variationCount) / AppConstants.rgbMaxSum, // 正規化
-    };
+    final textureVariation = totalVariation / variationCount;
+    return _TextureStats(
+      textureVariation: textureVariation,
+      smoothness: 1.0 - (textureVariation / AppConstants.rgbMaxSum), // 正規化
+    );
   }
 
   /// 形状統計の計算
-  Map<String, double> _calculateShapeStatistics(img.Image image) {
+  _ShapeStats _calculateShapeStatistics(img.Image image) {
     // エッジ検出の簡易実装
     int edgeCount = 0;
     int totalPixels = image.width * image.height;
@@ -308,19 +385,23 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
       }
     }
 
-    return {
-      'edgeDensity': edgeCount / totalPixels,
-      'complexity': edgeCount / totalPixels,
-    };
+    final edgeDensity = edgeCount / totalPixels;
+    return _ShapeStats(
+      edgeDensity: edgeDensity,
+      complexity: edgeDensity,
+    );
   }
 
   /// 成長状態の判定
-  String _determineGrowthStage(Map<String, double> colorStats,
-      Map<String, double> textureStats, Map<String, double> shapeStats) {
-    final brightness = colorStats['brightness']!;
-    final greenness = colorStats['greenness']!;
-    final smoothness = textureStats['smoothness']!;
-    final complexity = shapeStats['complexity']!;
+  String _determineGrowthStage(
+    _ColorStats colorStats,
+    _TextureStats textureStats,
+    _ShapeStats shapeStats,
+  ) {
+    final brightness = colorStats.brightness;
+    final greenness = colorStats.greenness;
+    final smoothness = textureStats.smoothness;
+    final complexity = shapeStats.complexity;
 
     // 複合的な判定ロジック
     if (brightness > AppConstants.brightnessThresholdHigh &&
@@ -341,11 +422,14 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
   }
 
   /// 健康状態の判定
-  String _determineHealthStatus(Map<String, double> colorStats,
-      Map<String, double> textureStats, Map<String, double> shapeStats) {
-    final greenness = colorStats['greenness']!;
-    final smoothness = textureStats['smoothness']!;
-    final brightness = colorStats['brightness']!;
+  String _determineHealthStatus(
+    _ColorStats colorStats,
+    _TextureStats textureStats,
+    _ShapeStats shapeStats,
+  ) {
+    final greenness = colorStats.greenness;
+    final smoothness = textureStats.smoothness;
+    final brightness = colorStats.brightness;
 
     // 健康度のスコア計算
     final healthScore = (greenness * AppConstants.healthScoreWeightGreenness) +
@@ -365,16 +449,19 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
   }
 
   /// 信頼度の計算
-  double _calculateConfidence(Map<String, double> colorStats,
-      Map<String, double> textureStats, Map<String, double> shapeStats) {
+  double _calculateConfidence(
+    _ColorStats colorStats,
+    _TextureStats textureStats,
+    _ShapeStats shapeStats,
+  ) {
     // 特徴量の一貫性に基づく信頼度計算
     final colorConsistency = 1.0 -
-        (colorStats['brightness']! / AppConstants.rgbMaxChannel -
+        (colorStats.brightness / AppConstants.rgbMaxChannel -
                     AppConstants.colorConsistencyCenter)
                 .abs() *
             2;
-    final textureConsistency = textureStats['smoothness']!;
-    final shapeConsistency = 1.0 - shapeStats['complexity']!;
+    final textureConsistency = textureStats.smoothness;
+    final shapeConsistency = 1.0 - shapeStats.complexity;
 
     return (colorConsistency + textureConsistency + shapeConsistency) / 3.0;
   }
