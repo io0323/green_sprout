@@ -7,6 +7,7 @@ import '../widgets/camera_button.dart';
 import '../widgets/today_summary_card.dart';
 import '../../../../core/widgets/modern_ui_components.dart';
 import '../../../../core/services/localization_service.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/tea_garden_theme.dart';
 
 /// ホームページ
@@ -48,7 +49,7 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: Icon(Icons.history, color: colorScheme.onPrimary),
             onPressed: () {
-              Navigator.pushNamed(context, '/logs');
+              Navigator.pushNamed(context, RouteNames.logs);
             },
             tooltip: '日誌一覧',
           ),
