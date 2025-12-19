@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/tea_garden_theme.dart';
+import '../../../../core/constants/app_constants.dart';
 
 /// 写真撮影ボタンウィジェット
 /// 再利用可能なUIコンポーネント
@@ -15,7 +16,7 @@ class CameraButton extends StatelessWidget {
         height: TeaGardenTheme.buttonHeightDefault,
         child: ElevatedButton.icon(
           onPressed: () {
-            Navigator.pushNamed(context, '/camera');
+            Navigator.pushNamed(context, RouteNames.camera);
           },
           icon: const Icon(Icons.camera_alt,
               size: TeaGardenTheme.iconSizeDefaultMedium),

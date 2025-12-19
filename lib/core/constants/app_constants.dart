@@ -169,6 +169,16 @@ class NavigationResultKeys {
   static const String cameraErrorMessage = 'error';
 }
 
+/*
+ * アプリ内ルーティング（Navigator.pushNamed等）で使用するルート名
+ * - 直書きによるtypoを防ぎ、参照元を統一する
+ */
+class RouteNames {
+  static const String camera = '/camera';
+  static const String analysis = '/analysis';
+  static const String logs = '/logs';
+}
+
 /// エラーメッセージの定数
 class ErrorMessages {
   static const String cameraInitializationFailed = 'カメラの初期化に失敗しました';

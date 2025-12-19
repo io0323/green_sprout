@@ -5,6 +5,7 @@ import '../widgets/camera_preview_widget.dart';
 import '../widgets/capture_button_widget.dart';
 import '../../domain/entities/camera_capture_result.dart';
 import '../../../../core/services/localization_service.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/widgets/modern_ui_components.dart';
 import '../../../../core/theme/tea_garden_theme.dart';
 
@@ -184,7 +185,7 @@ class _CameraPageState extends State<CameraPage> {
                   // 撮影完了後、解析画面に遷移
                   Navigator.pushNamed(
                     context,
-                    '/analysis',
+                    RouteNames.analysis,
                     arguments: state.imagePath,
                   );
                 }
