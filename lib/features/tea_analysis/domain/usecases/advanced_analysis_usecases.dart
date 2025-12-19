@@ -33,11 +33,16 @@ class AdvancedAnalyzeImage implements UseCase<AnalysisResult, File> {
       return Right(result);
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        '高度な解析エラー',
+        LogMessages.teaAnalysisAdvancedAnalysisError,
         e,
         stackTrace,
       );
-      return Left(TFLiteFailure('高度な解析エラー: ${e.toString()}'));
+      return Left(
+        TFLiteFailure(
+          '${ErrorMessages.teaAnalysisAdvancedAnalysisFailedPrefix} '
+          '${e.toString()}',
+        ),
+      );
     }
   }
 }
@@ -55,11 +60,16 @@ class InitializeAdvancedAnalysisEngine implements UseCaseNoParams<Unit> {
       return const Right(unit);
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        '高度な解析エンジン初期化エラー',
+        LogMessages.teaAnalysisAdvancedEngineInitError,
         e,
         stackTrace,
       );
-      return Left(TFLiteFailure('高度な解析エンジンの初期化に失敗しました: ${e.toString()}'));
+      return Left(
+        TFLiteFailure(
+          '${ErrorMessages.teaAnalysisAdvancedEngineInitFailedPrefix} '
+          '${e.toString()}',
+        ),
+      );
     }
   }
 }
