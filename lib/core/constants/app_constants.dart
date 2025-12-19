@@ -219,6 +219,17 @@ class ErrorMessages {
   static const String analysisResultsLoadError = '解析結果の読み込みエラー';
 
   /*
+   * 茶葉解析（TFLite/フォールバック）関連
+   * - Failureメッセージ等で使用する共通文言を集約する
+   */
+  static const String teaAnalysisImageLoadFailed = '画像の読み込みに失敗しました';
+  static const String teaAnalysisModelLoadFailedPrefix = 'モデルの読み込みに失敗しました:';
+  static const String teaAnalysisAnalysisFailedPrefix = '画像解析に失敗しました:';
+  static const String teaAnalysisWebAnalysisFailedPrefix = 'Web解析に失敗しました:';
+  static const String teaAnalysisFallbackAnalysisFailedPrefix =
+      'フォールバック解析に失敗しました:';
+
+  /*
    * SecureHttpClient関連
    * - ネットワークリトライ等で使用する例外メッセージを集約する
    */
@@ -317,6 +328,20 @@ class LogMessages {
   static const String cloudSyncConnectionCheckError = 'クラウド接続確認エラー';
   static const String cloudSyncSendError = 'クラウド同期エラー（送信）';
   static const String cloudSyncReceiveError = 'クラウド同期エラー（受信）';
+
+  /*
+   * 茶葉解析（Webモック/ローカル）関連（ログ用途）
+   * - AppLoggerのログコンテキスト文字列を集約する
+   */
+  static const String teaAnalysisTfliteInitFallback =
+      'TensorFlow Lite初期化エラー（フォールバック使用）';
+  static const String teaAnalysisModelLoadError = 'モデル読み込みエラー';
+  static const String teaAnalysisModelLoadFallbackError =
+      'モデル読み込みエラー（フォールバック使用）';
+  static const String teaAnalysisImageAnalysisErrorWeb = '画像解析エラー（Web）';
+  static const String teaAnalysisImageAnalysisError = '画像解析エラー';
+  static const String teaAnalysisWebAnalysisError = 'Web解析エラー';
+  static const String teaAnalysisFallbackAnalysisErrorWeb = 'フォールバック解析エラー（Web）';
 }
 
 /*

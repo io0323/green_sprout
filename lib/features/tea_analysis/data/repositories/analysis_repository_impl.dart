@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/errors/failures.dart';
 import '../../domain/entities/analysis_result.dart';
 import '../../domain/repositories/analysis_repository.dart';
@@ -22,11 +23,13 @@ class AnalysisRepositoryImpl implements AnalysisRepository {
       return result;
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'モデル読み込みエラー',
+        LogMessages.teaAnalysisModelLoadError,
         e,
         stackTrace,
       );
-      return Left(TFLiteFailure('モデルの読み込みに失敗しました: $e'));
+      return Left(
+        TFLiteFailure('${ErrorMessages.teaAnalysisModelLoadFailedPrefix} $e'),
+      );
     }
   }
 
@@ -37,11 +40,13 @@ class AnalysisRepositoryImpl implements AnalysisRepository {
       return result;
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        '画像解析エラー',
+        LogMessages.teaAnalysisImageAnalysisError,
         e,
         stackTrace,
       );
-      return Left(TFLiteFailure('画像解析に失敗しました: $e'));
+      return Left(
+        TFLiteFailure('${ErrorMessages.teaAnalysisAnalysisFailedPrefix} $e'),
+      );
     }
   }
 
