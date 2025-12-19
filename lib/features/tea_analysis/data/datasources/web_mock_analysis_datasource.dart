@@ -26,7 +26,7 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
         return const Right(unit);
       } catch (e, stackTrace) {
         AppLogger.logErrorWithStackTrace(
-          'TensorFlow Lite初期化エラー（フォールバック使用）',
+          LogMessages.teaAnalysisTfliteInitFallback,
           e,
           stackTrace,
         );
@@ -37,11 +37,13 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
       }
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'モデル読み込みエラー',
+        LogMessages.teaAnalysisModelLoadError,
         e,
         stackTrace,
       );
-      return Left(TFLiteFailure('モデルの読み込みに失敗しました: $e'));
+      return Left(
+        TFLiteFailure('${ErrorMessages.teaAnalysisModelLoadFailedPrefix} $e'),
+      );
     }
   }
 
@@ -60,7 +62,9 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
       final imageBytes = await imageFile.readAsBytes();
       final image = img.decodeImage(imageBytes);
       if (image == null) {
-        return const Left(TFLiteFailure('画像の読み込みに失敗しました'));
+        return const Left(
+          TFLiteFailure(ErrorMessages.teaAnalysisImageLoadFailed),
+        );
       }
 
       // 画像をリサイズ
@@ -79,11 +83,13 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
       }
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        '画像解析エラー（Web）',
+        LogMessages.teaAnalysisImageAnalysisErrorWeb,
         e,
         stackTrace,
       );
-      return Left(TFLiteFailure('画像解析に失敗しました: $e'));
+      return Left(
+        TFLiteFailure('${ErrorMessages.teaAnalysisAnalysisFailedPrefix} $e'),
+      );
     }
   }
 
@@ -104,11 +110,13 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
       return Right(result);
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'Web解析エラー',
+        LogMessages.teaAnalysisWebAnalysisError,
         e,
         stackTrace,
       );
-      return Left(TFLiteFailure('Web解析に失敗しました: $e'));
+      return Left(
+        TFLiteFailure('${ErrorMessages.teaAnalysisWebAnalysisFailedPrefix} $e'),
+      );
     }
   }
 
@@ -175,11 +183,15 @@ class WebMockAnalysisDataSource implements AnalysisLocalDataSource {
       ));
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'フォールバック解析エラー（Web）',
+        LogMessages.teaAnalysisFallbackAnalysisErrorWeb,
         e,
         stackTrace,
       );
-      return Left(TFLiteFailure('フォールバック解析に失敗しました: $e'));
+      return Left(
+        TFLiteFailure(
+          '${ErrorMessages.teaAnalysisFallbackAnalysisFailedPrefix} $e',
+        ),
+      );
     }
   }
 

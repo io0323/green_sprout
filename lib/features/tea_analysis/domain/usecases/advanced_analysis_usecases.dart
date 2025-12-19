@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:image/image.dart' as img;
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../entities/analysis_result.dart';
@@ -21,7 +22,9 @@ class AdvancedAnalyzeImage implements UseCase<AnalysisResult, File> {
       final image = img.decodeImage(imageBytes);
 
       if (image == null) {
-        return const Left(TFLiteFailure('画像の読み込みに失敗しました'));
+        return const Left(
+          TFLiteFailure(ErrorMessages.teaAnalysisImageLoadFailed),
+        );
       }
 
       // 高度な解析エンジンで解析

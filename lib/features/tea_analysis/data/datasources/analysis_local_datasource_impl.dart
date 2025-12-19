@@ -35,7 +35,9 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
       final imageBytes = await imageFile.readAsBytes();
       final image = img.decodeImage(imageBytes);
       if (image == null) {
-        return const Left(TFLiteFailure('画像の読み込みに失敗しました'));
+        return const Left(
+          TFLiteFailure(ErrorMessages.teaAnalysisImageLoadFailed),
+        );
       }
 
       // 画像をリサイズ
@@ -54,11 +56,13 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
       }
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        '画像解析エラー',
+        LogMessages.teaAnalysisImageAnalysisError,
         e,
         stackTrace,
       );
-      return Left(TFLiteFailure('画像解析に失敗しました: $e'));
+      return Left(
+        TFLiteFailure('${ErrorMessages.teaAnalysisAnalysisFailedPrefix} $e'),
+      );
     }
   }
 
@@ -93,7 +97,7 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
       }
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'モデル読み込みエラー（フォールバック使用）',
+        LogMessages.teaAnalysisModelLoadFallbackError,
         e,
         stackTrace,
       );
