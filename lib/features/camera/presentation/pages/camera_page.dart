@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/camera_cubit.dart';
 import '../widgets/camera_preview_widget.dart';
 import '../widgets/capture_button_widget.dart';
+import '../../domain/entities/camera_capture_result.dart';
 import '../../../../core/services/localization_service.dart';
 import '../../../../core/widgets/modern_ui_components.dart';
 import '../../../../core/theme/tea_garden_theme.dart';
@@ -10,7 +11,17 @@ import '../../../../core/theme/tea_garden_theme.dart';
 /// カメラページ
 /// 茶葉の撮影を行う画面
 class CameraPage extends StatefulWidget {
-  const CameraPage({super.key});
+  /*
+   * popResultOnCapture:
+   * - trueの場合、撮影完了時にNavigator.popで結果を返す
+   * - falseの場合、従来通り解析画面へ遷移する
+   */
+  final bool popResultOnCapture;
+
+  const CameraPage({
+    super.key,
+    this.popResultOnCapture = false,
+  });
 
   @override
   State<CameraPage> createState() => _CameraPageState();
@@ -163,13 +174,20 @@ class _CameraPageState extends State<CameraPage> {
             }
 
             if (state is CameraCaptured) {
-              // 撮影完了後、解析画面に遷移
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushNamed(
-                  context,
-                  '/analysis',
-                  arguments: state.imagePath,
-                );
+                if (widget.popResultOnCapture) {
+                  Navigator.pop(
+                    context,
+                    CameraCaptureResult(imagePath: state.imagePath),
+                  );
+                } else {
+                  // 撮影完了後、解析画面に遷移
+                  Navigator.pushNamed(
+                    context,
+                    '/analysis',
+                    arguments: state.imagePath,
+                  );
+                }
               });
 
               return BeautifulLoadingIndicator(

@@ -159,6 +159,16 @@ class WearableUiConstants {
   static const int maxRecentResults = 10;
 }
 
+/*
+ * 画面遷移（Navigator）の戻り値/引数で使用するキー
+ * - Mapベースで値をやり取りする箇所のマジックストリングを排除する
+ */
+class NavigationResultKeys {
+  /* CameraPage -> 呼び出し元 */
+  static const String cameraImagePath = 'imagePath';
+  static const String cameraErrorMessage = 'error';
+}
+
 /// エラーメッセージの定数
 class ErrorMessages {
   static const String cameraInitializationFailed = 'カメラの初期化に失敗しました';
