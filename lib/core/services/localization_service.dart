@@ -90,7 +90,25 @@ class LocalizationService {
           'comment_hint': 'この茶葉についてのコメントを入力してください',
           'save_result_success': '解析結果を保存しました',
           'save_result_failed': '保存に失敗しました',
-          'unknown_state': '不明な状態'
+          'unknown_state': '不明な状態',
+
+          /*
+           * 追加されたUI文言（フォールバック用）
+           * - translations.json が読み込めない場合でもキー文字列が露出しないようにする
+           */
+          'advanced_analysis': '高度な分析',
+          'advanced_analysis_description': '複数の解析手法を組み合わせた高精度な分析を実行します',
+          'run_advanced_analysis': '高度な分析を実行',
+          'rerun_advanced_analysis': '高度な分析を再実行',
+
+          // AppRouter フォールバック画面
+          'router_unknown_route_title': '画面が見つかりません',
+          'router_invalid_navigation_title': '画面遷移に失敗しました',
+          'router_web_unsupported_title': '未サポート',
+          'router_unknown_route_message': '不明な画面: {route}',
+          'router_invalid_arguments_message':
+              '引数が不正です: {route}（期待: {expected}）',
+          'router_web_unsupported_message': 'Webでは未サポートです: {route}',
         }
       };
     }
@@ -155,7 +173,25 @@ class LocalizationService {
             'comment_hint': 'この茶葉についてのコメントを入力してください',
             'save_result_success': '解析結果を保存しました',
             'save_result_failed': '保存に失敗しました',
-            'unknown_state': '不明な状態'
+            'unknown_state': '不明な状態',
+
+            /*
+             * 追加されたUI文言（テスト用デフォルト）
+             * - テスト環境でもキー文字列が露出しないようにする
+             */
+            'advanced_analysis': '高度な分析',
+            'advanced_analysis_description': '複数の解析手法を組み合わせた高精度な分析を実行します',
+            'run_advanced_analysis': '高度な分析を実行',
+            'rerun_advanced_analysis': '高度な分析を再実行',
+
+            // AppRouter フォールバック画面
+            'router_unknown_route_title': '画面が見つかりません',
+            'router_invalid_navigation_title': '画面遷移に失敗しました',
+            'router_web_unsupported_title': '未サポート',
+            'router_unknown_route_message': '不明な画面: {route}',
+            'router_invalid_arguments_message':
+                '引数が不正です: {route}（期待: {expected}）',
+            'router_web_unsupported_message': 'Webでは未サポートです: {route}',
           }
         };
   }
