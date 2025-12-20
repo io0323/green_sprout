@@ -27,12 +27,11 @@ void main() {
         initialRoute: RouteNames.analysis,
       ),
     );
+    await tester.pumpAndSettle();
 
     expect(find.text('画面遷移に失敗しました'), findsOneWidget);
-    expect(
-      find.textContaining('Invalid arguments for'),
-      findsOneWidget,
-    );
+    expect(find.textContaining('Invalid arguments for'), findsOneWidget);
+    expect(find.textContaining('expected: String (imagePath)'), findsOneWidget);
   });
 
   test('known routes は Route を生成できる（builderは実行しない）', () {
