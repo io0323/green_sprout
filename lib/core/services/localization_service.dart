@@ -189,7 +189,7 @@ class LocalizationService {
       return text;
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        '翻訳処理エラー',
+        ErrorMessages.translationProcessError,
         e,
         stackTrace,
       );
