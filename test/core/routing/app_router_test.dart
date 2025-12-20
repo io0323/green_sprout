@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tea_garden_ai/core/constants/app_constants.dart';
 import 'package:tea_garden_ai/core/routing/app_router.dart';
+import 'package:tea_garden_ai/core/services/localization_service.dart';
 
 /*
  * AppRouter のルート解決テスト
@@ -12,6 +13,17 @@ import 'package:tea_garden_ai/core/routing/app_router.dart';
  *   画面は build しない（builder 実行を避ける）ことでテストを安定させる。
  */
 void main() {
+  setUp(() async {
+    final service = LocalizationService.instance;
+    await service.loadTranslationsForTest({
+      'ja': {
+        'router_invalid_navigation_title': '画面遷移に失敗しました',
+        'router_invalid_arguments_message': '引数が不正です: {route}（期待: {expected}）',
+      },
+    });
+    service.setLanguage('ja');
+  });
+
   test('unknown route はフォールバック画面の Route を返す', () {
     final route = AppRouter.onGenerateRoute(
       const RouteSettings(name: '/unknown'),
