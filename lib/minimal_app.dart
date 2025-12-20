@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'core/utils/app_initialization.dart';
+import 'core/routing/app_router.dart';
 import 'core/widgets/snackbar_helper.dart';
 import 'core/theme/tea_garden_theme.dart';
 
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: appDefaults.localizationsDelegates,
       supportedLocales: appDefaults.supportedLocales,
       debugShowCheckedModeBanner: appDefaults.debugShowCheckedModeBanner,
+      onGenerateRoute: AppRouter.onGenerateRoute,
       home: const MyHomePage(),
     );
   }

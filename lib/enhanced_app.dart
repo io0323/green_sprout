@@ -6,6 +6,7 @@ import 'src/web_storage.dart';
 import 'core/services/localization_service.dart';
 import 'core/widgets/language_selector.dart';
 import 'core/utils/app_initialization.dart';
+import 'core/routing/app_router.dart';
 import 'core/di/injection_container.dart' as di;
 import 'features/cloud_sync/presentation/bloc/cloud_sync_cubit.dart';
 import 'core/theme/tea_garden_theme.dart';
@@ -61,6 +62,7 @@ class _EnhancedTeaGardenAppState extends State<EnhancedTeaGardenApp> {
       localizationsDelegates: appDefaults.localizationsDelegates,
       supportedLocales: appDefaults.supportedLocales,
       debugShowCheckedModeBanner: appDefaults.debugShowCheckedModeBanner,
+      onGenerateRoute: AppRouter.onGenerateRoute,
       home: FutureBuilder(
         future: di.sl.getAsync<CloudSyncCubit>(),
         builder: (context, snapshot) {
