@@ -228,6 +228,13 @@ class ErrorMessages {
   static const String teaAnalysisWebAnalysisFailedPrefix = 'Web解析に失敗しました:';
   static const String teaAnalysisFallbackAnalysisFailedPrefix =
       'フォールバック解析に失敗しました:';
+  static const String teaAnalysisTfliteModelNotLoaded =
+      'TensorFlow Liteモデルが読み込まれていません';
+  static const String teaAnalysisTfliteAnalysisFailedPrefix =
+      'TensorFlow Lite解析に失敗しました:';
+  static const String teaAnalysisAdvancedAnalysisFailedPrefix = '高度な解析エラー:';
+  static const String teaAnalysisAdvancedEngineInitFailedPrefix =
+      '高度な解析エンジンの初期化に失敗しました:';
 
   /*
    * SecureHttpClient関連
@@ -342,6 +349,10 @@ class LogMessages {
   static const String teaAnalysisImageAnalysisError = '画像解析エラー';
   static const String teaAnalysisWebAnalysisError = 'Web解析エラー';
   static const String teaAnalysisFallbackAnalysisErrorWeb = 'フォールバック解析エラー（Web）';
+  static const String teaAnalysisFallbackAnalysisError = 'フォールバック解析エラー';
+  static const String teaAnalysisTfliteAnalysisError = 'TensorFlow Lite解析エラー';
+  static const String teaAnalysisAdvancedAnalysisError = '高度な解析エラー';
+  static const String teaAnalysisAdvancedEngineInitError = '高度な解析エンジン初期化エラー';
 }
 
 /*

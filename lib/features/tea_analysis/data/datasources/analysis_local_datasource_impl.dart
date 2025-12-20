@@ -114,7 +114,9 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
       img.Image image) async {
     try {
       if (_interpreter == null) {
-        return const Left(TFLiteFailure('TensorFlow Liteモデルが読み込まれていません'));
+        return const Left(
+          TFLiteFailure(ErrorMessages.teaAnalysisTfliteModelNotLoaded),
+        );
       }
 
       // 画像をRGB配列に変換
@@ -137,11 +139,14 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
       return Right(result);
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'TensorFlow Lite解析エラー',
+        LogMessages.teaAnalysisTfliteAnalysisError,
         e,
         stackTrace,
       );
-      return Left(TFLiteFailure('TensorFlow Lite解析に失敗しました: $e'));
+      return Left(
+        TFLiteFailure(
+            '${ErrorMessages.teaAnalysisTfliteAnalysisFailedPrefix} $e'),
+      );
     }
   }
 
@@ -208,11 +213,15 @@ class AnalysisLocalDataSourceImpl implements AnalysisLocalDataSource {
       ));
     } catch (e, stackTrace) {
       AppLogger.logErrorWithStackTrace(
-        'フォールバック解析エラー',
+        LogMessages.teaAnalysisFallbackAnalysisError,
         e,
         stackTrace,
       );
-      return Left(TFLiteFailure('フォールバック解析に失敗しました: $e'));
+      return Left(
+        TFLiteFailure(
+          '${ErrorMessages.teaAnalysisFallbackAnalysisFailedPrefix} $e',
+        ),
+      );
     }
   }
 
