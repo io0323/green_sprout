@@ -156,6 +156,11 @@
     "error_loading_data": "Failed to load data",
     "error_navigation": "Navigation error occurred",
     "error_camera_navigation": "Failed to open camera"
+    ,
+    "advanced_analysis": "Advanced analysis",
+    "advanced_analysis_description": "Run a high-accuracy analysis by combining multiple methods",
+    "run_advanced_analysis": "Run advanced analysis",
+    "rerun_advanced_analysis": "Re-run advanced analysis"
   },
   "ja": {
     "app_title": "茶園管理AI",
@@ -314,5 +319,10 @@
     "error_loading_data": "データの読み込みに失敗しました",
     "error_navigation": "画面遷移エラーが発生しました",
     "error_camera_navigation": "カメラを開くことができませんでした"
+    ,
+    "advanced_analysis": "高度な分析",
+    "advanced_analysis_description": "複数の解析手法を組み合わせた高精度な分析を実行します",
+    "run_advanced_analysis": "高度な分析を実行",
+    "rerun_advanced_analysis": "高度な分析を再実行"
   }
 }
