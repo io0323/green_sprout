@@ -205,6 +205,7 @@ class ErrorMessages {
 
   // ログ用途（共通）
   static const String translationDataLoadError = '翻訳データ読み込みエラー';
+  static const String translationProcessError = '翻訳処理エラー';
   static const String diInitializationError = 'DI初期化エラー';
   static const String flutterFrameworkError = 'Flutterエラー';
   static const String widgetTreeError = 'ウィジェットエラー';
