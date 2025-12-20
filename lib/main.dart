@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'core/services/localization_service.dart';
 import 'core/utils/platform_utils.dart';
 import 'core/utils/app_initialization.dart';
+import 'core/routing/app_router.dart';
 import 'features/tea_analysis/presentation/pages/web_home_page.dart';
 import 'wearable_app.dart';
 
@@ -60,6 +61,7 @@ class _TeaGardenAppState extends State<TeaGardenApp> {
       localizationsDelegates: appDefaults.localizationsDelegates,
       supportedLocales: appDefaults.supportedLocales,
       debugShowCheckedModeBanner: appDefaults.debugShowCheckedModeBanner,
+      onGenerateRoute: AppRouter.onGenerateRoute,
       home: kIsWeb
           ? WebHomePage(onLanguageChanged: _updateLanguage)
           : WebHomePage(onLanguageChanged: _updateLanguage),
