@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:tea_garden_ai/core/services/localization_service.dart';
 import 'package:tea_garden_ai/core/constants/app_constants.dart';
 import 'package:tea_garden_ai/core/di/injection_container.dart' as di;
+import 'package:tea_garden_ai/core/routing/app_router.dart';
 import 'package:tea_garden_ai/core/utils/app_logger.dart';
 import 'package:tea_garden_ai/core/utils/platform_utils.dart';
 import 'package:tea_garden_ai/core/utils/app_localizations.dart';
@@ -187,6 +188,7 @@ class AppInitialization {
       localizationsDelegates: AppLocalizations.delegates,
       supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
+      onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }
 }
@@ -199,6 +201,7 @@ class MaterialAppData {
   final List<LocalizationsDelegate<dynamic>> localizationsDelegates;
   final List<Locale> supportedLocales;
   final bool debugShowCheckedModeBanner;
+  final RouteFactory? onGenerateRoute;
 
   const MaterialAppData({
     required this.theme,
@@ -207,5 +210,6 @@ class MaterialAppData {
     required this.localizationsDelegates,
     required this.supportedLocales,
     required this.debugShowCheckedModeBanner,
+    required this.onGenerateRoute,
   });
 }
