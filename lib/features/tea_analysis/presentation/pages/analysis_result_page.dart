@@ -109,7 +109,8 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                                     color: TeaGardenTheme.infoColor),
                                 const SizedBox(width: TeaGardenTheme.spacingS),
                                 Text(
-                                  '高度な分析',
+                                  LocalizationService.instance
+                                      .translate('advanced_analysis'),
                                   style: TextStyle(
                                     fontSize: TeaGardenTheme.bodyLarge.fontSize,
                                     fontWeight: FontWeight.bold,
@@ -120,7 +121,9 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                             ),
                             const SizedBox(height: TeaGardenTheme.spacingS),
                             Text(
-                              '複数の解析手法を組み合わせた高精度な分析を実行します',
+                              LocalizationService.instance.translate(
+                                'advanced_analysis_description',
+                              ),
                               style: TextStyle(
                                 fontSize: TeaGardenTheme.bodySmall.fontSize,
                                 color: Theme.of(context)
@@ -140,7 +143,11 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                                       .advancedAnalyzeImageFile(imageFile);
                                 },
                                 icon: const Icon(Icons.auto_awesome),
-                                label: const Text('高度な分析を実行'),
+                                label: Text(
+                                  LocalizationService.instance.translate(
+                                    'run_advanced_analysis',
+                                  ),
+                                ),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: TeaGardenTheme.infoColor,
                                   foregroundColor:
@@ -187,7 +194,8 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                                     color: TeaGardenTheme.infoColor),
                                 const SizedBox(width: TeaGardenTheme.spacingS),
                                 Text(
-                                  '高度な分析',
+                                  LocalizationService.instance
+                                      .translate('advanced_analysis'),
                                   style: TextStyle(
                                     fontSize: TeaGardenTheme.bodyLarge.fontSize,
                                     fontWeight: FontWeight.bold,
@@ -198,7 +206,9 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                             ),
                             const SizedBox(height: TeaGardenTheme.spacingS),
                             Text(
-                              '複数の解析手法を組み合わせた高精度な分析を実行します',
+                              LocalizationService.instance.translate(
+                                'advanced_analysis_description',
+                              ),
                               style: TextStyle(
                                 fontSize: TeaGardenTheme.bodySmall.fontSize,
                                 color: Theme.of(context)
@@ -218,7 +228,11 @@ class _AnalysisResultPageState extends State<AnalysisResultPage> {
                                       .advancedAnalyzeImageFile(imageFile);
                                 },
                                 icon: const Icon(Icons.auto_awesome),
-                                label: const Text('高度な分析を再実行'),
+                                label: Text(
+                                  LocalizationService.instance.translate(
+                                    'rerun_advanced_analysis',
+                                  ),
+                                ),
                                 style: OutlinedButton.styleFrom(
                                   foregroundColor: TeaGardenTheme.infoColor,
                                   side: const BorderSide(
