@@ -160,7 +160,13 @@
     "advanced_analysis": "Advanced analysis",
     "advanced_analysis_description": "Run a high-accuracy analysis by combining multiple methods",
     "run_advanced_analysis": "Run advanced analysis",
-    "rerun_advanced_analysis": "Re-run advanced analysis"
+    "rerun_advanced_analysis": "Re-run advanced analysis",
+    "router_unknown_route_title": "Page not found",
+    "router_invalid_navigation_title": "Navigation failed",
+    "router_web_unsupported_title": "Not supported",
+    "router_unknown_route_message": "Unknown route: {route}",
+    "router_invalid_arguments_message": "Invalid arguments for {route} (expected: {expected})",
+    "router_web_unsupported_message": "This route is not supported on Web: {route}"
   },
   "ja": {
     "app_title": "茶園管理AI",
@@ -323,6 +329,12 @@
     "advanced_analysis": "高度な分析",
     "advanced_analysis_description": "複数の解析手法を組み合わせた高精度な分析を実行します",
     "run_advanced_analysis": "高度な分析を実行",
-    "rerun_advanced_analysis": "高度な分析を再実行"
+    "rerun_advanced_analysis": "高度な分析を再実行",
+    "router_unknown_route_title": "画面が見つかりません",
+    "router_invalid_navigation_title": "画面遷移に失敗しました",
+    "router_web_unsupported_title": "未サポート",
+    "router_unknown_route_message": "不明な画面: {route}",
+    "router_invalid_arguments_message": "引数が不正です: {route}（期待: {expected}）",
+    "router_web_unsupported_message": "Webでは未サポートです: {route}"
   }
 }
