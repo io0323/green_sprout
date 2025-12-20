@@ -42,8 +42,9 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('画面遷移に失敗しました'), findsOneWidget);
-    expect(find.textContaining('Invalid arguments for'), findsOneWidget);
-    expect(find.textContaining('expected: String (imagePath)'), findsOneWidget);
+    expect(find.textContaining('引数が不正です'), findsOneWidget);
+    expect(find.textContaining(RouteNames.analysis), findsOneWidget);
+    expect(find.textContaining('String (imagePath)'), findsOneWidget);
   });
 
   test('known routes は Route を生成できる（builderは実行しない）', () {

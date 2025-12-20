@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../constants/app_constants.dart';
 import '../di/injection_container.dart';
+import '../services/localization_service.dart';
 import '../utils/platform_utils.dart';
 import '../../features/camera/presentation/bloc/camera_cubit.dart';
 import '../../features/camera/presentation/pages/camera_page.dart';
@@ -93,10 +94,19 @@ class AppRouter {
    * ルートが見つからない場合のフォールバック画面
    */
   static Widget _unknownRoutePage({required String? routeName}) {
+    final loc = LocalizationService.instance;
+    final routeText = routeName ?? '(null)';
     return Scaffold(
-      appBar: AppBar(title: const Text('画面が見つかりません')),
+      appBar: AppBar(
+        title: Text(loc.translate('router_unknown_route_title')),
+      ),
       body: Center(
-        child: Text('Unknown route: ${routeName ?? '(null)'}'),
+        child: Text(
+          loc.translate(
+            'router_unknown_route_message',
+            params: {'route': routeText},
+          ),
+        ),
       ),
     );
   }
@@ -108,12 +118,21 @@ class AppRouter {
     required String? routeName,
     required String expected,
   }) {
+    final loc = LocalizationService.instance;
+    final routeText = routeName ?? '(null)';
     return Scaffold(
-      appBar: AppBar(title: const Text('画面遷移に失敗しました')),
+      appBar: AppBar(
+        title: Text(loc.translate('router_invalid_navigation_title')),
+      ),
       body: Center(
         child: Text(
-          'Invalid arguments for ${routeName ?? '(null)'} '
-          '(expected: $expected)',
+          loc.translate(
+            'router_invalid_arguments_message',
+            params: {
+              'route': routeText,
+              'expected': expected,
+            },
+          ),
         ),
       ),
     );
@@ -123,11 +142,18 @@ class AppRouter {
    * Web で未サポート機能へ遷移した場合の案内画面
    */
   static Widget _unsupportedOnWebPage({required String? routeName}) {
+    final loc = LocalizationService.instance;
+    final routeText = routeName ?? '(null)';
     return Scaffold(
-      appBar: AppBar(title: const Text('未サポート')),
+      appBar: AppBar(
+        title: Text(loc.translate('router_web_unsupported_title')),
+      ),
       body: Center(
         child: Text(
-          'This route is not supported on Web: ${routeName ?? '(null)'}',
+          loc.translate(
+            'router_web_unsupported_message',
+            params: {'route': routeText},
+          ),
         ),
       ),
     );
