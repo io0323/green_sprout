@@ -5,7 +5,6 @@ import 'core/services/wearable_device_service.dart';
 import 'core/utils/platform_utils.dart';
 import 'core/utils/app_logger.dart';
 import 'core/utils/app_initialization.dart';
-import 'core/routing/app_router.dart';
 import 'core/theme/tea_garden_theme.dart';
 import 'core/constants/app_constants.dart';
 import 'features/wearable/presentation/pages/wearable_home_page.dart';
@@ -215,7 +214,7 @@ class _WearableTeaGardenAppState extends State<WearableTeaGardenApp> {
       localizationsDelegates: appDefaults.localizationsDelegates,
       supportedLocales: appDefaults.supportedLocales,
       debugShowCheckedModeBanner: appDefaults.debugShowCheckedModeBanner,
-      onGenerateRoute: AppRouter.onGenerateRoute,
+      onGenerateRoute: appDefaults.onGenerateRoute,
       home: const WearableHomePage(),
     );
   }
