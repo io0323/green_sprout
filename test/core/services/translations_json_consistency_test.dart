@@ -9,6 +9,54 @@ import 'package:flutter_test/flutter_test.dart';
  * - 追加したキーは必ず両言語に入れる運用を担保する
  */
 void main() {
+  test('translations.json の en/ja がMapで、値がすべてStringである', () {
+    final file = File('assets/translations/translations.json');
+    final contents = file.readAsStringSync();
+    final decoded = json.decode(contents) as Map<String, dynamic>;
+
+    expect(decoded.containsKey('en'), isTrue);
+    expect(decoded.containsKey('ja'), isTrue);
+
+    final en = decoded['en'];
+    final ja = decoded['ja'];
+
+    expect(en, isA<Map<String, dynamic>>());
+    expect(ja, isA<Map<String, dynamic>>());
+
+    final enMap = en as Map<String, dynamic>;
+    final jaMap = ja as Map<String, dynamic>;
+
+    final nonStringValues = <String, List<String>>{
+      'en': [],
+      'ja': [],
+    };
+
+    for (final entry in enMap.entries) {
+      if (entry.value is! String) {
+        nonStringValues['en']!.add(entry.key);
+      }
+    }
+    for (final entry in jaMap.entries) {
+      if (entry.value is! String) {
+        nonStringValues['ja']!.add(entry.key);
+      }
+    }
+
+    nonStringValues['en']!.sort();
+    nonStringValues['ja']!.sort();
+
+    expect(
+      nonStringValues['en'],
+      isEmpty,
+      reason: 'en の value が String ではないキー: ${nonStringValues['en']}',
+    );
+    expect(
+      nonStringValues['ja'],
+      isEmpty,
+      reason: 'ja の value が String ではないキー: ${nonStringValues['ja']}',
+    );
+  });
+
   test('translations.json の en/ja でキーが一致する', () {
     final file = File('assets/translations/translations.json');
     final contents = file.readAsStringSync();
