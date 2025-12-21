@@ -14,7 +14,7 @@ class LocalizationService {
 
   LocalizationService._();
 
-  Map<String, dynamic> _translations = {};
+  Map<String, Map<String, String>> _translations = {};
   String _currentLanguage = 'ja';
   static const String _languageStorageKey = 'tea_garden_language';
 
@@ -118,12 +118,55 @@ class LocalizationService {
     },
   };
 
+  /*
+   * 翻訳データを型安全に正規化する
+   * - json.decode の dynamic を Map<String, Map<String, String>> に落とし込む
+   */
+  static Map<String, Map<String, String>> _normalizeTranslations(
+    Object? decoded,
+  ) {
+    final root = decoded;
+    if (root is! Map) {
+      return _fallbackTranslations;
+    }
+
+    final result = <String, Map<String, String>>{};
+
+    for (final entry in root.entries) {
+      final langKey = entry.key;
+      final langValue = entry.value;
+      if (langKey is! String) {
+        continue;
+      }
+      if (langValue is! Map) {
+        continue;
+      }
+
+      final normalizedLang = <String, String>{};
+      for (final inner in langValue.entries) {
+        final k = inner.key;
+        final v = inner.value;
+        if (k is String && v is String) {
+          normalizedLang[k] = v;
+        }
+      }
+
+      result[langKey] = normalizedLang;
+    }
+
+    if (result.isEmpty) {
+      return _fallbackTranslations;
+    }
+
+    return result;
+  }
+
   /// 翻訳データを読み込み
   Future<void> loadTranslations() async {
     try {
       final String jsonString =
           await rootBundle.loadString('assets/translations/translations.json');
-      _translations = json.decode(jsonString);
+      _translations = _normalizeTranslations(json.decode(jsonString));
 
       // 保存された言語設定を読み込み
       final savedLanguage = getLocalStorage(_languageStorageKey);
@@ -146,7 +189,12 @@ class LocalizationService {
   @visibleForTesting
   Future<void> loadTranslationsForTest(
       [Map<String, dynamic>? translations]) async {
-    _translations = translations ?? _fallbackTranslations;
+    if (translations == null) {
+      _translations = _fallbackTranslations;
+      return;
+    }
+
+    _translations = _normalizeTranslations(translations);
   }
 
   /// 言語を設定
@@ -164,9 +212,9 @@ class LocalizationService {
   /// 翻訳テキストを取得
   String translate(String key, {Map<String, dynamic>? params}) {
     try {
-      String text = _translations[_currentLanguage]?[key] ??
-          _translations['ja']?[key] ??
-          key;
+      final currentMap = _translations[_currentLanguage];
+      final jaMap = _translations['ja'];
+      String text = currentMap?[key] ?? jaMap?[key] ?? key;
 
       // パラメータ置換
       if (params != null) {
