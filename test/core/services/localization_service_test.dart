@@ -61,7 +61,8 @@ void main() {
       'en': 'oops',
     });
 
-    service.setLanguage('en');
+    // 'en' は不正フォーマットなので正規化で取り込まれず、言語も切り替わらない
+    expect(service.availableLanguages.contains('en'), isFalse);
     expect(service.translate('any_key'), 'any_key');
   });
 }
