@@ -18,6 +18,106 @@ class LocalizationService {
   String _currentLanguage = 'ja';
   static const String _languageStorageKey = 'tea_garden_language';
 
+  /*
+   * フォールバック翻訳（最小セット）
+   * - translations.json が読めない場合でも UI がキー文字列のまま露出しないようにする
+   * - en は主要タイトル + router/advanced_analysis 系のみを最低限用意する
+   */
+  static const Map<String, Map<String, String>> _fallbackTranslations = {
+    'en': {
+      'app_title': 'Tea Garden AI',
+      'home_title': 'Tea Garden Management',
+      'camera_title': 'Take Photo',
+      'analysis_title': 'Analysis Result',
+      'logs_title': 'Analysis Logs',
+
+      // Advanced analysis (AnalysisResultPage)
+      'advanced_analysis': 'Advanced analysis',
+      'advanced_analysis_description':
+          'Run a high-accuracy analysis by combining multiple methods',
+      'run_advanced_analysis': 'Run advanced analysis',
+      'rerun_advanced_analysis': 'Re-run advanced analysis',
+
+      // AppRouter fallback pages
+      'router_unknown_route_title': 'Page not found',
+      'router_invalid_navigation_title': 'Navigation failed',
+      'router_web_unsupported_title': 'Not supported',
+      'router_unknown_route_message': 'Unknown route: {route}',
+      'router_invalid_arguments_message':
+          'Invalid arguments for {route} (expected: {expected})',
+      'router_web_unsupported_message':
+          'This route is not supported on Web: {route}',
+    },
+    'ja': {
+      'app_title': '茶園管理AI',
+      'home_title': '茶園管理',
+      'camera_title': '茶葉撮影',
+      'analysis_title': '解析結果',
+      'logs_title': '解析日誌',
+      'take_photo': '茶葉を撮影・解析',
+      'analyze': '解析開始',
+      'save': '保存',
+      'cancel': 'キャンセル',
+      'search': '検索',
+      'filter': 'フィルター',
+      'growth_stage': '成長状態',
+      'health_status': '健康状態',
+      'confidence': '信頼度',
+      'comment': 'コメント',
+      'loading': '読み込み中...',
+      'error': 'エラー',
+      'retry': '再試行',
+      'no_data': 'データがありません',
+      'bud': '芽',
+      'young_leaf': '若葉',
+      'mature_leaf': '成葉',
+      'old_leaf': '老葉',
+      'healthy': '健康',
+      'minor_damage': '軽微な損傷',
+      'damaged': '損傷',
+      'diseased': '病気',
+      'today_summary': '今日の解析結果',
+      'recent_results': '最近の解析結果',
+      'analysis_complete': '解析が完了しました！',
+      'save_success': '保存しました',
+      'save_failed': '保存に失敗しました',
+      'analysis_failed': '解析に失敗しました',
+      'camera_error': 'カメラエラー',
+      'model_loading': 'AIモデルを読み込み中...',
+      'image_processing': '画像を処理中...',
+      'high_confidence': '高い信頼度',
+      'medium_confidence': '中程度の信頼度',
+      'low_confidence': '低い信頼度',
+      'camera_initializing': 'カメラを初期化中...',
+      'capturing': '撮影中...',
+      'moving_to_analysis': '解析画面へ移動中...',
+      'place_leaf_center': '茶葉を画面の中央に配置してください',
+      'analyzing_image': '画像を解析中...',
+      'analysis_error': '解析エラー',
+      'error_occurred': 'エラーが発生しました',
+      'data_loading': 'データを読み込み中...',
+      'save_result': '結果を保存',
+      'comment_hint': 'この茶葉についてのコメントを入力してください',
+      'save_result_success': '解析結果を保存しました',
+      'save_result_failed': '保存に失敗しました',
+      'unknown_state': '不明な状態',
+
+      // Advanced analysis (AnalysisResultPage)
+      'advanced_analysis': '高度な分析',
+      'advanced_analysis_description': '複数の解析手法を組み合わせた高精度な分析を実行します',
+      'run_advanced_analysis': '高度な分析を実行',
+      'rerun_advanced_analysis': '高度な分析を再実行',
+
+      // AppRouter fallback pages
+      'router_unknown_route_title': '画面が見つかりません',
+      'router_invalid_navigation_title': '画面遷移に失敗しました',
+      'router_web_unsupported_title': '未サポート',
+      'router_unknown_route_message': '不明な画面: {route}',
+      'router_invalid_arguments_message': '引数が不正です: {route}（期待: {expected}）',
+      'router_web_unsupported_message': 'Webでは未サポートです: {route}',
+    },
+  };
+
   /// 翻訳データを読み込み
   Future<void> loadTranslations() async {
     try {
@@ -36,81 +136,8 @@ class LocalizationService {
         e,
         stackTrace,
       );
-      // フォールバック: デフォルトの日本語翻訳
-      _translations = {
-        'ja': {
-          'app_title': '茶園管理AI',
-          'home_title': '茶園管理',
-          'camera_title': '茶葉撮影',
-          'analysis_title': '解析結果',
-          'logs_title': '解析日誌',
-          'take_photo': '茶葉を撮影・解析',
-          'analyze': '解析開始',
-          'save': '保存',
-          'cancel': 'キャンセル',
-          'search': '検索',
-          'filter': 'フィルター',
-          'growth_stage': '成長状態',
-          'health_status': '健康状態',
-          'confidence': '信頼度',
-          'comment': 'コメント',
-          'loading': '読み込み中...',
-          'error': 'エラー',
-          'retry': '再試行',
-          'no_data': 'データがありません',
-          'bud': '芽',
-          'young_leaf': '若葉',
-          'mature_leaf': '成葉',
-          'old_leaf': '老葉',
-          'healthy': '健康',
-          'minor_damage': '軽微な損傷',
-          'damaged': '損傷',
-          'diseased': '病気',
-          'today_summary': '今日の解析結果',
-          'recent_results': '最近の解析結果',
-          'analysis_complete': '解析が完了しました！',
-          'save_success': '保存しました',
-          'save_failed': '保存に失敗しました',
-          'analysis_failed': '解析に失敗しました',
-          'camera_error': 'カメラエラー',
-          'model_loading': 'AIモデルを読み込み中...',
-          'image_processing': '画像を処理中...',
-          'high_confidence': '高い信頼度',
-          'medium_confidence': '中程度の信頼度',
-          'low_confidence': '低い信頼度',
-          'camera_initializing': 'カメラを初期化中...',
-          'capturing': '撮影中...',
-          'moving_to_analysis': '解析画面へ移動中...',
-          'place_leaf_center': '茶葉を画面の中央に配置してください',
-          'analyzing_image': '画像を解析中...',
-          'analysis_error': '解析エラー',
-          'error_occurred': 'エラーが発生しました',
-          'data_loading': 'データを読み込み中...',
-          'save_result': '結果を保存',
-          'comment_hint': 'この茶葉についてのコメントを入力してください',
-          'save_result_success': '解析結果を保存しました',
-          'save_result_failed': '保存に失敗しました',
-          'unknown_state': '不明な状態',
-
-          /*
-           * 追加されたUI文言（フォールバック用）
-           * - translations.json が読み込めない場合でもキー文字列が露出しないようにする
-           */
-          'advanced_analysis': '高度な分析',
-          'advanced_analysis_description': '複数の解析手法を組み合わせた高精度な分析を実行します',
-          'run_advanced_analysis': '高度な分析を実行',
-          'rerun_advanced_analysis': '高度な分析を再実行',
-
-          // AppRouter フォールバック画面
-          'router_unknown_route_title': '画面が見つかりません',
-          'router_invalid_navigation_title': '画面遷移に失敗しました',
-          'router_web_unsupported_title': '未サポート',
-          'router_unknown_route_message': '不明な画面: {route}',
-          'router_invalid_arguments_message':
-              '引数が不正です: {route}（期待: {expected}）',
-          'router_web_unsupported_message': 'Webでは未サポートです: {route}',
-        }
-      };
+      // フォールバック: assets 読み込みに失敗した場合の最小翻訳
+      _translations = _fallbackTranslations;
     }
   }
 
@@ -119,81 +146,7 @@ class LocalizationService {
   @visibleForTesting
   Future<void> loadTranslationsForTest(
       [Map<String, dynamic>? translations]) async {
-    _translations = translations ??
-        {
-          'ja': {
-            'app_title': '茶園管理AI',
-            'home_title': '茶園管理',
-            'camera_title': '茶葉撮影',
-            'analysis_title': '解析結果',
-            'logs_title': '解析日誌',
-            'take_photo': '茶葉を撮影・解析',
-            'analyze': '解析開始',
-            'save': '保存',
-            'cancel': 'キャンセル',
-            'search': '検索',
-            'filter': 'フィルター',
-            'growth_stage': '成長状態',
-            'health_status': '健康状態',
-            'confidence': '信頼度',
-            'comment': 'コメント',
-            'loading': '読み込み中...',
-            'error': 'エラー',
-            'retry': '再試行',
-            'no_data': 'データがありません',
-            'bud': '芽',
-            'young_leaf': '若葉',
-            'mature_leaf': '成葉',
-            'old_leaf': '老葉',
-            'healthy': '健康',
-            'minor_damage': '軽微な損傷',
-            'damaged': '損傷',
-            'diseased': '病気',
-            'today_summary': '今日の解析結果',
-            'recent_results': '最近の解析結果',
-            'analysis_complete': '解析が完了しました！',
-            'save_success': '保存しました',
-            'save_failed': '保存に失敗しました',
-            'analysis_failed': '解析に失敗しました',
-            'camera_error': 'カメラエラー',
-            'model_loading': 'AIモデルを読み込み中...',
-            'image_processing': '画像を処理中...',
-            'high_confidence': '高い信頼度',
-            'medium_confidence': '中程度の信頼度',
-            'low_confidence': '低い信頼度',
-            'camera_initializing': 'カメラを初期化中...',
-            'capturing': '撮影中...',
-            'moving_to_analysis': '解析画面へ移動中...',
-            'place_leaf_center': '茶葉を画面の中央に配置してください',
-            'analyzing_image': '画像を解析中...',
-            'analysis_error': '解析エラー',
-            'error_occurred': 'エラーが発生しました',
-            'data_loading': 'データを読み込み中...',
-            'save_result': '結果を保存',
-            'comment_hint': 'この茶葉についてのコメントを入力してください',
-            'save_result_success': '解析結果を保存しました',
-            'save_result_failed': '保存に失敗しました',
-            'unknown_state': '不明な状態',
-
-            /*
-             * 追加されたUI文言（テスト用デフォルト）
-             * - テスト環境でもキー文字列が露出しないようにする
-             */
-            'advanced_analysis': '高度な分析',
-            'advanced_analysis_description': '複数の解析手法を組み合わせた高精度な分析を実行します',
-            'run_advanced_analysis': '高度な分析を実行',
-            'rerun_advanced_analysis': '高度な分析を再実行',
-
-            // AppRouter フォールバック画面
-            'router_unknown_route_title': '画面が見つかりません',
-            'router_invalid_navigation_title': '画面遷移に失敗しました',
-            'router_web_unsupported_title': '未サポート',
-            'router_unknown_route_message': '不明な画面: {route}',
-            'router_invalid_arguments_message':
-                '引数が不正です: {route}（期待: {expected}）',
-            'router_web_unsupported_message': 'Webでは未サポートです: {route}',
-          }
-        };
+    _translations = translations ?? _fallbackTranslations;
   }
 
   /// 言語を設定
