@@ -34,4 +34,52 @@ void main() {
       reason: 'en に不足しているキー: $missingInEn',
     );
   });
+
+  test('translations.json の en/ja でプレースホルダ（{...}）が一致する', () {
+    final file = File('assets/translations/translations.json');
+    final contents = file.readAsStringSync();
+    final decoded = json.decode(contents) as Map<String, dynamic>;
+
+    final en = decoded['en'] as Map<String, dynamic>;
+    final ja = decoded['ja'] as Map<String, dynamic>;
+
+    final placeholderRegExp = RegExp(r'\{([a-zA-Z0-9_]+)\}');
+
+    final mismatches = <String, Map<String, List<String>>>{};
+
+    for (final key in en.keys) {
+      final enValue = en[key];
+      final jaValue = ja[key];
+      if (enValue is! String || jaValue is! String) {
+        // 想定外の型はプレースホルダ比較対象外
+        continue;
+      }
+
+      final enPlaceholders = placeholderRegExp
+          .allMatches(enValue)
+          .map((m) => m.group(1)!)
+          .toSet()
+          .toList()
+        ..sort();
+      final jaPlaceholders = placeholderRegExp
+          .allMatches(jaValue)
+          .map((m) => m.group(1)!)
+          .toSet()
+          .toList()
+        ..sort();
+
+      if (enPlaceholders.join(',') != jaPlaceholders.join(',')) {
+        mismatches[key] = {
+          'en': enPlaceholders,
+          'ja': jaPlaceholders,
+        };
+      }
+    }
+
+    expect(
+      mismatches,
+      isEmpty,
+      reason: 'プレースホルダ不一致: $mismatches',
+    );
+  });
 }
